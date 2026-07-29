@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest mypy
+
+      - name: Verify git hooks are valid (syntax check)
+        run: |
+          bash -n .githooks/pre-commit
+          bash -n .githooks/pre-push
+          echo "  ✅ Git hook syntax valid"
+
+      - name: Run tests — scripts/
+        run: |
+          python -m pytest skills/cc-rsg/scripts/tests/ -v --tb=short
+
+      - name: Run tests — source_map_v2/
+        run: |
+          python -m pytest skills/cc-rsg/scripts/source_map_v2/tests/ -v --tb=short
+
+      - name: Type check — mypy (advisory)
+        run: |
+          python -m mypy skills/cc-rsg/scripts/ \
+            --ignore-missing-imports \
+            --follow-imports=skip 2>&1 \
+            || echo "  ⚠️  mypy reported warnings (non-blocking)"
+
+      - name: Smoke import — source_map_v2 module
+        run: |
+          cd skills/cc-rsg/scripts
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+          from source_map_v2 import SCHEMA_VERSION, build_source_map
+          from source_map_v2.taxonomy import ROLES, UNIVERSAL_TABLES
+          print(f'  ✅ source_map_v2 (schema {SCHEMA_VERSION}, {len(ROLES)} roles)')
+          "
+
+      - name: Smoke import — standalone scripts via pytest collect
+        run: |
+          python -m pytest skills/cc-rsg/scripts/tests/ \
+            --collect-only -q 2>&1 | tail -5
+          echo "  ✅ All test imports resolved"
