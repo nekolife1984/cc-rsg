@@ -1,0 +1,53 @@
+#!/bin/sh
+# .githooks/pre-commit — Ensure new scripts have corresponding tests
+set -e
+
+echo "🔍 Checking for new scripts without tests..."
+
+# Get newly staged .py files in scripts/ (excluding __init__, source_map_v2, and tests/)
+new_scripts=$(git diff --cached --name-only --diff-filter=A -- 'skills/cc-rsg/scripts/*.py' | grep -v '__init__' | grep -v 'source_map_v2/' || true)
+
+if [ -z "$new_scripts" ]; then
+    echo "  ✅ No new scripts detected."
+    exit 0
+fi
+
+# Use IFS to handle filenames with spaces
+has_violation=0
+echo "$new_scripts" | while IFS= read -r script; do
+    # Extract base name: skills/cc-rsg/scripts/foo.py → foo
+    base=$(basename "$script" .py)
+    test_file="skills/cc-rsg/scripts/tests/test_${base}.py"
+
+    if [ ! -f "$test_file" ] && [ ! -f "${script%.py}" ]; then
+        # Check if it's staged (new file) — if not, it might be in tests/ already
+        if ! git diff --cached --name-only --diff-filter=A | grep -q "^${test_file}$"; then
+            echo "  ⚠️  New script detected: $script"
+            echo "     Missing test file: $test_file"
+            echo "     Please add tests before committing."
+            has_violation=1
+        fi
+    fi
+done
+
+# Re-check has_violation in the parent shell
+# (pipeline runs in a subshell, so we use a temp file)
+echo "$has_violation" > /tmp/.cc-rsg-hook-test-violation.tmp
+
+if [ "$(cat /tmp/.cc-rsg-hook-test-violation.tmp)" = "1" ]; then
+    rm -f /tmp/.cc-rsg-hook-test-violation.tmp
+    echo ""
+    echo "💡 Tip: Create $test_file with at least a smoke test:"
+    echo '    """Smoke tests for foo.py"""'
+    echo '    import subprocess, sys'
+    echo '    from pathlib import Path'
+    echo '    SCRIPT = Path(__file__).resolve().parent.parent / "foo.py"'
+    echo '    def test_help():'
+    echo '        result = subprocess.run([sys.executable, str(SCRIPT), "--help"], capture_output=True, text=True)'
+    echo '        assert result.returncode == 0'
+    echo ""
+    exit 1
+fi
+rm -f /tmp/.cc-rsg-hook-test-violation.tmp
+
+echo "  ✅ All new scripts have corresponding tests."
