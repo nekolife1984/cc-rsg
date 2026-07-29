@@ -47,3 +47,17 @@ sh scripts/install-hooks.sh
 git commit --no-verify              # Skips pre-commit hook
 git push --no-verify origin main    # Skips pre-push hook
 ```
+
+## Merge Gate
+
+CI チェックが通ったPRだけをマージするには以下のスクリプトを使用します:
+
+```bash
+# カレントブランチのPRをマージ（CI確認付き）
+scripts/merge-pr.sh
+
+# PR番号を直接指定
+scripts/merge-pr.sh 34
+```
+
+CIが失敗している場合はマージがブロックされ、どのチェックが落ちているか表示されます。
