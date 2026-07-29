@@ -75,9 +75,10 @@ def _autoload() -> None:
     missing optional dependency simply leaves that language unregistered (the
     pipeline then falls back to file-level units + a loud warning).
     """
-    for mod in ("python_ext", "typescript_ext", "ruby_ext",
+    for mod in ("c_ext", "cpp_ext", "python_ext", "typescript_ext", "ruby_ext",
                 "php_ext", "java_ext", "csharp_ext",
-                "go_ext", "sql_ext", "cobol_ext", "kotlin_ext"):
+                "go_ext", "sql_ext", "cobol_ext", "kotlin_ext",
+                "dart_ext", "swift_ext"):
         try:
             __import__(f"{__name__}.{mod}")
         except Exception:
