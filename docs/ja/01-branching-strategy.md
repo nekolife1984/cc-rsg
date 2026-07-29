@@ -76,35 +76,25 @@ git push origin upstream/merge-v0.8.0
 # → PR作成 → squash merge → main
 ```
 
+## CIゲート
+
+GitHub Actions（`.github/workflows/ci.yml`）がすべてのPRで自動実行されます。詳細は [03-pr-review-process.md](03-pr-review-process.md) を参照してください。
+
 ## リリース手順
 
+完全なリリース手順（バージョニング、CHANGELOG、Zenodo更新）は [04-release-process.md](04-release-process.md) を参照してください。
+
+簡単なタグ作成コマンド：
+
 ```bash
-# Semver: MAJOR.MINOR.PATCH
 git tag -a v0.8.0 -m "v0.8.0 — description"
 git push origin v0.8.0
-
-# プレリリース: v0.8.0-alpha.1, v0.8.0-beta.1
 ```
 
-タグは `main` 上でPRマージ後に作成。リリースのたびに `CHANGELOG.md` を更新します。
+## 関連ドキュメント
 
-## ホットフィックス
-
-リリース済みバージョンへの緊急修正：
-
-```bash
-git checkout -b fix/hotfix-crash main
-# 修正 → コミット → PR → squash merge → main
-git tag -a v0.8.1 -m "v0.8.1 — crash fix"
-git push origin v0.8.1
-```
-
-## CIゲート（予定）
-
-| チェック | 必須 | タイミング |
-|---------|------|-----------|
-| `pytest tests/ -q` | ✅ | PR時 |
-| `mypy . --strict` | ✅ | PR時（Pythonの場合） |
-| Trace/drift gate | ✅ | PR時（specbridge導入時） |
-| CHANGELOG更新 | 📋 手動 | マージ前 |
-| ブランチ戦略ドキュメント更新 | 📋 手動 | 戦略変更時 |
+| ドキュメント | 説明 |
+|-------------|------|
+| [02-commit-conventions.md](02-commit-conventions.md) | Conventional Commits形式、1変更1コミットルール |
+| [03-pr-review-process.md](03-pr-review-process.md) | PRライフサイクル、テンプレート、レビュアーチェックリスト、squash merge |
+| [04-release-process.md](04-release-process.md) | バージョニング、CHANGELOG、Roadmap、Zenodo、リリースチェックリスト |

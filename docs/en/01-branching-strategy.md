@@ -76,35 +76,25 @@ git push origin upstream/merge-v0.8.0
 # → Open PR → squash merge → main
 ```
 
+## CI Gates
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every PR. See [03-pr-review-process.md](03-pr-review-process.md) for details.
+
 ## Release Process
 
+See [04-release-process.md](04-release-process.md) for the full release procedure including versioning, CHANGELOG, and Zenodo updates.
+
+Quick tag command:
+
 ```bash
-# Semver: MAJOR.MINOR.PATCH
 git tag -a v0.8.0 -m "v0.8.0 — description"
 git push origin v0.8.0
-
-# Pre-release: v0.8.0-alpha.1, v0.8.0-beta.1
 ```
 
-Tags are created from `main` after a PR merge. Update `CHANGELOG.md` with each release.
+## Related Documents
 
-## Hotfix Flow
-
-For urgent fixes on a released version:
-
-```bash
-git checkout -b fix/hotfix-crash main
-# fix → commit → PR → squash merge → main
-git tag -a v0.8.1 -m "v0.8.1 — crash fix"
-git push origin v0.8.1
-```
-
-## CI Gates (Planned)
-
-| Check | Required | When |
-|-------|----------|------|
-| `pytest tests/ -q` | ✅ | On PR |
-| `mypy . --strict` | ✅ | On PR (if Python) |
-| Trace/drift gate | ✅ | On PR (if specbridge enabled) |
-| CHANGELOG updated | 📋 Manual | Before merge |
-| Branch strategy doc updated | 📋 Manual | When strategy changes |
+| Document | Description |
+|----------|-------------|
+| [02-commit-conventions.md](02-commit-conventions.md) | Conventional Commits format, one-change-one-commit rule |
+| [03-pr-review-process.md](03-pr-review-process.md) | PR lifecycle, template, reviewer checklist, squash merge |
+| [04-release-process.md](04-release-process.md) | Versioning, CHANGELOG, Roadmap, Zenodo, release checklist |
