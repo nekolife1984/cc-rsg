@@ -131,32 +131,54 @@ Finalise the skeleton of the spec, decompose the work to fill each chapter into 
    - The three files `00-metadata.md` / `99-unresolved.md` / `traceability.md` appear with `kind: "reserved"` and an empty `assigned_inventory_ids` array; Phase 6 fills their bodies.
    - `source_intent` (user-custom only) verbatim-quotes the snippet of `free_text_notes` that established the deliverable, so Phase 3/5 has the user's words at hand.
 
-3. **Inventory extraction (v2: source-map.py based)**
+3. **Inventory extraction (v3: source-map.py + mechanical conversion)**
 
-   **STEP A (required)**: Run `scripts/source-map.py` to extract source units automatically:
+   **STEP A (required)**: Run `scripts/source-map.py` (v1, original) OR `source_map_v2` (v2, role-typed) to extract source units automatically:
    ```bash
    python .cc-rsg/skill/scripts/source-map.py \
      --target <target root> \
      --output .cc-rsg/source-map.json
    ```
-   This enumerates language-specific classes, modules, routes, migrations, views, etc. as `SRC-NNNN`.
+   With v2:
+   ```bash
+   python -m source_map_v2 \
+     --target <target root> \
+     --output .cc-rsg/source-map.json
+   ```
+   Either produces `source-map.json` with `SRC-NNNN` units — v2 adds role typing (`role`, `table`, `framework`) but the conversion below handles both.
 
-   **STEP B (required)**: Derive the minimum INV count from `source-map.json`'s `stats.files_scanned`:
+   **STEP B (required)**: Run `scripts/build-inventory-from-sourcemap.py` to mechanically convert `source-map.json` → `inventory.json`:
+   ```bash
+   python .cc-rsg/skill/scripts/build-inventory-from-sourcemap.py \
+     --source-map .cc-rsg/source-map.json \
+     --output .cc-rsg/inventory.json
+   ```
+   This maps:
+   - `source-map[].role` → `inventory[].type` (via built-in role→type table; overridable via `--role-to-type`)
+   - `source-map[].name` → `inventory[].name`
+   - `source-map[].path` → `inventory[].file`
+   - `source-map[].line_range[0]` → `inventory[].line`
+   - `source-map[].id` → `inventory[].related_source_ids[0]`
+   - `inventory[].covered_by` → `[]` (filled by Phase 3)
+
+   **STEP C**: Validate minimum INV count:
    ```
    inventory.json minimum count = max(50, files_scanned // 20)
    ```
    Falling below this fails `coverage-check.py`.
 
-   **STEP C**: Consulting `references/inventory-units.md`, group `source-map.json` units into conceptual units per language catalogue:
-   - Examples (per language):
-     - PHP: classes, traits, functions, route definitions
-     - COBOL: PROGRAM-ID, SECTION, PARAGRAPH
-     - Python: modules, classes, functions, endpoints
-     - Java: classes, methods, endpoints, entities
-     - JavaScript/TypeScript: exported functions, components, routes
-     - **Ruby on Rails**: always cover the 14-item "Ruby on Rails catalogue" in `inventory-units.md` (Controller/Model/Concern/Service/Job/Mailer/Helper/Lib/Migration/Route group/View group/JS module/Config/Mailer template).
+   **STEP D (optional, only when v1 source-map.py was used)**: For `source-map.json` v0.1.0 units that lack a `role` field, `build-inventory-from-sourcemap.py` falls back to `kind` as the inventory `type`. If a more precise role→type mapping is needed, pass `--role-to-type`:
+   ```bash
+   python build-inventory-from-sourcemap.py \
+     --source-map .cc-rsg/source-map.json \
+     --output .cc-rsg/inventory.json \
+     --role-to-type '{"endpoint":"api","model":"entity"}'
+   ```
+   When using v2 (`source_map_v2`), roles are already assigned and the default mapping works out of the box.
 
-   **STEP D**: macro/group/module style types are forbidden. Always 1 class / 1 module / 1 action per row.
+   **Why this matters**: Before this script, Phase 2 had to manually group `source-map.json` units into conceptual units per `references/inventory-units.md` — a hand-written process that broke the Phase 2 skeleton content contract (Phase 2 was writing body content instead of skeletons). Now the inventory is *mechanically derived* from the source map, eliminating the manual grouping step and enforcing separation of concerns: Phase 1 extracts, Phase 2 converts, Phase 3 fills.
+
+   macro/group/module style types in `inventory[].type` are forbidden. Always 1 class / 1 module / 1 action per row.
 
    Save the result to `inventory.json`. Schema:
 
