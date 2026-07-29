@@ -77,7 +77,7 @@ def _autoload() -> None:
     """
     for mod in ("python_ext", "typescript_ext", "ruby_ext",
                 "php_ext", "java_ext", "csharp_ext",
-                "go_ext", "sql_ext", "cobol_ext"):
+                "go_ext", "sql_ext", "cobol_ext", "kotlin_ext"):
         try:
             __import__(f"{__name__}.{mod}")
         except Exception:
