@@ -59,6 +59,34 @@ What would you like to do?
 (D) 状況を詳細表示してから判断する
 ```
 
-Per-phase resume message details will be moved into a separate doc in a follow-up.
+
+Per-phase resume message details are in the resume table below.
+
+### Resume execution rule (MANDATORY)
+
+After the user confirms the resume option, the agent MUST:
+
+1. **Read `state.json`** to identify `current_phase` (e.g. Phase 3).
+2. **Read the corresponding phase detail file** from SKILL.md's phase overview table (e.g. `phase-3-investigate.md`).
+3. **Read the appropriate common reference files** if the phase depends on them (Question Bank for Phase 1+/3+, Sub-agent for Phase 3+, State management always).
+4. Only then, **resume execution** according to the phase detail file's procedure.
+
+This rule exists because SKILL.md is intentionally lightweight — the phase detail files are NOT in the system prompt and must be explicitly loaded.
+
+**Resume phase → file mapping:**
+
+| current_phase | File(s) to read |
+|---------------|-----------------|
+| 0 | `phase-0-setup.md` |
+| 1 | `phase-1-recon.md`, `question-bank.md` |
+| 2 | `phase-2-wbs.md` |
+| 3 | `phase-3-investigate.md`, `question-bank.md`, `subagent-behavior.md` |
+| 4 | `phase-4-verify.md`, `question-bank.md` |
+| 5 | `phase-5-dialogue.md`, `question-bank.md` |
+| 6 | `phase-6-deliver.md`, `state-management.md` |
+| 6.5 | `phase-6-5-deepdive.md` |
+| 7 | `phase-7-drift.md` |
+| 7b | `phase-7b-ref-autofix.md` |
+| 7c | `phase-7c-changespec.md` |
 
 ---
