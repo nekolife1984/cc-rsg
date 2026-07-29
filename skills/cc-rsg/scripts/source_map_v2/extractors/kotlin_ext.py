@@ -7,7 +7,6 @@ Extracts Kotlin-specific constructs that the Java extractor cannot handle:
   - Extension functions → callable role
   - Spring annotations (same as Java: @RestController, @GetMapping, @Entity, etc.)
   - Ktor routing (routing { get("/path") { } })
-  - top-level properties → schema (config-like vals)
 """
 from __future__ import annotations
 
@@ -31,7 +30,6 @@ for _kind, _role, _tier in [
     ("jpa_entity", "model", "middle"),
     ("spring_endpoint", "endpoint", "middle"),
     ("ktor_endpoint", "endpoint", "middle"),
-    ("kotlin_property", "schema", "micro"),
 ]:
     taxonomy.register_kind(_kind, _role, _tier)
 
@@ -45,79 +43,216 @@ _MAPPING_METHOD = {
 _KTOR_METHODS = {"get", "post", "put", "patch", "delete", "head", "options"}
 
 
-def _modifier_annotation_names(node, src) -> set[str]:
-    """Collect annotation names from a node's modifiers (the Kotlin way).
+# ---------------------------------------------------------------------------
+# Helpers for tree-sitter-kotlin AST navigation
+#
+# In tree-sitter-kotlin the ``modifiers`` node is a DIRECT child (not a named
+# field), so H.field(node, "modifiers") returns None.  All modifier/annotation
+# lookups iterate the children instead.
+# ---------------------------------------------------------------------------
 
-    In tree-sitter-kotlin, annotations sit inside the ``modifiers`` child as
-    ``annotation`` nodes. Each annotation's ``@``-prefixed identifier is the
-    name (stripped of the ``@`` prefix).
+
+def _modifiers_child(node):
+    """Return the first child with type ``modifiers``, or None."""
+    for c in node.children:
+        if c.type == "modifiers":
+            return c
+    return None
+
+
+def _class_body_child(node):
+    """Return the first child with type ``class_body``, or None."""
+    for c in node.children:
+        if c.type == "class_body":
+            return c
+    return None
+
+
+def _annotation_name_of(ann_node, src) -> str:
+    """Extract the bare name from an annotation node.
+
+    ``@GetMapping("/{id}")`` → ``"GetMapping"``
+    ``@RestController`` → ``"RestController"``
+    ``@RequestMapping(value = ["/a"])`` → ``"RequestMapping"``
     """
-    mods = H.field(node, "modifiers")
-    if not mods:
-        return set()
+    raw = H.text(ann_node, src).strip()
+    stripped = raw.lstrip("@")
+    paren = stripped.find("(")
+    if paren != -1:
+        stripped = stripped[:paren]
+    return stripped
+
+
+def _annotation_names(node, src) -> set[str]:
+    """Collect annotation names from a node.
+
+    tree-sitter-kotlin v1.1.0 places annotations in one of two places:
+
+    1. Inside a ``modifiers`` child node (common for simple cases like
+       ``@Service`` / ``@Entity``).
+
+    2. As a preceding ``annotated_expression`` sibling node (common for
+       multi-annotation patterns like ``@RestController @RequestMapping``,
+       where the annotations wrap the declaration externally).
+
+    We check both locations.
+    """
     names: set[str] = set()
-    for c in mods.children:
+
+    # Source 1: modifiers child
+    mods = _modifiers_child(node)
+    if mods:
+        for c in mods.children:
+            if c.type == "annotation":
+                names.add(_annotation_name_of(c, src))
+
+    # Source 2: direct child annotation nodes (fallback)
+    for c in node.children:
         if c.type == "annotation":
-            # annotation text is e.g. "@RestController" — strip the @
-            raw = H.text(c, src).strip()
-            names.add(raw.lstrip("@"))
+            names.add(_annotation_name_of(c, src))
+
+    # Source 3: preceding annotated_expression sibling
+    # (tree-sitter-kotlin v1.1.0 wraps multi-annotation sequences as
+    # ``annotated_expression`` nodes before the actual declaration.)
+    parent = node.parent
+    if parent:
+        for i, sibling in enumerate(parent.children):
+            if sibling.id == node.id and i > 0:
+                prev = parent.children[i - 1]
+                if prev.type == "annotated_expression":
+                    _collect_anns(prev, src, names)
+                break
+
     return names
 
 
-def _has_modifier(node, modifier: str) -> bool:
-    """Check if a node has a specific modifier keyword (data, sealed, suspend, etc.)."""
-    mods = H.field(node, "modifiers")
+def _collect_anns(ann_node, src, names: set[str]) -> None:
+    """Recursively collect annotation names from an ``annotated_expression``."""
+    for c in ann_node.children:
+        if c.type == "annotation":
+            names.add(_annotation_name_of(c, src))
+        _collect_anns(c, src, names)
+
+
+def _is_data_class(node) -> bool:
+    """Return True if the class_declaration has the ``data`` modifier."""
+    mods = _modifiers_child(node)
     if not mods:
         return False
     for c in mods.children:
-        if c.type == modifier:
-            return True
+        if c.type == "class_modifier":
+            for cc in c.children:
+                if cc.type == "data":
+                    return True
     return False
 
 
-def _first_string_arg(node, src) -> str | None:
-    """Return the first string literal argument of a call expression."""
-    args = None
-    for c in node.children:
-        if c.type == "call_expression":
-            args = c
-            break
-        if c.type == "lambda_literal":
-            # Ktor: get("/path") { } — the path is in the call, not lambda
-            continue
-    if args is None and node.type == "call_expression":
-        args = node
-    if args is None:
-        return None
-    for c in args.children:
-        if c.type == "string_literal":
-            raw = H.text(c, src)
-            return raw.strip("\"")
-        if c.type == "navigation_expression":
-            # member expression like foo.bar
+def _is_suspend_function(fn) -> bool:
+    """Return True if the function_declaration has the ``suspend`` modifier."""
+    mods = _modifiers_child(fn)
+    if not mods:
+        return False
+    for c in mods.children:
+        if c.type == "function_modifier":
             for cc in c.children:
-                if cc.type == "string_literal":
-                    return H.text(cc, src).strip("\"")
+                if cc.type == "suspend":
+                    return True
+    return False
+
+
+def _is_extension_function(fn) -> bool:
+    """Return True if the function_declaration is an extension function.
+
+    Extension functions have a ``user_type`` child (the receiver) followed
+    immediately by a ``.`` child, before the identifier (name).
+    """
+    found_user_type = False
+    for c in fn.children:
+        if c.type == "user_type":
+            found_user_type = True
+        elif c.type == "." and found_user_type:
+            return True
+        elif c.type in ("identifier", "name"):
+            return False
+    return False
+
+
+def _annotation_string_arg(node, src, ann_name: str) -> str | None:
+    """Extract the first string argument of a named annotation.
+
+    e.g. @GetMapping("/users") → "/users"
+
+    In tree-sitter-kotlin the path string is nested inside:
+      annotation → constructor_invocation → value_arguments →
+        value_argument → string_literal
+    """
+    mods = _modifiers_child(node)
+    if not mods:
+        return None
+    for c in mods.children:
+        if c.type != "annotation":
+            continue
+        raw = H.text(c, src).strip()
+        if not raw.startswith("@" + ann_name):
+            continue
+        for ci in c.children:
+            if ci.type == "constructor_invocation":
+                for va in ci.children:
+                    if va.type == "value_arguments":
+                        for varg in va.children:
+                            if varg.type == "value_argument":
+                                for sl in varg.children:
+                                    if sl.type == "string_literal":
+                                        return H.text(sl, src).strip("\"")
+        return None
     return None
 
 
-def _ktor_path(call_node, src) -> str | None:
-    """Extract the path string from a Ktor route call.
+def _ktor_path_from_call(call_node, src) -> str | None:
+    """Extract path from a Ktor call expression node.
 
-    Handles:
-      get("/users") { }
-      post("/api/users") { }
+    tree-sitter-kotlin v1.1.0 represents ``get("/users") { }`` as an
+    outer ``call_expression`` whose first child is an inner
+    ``call_expression`` containing the identifier + value_arguments::
+
+      call_expression (outer)
+        call_expression (inner)
+          identifier  "get"
+          value_arguments
+            value_argument
+              string_literal  "/users"
+        annotated_lambda  (the body)
+
+    We walk the whole tree looking for ``string_literal`` inside any
+    ``value_argument`` descendant.
     """
+    path: str | None = None
     for c in call_node.children:
         if c.type == "call_suffix":
             for cc in c.children:
-                if cc.type == "string_literal":
-                    return H.text(cc, src).strip("\"")
-                # handle value_argument -> string_literal
-                for ccc in cc.children:
-                    if ccc.type == "string_literal":
-                        return H.text(ccc, src).strip("\"")
-    return None
+                if cc.type == "value_arguments":
+                    for va in cc.children:
+                        if va.type == "value_argument":
+                            for sl in va.children:
+                                if sl.type == "string_literal":
+                                    path = H.text(sl, src).strip("\"")
+        if c.type == "value_arguments":
+            for va in c.children:
+                if va.type == "value_argument":
+                    for sl in va.children:
+                        if sl.type == "string_literal":
+                            path = H.text(sl, src).strip("\"")
+        # Also recurse into nested call_expressions (Ktor pattern)
+        if c.type == "call_expression":
+            sub = _ktor_path_from_call(c, src)
+            if sub is not None:
+                path = sub
+    return path
+
+
+# ---------------------------------------------------------------------------
+# The extractor
+# ---------------------------------------------------------------------------
 
 
 class KotlinExtractor(Extractor):
@@ -137,10 +272,9 @@ class KotlinExtractor(Extractor):
             ))
 
         def handle_class(c):
-            anns = _modifier_annotation_names(c, src)
+            anns = _annotation_names(c, src)
             name = H.name_of(c, src)
 
-            # Spring stereotypes
             if anns & {"RestController", "Controller"}:
                 emit("class", "spring_controller", name, c)
                 _emit_spring_endpoints(c, name)
@@ -154,12 +288,10 @@ class KotlinExtractor(Extractor):
                 emit("dependency", "spring_service", name, c)
                 return
 
-            # data class → schema (DTO / Pydantic-like)
-            if _has_modifier(c, "data"):
+            if _is_data_class(c):
                 emit("schema", "kotlin_data_class", name, c)
                 return
 
-            # regular class
             emit("class", "kotlin_class", name, c)
 
         def handle_object(obj):
@@ -168,91 +300,49 @@ class KotlinExtractor(Extractor):
 
         def handle_function(fn):
             name = H.name_of(fn, src) or "?"
-            is_suspend = _has_modifier(fn, "suspend")
-            is_extension = False
-
-            # Detect extension function: if the function has a receiver type
-            # (non-null type_identifier before the name)
-            for c in fn.children:
-                if c.type in ("type_identifier", "user_type"):
-                    # The first type_identifier before ( is the receiver
-                    for sibling in fn.children:
-                        if sibling.type == "parameter":
-                            break
-                        if sibling.type in ("type_identifier", "user_type"):
-                            is_extension = True
-                            break
-                    break
-
-            if is_suspend:
+            if _is_suspend_function(fn):
                 emit("callable", "kotlin_suspend_function", name, fn)
-            elif is_extension:
+            elif _is_extension_function(fn):
                 emit("callable", "kotlin_extension_function", name, fn)
             else:
                 emit("callable", "kotlin_function", name, fn)
 
         def _emit_spring_endpoints(class_node, ctrl):
             """Extract @*Mapping endpoints from a Spring controller class."""
-            body = H.field(class_node, "class_body")
+            body = _class_body_child(class_node)
             if not body:
                 return
             for m in body.children:
                 if m.type != "function_declaration":
                     continue
-                anns = _modifier_annotation_names(m, src)
+                anns = _annotation_names(m, src)
                 for ann in anns:
                     if ann in _MAPPING_METHOD:
                         method = _MAPPING_METHOD[ann]
-                        # Try to extract path from annotation arg
                         path_arg = _annotation_string_arg(m, src, ann)
                         emit("endpoint", "spring_endpoint",
                              f"{ctrl}#{H.name_of(m, src)}", m,
                              endpoint={"method": method, "path": path_arg or ""})
                         break
 
-        def _annotation_string_arg(node, src, ann_name: str) -> str | None:
-            """Extract the first string argument of a named annotation.
-
-            e.g. @GetMapping("/users") → "/users"
-            """
-            mods = H.field(node, "modifiers")
-            if not mods:
-                return None
-            for c in mods.children:
-                if c.type != "annotation":
-                    continue
-                raw = H.text(c, src).strip()
-                if not raw.startswith("@" + ann_name):
-                    continue
-                # Find the string inside parentheses
-                for cc in c.children:
-                    if cc.type in ("string_literal", "string"):
-                        return H.text(cc, src).strip("\"")
-                return None
-            return None
-
-        def _emit_ktor_endpoints(fn_body_node):
-            """Walk a Ktor ``routing { }`` block for route definitions.
-
-            Matches ``get("/path") { }``, ``post("/path") { }`` etc.
-            """
-            for c in fn_body_node.children:
+        def _walk_ktor(body_node):
+            """Walk a Ktor ``routing { }`` block for route definitions."""
+            for c in body_node.children:
                 if c.type == "call_expression":
                     call_text = H.text(c, src).strip()
-                    # Check if this is a Ktor method call
                     for ktor_method in _KTOR_METHODS:
                         if call_text.startswith(ktor_method + "(") or \
-                           call_text.startswith(ktor_method + " ") or \
+                           call_text.startswith(ktor_method + " {") or \
                            call_text.startswith(ktor_method + "{"):
-                            p = _ktor_path(c, src)
+                            p = _ktor_path_from_call(c, src)
                             emit("endpoint", "ktor_endpoint",
                                  f"{ktor_method.upper()} {p or '/'}", c,
                                  endpoint={"method": ktor_method.upper(), "path": p or "/"})
                             break
-                    # Check for nested routing { }
-                    if call_text.startswith("routing"):
-                        for cc in c.children:
-                            _emit_ktor_endpoints(cc)
+                    if call_text.startswith("routing") or call_text.startswith("route"):
+                        _walk_ktor(c)
+                else:
+                    _walk_ktor(c)
 
         def walk(node):
             for c in node.children:
@@ -261,13 +351,16 @@ class KotlinExtractor(Extractor):
                 elif c.type == "object_declaration":
                     handle_object(c)
                 elif c.type == "function_declaration":
-                    # If function is top-level or inside a file (not inside a class body)
                     handle_function(c)
-                # Recurse into class bodies for nested classes
-                if c.type in ("class_body", "source_file", "script_file"):
-                    walk(c)
+                walk(c)
 
         walk(tree.root_node)
+
+        # Ktor routing detection (second pass on the whole tree).
+        # Always scan — the ``framework`` hint is unreliable because
+        # callers may not pass it, and Ktor patterns are unambiguous.
+        _walk_ktor(tree.root_node)
+
         return out
 
 

@@ -30,7 +30,7 @@ jobs:
           pip install pytest mypy
           pip install tree-sitter tree-sitter-python tree-sitter-typescript \
             tree-sitter-ruby tree-sitter-php tree-sitter-java \
-            tree-sitter-c-sharp tree-sitter-go 2>&1 | tail -3
+            tree-sitter-c-sharp tree-sitter-go tree-sitter-kotlin 2>&1 | tail -3
 
       - name: Verify git hooks are valid (syntax check)
         run: |
