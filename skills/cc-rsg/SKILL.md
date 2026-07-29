@@ -2,6 +2,11 @@
 name: cc-rsg
 description: Reverse-engineer comprehensive specification documents from existing codebases through goal-driven reconnaissance, WBS-based parallel investigation, and iterative question-bank dialogue.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion, WebFetch, WebSearch
+metadata:
+  short-description: >-
+    Reverse-spec generator for legacy codebases.
+    Phased reconnaissance → WBS → parallel investigation →
+    verification → dialogue refinement → delivery.
 ---
 
 # cc-rsg (Claude Code Reverse Spec Generator)

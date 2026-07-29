@@ -42,7 +42,29 @@ In the LLM era, asking an AI to "make a spec from this code" produces visually p
 
 ## Installation
 
-### Place into your Claude Code environment
+### Quick install (recommended)
+
+Clone the repository and run the installer from the **project root directory** (not inside the repo):
+
+```bash
+git clone https://github.com/nekolife1984/cc-rsg.git
+./cc-rsg/install.sh
+```
+
+This interactive installer supports: Claude Code, Codex CLI, OpenCode, GitHub Copilot, Cursor, and Other agents.
+
+Windows:
+```powershell
+git clone https://github.com/nekolife1984/cc-rsg.git
+.\cc-rsg\install.ps1
+```
+
+Dry-run mode:
+```bash
+./cc-rsg/install.sh --dry-run
+```
+
+### Manual installation
 
 ```bash
 # As a project-level skill
@@ -56,7 +78,7 @@ cp -r skills/cc-rsg ~/.claude/skills/
 
 ### Verify installation
 
-Launch Claude Code and run `/help` — `cc-rsg` should appear in the skill list.
+Launch your agent and run `/help` — `cc-rsg` should appear in the skill list.
 
 ---
 
