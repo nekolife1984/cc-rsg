@@ -146,7 +146,7 @@ Corresponding real sources (Read these with the Read tool):
 - app/models/role.rb
 - db/schema.rb (relevant portions)
 
-Draft output path: {output_dir}/drafts/05-data-model.md
+Draft output path: .cc-rsg/drafts/05-data-model.md
 
 Quality bar:
 - Body ≥ 200 lines
@@ -273,6 +273,6 @@ In outline mode:
 - **In `outline` / `interactive` mode**: "exhaustive entity listing" takes precedence. Apply Confidence labels honestly per cell — do NOT over-apply 🟢 (only for files actually viewed).
 - Cross-chapter consistency is checked in Phase 4.
 - Do not hide uncertainty markers; keep them explicit in the draft. They are the starting point for Phase 5 dialogue.
-- **Phase 3 progression gate (mandatory)**: do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` (standard, reserved, AND user_custom) has a non-empty body in `drafts/` (at least 10 non-blank lines outside of code fences). The agent MUST verify this before updating `state.json` to mark Phase 3 complete; declaring "complete" while chapters are still stubs is a contract violation and triggers an immediate Phase 4 fail.
+- **Phase 3 progression gate (mandatory)**: do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` (standard, reserved, AND user_custom) has a non-empty body in `.cc-rsg/drafts/` (at least 10 non-blank lines outside of code fences). The agent MUST verify this before updating `state.json` to mark Phase 3 complete; declaring "complete" while chapters are still stubs is a contract violation and triggers an immediate Phase 4 fail.
 
 ---

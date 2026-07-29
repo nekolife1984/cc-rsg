@@ -23,7 +23,7 @@ Corresponding real sources (Read these):
 - app/models/role.rb
 - db/schema.rb (relevant portions)
 
-Draft output path: {output_dir}/drafts/05-data-model.md
+Draft output path: .cc-rsg/drafts/05-data-model.md
 
 Quality bar:
 - Body ≥ 200 lines
@@ -64,7 +64,7 @@ After every per-chapter `task` completes, append a row to `.cc-rsg/state/manifes
 
 | NN | slug | path | inventory_ids | lines | key topic |
 |----|------|------|----------------|------|----------------|
-| 05 | data-model | {output_dir}/drafts/05-data-model.md | INV-012,INV-013,INV-014,INV-015 | 234 | Project / Issue / User / Role relationships |
+| 05 | data-model | .cc-rsg/drafts/05-data-model.md | INV-012,INV-013,INV-014,INV-015 | 234 | Project / Issue / User / Role relationships |
 ```
 
 This manifest is the **single entry point** when the main agent needs a chapter-level overview in Phase 4 / 5 / 6. Because the chapter body never enters the conversation history, the main agent first reads the manifest and only then opens the specific chapter via the Read tool.

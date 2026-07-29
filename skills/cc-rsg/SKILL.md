@@ -57,10 +57,10 @@ Use **shape** (not color) for visual emphasis.
 | 0 | Setup & Goal | `phase-0-setup.md` | `.cc-rsg/goal.json` |
 | 1 | Recon & Template | `phase-1-recon.md` | `recon-report.md`, template |
 | 2 | Plan & WBS | `phase-2-wbs.md` | `inventory.json`, `wbs.json` |
-| 3 | Investigate | `phase-3-investigate.md` | `drafts/*.md` |
+| 3 | Investigate | `phase-3-investigate.md` | `.cc-rsg/drafts/*.md` (intermediate) |
 | 4 | Verify | `phase-4-verify.md` | coverage report |
 | 5 | Refine via Dialogue | `phase-5-dialogue.md` | resolved `questions.json` |
-| 6 | Deliver | `phase-6-deliver.md` | `final/` spec |
+| 6 | Deliver | `phase-6-deliver.md` | `{output_dir}/final/` (final spec) |
 | 6.5 | Interactive Deep-Dive | `phase-6-5-deepdive.md` | on-demand deep-dive chapters |
 | 7 | Drift Detection | `phase-7-drift.md` | `drift-report.md` |
 | 7b | REF Auto-Fix | `phase-7b-ref-autofix.md` | corrected REF lines |
@@ -83,5 +83,5 @@ Use **shape** (not color) for visual emphasis.
 3. **Sub-agent delegation** → read `subagent-behavior.md` before Phase 3.
 4. **State management & resume** → read `state-management.md` when resuming.
 5. **The 11 design principles above are universal across all phases.**
-6. **The Mermaid styling contract applies to every diagram in drafts/ and final/.**
+6. **The Mermaid styling contract applies to every diagram in `.cc-rsg/drafts/` and `{output_dir}/final/`.**
 7. **Context-saving note**: This SKILL.md is intentionally lightweight. Phase detail files are loaded only when needed via the Read tool, reducing per-invocation context overhead — especially important for Claude Code which injects SKILL.md into the system prompt.

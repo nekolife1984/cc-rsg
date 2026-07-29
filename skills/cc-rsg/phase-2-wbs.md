@@ -20,7 +20,7 @@ Finalise the skeleton of the spec, decompose the work to fill each chapter into 
      - `99-unresolved.md` (unresolved-items chapter)
      - `traceability.md` (traceability table, no chapter number)
    - Regular chapter numbers are assigned sequentially in `01`-`98` while avoiding collisions with reserved numbers.
-   - **When to generate them**: at Phase 2, create empty chapter files under `drafts/` for all chapters — standard, reserved, AND user-custom — so every chapter has a skeleton to fill (the body is filled in Phase 3 / Phase 5 / Phase 6 depending on `kind`).
+   - **When to generate them**: at Phase 2, create empty chapter files under `.cc-rsg/drafts/` for all chapters — standard, reserved, AND user-custom — so every chapter has a skeleton to fill (the body is filled in Phase 3 / Phase 5 / Phase 6 depending on `kind`).
    - Place a meta comment (`<!-- meta: ... -->`) at the top of each chapter file describing what that chapter covers.
    - The skeleton of `00-metadata.md` carries a meta comment indicating "Phase 6 will write goal.json snapshot / generation timestamp / commit hash / template selection result here".
    - The skeleton of `99-unresolved.md` carries a meta comment indicating "Phase 6 will aggregate `abandoned` entries from `questions.json` here".
@@ -219,7 +219,7 @@ Finalise the skeleton of the spec, decompose the work to fill each chapter into 
 - WBS granularity directly drives sub-agent precision. When in doubt, split finer.
 - Skipping the user review causes large rework in Phase 3.
 - **Strictly observe the chapter file naming convention**. Free-form names like `chapter2_architecture.md` or `第3章_認証.md` are NOT allowed. Violations are flagged by `scripts/coverage-check.py`.
-- **Skeleton size cap (mandatory)**: every file under `drafts/` produced in Phase 2 has **≤ 5 non-blank lines** of body outside code fences. Verify this immediately after writing each skeleton (`wc -l drafts/*.md` for a sanity check); a skeleton that is already long has body content that belongs in Phase 3 — delete the body and keep only meta comment + title + (optional) Sources Read placeholder.
+- **Skeleton size cap (mandatory)**: every file under `.cc-rsg/drafts/` produced in Phase 2 has **≤ 5 non-blank lines** of body outside code fences. Verify this immediately after writing each skeleton (`wc -l .cc-rsg/drafts/*.md` for a sanity check); a skeleton that is already long has body content that belongs in Phase 3 — delete the body and keep only meta comment + title + (optional) Sources Read placeholder.
 - **Phase 2 does NOT read code**: the only allowed source reads in Phase 2 are (a) for inventory extraction via `source-map.py`, (b) for deciding the depth_mode chapter structure. Reading individual class / model / controller files to write their description is **Phase 3's job**, not Phase 2's. If you catch yourself opening `app/models/issue.rb` to write what `Issue` does, you've crossed into Phase 3 — stop and finish Phase 2 first.
 
 ---

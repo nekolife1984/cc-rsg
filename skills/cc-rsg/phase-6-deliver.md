@@ -1,14 +1,14 @@
 ## Phase 6: Deliver
 
 ### Purpose
-Output the final spec as Markdown under `{output_dir}/final/`.
+Output the final spec as Markdown under `{output_dir}/final/` (default: `.cc-rsg/final/`). Drafts always stay at `.cc-rsg/drafts/` regardless of output_dir choice.
 
 ### Procedure
 
 File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d)-[a-z0-9-]+\.md$`; reserved files: `00-metadata.md` / `99-unresolved.md` / `traceability.md`). Phase 6 does not create new names; it fills in the skeleton files generated in Phase 2.
 
 1. **Merge chapter drafts**
-   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `drafts/` to `{output_dir}/final/` in the template-defined order (user-custom chapters typically appear at the end unless the user's intent suggests otherwise).
+   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `.cc-rsg/drafts/` to `{output_dir}/final/` in the template-defined order (user-custom chapters typically appear at the end unless the user's intent suggests otherwise).
    - Do NOT change the file names (use the names finalised in Phase 2).
    - Do NOT silently skip a chapter just because its draft body is short — that is a Phase 3 / Phase 4 failure and must be surfaced, not papered over.
    - Strip the meta comment at the top of each chapter file.

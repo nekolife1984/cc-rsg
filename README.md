@@ -116,9 +116,11 @@ A `.cc-rsg/` directory is created at the root of the target project, containing:
 ├── inventory.json      # All inventory items
 ├── wbs.json            # Work breakdown
 ├── questions.json      # Question Bank
-├── drafts/             # Per-chapter drafts
-└── final/              # Final deliverables
+├── drafts/             # Per-chapter drafts (intermediate, always in .cc-rsg/)
+└── final/              # Final deliverables (or {output_dir}/final/ if custom path set)
 ```
+
+Drafts always stay in `.cc-rsg/drafts/` regardless of the output directory choice (Q6 in Phase 0). Only the final deliverables go to the custom path.
 
 ---
 
@@ -480,9 +482,11 @@ cp -r skills/cc-rsg .claude/skills/
 ├── inventory.json      # 全インベントリ項目
 ├── wbs.json            # 作業分解
 ├── questions.json      # Question Bank
-├── drafts/             # 各章のドラフト
-└── final/              # 最終成果物
+├── drafts/             # 各章のドラフト（中間成果物、常に .cc-rsg/ 内）
+└── final/              # 最終成果物（カスタムパス指定時は {output_dir}/final/）
 ```
+
+Drafts（中間ドラフト）は出力先に関わらず常に `.cc-rsg/drafts/` に配置されます。最終成果物のみが Q6 で指定したパスに出力されます。
 
 ---
 

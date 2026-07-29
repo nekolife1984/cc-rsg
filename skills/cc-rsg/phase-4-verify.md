@@ -31,7 +31,7 @@ Run inventory cross-check, per-chapter quality metrics, MECE check, and consiste
    - per-chapter body lines (≥ 200), `[REF:]` count (≥ 10), code blocks (≥ 3), Mermaid (≥ 1), Sources Read items (≥ 5) — **applied only to `kind: "standard"` chapters; `user_custom` chapters are exempt**
    - questions count (≥ 10), open ratio (≤ 20%)
    - MECE coverage (≥ 70%)
-   - **Check 12 — User-custom deliverables**: every filename in `goal.json.user_custom_deliverables` must exist in the target directory (`drafts/` in Phase 4, `final/` in Phase 6) AND have a non-empty body (≥ 10 non-blank lines outside code fences).
+   - **Check 12 — User-custom deliverables**: every filename in `goal.json.user_custom_deliverables` must exist in the target directory (`.cc-rsg/drafts/` in Phase 4, `{output_dir}/final/` in Phase 6) AND have a non-empty body (≥ 10 non-blank lines outside code fences).
 
 3. **Failure → loop back to Phase 3**
    - When exit code is 1, read the "gate decision" section of the output and:
