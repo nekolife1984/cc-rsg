@@ -51,6 +51,18 @@ def _parser(language: str):
         elif language == "go":
             import tree_sitter_go as m
             lang = _ts.Language(m.language())
+        elif language == "c":
+            import tree_sitter_c as m
+            lang = _ts.Language(m.language())
+        elif language == "cpp":
+            import tree_sitter_cpp as m
+            lang = _ts.Language(m.language())
+        elif language == "dart":
+            import tree_sitter_dart as m
+            lang = _ts.Language(m.language())
+        elif language == "swift":
+            import tree_sitter_swift as m
+            lang = _ts.Language(m.language())
         else:
             return None
         return _ts.Parser(lang)
@@ -64,7 +76,7 @@ def name_of(node, src: bytes) -> str:
     if nm is not None:
         return text(nm, src)
     for c in node.children:
-        if c.type in ("identifier", "name", "type_identifier"):
+        if c.type in ("identifier", "name", "type_identifier", "field_identifier", "simple_identifier"):
             return text(c, src)
     return "?"
 

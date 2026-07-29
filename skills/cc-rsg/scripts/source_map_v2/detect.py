@@ -25,8 +25,12 @@ LANG_BY_EXT: dict[str, str] = {
     ".java": "java", ".kt": "kotlin", ".kts": "kotlin",
     ".cs": "csharp",
     ".go": "go",
+    ".c": "c", ".h": "c",
+    ".cpp": "cpp", ".hpp": "cpp", ".cxx": "cpp", ".cc": "cpp",
     ".cob": "cobol", ".cbl": "cobol", ".cpy": "cobol",
     ".sql": "sql",
+    ".dart": "dart",
+    ".swift": "swift",
 }
 
 
