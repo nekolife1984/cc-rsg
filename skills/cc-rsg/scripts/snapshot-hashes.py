@@ -1,0 +1,274 @@
+#!/usr/bin/env python3
+"""
+snapshot-hashes.py — record SHA256 hashes of source-map units for drift detection.
+
+Reads ``source-map.json`` and computes a SHA256 hash of the content of each
+SRC-ID's line range. The output is consumed by ``detect-drift.py --mode hash``
+to detect code changes without requiring Git.
+
+Usage
+-----
+    python snapshot-hashes.py --cc-rsg-dir .cc-rsg
+    python snapshot-hashes.py --cc-rsg-dir .cc-rsg --output .cc-rsg/source-hashes.json
+
+Output
+------
+    .cc-rsg/source-hashes.json
+
+Dependencies
+------------
+    Python 3.10+ (stdlib only).
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+
+SCHEMA_VERSION = "0.1.0"
+HASH_ALGORITHM = "sha256"
+LINE_HASH_BYTES = 4096  # read up to 4KB per line for hash stability
+
+
+def hash_line_range(
+    file_path: str | Path,
+    line_start: int,
+    line_end: int,
+) -> tuple[str, int]:
+    """Compute SHA256 of lines [line_start, line_end] (1-indexed inclusive).
+
+    Returns (hex_digest, actual_line_count).
+    Normalizes text encoding to eliminate nondeterminism:
+    - Reads as UTF-8 (strips BOM if present)
+    - Treats CRLF and LF as equivalent (rstrip trailing newline chars)
+    - Line-level trailing content (whitespace) is *preserved* — only
+      the line-ending character (\\n, \\r\\n) is stripped for hashing.
+    """
+    hasher = hashlib.sha256()
+    line_count = 0
+
+    try:
+        with open(file_path, "r", encoding="utf-8-sig", errors="replace") as f:
+            for current_lineno, line in enumerate(f, start=1):
+                if current_lineno > line_end:
+                    break
+                if current_lineno >= line_start:
+                    # Strip trailing newline for deterministic hashing
+                    normalized = line.rstrip("\n\r")
+                    hasher.update(normalized.encode("utf-8"))
+                    line_count += 1
+    except FileNotFoundError:
+        raise  # Let caller handle
+    except OSError as e:
+        print(f"WARNING: cannot read {file_path}: {e}", file=sys.stderr)
+        return ("", 0)
+
+    return hasher.hexdigest(), line_count
+
+
+def compute_hashes(
+    units: list[dict[str, Any]],
+    target_root: str | Path,
+) -> dict[str, dict[str, Any]]:
+    """Compute hash for each SRC-ID unit.
+
+    Returns dict keyed by SRC-ID with hash, line_count, etc.
+    """
+    result: dict[str, dict[str, Any]] = {}
+    for unit in units:
+        uid = unit.get("id", "")
+        file_path_rel = unit.get("path", "")
+        line_range = unit.get("line_range", [0, 0])
+        if not uid or not file_path_rel:
+            continue
+
+        abs_path = Path(target_root) / file_path_rel
+        line_start, line_end = line_range
+
+        try:
+            digest, line_count = hash_line_range(abs_path, line_start, line_end)
+        except FileNotFoundError:
+            print(
+                f"WARNING: file not found for {uid} ({file_path_rel}), "
+                f"marking as MISSING",
+                file=sys.stderr,
+            )
+            result[uid] = {
+                "id": uid,
+                "path": file_path_rel,
+                "line_range": line_range,
+                "line_count": 0,
+                "hash": "",
+                "status": "MISSING",
+            }
+            continue
+
+        result[uid] = {
+            "id": uid,
+            "path": file_path_rel,
+            "line_range": line_range,
+            "line_count": line_count,
+            "hash": f"{HASH_ALGORITHM}:{digest}",
+            "status": "OK",
+        }
+
+    return result
+
+
+def detect_scan_patterns(target_root: str | Path) -> dict[str, list[str]]:
+    """Detect common source file patterns from the target root.
+
+    Returns scan/include patterns based on observed file extensions.
+    This is a best-effort heuristic for detecting new files.
+    """
+    source_extensions = {
+        ".py", ".rb", ".js", ".ts", ".jsx", ".tsx", ".java", ".kt", ".kts",
+        ".go", ".rs", ".php", ".cs", ".swift", ".c", ".cpp", ".h", ".hpp",
+        ".sql", ".r", ".scala", ".ex", ".exs", ".vue", ".svelte",
+    }
+    exclude_dirs = {
+        ".git", ".svn", "node_modules", "vendor", ".venv", "venv",
+        "__pycache__", ".specbridge", ".cc-rsg", ".spectra", "dist", "build",
+        ".hermes", ".claude", ".cursor",
+    }
+
+    observed: set[str] = set()
+    try:
+        for entry in os.scandir(target_root):
+            if entry.name.startswith(".") or entry.name in exclude_dirs:
+                continue
+            if entry.is_dir():
+                # Shallow scan first level
+                try:
+                    for sub in os.scandir(entry.path):
+                        ext = os.path.splitext(sub.name)[1].lower()
+                        if ext in source_extensions:
+                            observed.add(f"**/*{ext}")
+                except PermissionError:
+                    continue
+            else:
+                ext = os.path.splitext(entry.name)[1].lower()
+                if ext in source_extensions:
+                    observed.add(f"**/*{ext}")
+    except PermissionError:
+        pass
+
+    patterns = sorted(observed) if observed else ["**/*.py", "**/*.rb", "**/*.js", "**/*.ts"]
+    return {
+        "include_patterns": patterns,
+        "exclude_patterns": [f"**/{d}/**" for d in sorted(exclude_dirs)],
+    }
+
+
+def build_output(
+    units_hashes: dict[str, dict[str, Any]],
+    target_root: str,
+    source_map_ref: str,
+    scan_info: dict[str, list[str]],
+) -> dict[str, Any]:
+    """Assemble the final source-hashes.json document."""
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "target_root": target_root,
+        "source_map_ref": source_map_ref,
+        "units_total": len(units_hashes),
+        "units": units_hashes,
+        "scan_patterns": scan_info,
+    }
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="cc-rsg: snapshot SHA256 hashes of source-map units for drift detection",
+    )
+    parser.add_argument(
+        "--cc-rsg-dir",
+        default=".cc-rsg",
+        help="Path to .cc-rsg/ directory (default: .cc-rsg)",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Output directory for source-hashes.json "
+             "(default: same as --cc-rsg-dir)",
+    )
+    parser.add_argument(
+        "--output",
+        default=None,
+        help="Output path for source-hashes.json "
+             "(default: <output-dir>/source-hashes.json)",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+    cc_rsg_path = Path(args.cc_rsg_dir)
+    if not cc_rsg_path.is_dir():
+        print(
+            f"ERROR: {args.cc_rsg_dir} is not a directory.",
+            file=sys.stderr,
+        )
+        return 2
+
+    source_map_path = cc_rsg_path / "source-map.json"
+    if not source_map_path.exists():
+        print(
+            f"ERROR: {source_map_path} not found. Run scripts/source-map.py first.",
+            file=sys.stderr,
+        )
+        return 2
+
+    # Load source-map
+    sm = json.loads(source_map_path.read_text(encoding="utf-8"))
+    units = sm.get("units", [])
+    if not units:
+        print("WARNING: source-map.json has no units. Nothing to hash.", file=sys.stderr)
+
+    target_root = sm.get("target_root", ".")
+
+    # Compute hashes
+    units_hashes = compute_hashes(units, target_root)
+
+    # Detect scan patterns for future new-file detection
+    scan_info = detect_scan_patterns(target_root)
+
+    # Build output
+    source_map_ref = (
+        f"source-map.json ({sm.get('schema_version', '?')})"
+        f" — {len(units)} units"
+    )
+    output = build_output(units_hashes, target_root, source_map_ref, scan_info)
+
+    output_dir = Path(args.output_dir) if args.output_dir else cc_rsg_path
+    output_path = args.output or str(output_dir / "source-hashes.json")
+    Path(output_path).write_text(
+        json.dumps(output, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+    ok_count = sum(
+        1 for u in units_hashes.values() if u.get("status") == "OK"
+    )
+    missing_count = sum(
+        1 for u in units_hashes.values() if u.get("status") == "MISSING"
+    )
+
+    print(
+        f"snapshot-hashes.py: {len(units)} units processed, "
+        f"{ok_count} hashed, {missing_count} missing, "
+        f"written to {output_path}"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
