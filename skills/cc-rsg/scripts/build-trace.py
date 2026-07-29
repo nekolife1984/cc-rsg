@@ -12,9 +12,9 @@ This produces in one pass:
 - covered / excluded / uncovered aggregation for MECE verification
 
 Usage:
-    python build-trace.py --cc-rsg-dir .cc-rsg [--target-dir-for-required final]
+    python build-trace.py --cc-rsg-dir .cc-rsg [--output-dir .cc-rsg] [--target-dir-for-required final]
 
-Output schema (.cc-rsg/trace.json):
+Output schema (<output-dir>/trace.json):
     {
       "schema_version": "0.2.0",
       "generated_at": "<ISO>",
@@ -195,12 +195,18 @@ def main(argv: list[str] | None = None) -> int:
         choices=["drafts", "final"],
         help="Which directory to scan for [REF:] markers (drafts or final)",
     )
+    parser.add_argument(
+        "--output-dir",
+        default=".cc-rsg",
+        help="Path to output trace.json (defaults to --cc-rsg-dir value if you only want one dir)",
+    )
     args = parser.parse_args(argv)
 
     cc_rsg = Path(args.cc_rsg_dir)
+    output_dir = Path(args.output_dir)
     source_map_path = cc_rsg / "source-map.json"
     drafts_dir = cc_rsg / args.target_dir_for_required
-    output_path = cc_rsg / "trace.json"
+    output_path = output_dir / "trace.json"
     exclusions_path = cc_rsg / "exclusions.yaml"
 
     if not source_map_path.exists():

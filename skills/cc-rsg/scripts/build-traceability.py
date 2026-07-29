@@ -3,7 +3,7 @@
 cc-rsg build-traceability.py
 
 Reads `.cc-rsg/trace.json` and auto-generates a human-readable
-`final/traceability.md` (or `drafts/traceability.md`).
+`traceability.md` under the specified output directory.
 
 Produces:
 - Chapter → Source mapping table
@@ -14,7 +14,7 @@ so the user can see everything in a single Markdown file. Never write it
 by hand.
 
 Usage:
-    python build-traceability.py --cc-rsg-dir .cc-rsg --output-dir final
+    python build-traceability.py --cc-rsg-dir .cc-rsg --output-dir . --stage final
 """
 
 from __future__ import annotations
@@ -30,11 +30,12 @@ from pathlib import Path
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="cc-rsg traceability.md generator")
     parser.add_argument("--cc-rsg-dir", default=".cc-rsg")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Output directory (default: same as --cc-rsg-dir)")
     parser.add_argument(
-        "--output-dir",
-        default="final",
+        "--stage",
         choices=["drafts", "final"],
-        help="Where to write traceability.md (drafts/ or final/)",
+        default="final",
+        help="Write to a stage subdirectory under --output-dir",
     )
     args = parser.parse_args(argv)
 
@@ -48,7 +49,8 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     trace = json.loads(trace_path.read_text(encoding="utf-8"))
-    output_path = cc_rsg / args.output_dir / "traceability.md"
+    output_dir = args.output_dir or Path(args.cc_rsg_dir)
+    output_path = output_dir / args.stage / "traceability.md"
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     total = trace["source_units_total"]

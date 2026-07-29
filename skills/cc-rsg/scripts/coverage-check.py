@@ -509,6 +509,7 @@ def detect_depth_mode(cc_rsg_dir: Path) -> str:
 def build_report(
     cc_rsg_dir: Path,
     *,
+    output_dir: Path,
     target_dir_name: str,
     min_inventory: str | int,
     max_macro_ratio: float,
@@ -522,7 +523,7 @@ def build_report(
     min_sources_read_per_chapter: int,
     min_mece_coverage: float,
 ) -> CoverageReport:
-    target_dir = cc_rsg_dir / target_dir_name
+    target_dir = output_dir / target_dir_name
     inventory_path = cc_rsg_dir / "inventory.json"
     questions_path = cc_rsg_dir / "questions.json"
 
@@ -840,6 +841,8 @@ def main() -> int:
     p = argparse.ArgumentParser(description="cc-rsg Phase 4 verification (v2)")
     p.add_argument("--cc-rsg-dir", type=Path, default=Path.cwd() / ".cc-rsg")
     p.add_argument("--target-dir-for-required", default="final", choices=["drafts", "final"])
+    p.add_argument("--output-dir", type=Path, default=None,
+                   help="Spec output directory (default: same as --cc-rsg-dir)")
     p.add_argument("--output-format", choices=["text", "json"], default="text")
 
     # Per-chapter thresholds
@@ -863,10 +866,12 @@ def main() -> int:
     p.add_argument("--strict", action="store_true")
 
     args = p.parse_args()
+    args.output_dir = args.output_dir or args.cc_rsg_dir
 
     try:
         report = build_report(
             args.cc_rsg_dir,
+            output_dir=args.output_dir,
             target_dir_name=args.target_dir_for_required,
             min_inventory=args.min_inventory,
             max_macro_ratio=args.max_macro_ratio,
