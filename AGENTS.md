@@ -1,10 +1,13 @@
 # cc-rsg — Agent Guide
 
-## Branching Strategy
+## Contributor Docs
 
-GitHub Flow. Details:
-- EN: [docs/en/01-branching-strategy.md](docs/en/01-branching-strategy.md)
-- JA: [docs/ja/01-branching-strategy.md](docs/ja/01-branching-strategy.md)
+| Guide | EN | JA |
+|-------|----|----|
+| Branching Strategy | [docs/en/01-branching-strategy.md](docs/en/01-branching-strategy.md) | [docs/ja/01-branching-strategy.md](docs/ja/01-branching-strategy.md) |
+| Commit Conventions | [docs/en/02-commit-conventions.md](docs/en/02-commit-conventions.md) | [docs/ja/02-commit-conventions.md](docs/ja/02-commit-conventions.md) |
+| PR Review Process | [docs/en/03-pr-review-process.md](docs/en/03-pr-review-process.md) | [docs/ja/03-pr-review-process.md](docs/ja/03-pr-review-process.md) |
+| Release Process | [docs/en/04-release-process.md](docs/en/04-release-process.md) | [docs/ja/04-release-process.md](docs/ja/04-release-process.md) |
 
 ## Key Files
 

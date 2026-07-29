@@ -9,14 +9,7 @@
 - 検証チェックリストの拡充
 - 実プロジェクト適用例のレポート
 
-## 開発の流れ
-
-ブランチ戦略は **GitHub Flow** を採用しています。詳細は以下を参照してください：
-
-- EN: [Branching Strategy](docs/en/01-branching-strategy.md)
-- JA: [ブランチ戦略](docs/ja/01-branching-strategy.md)
-
-### クイックスタート
+## クイックスタート
 
 ```bash
 # 1. main からブランチを作成
@@ -33,7 +26,16 @@ git push origin feat/your-feature
 # → GitHubでPRを作成
 ```
 
-### ルール
+## 開発ガイド
+
+| ガイド | 説明 |
+|--------|------|
+| [ブランチ戦略](docs/ja/01-branching-strategy.md) | GitHub Flow、ブランチ命名規則、上流同期 |
+| [コミット規約](docs/ja/02-commit-conventions.md) | Conventional Commits、1変更1コミット、メッセージ形式 |
+| [PRレビュープロセス](docs/ja/03-pr-review-process.md) | PRテンプレート、レビュアーチェックリスト、squash merge |
+| [リリース手順](docs/ja/04-release-process.md) | バージョニング、CHANGELOG、Zenodo |
+
+## ルール
 
 - **1変更1コミット** — コミットメッセージは `feat:` / `fix:` / `chore:` / `docs:` / `upstream:` のプレフィックスを使用
 - **PR必須** — ソースコード・テスト・機能変更は必ずPR経由
@@ -43,3 +45,7 @@ git push origin feat/your-feature
   - `mypy`（アドバイザリ、警告表示）
   - Smoke import チェック（全スクリプトの import 検証）
 - **ドキュメント同期** — EN + JA の両方を更新（ドキュメント変更時）
+
+## 英語版
+
+For English: see the [English README](README.md) and [docs/en/](docs/en/) directory.
