@@ -60,7 +60,7 @@ Use **shape** (not color) for visual emphasis.
 | 3 | Investigate | `phase-3-investigate.md` | `.cc-rsg/drafts/*.md` (intermediate) |
 | 4 | Verify | `phase-4-verify.md` | coverage report |
 | 5 | Refine via Dialogue | `phase-5-dialogue.md` | resolved `questions.json` |
-| 6 | Deliver | `phase-6-deliver.md` | `{output_dir}/` (final spec) |
+| 6 | Deliver | `phase-6-deliver.md` | `{output_dir}/` (final spec; default: `.cc-rsg/final/`) |
 | 6.5 | Interactive Deep-Dive | `phase-6-5-deepdive.md` | on-demand deep-dive chapters |
 | 7 | Drift Detection | `phase-7-drift.md` | `drift-report.md` |
 | 7b | REF Auto-Fix | `phase-7b-ref-autofix.md` | corrected REF lines |
