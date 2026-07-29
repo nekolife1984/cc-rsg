@@ -249,7 +249,21 @@ cc-rsg/
 ├── .gitignore
 └── skills/
     └── cc-rsg/
-        ├── SKILL.md
+        ├── SKILL.md                         # Lightweight index (~90 lines)
+        ├── phase-0-setup.md                 # Phase 0: Setup & Goal
+        ├── phase-1-recon.md                 # Phase 1: Recon & Template
+        ├── phase-2-wbs.md                   # Phase 2: Plan & WBS
+        ├── phase-3-investigate.md           # Phase 3: Investigate
+        ├── phase-4-verify.md                # Phase 4: Verify
+        ├── phase-5-dialogue.md              # Phase 5: Refine via Dialogue
+        ├── phase-6-deliver.md               # Phase 6: Deliver
+        ├── phase-6-5-deepdive.md            # Phase 6.5: Interactive Deep-Dive
+        ├── phase-7-drift.md                 # Phase 7: Drift Detection
+        ├── phase-7b-ref-autofix.md          # Phase 7b: REF Auto-Fix
+        ├── phase-7c-changespec.md           # Phase 7c: ChangeSpec
+        ├── question-bank.md                 # Question Bank operation
+        ├── subagent-behavior.md             # Sub-agent behaviour
+        ├── state-management.md              # State management & resume
         ├── agents/
         │   └── chapter-investigator.md  # Per-chapter sub-agent definition
         ├── references/
@@ -599,7 +613,21 @@ cc-rsg/
 ├── .gitignore
 └── skills/
     └── cc-rsg/
-        ├── SKILL.md
+        ├── SKILL.md                         # Lightweight index (~90 lines)
+        ├── phase-0-setup.md                 # Phase 0: Setup & Goal
+        ├── phase-1-recon.md                 # Phase 1: Recon & Template
+        ├── phase-2-wbs.md                   # Phase 2: Plan & WBS
+        ├── phase-3-investigate.md           # Phase 3: Investigate
+        ├── phase-4-verify.md                # Phase 4: Verify
+        ├── phase-5-dialogue.md              # Phase 5: Refine via Dialogue
+        ├── phase-6-deliver.md               # Phase 6: Deliver
+        ├── phase-6-5-deepdive.md            # Phase 6.5: Interactive Deep-Dive
+        ├── phase-7-drift.md                 # Phase 7: Drift Detection
+        ├── phase-7b-ref-autofix.md          # Phase 7b: REF Auto-Fix
+        ├── phase-7c-changespec.md           # Phase 7c: ChangeSpec
+        ├── question-bank.md                 # Question Bank operation
+        ├── subagent-behavior.md             # Sub-agent behaviour
+        ├── state-management.md              # State management & resume
         ├── agents/
         │   └── chapter-investigator.md  # 章単位サブエージェント定義
         ├── references/
