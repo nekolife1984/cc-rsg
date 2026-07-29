@@ -63,7 +63,7 @@ Regardless of template, confirm the following on every spec.
 
 ### Filename convention and required files
 - [ ] Every chapter file under `.cc-rsg/drafts/` matches `^(0\\d|[1-9]\\d)-[a-z0-9-]+\\.md$` (`coverage-check.py` checks this; violations are WARN).
-- [ ] The three required files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) exist under `.cc-rsg/drafts/` or `{output_dir}/final/` (`coverage-check.py` checks this; missing files are ERROR).
+- [ ] The three required files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) exist under `.cc-rsg/drafts/` or `{output_dir}/` (`coverage-check.py` checks this; missing files are ERROR).
 - [ ] Chapter numbers (`NN`) have no duplicates and no unnecessary gaps.
 
 ### Traceability

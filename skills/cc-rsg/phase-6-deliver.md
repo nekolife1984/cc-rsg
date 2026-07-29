@@ -1,14 +1,14 @@
 ## Phase 6: Deliver
 
 ### Purpose
-Output the final spec as Markdown under `{output_dir}/final/` (default: `.cc-rsg/final/`). Drafts always stay at `.cc-rsg/drafts/` regardless of output_dir choice.
+Output the final spec as Markdown under `{output_dir}/` (default: `.cc-rsg/`). Drafts always stay at `.cc-rsg/drafts/` regardless of output_dir choice.
 
 ### Procedure
 
 File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d)-[a-z0-9-]+\.md$`; reserved files: `00-metadata.md` / `99-unresolved.md` / `traceability.md`). Phase 6 does not create new names; it fills in the skeleton files generated in Phase 2.
 
 1. **Merge chapter drafts**
-   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `.cc-rsg/drafts/` to `{output_dir}/final/` in the template-defined order (user-custom chapters typically appear at the end unless the user's intent suggests otherwise).
+   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `.cc-rsg/drafts/` to `{output_dir}/` in the template-defined order (user-custom chapters typically appear at the end unless the user's intent suggests otherwise).
    - Do NOT change the file names (use the names finalised in Phase 2).
    - Do NOT silently skip a chapter just because its draft body is short — that is a Phase 3 / Phase 4 failure and must be surfaced, not papered over.
    - Strip the meta comment at the top of each chapter file.
@@ -36,7 +36,7 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 
 5. **Final deliverable layout**
    ```
-   {output_dir}/final/
+   {output_dir}/
    ├── 00-metadata.md       # metadata (created Phase 2, filled Phase 6)
    ├── 01-overview.md       # Chapter 1: Overview
    ├── 02-architecture.md   # Chapter 2: Architecture
@@ -49,9 +49,9 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
    Note: standard / reserved file names are ASCII slug-fixed (language-independent); user-custom file names match the verbatim entries in `goal.json.user_custom_deliverables`. Chapter titles in the body follow `goal.json.output_language` (EN example: `# Chapter 1: Overview` / JA example: `# 第1章: 概要`).
 
 6. **Intent-vs-delivery audit (mandatory; the final gate before completion)**
-   - Re-run `coverage-check.py` against `--target-dir-for-required final`. Exit code must be 0.
-   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/final/{name}` AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
-   - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `final/`.
+   - Re-run `coverage-check.py` against `--target-dir-for-required {output_dir}`. Exit code must be 0.
+   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
+   - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `{output_dir}/`.
    - **Verify state.json invariants**:
      - `current_phase` must equal `6` (and only `6`) when Phase 6 completes. Earlier values such as `2` while `phase_6.status: "complete"` are inconsistent and indicate the agent advanced phases out of order — fail Phase 6 in that case.
      - For every `i` from 0 to 6, if `phase_i.status == "complete"`, then `phase_j.status` for `j < i` MUST also be `"complete"`. No skipping allowed.
