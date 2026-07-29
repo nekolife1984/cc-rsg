@@ -85,12 +85,12 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - Default (.cc-rsg)
    - Custom path (free-form, relative to project root)
 
-   - Q6 specifies the **spec output directory** for the final deliverables. Default is `.cc-rsg` (same as the state directory). When a custom path like `docs/specs` is given, **final spec files go directly to `{output_dir}/`** (e.g. `docs/specs/`), while **draft files always stay at `.cc-rsg/drafts/`** (intermediate artifacts). State files (goal.json, state.json, trace.json, etc.) remain in `.cc-rsg/` regardless.
+   - Q6 specifies the **final spec output directory**. Default is `.cc-rsg` → final deliverables go to `.cc-rsg/final/` (kept separate from state files). When a custom path like `docs/specs` is given, final spec files go directly to `docs/specs/`. Drafts always stay at `.cc-rsg/drafts/` regardless. State files (goal.json, state.json, trace.json, etc.) remain in `.cc-rsg/`.
    - In resume mode, read `goal.json.output_dir` and skip this question.
 
 5. **Extract `user_custom_deliverables` from `free_text_notes`**
    - **Mandatory.** Before persisting `goal.json`, scan `free_text_notes` for explicit deliverable filenames using the regex `\b[a-z][a-z0-9_-]*\.md\b` (case-insensitive). De-duplicate and exclude any name matching the chapter-naming regex `^(0\d|[1-9]\d)-[a-z0-9-]+\.md$` or the reserved names `00-metadata.md` / `99-unresolved.md` / `traceability.md` (those are handled by the standard chapter pipeline).
-   - The remaining names are **user-promised custom deliverables**. They MUST appear in `{output_dir}/` at Phase 6 completion; missing any of them is a hard failure (check 12 in `coverage-check.py`).
+   - The remaining names are **user-promised custom deliverables**. They MUST appear in `{output_dir}/` (e.g. `.cc-rsg/final/` or `docs/specs/`) at Phase 6 completion; missing any of them is a hard failure (check 12 in `coverage-check.py`).
    - Example: `free_text_notes = "顧客向けドキュメント。Mermaid図による視覚的説明と、紙芝居的な manual.md を含める。"` → `user_custom_deliverables = ["manual.md"]`.
    - If the free-form text is empty or contains no `*.md` references, the list is `[]`.
    - User-custom files are **exempt from comprehensive per-chapter quality gates** (the 200-lines / 10-REFs / Mermaid / Sources Read minimums) because their quality bar is the user's intent recorded in `free_text_notes`, not the source-derived spec-chapter bar. Only existence + non-empty body is enforced.
@@ -112,8 +112,8 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    }
    ```
    - `output_language` is required and must be `"en"` or `"ja"`. Other enum fields (`primary_reader`, `reader_action`, `granularity`, `perspectives`, `existing_docs`) are language-independent English enums (localized only at display time using `output_language`).
-   - `output_dir` specifies the final spec output directory (default `.cc-rsg`). Final spec files go to `{output_dir}/`. Drafts always stay at `.cc-rsg/drafts/`. State files remain in `.cc-rsg/`.
-   - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/`.
+   - `output_dir` specifies the final spec output directory. Default is `.cc-rsg` (which the agent resolves to `.cc-rsg/final/`). Custom paths like `docs/specs` are stored as-is (final goes to `docs/specs/`). Final spec files go to `{output_dir}/`. Drafts stay at `.cc-rsg/drafts/`. State files remain in `.cc-rsg/`.
+   - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/` (default: `.cc-rsg/final/`, custom: per choice).
 
 7. **Phase 0 complete**
    - Update `state.json` and proceed to Phase 1.

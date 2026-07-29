@@ -1,7 +1,7 @@
 ## Phase 6: Deliver
 
 ### Purpose
-Output the final spec as Markdown under `{output_dir}/` (default: `.cc-rsg/`). Drafts always stay at `.cc-rsg/drafts/` regardless of output_dir choice.
+Output the final spec as Markdown under `{output_dir}/` (default: `.cc-rsg/final/`; custom: per choice, e.g. `docs/specs/`). Drafts always stay at `.cc-rsg/drafts/` regardless.
 
 ### Procedure
 
@@ -50,7 +50,7 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 
 6. **Intent-vs-delivery audit (mandatory; the final gate before completion)**
    - Re-run `coverage-check.py` against `--target-dir-for-required {output_dir}`. Exit code must be 0.
-   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
+   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` (default: `.cc-rsg/final/{name}`) AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
    - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `{output_dir}/`.
    - **Verify state.json invariants**:
      - `current_phase` must equal `6` (and only `6`) when Phase 6 completes. Earlier values such as `2` while `phase_6.status: "complete"` are inconsistent and indicate the agent advanced phases out of order — fail Phase 6 in that case.
