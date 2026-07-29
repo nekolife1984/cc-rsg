@@ -185,6 +185,18 @@ def load_questions(path: Path) -> list[dict[str, Any]]:
     return []
 
 
+def load_source_map_ids(cc_rsg_dir: Path) -> set[str]:
+    """Return the set of unit IDs from source-map.json, or empty set if absent."""
+    sm = cc_rsg_dir / "source-map.json"
+    if not sm.exists():
+        return set()
+    try:
+        data = json.loads(sm.read_text(encoding="utf-8"))
+        return {u["id"] for u in data.get("units", []) if "id" in u}
+    except (json.JSONDecodeError, OSError, KeyError):
+        return set()
+
+
 def load_source_map_count(cc_rsg_dir: Path) -> int | None:
     """Return the total file count from source-map.json if available (used by min-inventory auto)."""
     sm = cc_rsg_dir / "source-map.json"
@@ -659,6 +671,24 @@ def build_report(
     # Reflect user-custom deliverable failures (Phase 6 intent-vs-delivery gate, check 12).
     for f in user_custom_failures:
         gate_failures.append(f"user_custom: {f}")
+
+    # Source-map ↔ inventory cross-reference consistency (check 13).
+    # Every `related_source_ids[*]` in inventory must match an `id` in source-map.json.
+    source_map_ids = load_source_map_ids(cc_rsg_dir)
+    if not source_map_ids:
+        # source-map.json absent → skip the check (e.g. early pipeline runs).
+        pass
+    elif not inventory:
+        # No inventory items → nothing to check.
+        pass
+    else:
+        orphan_refs: list[str] = []
+        for item in inventory:
+            for ref in item.related_source_ids:
+                if ref not in source_map_ids:
+                    orphan_refs.append(f"{item.id}.related_source_ids contains {ref!r} which is not in source-map.json")
+        for ref in sorted(orphan_refs):
+            gate_failures.append(f"source-map/inventory: {ref}")
 
     # Aggregate confidence labels for outline / interactive mode.
     # Count how many times 🟢 VERIFIED / 🟡 INFERRED / 🔴 ASSUMED appear in chapter bodies.
