@@ -335,11 +335,8 @@ The design draws significant inspiration from:
 - [Branching Strategy](docs/en/01-branching-strategy.md)
 
 ---
-
 > "An honest spec with visible holes is more practically valuable than a polished spec full of fiction."
 > — from the `cc-rsg` design principles
-
----
 ---
 
 # 日本語版
