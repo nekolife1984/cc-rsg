@@ -129,8 +129,8 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - **All natural-language output from Step 4 onward** — `AskUserQuestion` bodies and choices, confirmation summaries, chapter titles, generated spec body, `questions.json` body text, etc. — is rendered in the language selected here (see Design Principle #11).
    - **Resume mode**: when `.cc-rsg/goal.json` already exists, read the persisted `output_language` and skip this step entirely.
 
-4. **Run the 5 goal-definition questions**
-   - Use `AskUserQuestion` to ask the following 5 questions in sequence. **Question bodies, choice labels, and free-form-input placeholders are all rendered in the `output_language` selected in Step 3.** The choice labels below are shown when `output_language == "en"`; the agent dynamically translates them when `output_language == "ja"` (enum values such as `primary_reader: "maintenance_developer"` stay as language-independent English enums in `goal.json`). Each question is choice-based first with a free-form field as a fallback.
+4. **Run the 6 goal-definition questions**
+   - Use `AskUserQuestion` to ask the following 6 questions in sequence. **Question bodies, choice labels, and free-form-input placeholders are all rendered in the `output_language` selected in Step 3.** The choice labels below are shown when `output_language == "en"`; the agent dynamically translates them when `output_language == "ja"` (enum values such as `primary_reader: "maintenance_developer"` stay as language-independent English enums in `goal.json`). Each question is choice-based first with a free-form field as a fallback.
    - **Question-text quality contract (applies to every `AskUserQuestion` call in every phase, especially when translating into `output_language == "ja"`)**:
      1. **NEVER JSON-escape characters.** Emit raw UTF-8 only. If you find yourself writing `あ` or any other `\uXXXX` form inside the `question` or `choices` strings, that is a defect — decode it before emitting. A user who sees `次の中` on screen will reject the run.
      2. **Use only standard Japanese kanji.** Stay within JIS Level 1 / 常用漢字 / 人名用漢字. Do NOT mix in Chinese-simplified variants (e.g. `优 (Chinese)` ← write `優 (Japanese)`; `寸叧` is not a valid word — `対応` is). The runtime has no automatic fix for these; they reach the user verbatim.
@@ -173,6 +173,13 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - Existing docs / want to retire
    - Other (free-form)
 
+   **Q6. Where should the spec documents be written?**
+   - Default (.cc-rsg)
+   - Custom path (free-form, relative to project root)
+
+   - Q6 specifies the **spec output directory**. Default is `.cc-rsg` (same as the state directory). When a custom path like `docs/specs` is given, draft and final spec files go to `{output_dir}/drafts/` and `{output_dir}/final/`, while state files (goal.json, state.json, trace.json, etc.) stay in `.cc-rsg/`.
+   - In resume mode, read `goal.json.output_dir` and skip this question.
+
 5. **Extract `user_custom_deliverables` from `free_text_notes`**
    - **Mandatory.** Before persisting `goal.json`, scan `free_text_notes` for explicit deliverable filenames using the regex `\b[a-z][a-z0-9_-]*\.md\b` (case-insensitive). De-duplicate and exclude any name matching the chapter-naming regex `^(0\d|[1-9]\d)-[a-z0-9-]+\.md$` or the reserved names `00-metadata.md` / `99-unresolved.md` / `traceability.md` (those are handled by the standard chapter pipeline).
    - The remaining names are **user-promised custom deliverables**. They MUST appear in `final/` at Phase 6 completion; missing any of them is a hard failure (check 12 in `coverage-check.py`).
@@ -181,11 +188,12 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - User-custom files are **exempt from comprehensive per-chapter quality gates** (the 200-lines / 10-REFs / Mermaid / Sources Read minimums) because their quality bar is the user's intent recorded in `free_text_notes`, not the source-derived spec-chapter bar. Only existence + non-empty body is enforced.
 
 6. **Persist to `goal.json`**
-   - Save the language choice from Step 3, the 5 answers from Step 4, and the `user_custom_deliverables` array from Step 5 as a structured `goal.json` under `.cc-rsg/`. Schema:
+   - Save the language choice from Step 3, the 6 answers from Step 4, and the `user_custom_deliverables` array from Step 5 as a structured `goal.json` under `.cc-rsg/`. Schema:
 
    ```json
    {
      "output_language": "en",
+     "output_dir": ".cc-rsg",
      "primary_reader": "maintenance_developer",
      "reader_action": "code_change",
      "granularity": "medium",
@@ -196,7 +204,8 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    }
    ```
    - `output_language` is required and must be `"en"` or `"ja"`. Other enum fields (`primary_reader`, `reader_action`, `granularity`, `perspectives`, `existing_docs`) are language-independent English enums (localized only at display time using `output_language`).
-   - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `final/`.
+   - `output_dir` specifies the spec output directory (default `.cc-rsg`). When it differs from `.cc-rsg`, spec files (drafts, final) go to `{output_dir}/` while state files stay in `.cc-rsg/`.
+   - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/final/`.
 
 7. **Phase 0 complete**
    - Update `state.json` and proceed to Phase 1.
@@ -645,7 +654,7 @@ Corresponding real sources (Read these with the Read tool):
 - app/models/role.rb
 - db/schema.rb (relevant portions)
 
-Draft output path: .cc-rsg/drafts/05-data-model.md
+Draft output path: {output_dir}/drafts/05-data-model.md
 
 Quality bar:
 - Body ≥ 200 lines
@@ -785,7 +794,7 @@ Run inventory cross-check, per-chapter quality metrics, MECE check, and consiste
 
 1. **Generate trace.json**
    ```bash
-   python .cc-rsg/skill/scripts/build-trace.py --cc-rsg-dir .cc-rsg --target-dir-for-required drafts
+   python .cc-rsg/skill/scripts/build-trace.py --cc-rsg-dir .cc-rsg --output-dir {output_dir} --target-dir-for-required drafts
    ```
    This resolves every `[REF: path:line]` in `drafts/*.md` to a SRC unit and produces the MECE aggregation.
 
@@ -793,6 +802,7 @@ Run inventory cross-check, per-chapter quality metrics, MECE check, and consiste
    ```bash
    python .cc-rsg/skill/scripts/coverage-check.py \
      --cc-rsg-dir .cc-rsg \
+     --output-dir {output_dir} \
      --target-dir-for-required drafts \
      --output-format text
    ```
@@ -957,14 +967,14 @@ The Phase 6 intent-vs-delivery audit re-verifies these constraints; failure rout
 ## Phase 6: Deliver
 
 ### Purpose
-Output the final spec as Markdown under `.cc-rsg/final/`.
+Output the final spec as Markdown under `{output_dir}/final/`.
 
 ### Procedure
 
 File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d)-[a-z0-9-]+\.md$`; reserved files: `00-metadata.md` / `99-unresolved.md` / `traceability.md`). Phase 6 does not create new names; it fills in the skeleton files generated in Phase 2.
 
 1. **Merge chapter drafts**
-   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `drafts/` to `.cc-rsg/final/` in the template-defined order (user-custom chapters typically appear at the end unless the user's intent suggests otherwise).
+   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `drafts/` to `{output_dir}/final/` in the template-defined order (user-custom chapters typically appear at the end unless the user's intent suggests otherwise).
    - Do NOT change the file names (use the names finalised in Phase 2).
    - Do NOT silently skip a chapter just because its draft body is short — that is a Phase 3 / Phase 4 failure and must be surfaced, not papered over.
    - Strip the meta comment at the top of each chapter file.
@@ -992,7 +1002,7 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 
 5. **Final deliverable layout**
    ```
-   .cc-rsg/final/
+   {output_dir}/final/
    ├── 00-metadata.md       # metadata (created Phase 2, filled Phase 6)
    ├── 01-overview.md       # Chapter 1: Overview
    ├── 02-architecture.md   # Chapter 2: Architecture
@@ -1006,7 +1016,7 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 
 6. **Intent-vs-delivery audit (mandatory; the final gate before completion)**
    - Re-run `coverage-check.py` against `--target-dir-for-required final`. Exit code must be 0.
-   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `.cc-rsg/final/{name}` AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
+   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/final/{name}` AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
    - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `final/`.
    - **Verify state.json invariants**:
      - `current_phase` must equal `6` (and only `6`) when Phase 6 completes. Earlier values such as `2` while `phase_6.status: "complete"` are inconsistent and indicate the agent advanced phases out of order — fail Phase 6 in that case.
@@ -1073,7 +1083,7 @@ Once the deep-dive target is fixed:
    - Target entity / candidate ID and overview
    - List of related real source files
    - "Write 1 chapter at **comprehensive-mode-equivalent quality**" (≥ 200 lines, ≥ 10 REFs, ≥ 1 Mermaid, ≥ 5 Sources Read)
-   - Output path: `.cc-rsg/drafts/deep/D-NNN-{slug}.md` or `M-NNN-{slug}.md`
+   - Output path: `{output_dir}/drafts/deep/D-NNN-{slug}.md` or `M-NNN-{slug}.md`
 3. Display the key findings returned by the sub-agent in the main thread.
 4. **Update traceability.md** (append the deep-dive chapter).
 5. **Update the relevant row in the original Layer 1 chapter**: bump the confidence from 🟡/🔴 → 🟢, add a "see deep-dive `D-001`" link.
