@@ -14,6 +14,14 @@ GitHub Flow. Details:
 | PR template | [.github/pull_request_template.md](.github/pull_request_template.md) |
 | README (EN) | [README.md](README.md) |
 
+## Workflow
+
+1. **Issue作成** — 作業内容をIssueに書く（日本語）
+2. **確認待ち** — ボクがGoを出すまで待機
+3. **Go → 実装** — ブランチ作成 → 実装 → PR作成
+4. **確認待ち** — ボクがOKを出すまで待機
+5. **OK → マージ** — squash merge → ブランチ削除
+
 ## Git Hooks
 
 main直pushをローカルで防ぐpre-push hookが `.githooks/pre-push` にあります。
