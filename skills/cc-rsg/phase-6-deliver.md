@@ -48,6 +48,11 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
    ```
    Note: standard / reserved file names are ASCII slug-fixed (language-independent); user-custom file names match the verbatim entries in `goal.json.user_custom_deliverables`. Chapter titles in the body follow `goal.json.output_language` (EN example: `# Chapter 1: Overview` / JA example: `# 第1章: 概要`).
 
+5.5. **Knowledge Graph export (recommended)**
+   - Run `build-knowledge-graph.py` to export `.cc-rsg/knowledge-graph.jsonld` from the source map, trace, and inventory data.
+   - The JSON-LD Knowledge Graph is machine-readable and can be imported into GraphDB, Neo4j, GBrain, Obsidian, or any SPARQL/Cypher-compatible tool for ad-hoc querying.
+   - Use `--skip-kg` to disable this step (useful when the additional output is not needed).
+
 6. **Intent-vs-delivery audit (mandatory; the final gate before completion)**
    - Re-run `coverage-check.py` against `--target-dir-for-required {output_dir}`. Exit code must be 0.
    - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` (default: `.cc-rsg/final/{name}`) AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.

@@ -110,14 +110,17 @@ A `.cc-rsg/` directory is created at the root of the target project, containing:
 
 ```
 .cc-rsg/
-├── state.json          # Progress tracking
-├── goal.json           # Phase 0 goal definition
-├── recon-report.md     # Phase 1 reconnaissance
-├── inventory.json      # All inventory items
-├── wbs.json            # Work breakdown
-├── questions.json      # Question Bank
-├── drafts/             # Per-chapter drafts (intermediate, always in .cc-rsg/)
-└── final/              # Final deliverables (default) or {output_dir}/ if custom path set
+├── state.json              # Progress tracking
+├── goal.json               # Phase 0 goal definition
+├── recon-report.md         # Phase 1 reconnaissance
+├── source-map.json         # Mechanical source unit map (v2)
+├── inventory.json          # All inventory items
+├── trace.json              # Spec-to-source traceability
+├── wbs.json                # Work breakdown
+├── questions.json          # Question Bank
+├── knowledge-graph.jsonld  # JSON-LD Knowledge Graph (machine-queryable)
+├── drafts/                 # Per-chapter drafts (intermediate, always in .cc-rsg/)
+└── final/                  # Final deliverables (default) or {output_dir}/ if custom path set
 ```
 
 Drafts always stay in `.cc-rsg/drafts/` regardless of the output directory choice. Final deliverables go to `{output_dir}/` (default: `.cc-rsg/final/`; custom: e.g. `docs/specs/`).
@@ -474,16 +477,19 @@ cp -r skills/cc-rsg .claude/skills/
 
 利用プロジェクトの直下に `.cc-rsg/` ディレクトリが作成され、以下が保存されます。
 
-```
+```{.cc-rsg/ tree}
 .cc-rsg/
-├── state.json          # 進捗管理
-├── goal.json           # Phase 0 のゴール定義
-├── recon-report.md     # Phase 1 の偵察結果
-├── inventory.json      # 全インベントリ項目
-├── wbs.json            # 作業分解
-├── questions.json      # Question Bank
-├── drafts/             # 各章のドラフト（中間成果物、常に .cc-rsg/ 内）
-└── final/              # 最終成果物（デフォルト）／カスタムパス指定時は {output_dir}/
+├── state.json              # 進捗管理
+├── goal.json               # Phase 0 のゴール定義
+├── recon-report.md         # Phase 1 の偵察結果
+├── source-map.json         # 機械的なソースユニットマップ (v2)
+├── inventory.json          # 全インベントリ項目
+├── trace.json              # 仕様とソースのトレーサビリティ
+├── wbs.json                # 作業分解
+├── questions.json          # Question Bank
+├── knowledge-graph.jsonld  # JSON-LD 知識グラフ (機械クエリ可能)
+├── drafts/                 # 各章のドラフト（中間成果物、常に .cc-rsg/ 内）
+└── final/                  # 最終成果物（デフォルト）／カスタムパス指定時は {output_dir}/
 ```
 
 Drafts（中間ドラフト）は出力先に関わらず常に `.cc-rsg/drafts/` に配置されます。最終成果物は `{output_dir}/` に出力されます（デフォルト: `.cc-rsg/final/`、カスタム例: `docs/specs/`）。
