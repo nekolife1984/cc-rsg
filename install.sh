@@ -30,6 +30,7 @@ fi
 DRY_RUN=false
 CLI_AGENT=""
 CLI_LEVEL=""
+INSTALL_DEPS=false
 
 # ── Parse flags ────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
@@ -42,6 +43,10 @@ while [[ $# -gt 0 ]]; do
       if [[ -z "${2:-}" ]]; then echo "Error: --agent requires a value"; exit 1; fi
       CLI_AGENT="$2"
       shift 2
+      ;;
+    --install-deps)
+      INSTALL_DEPS=true
+      shift
       ;;
     --level)
       if [[ -z "${2:-}" ]]; then echo "Error: --level requires a value"; exit 1; fi
@@ -56,6 +61,7 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Options:"
       echo "  --dry-run           Print what would be done, no changes"
+      echo "  --install-deps      Install optional Python dependencies (tree-sitter grammars)"
       echo "  --agent AGENTS      Comma-separated agent keys: claude,codex,opencode,copilot,cursor,other,all"
       echo "  --level LEVEL       Install level: user, project, both"
       echo "  --help, -h          Show this message"
@@ -151,6 +157,23 @@ install_skill() {
   echo "  ✅ $dest/ ($label)"
 }
 
+# ── Optional dependency installer ──────────────────────────────────────
+install_deps() {
+  local req="$SKILL_SRC/scripts/requirements.txt"
+  if [[ ! -f "$req" ]]; then
+    echo "  ⚠️  requirements.txt not found at $req"
+    return
+  fi
+  if $DRY_RUN; then
+    echo "  ⏺  pip install -r $req"
+    return
+  fi
+  echo ""
+  echo "Installing optional Python dependencies (tree-sitter grammars)..."
+  pip install -r "$req" 2>&1 | tail -3
+  echo "  ✅ Optional dependencies installed"
+}
+
 # ── Main ──────────────────────────────────────────────────────────────
 echo ""
 echo "cc-rsg installer v0.2.0"
@@ -219,6 +242,7 @@ if [[ -n "$RESOLVED_AGENT" ]]; then
   if $DRY_RUN; then
     echo "Dry-run complete. No changes were made."
   else
+    $INSTALL_DEPS && install_deps
     echo "Done. cc-rsg is now installed."
   fi
   echo ""
@@ -324,6 +348,7 @@ echo ""
 if $DRY_RUN; then
   echo "Dry-run complete. No changes were made."
 else
+  $INSTALL_DEPS && install_deps
   echo "Done. cc-rsg is now installed."
 fi
 echo ""

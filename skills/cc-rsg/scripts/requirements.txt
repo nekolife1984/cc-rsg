@@ -1,0 +1,23 @@
+# cc-rsg optional Python dependencies
+#
+# These packages provide tree-sitter based language extraction for
+# source_map_v2.  Without them, all scripts still work using Python
+# standard library only — source_map_v2 falls back to file-level units
+# with a clear warning.
+#
+# Install:  pip install -r requirements.txt
+
+tree-sitter
+tree-sitter-python
+tree-sitter-typescript
+tree-sitter-ruby
+tree-sitter-php
+tree-sitter-java
+tree-sitter-c-sharp
+tree-sitter-go
+tree-sitter-kotlin
+tree-sitter-c
+tree-sitter-cpp
+tree-sitter-dart
+tree-sitter-swift
+tree-sitter-rust
