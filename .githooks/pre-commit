@@ -1,0 +1,83 @@
+#!/bin/sh
+# .githooks/pre-commit — Enforce test coverage for script changes
+set -e
+
+echo "🔍 Checking staged scripts for test coverage..."
+
+SCRIPT_DIR="skills/cc-rsg/scripts"
+CHECKER="${SCRIPT_DIR}/tests/check_test_coverage.py"
+HAS_VIOLATION=0
+
+# Get staged .py files (new or modified) in scripts/ dir
+# Exclude __init__.py and source_map_v2/ (those have their own test structure)
+staged_scripts=$( \
+    git diff --cached --name-only --diff-filter=AM -- "${SCRIPT_DIR}/*.py" \
+    | grep -v '__init__' \
+    | grep -v 'source_map_v2/' \
+    | grep -v '/tests/' \
+    || true \
+)
+
+if [ -z "$staged_scripts" ]; then
+    echo "  ✅ No script changes detected."
+    exit 0
+fi
+
+echo "$staged_scripts" | while IFS= read -r script; do
+    base=$(basename "$script" .py)
+    # Test files use underscores; scripts may use hyphens
+    test_variants=$(echo "$base" | tr '-' '_')
+    test_file="${SCRIPT_DIR}/tests/test_${test_variants}.py"
+    kind=$(git diff --cached --name-status -- "$script" | awk '{print $1}')
+
+    if [ "$kind" = "A" ]; then
+        # === NEW script: test file is REQUIRED ===
+        if [ ! -f "$test_file" ]; then
+            echo "  ❌ New script: $script"
+            echo "     Missing test: $test_file"
+            echo "     Tests are required for new scripts."
+            echo "1" > /tmp/.cc-rsg-hook-violation.tmp
+        else
+            echo "  ✅ New script + test: $base"
+        fi
+
+    elif [ "$kind" = "M" ]; then
+        # === MODIFIED script: check test status ===
+        if [ -f "$test_file" ]; then
+            # Test exists — check it's also staged (test update enforcement)
+            if ! git diff --cached --name-only | grep -q "^${test_file}$"; then
+                echo "  ⚠️  Modified script: $script"
+                echo "     Test exists but NOT staged: $test_file"
+                echo "     Did you forget to update the test? (git add $test_file)"
+                echo "1" > /tmp/.cc-rsg-hook-violation.tmp
+            else
+                echo "  ✅ Modified script + test staged: $base"
+                # Function-level coverage check (WARN only)
+                if [ -f "$CHECKER" ]; then
+                    cd "$(git rev-parse --show-toplevel)" 2>/dev/null || true
+                    coverage_out=$(python "$CHECKER" "$script" "$test_file" 2>&1) || true
+                    if echo "$coverage_out" | grep -q "Missing"; then
+                        echo "$coverage_out" | while IFS= read -r line; do
+                            echo "     $line"
+                        done
+                        # WARN but don't block for function coverage
+                    fi
+                fi
+            fi
+        else
+            # Test doesn't exist — warn but don't block (legacy script)
+            echo "  ⚠️  Modified script (no test): $script"
+            echo "     Tip: consider adding $test_file"
+            # No violation — just a warning
+        fi
+    fi
+done
+
+if [ -f /tmp/.cc-rsg-hook-violation.tmp ]; then
+    rm -f /tmp/.cc-rsg-hook-violation.tmp
+    echo ""
+    echo "💡 To bypass: git commit --no-verify"
+    exit 1
+fi
+
+echo "  ✅ All checks passed."
