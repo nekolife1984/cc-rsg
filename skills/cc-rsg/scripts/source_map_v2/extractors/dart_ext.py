@@ -70,19 +70,19 @@ class DartExtractor(Extractor):
                     else:
                         emit("callable", "dart_function", name, c)
 
-                elif c.type == "enum_definition":
+                elif c.type == "enum_declaration":
                     name = H.name_of(c, src)
                     emit("model", "dart_enum", name, c)
 
-                elif c.type == "typedef_definition":
+                elif c.type == "type_alias":
                     name = H.name_of(c, src)
                     emit("dependency", "dart_typedef", name, c)
 
-                elif c.type == "mixin_definition":
+                elif c.type == "mixin_declaration":
                     name = H.name_of(c, src)
                     emit("class", "dart_mixin", name, c)
 
-                elif c.type == "extension_definition":
+                elif c.type == "extension_declaration":
                     name = H.name_of(c, src)
                     emit("class", "dart_extension", name, c)
 

@@ -112,7 +112,8 @@ class CppExtractor(Extractor):
 
         def handle_method(node):
             name = function_name(node)
-            has_virtual = any(c.type == "virtual" for c in node.children)
+            fn_text = H.text(node, src)
+            has_virtual = "virtual" in fn_text[:60]  # check text, robust across grammar versions
             if has_virtual:
                 emit("callable", "cpp_virtual_method", name, node)
             else:
