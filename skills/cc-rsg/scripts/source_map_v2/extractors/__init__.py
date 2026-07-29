@@ -78,7 +78,7 @@ def _autoload() -> None:
     for mod in ("c_ext", "cpp_ext", "python_ext", "typescript_ext", "ruby_ext",
                 "php_ext", "java_ext", "csharp_ext",
                 "go_ext", "sql_ext", "cobol_ext", "kotlin_ext",
-                "dart_ext", "swift_ext"):
+                "dart_ext", "swift_ext", "rust_ext"):
         try:
             __import__(f"{__name__}.{mod}")
         except Exception:
