@@ -1,0 +1,20 @@
+#!/bin/sh
+# .githooks/pre-push — Protect main from direct pushes
+set -e
+
+z40=0000000000000000000000000000000000000000
+
+while read local_ref local_sha remote_ref remote_sha; do
+  case "$remote_ref" in
+    refs/heads/main)
+      if [ "$local_sha" != "$z40" ]; then
+        echo ""
+        echo "❌  Direct push to main is not allowed!"
+        echo "    Create a feature branch and open a PR instead."
+        echo "    See: docs/ja/01-branching-strategy.md"
+        echo ""
+        exit 1
+      fi
+      ;;
+  esac
+done
