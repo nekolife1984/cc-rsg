@@ -2,7 +2,7 @@
 
 This directory holds an **alternative execution mode** for cc-rsg in which
 the main agent delegates each chapter to an isolated `chapter-investigator`
-sub-agent via Claude Code's Task tool, instead of writing the chapter body
+sub-agent via the runtime's task tool, instead of writing the chapter body
 itself.
 
 ## When to use mode B

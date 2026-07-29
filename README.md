@@ -1,6 +1,6 @@
-# cc-rsg — Claude Code Reverse Spec Generator
+# cc-rsg — Reverse Spec Generator
 
-> A Claude Code skill that reverse-engineers specification documents from existing codebases
+> A multi-agent skill that reverse-engineers specification documents from existing codebases
 
 📖 **日本語版は下記にあります** — [Jump to Japanese →](#日本語版)
 
@@ -36,7 +36,7 @@ In the LLM era, asking an AI to "make a spec from this code" produces visually p
 - **Reversa** (OSS): Modern form of "agent-readable executable specifications"
 - **IBM watsonx Code Assistant for Z / AWS Transform / CAST Imaging**: "Deterministic graph + LLM natural language" hybrid architecture
 
-`cc-rsg` builds on these by maximizing Claude Code features (SKILL.md, subagents, AskUserQuestion, Task) into a general-purpose framework.
+`cc-rsg` builds on these by maximizing skill-based AI agent features (SKILL.md, subagents, AskUserQuestion, Task) into a general-purpose framework.
 
 ---
 
@@ -64,10 +64,12 @@ Dry-run mode:
 ./cc-rsg/install.sh --dry-run
 ```
 
-### Manual installation
+### Manual installation (example)
+
+The installer above is recommended. To install manually, copy to your agent's skill directory:
 
 ```bash
-# As a project-level skill
+# As a project-level skill (e.g. for Claude Code)
 mkdir -p .claude/skills/
 cp -r skills/cc-rsg .claude/skills/
 
@@ -87,7 +89,7 @@ Launch your agent and run `/help` — `cc-rsg` should appear in the skill list.
 ### Basic Flow
 
 ```
-1. Launch Claude Code at the target codebase root
+1. Launch your coding agent at the target codebase root
 2. Invoke the cc-rsg skill
 3. Answer the 5-question goal definition (Phase 0)
 4. Review recon results and pick a template (Phase 1)
@@ -100,7 +102,7 @@ Launch your agent and run `/help` — `cc-rsg` should appear in the skill list.
 
 ### Pause and Resume
 
-Even if you interrupt the session, progress is saved to `.cc-rsg/state.json`. On the next Claude Code launch, a resume message appears with options: continue / rewind / full reset.
+Even if you interrupt the session, progress is saved to `.cc-rsg/state.json`. On the next launch, a resume message appears with options: continue / rewind / full reset.
 
 ### Output Location
 
@@ -290,7 +292,7 @@ Currently **v0.7.0** (source-map v2: a role-typed, framework-aware, tree-sitter-
 ### Known Limitations
 
 - Custom category addition requires manual JSON editing (UI mechanism is a future extension)
-- MCP integration is not implemented (designed for standalone Claude Code)
+- MCP integration is not implemented (designed for standalone agent execution)
 - Slash command options (`--restart`, etc.) are not implemented
 
 ### Roadmap (tentative)
@@ -363,11 +365,11 @@ The design draws significant inspiration from:
 
 # 日本語版
 
-# cc-rsg — Claude Code Reverse Spec Generator
+# cc-rsg — Reverse Spec Generator
 
-> 既存のコードベースから仕様書を逆生成(リバースエンジニアリング)するための Claude Code スキル
+> 既存のコードベースから仕様書を逆生成(リバースエンジニアリング)するためのマルチエージェントスキル
 
-📖 **English version is at the top** — [Jump to English →](#cc-rsg--claude-code-reverse-spec-generator)
+📖 **English version is at the top** — [Jump to English →](#cc-rsg--reverse-spec-generator)
 
 `cc-rsg` は、レガシーまたは現役のコードベースから、メンテナンス担当者あるいは納品先顧客に向けた仕様書を自動生成するための汎用フレームワークです。
 
@@ -401,27 +403,34 @@ LLM時代になり、AIに「このコードから仕様書を作って」と頼
 - **Reversa**(OSS): エージェント可読な実行可能仕様という現代的形態
 - **IBM watsonx Code Assistant for Z / AWS Transform / CAST Imaging**: 「決定論的グラフ + LLM自然言語化」のハイブリッドアーキテクチャ
 
-`cc-rsg` はこれらを踏まえ、Claude Code の機能(SKILL.md、subagents、AskUserQuestion、Task)を最大限活用したフレームワークとして設計されています。
+`cc-rsg` はこれらを踏まえ、スキルベース AI エージェントの機能(SKILL.md、subagents、AskUserQuestion、Task)を最大限活用したフレームワークとして設計されています。
 
 ---
 
 ## インストール
 
-### Claude Code 環境に配置
+### クイックインストール (推奨)
 
 ```bash
-# プロジェクトのスキルとして配置する場合
+git clone https://github.com/nekolife1984/cc-rsg.git
+./cc-rsg/install.sh
+```
+
+この対話型インストーラーは Claude Code、Codex CLI、OpenCode、GitHub Copilot、Cursor など複数のエージェントに対応しています。
+
+### 手動配置 (例)
+
+インストーラーが使えない場合は、お使いのエージェントのスキルディレクトリにコピーしてください:
+
+```bash
+# 例: Claude Code のプロジェクトレベルスキルとして
 mkdir -p .claude/skills/
 cp -r skills/cc-rsg .claude/skills/
-
-# または、ユーザーレベルのスキルとして配置する場合
-mkdir -p ~/.claude/skills/
-cp -r skills/cc-rsg ~/.claude/skills/
 ```
 
 ### 動作確認
 
-Claude Code を起動し、`/help` でスキル一覧に `cc-rsg` が表示されれば成功。
+エージェントを起動し、`/help` でスキル一覧に `cc-rsg` が表示されれば成功。
 
 ---
 
@@ -430,7 +439,7 @@ Claude Code を起動し、`/help` でスキル一覧に `cc-rsg` が表示さ�
 ### 基本フロー
 
 ```
-1. 対象コードベースのルートで Claude Code を起動
+1. 対象コードベースのルートでエージェントを起動
 2. cc-rsg スキルを呼び出す
 3. ゴール定義5問に回答(Phase 0)
 4. 偵察結果を確認しテンプレート選定(Phase 1)
@@ -443,7 +452,7 @@ Claude Code を起動し、`/help` でスキル一覧に `cc-rsg` が表示さ�
 
 ### 中断と再開
 
-セッションを中断しても、`.cc-rsg/state.json` に進捗が保存されます。次回 Claude Code 起動時に再開メッセージが表示され、続きから / 巻き戻し / 全リセット のいずれかを選択できます。
+セッションを中断しても、`.cc-rsg/state.json` に進捗が保存されます。次回エージェント起動時に再開メッセージが表示され、続きから / 巻き戻し / 全リセット のいずれかを選択できます。
 
 ### 出力場所
 
@@ -633,7 +642,7 @@ cc-rsg/
 ### 既知の制約
 
 - カスタムカテゴリ追加は手動JSON編集のみ(UI機構は将来拡張)
-- MCP統合は未実装(Claude Code 単体動作を前提)
+- MCP統合は未実装(単体エージェント動作を前提)
 - スラッシュコマンドのオプション(`--restart` 等)は未実装
 
 ### ロードマップ(暫定)
