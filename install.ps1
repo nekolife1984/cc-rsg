@@ -28,7 +28,8 @@
 param(
   [string]$Agent = "",
   [string]$Level = "",
-  [switch]$DryRun
+  [switch]$DryRun,
+  [switch]$InstallDeps
 )
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -96,6 +97,23 @@ function Install-Skill($dest, $label) {
   New-Item -ItemType Directory -Force -Path $dest | Out-Null
   Copy-Item -Recurse -Force "$SkillSrc\*" $dest
   Write-Host "  ✅ $dest ($label)"
+}
+
+# ── Optional dependency installer ──────────────────────────────────────────
+function Install-Deps {
+  $req = Join-Path $SkillSrc "scripts\requirements.txt"
+  if (-not (Test-Path $req)) {
+    Write-Host "  ⚠️  requirements.txt not found at $req"
+    return
+  }
+  if ($DryRun) {
+    Write-Host "  ⏺  pip install -r $req"
+    return
+  }
+  Write-Host ""
+  Write-Host "Installing optional Python dependencies (tree-sitter grammars)..."
+  pip install -r $req 2>&1 | Select-Object -Last 3
+  Write-Host "  ✅ Optional dependencies installed"
 }
 
 # ── Resolve input source: CLI > env > interactive ────────────────────
@@ -168,6 +186,7 @@ if ($ResolvedAgent) {
   if ($DryRun) {
     Write-Host "Dry-run complete. No changes were made."
   } else {
+    if ($InstallDeps) { Install-Deps }
     Write-Host "Done. cc-rsg is now installed."
   }
   Write-Host ""
@@ -263,6 +282,7 @@ Write-Host ""
 if ($DryRun) {
   Write-Host "Dry-run complete. No changes were made."
 } else {
+  if ($InstallDeps) { Install-Deps }
   Write-Host "Done. cc-rsg is now installed."
 }
 Write-Host ""

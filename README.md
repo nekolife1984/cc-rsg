@@ -64,6 +64,13 @@ Dry-run mode:
 ./cc-rsg/install.sh --dry-run
 ```
 
+Install optional Python dependencies (tree-sitter grammars for precise source-code extraction):
+```bash
+./cc-rsg/install.sh --install-deps
+```
+
+> **Note:** All cc-rsg scripts work with Python standard library only. The optional dependencies (`tree-sitter` + per-language grammars) enable fine-grained source-code analysis via `source_map_v2`. Without them, the system falls back to file-level units with a clear warning. See `skills/cc-rsg/scripts/requirements.txt` for the full list.
+
 ### Manual installation (example)
 
 The installer above is recommended. To install manually, copy to your agent's skill directory:
@@ -436,6 +443,13 @@ git clone https://github.com/nekolife1984/cc-rsg.git
 ```
 
 この対話型インストーラーは Claude Code、Codex CLI、OpenCode、GitHub Copilot、Cursor など複数のエージェントに対応しています。
+
+オプションの Python 依存パッケージ（tree-sitter 各言語パーサー）もインストールする場合:
+```bash
+./cc-rsg/install.sh --install-deps
+```
+
+> **注意:** cc-rsg の全スクリプトは Python 標準ライブラリのみで動作します。オプション依存（`tree-sitter` + 各言語 grammar）は `source_map_v2` による精密なソースコード解析を可能にします。なくても file-level のユニットにフォールバックし、警告を表示します。詳細は `skills/cc-rsg/scripts/requirements.txt` を参照してください。
 
 ### 手動配置 (例)
 
