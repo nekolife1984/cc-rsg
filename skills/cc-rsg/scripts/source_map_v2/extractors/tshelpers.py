@@ -63,6 +63,9 @@ def _parser(language: str):
         elif language == "swift":
             import tree_sitter_swift as m
             lang = _ts.Language(m.language())
+        elif language == "rust":
+            import tree_sitter_rust as m
+            lang = _ts.Language(m.language())
         else:
             return None
         return _ts.Parser(lang)

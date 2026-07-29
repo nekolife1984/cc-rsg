@@ -31,6 +31,7 @@ LANG_BY_EXT: dict[str, str] = {
     ".sql": "sql",
     ".dart": "dart",
     ".swift": "swift",
+    ".rs": "rust",
 }
 
 
