@@ -1,20 +1,35 @@
 <#
 .SYNOPSIS
-  cc-rsg installer — interactive skill installer for coding agents
+  cc-rsg installer — interactive or CLI-driven skill installer for coding agents
 
 .DESCRIPTION
   Installs the cc-rsg skill to one or more coding agents:
   Claude Code, Codex CLI, OpenCode, GitHub Copilot, Cursor, Other.
 
+.PARAMETER Agent
+  Comma-separated agent keys: claude, codex, opencode, copilot, cursor, other, all
+
+.PARAMETER Level
+  Install level: user, project, both
+
 .PARAMETER DryRun
   Print what would be done without making any changes.
 
 .EXAMPLE
-  .\install.ps1           interactive mode
-  .\install.ps1 -DryRun   dry-run mode
+  .\install.ps1                          interactive mode
+  .\install.ps1 -DryRun                  dry-run (interactive)
+  .\install.ps1 -Agent claude,opencode -Level user   non-interactive
+  .\install.ps1 -Agent all -Level both   all agents, both levels
+
+.NOTES
+  Environment variables (fallback): $env:CC_RSG_AGENT, $env:CC_RSG_LEVEL
 #>
 
-param([switch]$DryRun)
+param(
+  [string]$Agent = "",
+  [string]$Level = "",
+  [switch]$DryRun
+)
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SkillSrc = Join-Path $ScriptDir "skills\cc-rsg"
@@ -34,17 +49,17 @@ function Add-Agent($name, $key) {
   $script:AgentKeys  += $key
 }
 
-Write-Host ""
-Write-Host "cc-rsg installer v0.1.0"
-Write-Host "========================="
-Write-Host ""
-
 Add-Agent "Claude Code" "claude"
 Add-Agent "Codex CLI" "codex"
 Add-Agent "OpenCode" "opencode"
 Add-Agent "GitHub Copilot" "copilot"
 Add-Agent "Cursor" "cursor"
 Add-Agent "Other (.agents/skills/)" "other"
+
+# ── Helper: valid agent key? ──────────────────────────────────────────
+function Is-ValidKey($key) {
+  return $script:AgentKeys -contains $key
+}
 
 # ── Helper: install paths ─────────────────────────────────────────────
 function Get-UserPath($key) {
@@ -83,39 +98,144 @@ function Install-Skill($dest, $label) {
   Write-Host "  ✅ $dest ($label)"
 }
 
-# ── Select level ──────────────────────────────────────────────────────
-Write-Host "Select install level:"
-Write-Host "  1) User level (available for all projects)"
-Write-Host "  2) Project level (this directory only)"
-Write-Host "  3) Both"
-$levelChoice = Read-Host "> "
+# ── Resolve input source: CLI > env > interactive ────────────────────
+$ResolvedAgent = if ($Agent) { $Agent } else { $env:CC_RSG_AGENT }
+$ResolvedLevel = if ($Level) { $Level } else { $env:CC_RSG_LEVEL }
+
+# ── Main ──────────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "cc-rsg installer v0.2.0"
+Write-Host "======================="
 Write-Host ""
 
-$installUser = $true
-$installProj = $false
-if ($levelChoice -eq "2") { $installUser = $false; $installProj = $true }
-if ($levelChoice -eq "3") { $installUser = $true;  $installProj = $true }
+# ── Non-interactive mode ──────────────────────────────────────────────
+if ($ResolvedAgent) {
+  # Parse agent keys
+  $selectedKeys = @()
+  $parts = $ResolvedAgent -split ',' | ForEach-Object { $_.Trim() }
+  foreach ($part in $parts) {
+    if ($part -eq "all") {
+      $selectedKeys = $AgentKeys
+      break
+    } elseif (Is-ValidKey $part) {
+      $selectedKeys += $part
+    } else {
+      Write-Host "Warning: unknown agent key '$part', skipping"
+    }
+  }
+
+  # Resolve level
+  $installUser = $true
+  $installProj = $false
+  $useLevel = if ($ResolvedLevel) { $ResolvedLevel } else { "both" }
+  switch ($useLevel) {
+    "project" { $installUser = $false; $installProj = $true }
+    "both"    { $installUser = $true;  $installProj = $true }
+    default   { $installUser = $true;  $installProj = $false }
+  }
+
+  if ($selectedKeys.Count -eq 0) {
+    Write-Host "No valid agents selected. Use: claude, codex, opencode, copilot, cursor, other, all"
+    exit 1
+  }
+
+  Write-Host "Installing cc-rsg to:"
+  Write-Host ""
+
+  $installed = 0
+  foreach ($key in $selectedKeys) {
+    # Find display name
+    $label = $key
+    $idx = $AgentKeys.IndexOf($key)
+    if ($idx -ge 0) { $label = $AgentNames[$idx] }
+
+    if ($installUser) {
+      $dest = Get-UserPath $key
+      Install-Skill $dest $label
+      $installed++
+    }
+
+    if ($installProj) {
+      $dest = Get-ProjPath $key
+      if ($dest) {
+        Install-Skill $dest $label
+        $installed++
+      }
+    }
+  }
+
+  Write-Host ""
+  if ($DryRun) {
+    Write-Host "Dry-run complete. No changes were made."
+  } else {
+    Write-Host "Done. cc-rsg is now installed."
+  }
+  Write-Host ""
+  exit 0
+}
+
+# ── Interactive mode ──────────────────────────────────────────────────
+
+# ── Select level ──────────────────────────────────────────────────────
+if ($ResolvedLevel) {
+  switch ($ResolvedLevel) {
+    "project" { $installUser = $false; $installProj = $true }
+    "both"    { $installUser = $true;  $installProj = $true }
+    default   { $installUser = $true;  $installProj = $false }
+  }
+} else {
+  Write-Host "Select install level:"
+  Write-Host "  1) User level (available for all projects)"
+  Write-Host "  2) Project level (this directory only)"
+  Write-Host "  3) Both"
+  $levelChoice = Read-Host "> "
+  Write-Host ""
+
+  $installUser = $true
+  $installProj = $false
+  if ($levelChoice -eq "2") { $installUser = $false; $installProj = $true }
+  if ($levelChoice -eq "3") { $installUser = $true;  $installProj = $true }
+}
 
 # ── Select agents ─────────────────────────────────────────────────────
-Write-Host "Available agents:"
-for (\$i = 0; \$i -lt \$AgentNames.Count; \$i++) {
-  Write-Host ("  " + (\$i+1) + ") " + \$AgentNames[\$i])
-}
-Write-Host ""
-Write-Host "Select agents to install (comma separated, e.g. 1,3,6):"
-\$agentSel = Read-Host "> "
-Write-Host ""
+if ($ResolvedAgent) {
+  $selectedKeys = @()
+  $parts = $ResolvedAgent -split ',' | ForEach-Object { $_.Trim() }
+  foreach ($part in $parts) {
+    if ($part -eq "all") {
+      $selectedKeys = $AgentKeys
+      break
+    } elseif (Is-ValidKey $part) {
+      $selectedKeys += $part
+    }
+  }
+  $selectedIndices = @()
+  foreach ($key in $selectedKeys) {
+    $idx = $AgentKeys.IndexOf($key)
+    if ($idx -ge 0) { $selectedIndices += $idx }
+  }
+} else {
+  Write-Host "Available agents:"
+  for ($i = 0; $i -lt $AgentNames.Count; $i++) {
+    Write-Host ("  " + ($i+1) + ") " + $AgentNames[$i])
+  }
+  Write-Host ""
+  Write-Host "Select agents to install (comma separated, e.g. 1,3,6):"
+  $agentSel = Read-Host "> "
+  Write-Host ""
 
-\$selectedIndices = @()
-\$selNums = \$agentSel -split ',' | ForEach-Object { \$_.Trim() }
-foreach (\$n in \$selNums) {
-  \$idx = [int]\$n - 1
-  if (\$idx -ge 0 -and \$idx -lt \$AgentNames.Count) {
-    \$selectedIndices += \$idx
+  $selectedIndices = @()
+  $selNums = $agentSel -split ',' | ForEach-Object { $_.Trim() }
+  foreach ($n in $selNums) {
+    $idx = [int]$n - 1
+    if ($idx -ge 0 -and $idx -lt $AgentNames.Count) {
+      $selectedIndices += $idx
+    }
   }
 }
 
 # ── Install ───────────────────────────────────────────────────────────
+Write-Host ""
 Write-Host "Installing cc-rsg to:"
 Write-Host ""
 
