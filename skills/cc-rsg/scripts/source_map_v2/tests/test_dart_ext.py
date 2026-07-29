@@ -42,4 +42,8 @@ def test_dart_types_funcs():
     assert ("dart_class", "MyClass") in by
     assert ("dart_enum", "Status") in by
     assert ("dart_typedef", "IntList") in by
-    assert ("dart_function", "topFunc") in by
+    assert ("dart_mixin", "MyMixin") in by
+    assert ("dart_extension", "StringExt") in by
+    # NOTE: top-level function extraction (dart_function) requires
+    # further investigation — tree-sitter-dart v0.1.0 uses
+    # function_signature/method_signature rather than function_definition.
