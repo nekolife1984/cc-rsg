@@ -330,6 +330,12 @@ The design draws significant inspiration from:
 
 ---
 
+## Documentation
+
+- [Branching Strategy](docs/en/01-branching-strategy.md)
+
+---
+
 > "An honest spec with visible holes is more practically valuable than a polished spec full of fiction."
 > — from the `cc-rsg` design principles
 
@@ -639,16 +645,21 @@ MIT License。詳細は [LICENSE](LICENSE) を参照。
 
 ---
 
-## Contributing
-
-利用フィードバック・テンプレート追加要望・バグ報告は GitHub Issues にて受け付けます。
-
-特に以下の貢献を歓迎します。
-
-- 新しい言語・フレームワークのインベントリ単位定義
-- 新しいテンプレート(DWH、機械学習パイプライン、IaC、モバイルアプリ 等)
-- 検証チェックリストの拡充
-- 実プロジェクト適用例のレポート
+|## Contributing
+|
+|利用フィードバック・テンプレート追加要望・バグ報告は [GitHub Issues](https://github.com/nekolife1984/cc-rsg/issues) にて受け付けます。
+|
+|特に以下の貢献を歓迎します。
+|
+|- 新しい言語・フレームワークのインベントリ単位定義
+|- 新しいテンプレート(DWH、機械学習パイプライン、IaC、モバイルアプリ 等)
+|- 検証チェックリストの拡充
+|- 実プロジェクト適用例のレポート
+|
+|ブランチ戦略・開発フローについては以下を参照してください：
+|
+|- EN: [Branching Strategy](docs/en/01-branching-strategy.md)
+|- JA: [ブランチ戦略](docs/ja/01-branching-strategy.md)
 
 ---
 
