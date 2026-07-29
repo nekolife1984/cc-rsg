@@ -85,7 +85,7 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - Default (.cc-rsg)
    - Custom path (free-form, relative to project root)
 
-   - Q6 specifies the **spec output directory**. Default is `.cc-rsg` (same as the state directory). When a custom path like `docs/specs` is given, draft and final spec files go to `{output_dir}/drafts/` and `{output_dir}/final/`, while state files (goal.json, state.json, trace.json, etc.) stay in `.cc-rsg/`.
+   - Q6 specifies the **spec output directory** for the final deliverables. Default is `.cc-rsg` (same as the state directory). When a custom path like `docs/specs` is given, **final spec files go to `{output_dir}/final/`**, while **draft files always stay at `.cc-rsg/drafts/`** (intermediate artifacts). State files (goal.json, state.json, trace.json, etc.) remain in `.cc-rsg/` regardless.
    - In resume mode, read `goal.json.output_dir` and skip this question.
 
 5. **Extract `user_custom_deliverables` from `free_text_notes`**
@@ -112,7 +112,7 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    }
    ```
    - `output_language` is required and must be `"en"` or `"ja"`. Other enum fields (`primary_reader`, `reader_action`, `granularity`, `perspectives`, `existing_docs`) are language-independent English enums (localized only at display time using `output_language`).
-   - `output_dir` specifies the spec output directory (default `.cc-rsg`). When it differs from `.cc-rsg`, spec files (drafts, final) go to `{output_dir}/` while state files stay in `.cc-rsg/`.
+   - `output_dir` specifies the final spec output directory (default `.cc-rsg`). When it differs from `.cc-rsg`, **final spec files go to `{output_dir}/final/`** while **drafts always stay at `.cc-rsg/drafts/`**. State files remain in `.cc-rsg/`.
    - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/final/`.
 
 7. **Phase 0 complete**
