@@ -9,7 +9,7 @@ metadata:
     verification → dialogue refinement → delivery.
 ---
 
-# cc-rsg (Claude Code Reverse Spec Generator)
+# cc-rsg (Reverse Spec Generator)
 
 A general-purpose framework that reverse-engineers maintenance- or delivery-targeted specification documents from existing codebases (legacy or current).
 
@@ -717,7 +717,7 @@ in English.
   **Self-check before emitting `task()`:**
   Have you written the prompts for **every** chapter that needs investigation in this Phase 3 round? If not, finish drafting them first, THEN emit them all together. Never emit one and "see how it goes" — that is the sequential anti-pattern.
 
-  **Runtime concurrency mechanics.** Claude Code's `Task` tool dispatches sub-agents in parallel up to its own pool. Other runtimes integrating the same skill should configure their own sub-agent pool similarly so the batch actually runs in parallel rather than being serialised at the executor level.
+  **Runtime concurrency mechanics.** The runtime's `Task` tool dispatches sub-agents in parallel up to its own pool. Other runtimes integrating the same skill should configure their own sub-agent pool similarly so the batch actually runs in parallel rather than being serialised at the executor level.
 
 - **Prompt cache is NOT shared**: each sub-agent has an isolated LLM context, so token usage is 5–10× the main agent.
 - **The sub-agent writes the chapter draft directly via the Write tool** (saved as a file, NOT returned in the task result text). The main agent reads the return value and appends detail questions into `questions.json`.
