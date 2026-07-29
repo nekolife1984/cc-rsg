@@ -5,6 +5,7 @@ set -e
 echo "🔍 Checking staged scripts for test coverage..."
 
 SCRIPT_DIR="skills/cc-rsg/scripts"
+CHECKER="${SCRIPT_DIR}/tests/check_test_coverage.py"
 HAS_VIOLATION=0
 
 # Get staged .py files (new or modified) in scripts/ dir
@@ -13,6 +14,7 @@ staged_scripts=$( \
     git diff --cached --name-only --diff-filter=AM -- "${SCRIPT_DIR}/*.py" \
     | grep -v '__init__' \
     | grep -v 'source_map_v2/' \
+    | grep -v '/tests/' \
     || true \
 )
 
@@ -50,6 +52,17 @@ echo "$staged_scripts" | while IFS= read -r script; do
                 echo "1" > /tmp/.cc-rsg-hook-violation.tmp
             else
                 echo "  ✅ Modified script + test staged: $base"
+                # Function-level coverage check (WARN only)
+                if [ -f "$CHECKER" ]; then
+                    cd "$(git rev-parse --show-toplevel)" 2>/dev/null || true
+                    coverage_out=$(python "$CHECKER" "$script" "$test_file" 2>&1) || true
+                    if echo "$coverage_out" | grep -q "Missing"; then
+                        echo "$coverage_out" | while IFS= read -r line; do
+                            echo "     $line"
+                        done
+                        # WARN but don't block for function coverage
+                    fi
+                fi
             fi
         else
             # Test doesn't exist — warn but don't block (legacy script)
