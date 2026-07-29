@@ -81,7 +81,8 @@ Use **shape** (not color) for visual emphasis.
 1. **Before starting any phase, Read the corresponding detail file first.** The phase overview table above maps each phase to its file.
 2. **Question Bank operations** → read `question-bank.md` before Phase 1 step 4.
 3. **Sub-agent delegation** → read `subagent-behavior.md` before Phase 3.
-4. **State management & resume** → read `state-management.md` when resuming.
-5. **The 11 design principles above are universal across all phases.**
-6. **The Mermaid styling contract applies to every diagram in `.cc-rsg/drafts/` and `{output_dir}/`.**
-7. **Context-saving note**: This SKILL.md is intentionally lightweight. Phase detail files are loaded only when needed via the Read tool, reducing per-invocation context overhead — especially important for Claude Code which injects SKILL.md into the system prompt.
+4. **State management & resume** → read `state-management.md` when resuming. It contains a phase→file mapping table that tells you exactly which detail files to load based on `state.json.current_phase`.
+5. **On resume, after user confirms, load the phase file corresponding to `state.json.current_phase`** (see mapping in `state-management.md`). Without this, the phase instructions are not in the system prompt.
+6. **The 11 design principles above are universal across all phases.**
+7. **The Mermaid styling contract applies to every diagram in `.cc-rsg/drafts/` and `{output_dir}/`.**
+8. **Context-saving note**: This SKILL.md is intentionally lightweight. Phase detail files are loaded only when needed via the Read tool, reducing per-invocation context overhead — especially important for Claude Code which injects SKILL.md into the system prompt.
