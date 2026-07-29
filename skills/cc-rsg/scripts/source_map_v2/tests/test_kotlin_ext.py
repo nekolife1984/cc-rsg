@@ -62,8 +62,9 @@ def test_kotlin_spring_and_types():
     assert ("spring_controller", "UserController") in by
     assert ("spring_service", "UserService") in by
     assert ("jpa_entity", "User") in by
-    assert ("kotlin_data_class", "User") in by    # data class → schema
     assert ("kotlin_class", "PlainClass") in by
+
+    assert ("kotlin_data_class", "User") not in by  # @Entity takes priority over data class
 
     eps = [u for u in units if u.kind == "spring_endpoint"]
     methods = {u.endpoint["method"] for u in eps}

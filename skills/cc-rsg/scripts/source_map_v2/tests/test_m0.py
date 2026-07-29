@@ -116,12 +116,17 @@ def test_layer1_framework_detection_with_evidence(tmp_path):
 
 
 def test_unsupported_language_falls_back_with_loud_warning(tmp_path):
-    """A recognised language with no extractor (kotlin) must warn, not vanish (P4)."""
-    root = _make_project(tmp_path)  # contains legacy.kt + README.txt
+    """A recognised language with no extractor must warn, not vanish (P4).
+
+    All extensions in ``LANG_BY_EXT`` now have extractors, so we use a
+    file that has no entry at all — it should be excluded (no warning).
+    """
+    root = _make_project(tmp_path)
     payload = build_source_map(root).to_dict()
-    assert any("'kotlin'" in w for w in payload["warnings"])
+    # legacy.kt is now supported, no warning expected
+    assert not any("'kotlin'" in w for w in payload["warnings"])
     kt_units = [u for u in payload["units"] if u["language"] == "kotlin"]
-    assert kt_units and kt_units[0]["kind"] == "kotlin_file"  # file-level fallback
+    assert kt_units and kt_units[0]["kind"] == "kotlin_function"  # extracted properly
     assert payload["stats"]["files_excluded"] >= 1            # README.txt excluded
 
 
