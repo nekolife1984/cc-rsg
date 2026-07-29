@@ -22,7 +22,7 @@ LANG_BY_EXT: dict[str, str] = {
     ".js": "javascript", ".jsx": "javascript", ".mjs": "javascript", ".cjs": "javascript",
     ".ts": "typescript", ".tsx": "typescript",
     ".php": "php",
-    ".java": "java", ".kt": "kotlin",
+    ".java": "java", ".kt": "kotlin", ".kts": "kotlin",
     ".cs": "csharp",
     ".go": "go",
     ".cob": "cobol", ".cbl": "cobol", ".cpy": "cobol",
@@ -123,12 +123,29 @@ def detect_frameworks(root: Path) -> list[dict[str, Any]]:
             if token in low_c:
                 hints.append(_hint("php", fw, "high", f"{token} in composer.json"))
 
-    # --- Java / Kotlin: Spring Boot ---
+    # --- Java / Kotlin: Spring Boot / Ktor / Android ---
     for name in ("pom.xml", "build.gradle", "build.gradle.kts"):
         p = root / name
-        if p.exists() and "spring-boot" in (_read(p) or "").lower():
-            hints.append(_hint("java", "spring-boot", "high", f"spring-boot in {name}"))
+        if not p.exists():
+            continue
+        manifest = (_read(p) or "").lower()
+        if "spring-boot" in manifest:
+            lang = "kotlin" if name == "build.gradle.kts" and "kotlin" in manifest else "java"
+            hints.append(_hint(lang, "spring-boot", "high", f"spring-boot in {name}"))
+            # Also hint java when Kotlin + Spring appear in a .kts — mixed projects exist
+            if name == "build.gradle.kts" and "kotlin" in manifest and "java" in manifest:
+                hints.append(_hint("java", "spring-boot", "medium", f"java plugin + spring-boot in {name}"))
             break
+        if "ktor" in manifest:
+            hints.append(_hint("kotlin", "ktor", "high", f"ktor in {name}"))
+            break
+
+    # Android: build.gradle.kts with com.android.application or AndroidManifest.xml
+    android_kts = root / "build.gradle.kts"
+    if android_kts.exists() and "com.android.application" in (_read(android_kts) or "").lower():
+        hints.append(_hint("kotlin", "android", "high", "com.android.application in build.gradle.kts"))
+    elif list(root.rglob("AndroidManifest.xml")):
+        hints.append(_hint("kotlin", "android", "medium", "AndroidManifest.xml present"))
 
     # --- C#: ASP.NET Core ---
     for csproj in root.rglob("*.csproj"):

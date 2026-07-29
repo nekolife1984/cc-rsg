@@ -45,6 +45,9 @@ def _parser(language: str):
         elif language == "csharp":
             import tree_sitter_c_sharp as m
             lang = _ts.Language(m.language())
+        elif language == "kotlin":
+            import tree_sitter_kotlin as m
+            lang = _ts.Language(m.language())
         elif language == "go":
             import tree_sitter_go as m
             lang = _ts.Language(m.language())
