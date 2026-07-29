@@ -8,7 +8,7 @@
 - [ ] fix: バグ修正
 - [ ] chore: CI・リファクタリング・メンテナンス・依存関係
 - [ ] docs: ドキュメントのみ
-- [ ] upstream: daishir0/cc-rsg からの上流同期
+- [ ] upstream: nekolife1984/cc-rsg からの上流同期
 
 ## チェックリスト
 
@@ -17,7 +17,6 @@
 - [ ] `pytest tests/ -q` が通る
 - [ ] `mypy . --strict` が通る（該当する場合）
 - [ ] Trace/drift gate が通る（該当する場合）
-- [ ] `CHANGELOG.md` を更新した
 - [ ] 動作変更に伴いドキュメント（EN + JA）を更新した
 - [ ] `docs/ja/01-branching-strategy.md` のルールに従っている
 
