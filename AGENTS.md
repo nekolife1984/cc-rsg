@@ -31,7 +31,11 @@ sh scripts/install-hooks.sh
 - **No direct commits to `main`** — always feature branch → PR → squash merge (enforced by pre-push hook)
 - **New scripts must have tests** — pre-commit hook checks `tests/test_<name>.py` exists (enforced by pre-commit hook)
 - **One logical change per branch** — conventional commit prefix required
-- **CI gates** — `pytest tests/ -v` + `mypy` (when applicable) must pass on PR
+- **CI gates** — GitHub Actions (`.github/workflows/ci.yml`) runs on every PR:
+  - `pytest` (scripts/ + source_map_v2/)
+  - `mypy` (advisory, warnings displayed)
+  - Smoke import check (source_map_v2 module + pytest collect)
+  - All steps must pass before merge (mypy advisory exempted)
 - **Docs sync** — update both EN + JA docs when behaviors change
 
 ## Bypass (Emergency Only)

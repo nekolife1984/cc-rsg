@@ -38,5 +38,8 @@ git push origin feat/your-feature
 - **1変更1コミット** — コミットメッセージは `feat:` / `fix:` / `chore:` / `docs:` / `upstream:` のプレフィックスを使用
 - **PR必須** — ソースコード・テスト・機能変更は必ずPR経由
 - **Squash merge** — mainの履歴をまっすぐ保つ
-- **CIゲート通過必須** — `pytest` + `mypy`（該当時）+ trace gate
+- **CIゲート通過必須** — GitHub Actions（`.github/workflows/ci.yml`）が PR 上で自動実行:
+  - `pytest`（scripts/ および source_map_v2/）
+  - `mypy`（アドバイザリ、警告表示）
+  - Smoke import チェック（全スクリプトの import 検証）
 - **ドキュメント同期** — EN + JA の両方を更新（ドキュメント変更時）
