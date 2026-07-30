@@ -162,16 +162,16 @@ This uses the same matching heuristic as `build-trace.py`'s `resolve_refs_to_uni
 
 ```bash
 # Dry-run (default)
-python .specback/skill/scripts/fix-refs.py --specback-dir .specback
+python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir .specback
 
 # Apply corrections
-python .specback/skill/scripts/fix-refs.py --specback-dir .specback --apply
+python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir .specback --apply
 
 # CI check: exit 1 if any orphaned REFs remain
-python .specback/skill/scripts/fix-refs.py --specback-dir .specback --check
+python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir .specback --check
 
 # Pipe diff from CI
-git diff -U0 main...HEAD | python .specback/skill/scripts/fix-refs.py --diff - --check
+git diff -U0 main...HEAD | python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --diff - --check
 ```
 
 ### Safety

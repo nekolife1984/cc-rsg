@@ -19,7 +19,7 @@ Generate a **human-readable change specification document** (`change-spec.md`) f
 
 2. **Run change-spec.py** (mechanical extraction):
    ```bash
-   python .specback/skill/scripts/change-spec.py \
+   python "$(cat .specback/.skill-path)/scripts/change-spec.py" \
      --specback-dir .specback \
      --output-dir {output_dir}
    ```
@@ -41,13 +41,13 @@ Generate a **human-readable change specification document** (`change-spec.md`) f
 
 ```bash
 # Git mode (default)
-python .specback/skill/scripts/change-spec.py --specback-dir .specback
+python "$(cat .specback/.skill-path)/scripts/change-spec.py" --specback-dir .specback
 
 # Hash mode
-python .specback/skill/scripts/change-spec.py --specback-dir .specback --mode hash
+python "$(cat .specback/.skill-path)/scripts/change-spec.py" --specback-dir .specback --mode hash
 
 # Pipe diff
-git diff -U5 main...HEAD | python .specback/skill/scripts/change-spec.py --diff -
+git diff -U5 main...HEAD | python "$(cat .specback/.skill-path)/scripts/change-spec.py" --diff -
 ```
 
 ### Output
