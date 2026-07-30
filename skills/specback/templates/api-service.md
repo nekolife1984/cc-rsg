@@ -32,69 +32,129 @@ Designed for API services, microservices, and public APIs over REST, GraphQL, gR
 - Dependencies on related services
 
 ---
+---
 
-### Chapter 2: Architecture overview
+### Chapter 2: Feature specifications
+
+<!-- meta: consolidated feature-level view of the system. Maps features to screens, routes, and data. -->
+
+#### 2.1 Feature catalogue table
+
+| Feature ID | Feature name | Category | Related items (screens/endpoints/jobs/APIs) | Auth required | Summary | Confidence |
+|------------|-------------|----------|-------------------------------------------|-------------|---------|-----------|
+| F-001 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| F-002 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| ... | ... | ... | ... | ... | ... | ... |
+
+The catalogue table exhaustively lists every feature. Confidence labels:
+- 🟢 **VERIFIED**: Feature purpose confirmed by reading the actual code (screen, controller, or service file).
+- 🟡 **INFERRED**: Feature mechanically grouped from endpoint path prefix or class naming convention.
+- 🔴 **ASSUMED**: Feature inferred from use-case description; code evidence is indirect.
+
+#### 2.2 Per-feature processing definitions
+
+For each feature listed above, describe the processing flow structured as below. Generate at minimum the top-5 features by complexity or business criticality; list the remainder in the catalogue table only.
+
+##### F-001: {Feature name}
+
+**Overview**
+- Business value this feature provides
+- Which user / system role uses it
+
+**Trigger**
+- User action / system event / external call that initiates this feature
+
+**Pre-conditions**
+- Conditions that must hold before execution
+
+**Main flow**
+1. Step 1 [REF: src/path:line]
+2. Step 2 [REF: src/path:line]
+3. ...
+
+**Alternative flows**
+- Alt-1: When [condition] → [behaviour] [REF: src/path:line]
+
+**Error handling**
+- Error type → system behaviour [REF: src/path:line]
+
+**Post-conditions**
+- State of the system after successful execution
+
+**Related business rules**
+- → Ch? (Domain rules section) cross-reference
+
+**Related chapters**
+- → Ch? (Screen details / Routes / Data model) cross-reference
+
+**Confidence**: 🟢/🟡/🔴
+
+---
+
+
+
+### Chapter 3: Architecture overview
 
 <!-- meta: technology choices and overall structure. -->
 
-#### 2.1 Technology stack
+#### 3.1 Technology stack
 - Language / framework (Spring Boot / Express / FastAPI / .NET, etc.)
 - API style (REST / GraphQL / gRPC / WebSocket)
 - API spec format (OpenAPI / GraphQL SDL / .proto)
 
-#### 2.2 Internal architecture
+#### 3.2 Internal architecture
 - Layering (Controller / Service / Repository, etc.)
 - Data stores (RDB / NoSQL / Cache)
 - Messaging infrastructure
 
-#### 2.3 Deployment topology
+#### 3.3 Deployment topology
 - Runtime (Kubernetes / ECS / Lambda, etc.)
 - Scaling strategy
 
 ---
 
-### Chapter 3: Class / Module Design
+### Chapter 4: Class / Module Design
 
 <!-- meta: internal structure — classes, modules, and their relationships. -->
 
-#### 3.1 Module overview
+#### 4.1 Module overview
 
 | Module / package | Responsibility | Key classes | Dependencies |
 |:----------------|:-------------|:-----------|:------------|
 | ... | ... | ... | ... |
 
-#### 3.2 Class catalogue
+#### 4.2 Class catalogue
 
 | Class | Kind | Module | Responsibility | Depends on | Source |
 |:------|:----|:-------|:-------------|:----------|:-------|
 | ... | ... | ... | ... | ... | [REF: ...] |
 
-#### 3.3 Class diagram (Mermaid)
+#### 4.3 Class diagram (Mermaid)
 Include a `classDiagram` for key subsystems. Split per module if >15 classes (see SKILL.md Split rule).
 
-#### 3.4 Module dependency diagram (Mermaid)
+#### 4.4 Module dependency diagram (Mermaid)
 Show the direction of dependencies between top-level modules using `graph TD` or `flowchart TD`.
 
 ---
 
-### Chapter 4: Endpoint catalogue
+### Chapter 5: Endpoint catalogue
 
 <!-- meta: inventory of all endpoints. The pillar of verification. -->
 
-#### 3.1 Endpoint catalogue
+#### 4.1 Endpoint catalogue
 | Endpoint ID | Method | Path | Summary | Auth | Version |
 |---------------|---------|------|------|------|----------|
 | EP-001 | GET | /v1/users/{id} | Get user | required | v1 |
 | EP-002 | POST | /v1/users | Create user | required | v1 |
 | ... | ... | ... | ... | ... | ... |
 
-#### 3.2 Grouping by resource
+#### 4.2 Grouping by resource
 - Organise endpoints by resource
 - Relationships between resources
 
 ---
 
-### Chapter 5: Request / response specifications
+### Chapter 6: Request / response specifications
 
 <!-- meta: per-endpoint details. If they can be generated from OpenAPI, reference only is acceptable. -->
 
@@ -133,11 +193,11 @@ For each endpoint, describe:
 
 ---
 
-### Chapter 6: Data Model
+### Chapter 7: Data Model
 
 <!-- meta: persistent data structures and entity relationships. -->
 
-#### 6.1 Data stores
+#### 7.1 Data stores
 
 | Store | Type | Purpose | Connection config | ORM / client |
 |:------|:----|:-------|:----------------|:------------|
@@ -145,7 +205,7 @@ For each endpoint, describe:
 | Cache | Redis | Session / rate-limit store | config/cache.yml | RedisClient |
 | ... | ... | ... | ... | ... |
 
-#### 6.2 Entity definitions
+#### 7.2 Entity definitions
 
 Per entity (one table per row):
 
@@ -165,18 +225,18 @@ Full field definitions per entity (expand in the chapter body):
 | role | enum | ✅ | 'user' | - | - | 'user' / 'admin' |
 | ... | ... | ... | ... | ... | ... | ... |
 
-#### 6.3 Key domain rules
+#### 7.3 Key domain rules
 - Invariants (e.g. "issue status cannot transition from closed to open")
 - State transitions (Mermaid stateDiagram-v2)
 - Business rules (e.g. "withdrawn users are excluded from search results")
 
 ---
 
-### Chapter 7: Error codes / error responses
+### Chapter 8: Error codes / error responses
 
 <!-- meta: full error-code list and semantics. -->
 
-#### 7.1 Common error-response
+#### 8.1 Common error-response
 ```json
 {
   "error": {
@@ -188,7 +248,7 @@ Full field definitions per entity (expand in the chapter body):
 }
 ```
 
-#### 7.2 Error-code list
+#### 8.2 Error-code list
 | Code | HTTP status | Category | Meaning | Consumer action |
 |-------|--------------|---------|------|----------|
 | USER_NOT_FOUND | 404 | client error | User does not exist | Check the ID |
@@ -196,18 +256,18 @@ Full field definitions per entity (expand in the chapter body):
 | INTERNAL_ERROR | 500 | server error | Internal failure | Contact support |
 | ... | ... | ... | ... | ... |
 
-#### 7.3 HTTP status-code policy
+#### 8.3 HTTP status-code policy
 - When to use 200 vs 201 vs 204
 - When to use 400 vs 401 vs 403 vs 404 vs 409 vs 422
 - When to use 500 vs 502 vs 503 vs 504
 
 ---
 
-### Chapter 8: External interfaces
+### Chapter 9: External interfaces
 
 <!-- meta: all system boundaries — external APIs, databases, queues, file transfers. -->
 
-#### 8.1 External interface inventory
+#### 9.1 External interface inventory
 
 | IF-ID | Name | Type | Protocol | Direction | Consumer / provider | Failure behaviour |
 |:------|:-----|:----|:---------|:--------:|:------------------|:-----------------|
@@ -215,34 +275,34 @@ Full field definitions per entity (expand in the chapter body):
 | IF-002 | Main DB | Database | PostgreSQL | Bidirectional | Primary RDS | Pool reconnect |
 | ... | ... | ... | ... | ... | ... | ... |
 
-#### 8.2 External API integrations
+#### 9.2 External API integrations
 
-##### 8.2.1 Integration partners
+##### 9.2.1 Integration partners
 
 | Partner | Protocol | Purpose | Authentication | Timeout | Behaviour on failure |
 |---------|----------|------|--------------|:-------|-------------------|
 | ... | ... | ... | ... | ... | ... |
 
-##### 8.2.2 Details per integration
+##### 9.2.2 Details per integration
 - Authentication method (API key, OAuth, etc.)
 - Request / response example
 - Timeout / retry policy
 - Idempotency (or lack thereof)
 - Fallback behaviour on failure
 
-#### 8.3 Database connections
+#### 9.3 Database connections
 
 | Database | Type | Host / connection | Auth | Pool | TLS | Usage |
 |:---------|:-----|:-----------------|:----|:----:|:---|:------|
 | Main DB | PostgreSQL | db.example.com:5432 | SCRAM-SHA-256 | max: 10 | required | Primary persistence |
 
-#### 8.4 Message queues / event streams
+#### 9.4 Message queues / event streams
 
 | Queue / topic | Type | Broker | Direction | Routing | Retry / DLQ | Consumers |
 |:-------------|:----|:------|:--------:|:--------|:-----------|:----------|
 | ... | ... | ... | ... | ... | ... | ... |
 
-#### 8.5 File transfers
+#### 9.5 File transfers
 
 | Transfer | Source | Destination | Protocol | Schedule | File pattern | Encryption |
 |:---------|:-------|:-----------|:---------|:--------|:------------|:----------|
@@ -250,121 +310,121 @@ Full field definitions per entity (expand in the chapter body):
 
 ---
 
-### Chapter 9: Authentication
+### Chapter 10: Authentication
 
 <!-- meta: authentication-method details. -->
 
-#### 9.1 Authentication method
+#### 10.1 Authentication method
 - API key / OAuth 2.0 / JWT / mTLS / Basic auth
 - Reason for the choice
 
-#### 9.2 Authentication flow
+#### 10.2 Authentication flow
 - Token-acquisition steps
 - Token lifetime
 - Refresh procedure
 
-#### 9.3 Authorisation
+#### 10.3 Authorisation
 - Scopes / permissions
 - Role-based access control (RBAC)
 
-#### 9.4 Credential management
+#### 10.4 Credential management
 - Where keys / secrets are stored
 - Rotation procedure
 
 ---
 
-### Chapter 10: Rate limiting / quotas
+### Chapter 11: Rate limiting / quotas
 
 <!-- meta: usage caps and behaviour. -->
 
-#### 10.1 Rate-limit policy
+#### 11.1 Rate-limit policy
 | Tier | Limit | Unit | Scope |
 |------|-------|---------|---------|
 | Free plan | 100 req/min | per minute | per API key |
 | Paid plan | 10000 req/min | per minute | per API key |
 | ... | ... | ... | ... |
 
-#### 10.2 Behaviour on exceeding the limit
+#### 11.2 Behaviour on exceeding the limit
 - HTTP status (429 Too Many Requests)
 - Retry-After header
 - When the limit resets
 
-#### 10.3 Quotas
+#### 11.3 Quotas
 - Monthly / daily total-call ceilings
 - Behaviour when exceeded
 
 ---
 
-### Chapter 11: Versioning
+### Chapter 12: Versioning
 
 <!-- meta: API evolution and compatibility. -->
 
-#### 11.1 Versioning strategy
+#### 12.1 Versioning strategy
 - URL-path style (/v1/, /v2/)
 - Header style
 - Media-type style
 
-#### 11.2 Supported versions
+#### 12.2 Supported versions
 | Version | Released | Sunset planned | Status |
 |----------|----------|---------------|------|
 | v1 | 2024-01 | 2026-12 | active |
 | v2 | 2026-03 | - | active (recommended) |
 
-#### 11.3 Breaking-change policy
+#### 12.3 Breaking-change policy
 - What counts as a breaking change
 - Advance-notice period
 - Migration-guide commitment
 
-#### 11.4 Backward compatibility
+#### 12.4 Backward compatibility
 - Change patterns that preserve compatibility
 - Deprecation process
 
 ---
 
-### Chapter 12: SLA / performance requirements
+### Chapter 13: SLA / performance requirements
 
 <!-- meta: the quality the service provides. -->
 
-#### 12.1 Availability targets
+#### 13.1 Availability targets
 - Availability SLA (e.g. 99.9%)
 - Measurement method
 - How planned downtime is announced
 
-#### 12.2 Performance targets
+#### 13.2 Performance targets
 | Metric | Target | Measurement |
 |------|-------|---------|
 | Mean response time | < 200ms | p50 |
 | 95th percentile response time | < 500ms | p95 |
 | Peak throughput | 10000 RPS | over 1-minute windows |
 
-#### 12.3 Incident response
+#### 13.3 Incident response
 - Incident classification
 - Communication flow
 - Status page
 
 ---
 
-### Chapter 13: Operations settings
+### Chapter 14: Operations settings
 
 <!-- meta: deployment / monitoring / logging. -->
 
-#### 13.1 Environment variables / configuration values
+#### 14.1 Environment variables / configuration values
 | Variable | Required | Default | Purpose |
 |-------|------|----------|------|
 | DB_HOST | required | - | Database connection target |
 | ... | ... | ... | ... |
 
-#### 13.2 Deployment procedure
+#### 14.2 Deployment procedure
 - Build / deploy pipeline
 - Canary releases (if used)
 - Rollback procedure
 
-#### 13.3 Monitoring
+#### 14.3 Monitoring
 - Monitored metrics
 - Alert conditions
 - Dashboards
 
-#### 13.4 Logging
+#### 14.4 Logging
 
 | Log type | Output | Format | Level | Retention | Source config |
 |:---------|:-------|:------|:-----|:---------|:-------------|
@@ -383,16 +443,16 @@ Log level definitions:
 
 ---
 
-### Chapter 14: Known constraints and unresolved items
+### Chapter 15: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 14.1 Known technical constraints
+#### 15.1 Known technical constraints
 - Request-body size cap
 - Concurrent-connection cap
 - Known bugs / workarounds
 
-#### 14.2 Unresolved items
+#### 15.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 
 ---

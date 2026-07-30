@@ -34,34 +34,94 @@ Designed for typical web applications: PHP (Laravel/Symfony/CakePHP), Python (Dj
 - Use Mermaid notation when appropriate
 
 ---
+---
 
-### Chapter 2: Architecture overview
+### Chapter 2: Feature specifications
+
+<!-- meta: consolidated feature-level view of the system. Maps features to screens, routes, and data. -->
+
+#### 2.1 Feature catalogue table
+
+| Feature ID | Feature name | Category | Related items (screens/endpoints/jobs/APIs) | Auth required | Summary | Confidence |
+|------------|-------------|----------|-------------------------------------------|-------------|---------|-----------|
+| F-001 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| F-002 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| ... | ... | ... | ... | ... | ... | ... |
+
+The catalogue table exhaustively lists every feature. Confidence labels:
+- 🟢 **VERIFIED**: Feature purpose confirmed by reading the actual code (screen, controller, or service file).
+- 🟡 **INFERRED**: Feature mechanically grouped from endpoint path prefix or class naming convention.
+- 🔴 **ASSUMED**: Feature inferred from use-case description; code evidence is indirect.
+
+#### 2.2 Per-feature processing definitions
+
+For each feature listed above, describe the processing flow structured as below. Generate at minimum the top-5 features by complexity or business criticality; list the remainder in the catalogue table only.
+
+##### F-001: {Feature name}
+
+**Overview**
+- Business value this feature provides
+- Which user / system role uses it
+
+**Trigger**
+- User action / system event / external call that initiates this feature
+
+**Pre-conditions**
+- Conditions that must hold before execution
+
+**Main flow**
+1. Step 1 [REF: src/path:line]
+2. Step 2 [REF: src/path:line]
+3. ...
+
+**Alternative flows**
+- Alt-1: When [condition] → [behaviour] [REF: src/path:line]
+
+**Error handling**
+- Error type → system behaviour [REF: src/path:line]
+
+**Post-conditions**
+- State of the system after successful execution
+
+**Related business rules**
+- → Ch? (Domain rules section) cross-reference
+
+**Related chapters**
+- → Ch? (Screen details / Routes / Data model) cross-reference
+
+**Confidence**: 🟢/🟡/🔴
+
+---
+
+
+
+### Chapter 3: Architecture overview
 
 <!-- meta: design decisions and overall structure. Capture WHY this shape. -->
 
-#### 2.1 Adopted framework / libraries
+#### 3.1 Adopted framework / libraries
 - Language, framework, and major libraries
 - Version information
 
-#### 2.2 Architecture pattern
+#### 3.2 Architecture pattern
 - MVC / Clean architecture / Hexagonal, etc.
 - Reason for adoption (to the extent it can be inferred)
 
-#### 2.3 Directory structure
+#### 3.3 Directory structure
 - Responsibility of each major directory
 - Conventions (naming rules, placement rules)
 
-#### 2.4 Dependencies
+#### 3.4 Dependencies
 - External systems / APIs
 - Database / cache / message queue
 
 ---
 
-### Chapter 3: Class / Module Design
+### Chapter 4: Class / Module Design
 
 <!-- meta: internal structure of the codebase — classes, modules, and their relationships. -->
 
-#### 3.1 Module overview
+#### 4.1 Module overview
 
 | Module / package | Responsibility | Key classes | Dependencies |
 |:----------------|:-------------|:-----------|:------------|
@@ -70,7 +130,7 @@ Designed for typical web applications: PHP (Laravel/Symfony/CakePHP), Python (Dj
 | app/services | Business logic | IssueService, NotificationService | app/models |
 | ... | ... | ... | ... |
 
-#### 3.2 Class catalogue
+#### 4.2 Class catalogue
 
 | Class | Kind | Module | Responsibility | Depends on | Source |
 |:------|:----|:-------|:-------------|:----------|:-------|
@@ -79,32 +139,32 @@ Designed for typical web applications: PHP (Laravel/Symfony/CakePHP), Python (Dj
 | Issue | Model | app/models | Issue entity & persistence | User, Project | [REF: ...] |
 | ... | ... | ... | ... | ... | ... |
 
-#### 3.3 Class diagram (Mermaid)
+#### 4.3 Class diagram (Mermaid)
 
 For key subsystems, include a `classDiagram` showing inheritance, interfaces, and associations. Split per module if >15 classes (see SKILL.md Split rule).
 
-#### 3.4 Module dependency diagram (Mermaid)
+#### 4.4 Module dependency diagram (Mermaid)
 
 Show the direction of dependencies between top-level modules using `graph TD` or `flowchart TD`.
 
 ---
 
-### Chapter 4: Screens and screen transitions
+### Chapter 5: Screens and screen transitions
 
 <!-- meta: UI structure from the user's perspective. -->
 
-#### 4.1 Screen list
+#### 5.1 Screen list
 | Screen ID | Screen name | URL | Auth required | Required role |
 |-------|-------|-----|---------|---------|
 | SC-001 | Login | /login | no | - |
 | SC-002 | Dashboard | /dashboard | yes | regular user or higher |
 | ... | ... | ... | ... | ... |
 
-#### 4.2 Screen-transition diagram
+#### 5.2 Screen-transition diagram
 - Major transition paths (Mermaid notation, etc.)
 - Exceptional transitions (errors, session timeout)
 
-#### 4.3 Details of each screen
+#### 5.3 Details of each screen
 
 For each screen, describe using structured tables:
 
@@ -134,35 +194,35 @@ For each screen, describe using structured tables:
 
 ---
 
-### Chapter 5: Routes / endpoints
+### Chapter 6: Routes / endpoints
 
 <!-- meta: full list of HTTP routes. The pillar of inventory-based verification. -->
 
-#### 5.1 Web screen routes
+#### 6.1 Web screen routes
 | Method | Path | Controller::Action | Auth | Summary |
 |---------|------|-----------------------|------|------|
 | GET | / | HomeController::index | optional | Top page |
 | GET | /users/{id} | UserController::show | required | User details |
 | ... | ... | ... | ... | ... |
 
-#### 5.2 Internal API / Ajax endpoints
+#### 6.2 Internal API / Ajax endpoints
 - Ajax / Fetch APIs called from the screens
 - Response format
 
-#### 5.3 Per-route middleware
+#### 6.3 Per-route middleware
 - Applied middleware and the order of processing
 
 ---
 
-### Chapter 6: Data model
+### Chapter 7: Data model
 
 <!-- meta: structure and semantics of persisted data. -->
 
-#### 6.1 ER diagram
+#### 7.1 ER diagram
 - Relations between key entities
 - Use Mermaid notation, etc.
 
-#### 6.2 Entity list
+#### 7.2 Entity list
 Per entity:
 - Table / class name
 - Field list (type, nullability, default, business meaning)
@@ -170,43 +230,43 @@ Per entity:
 - Foreign keys
 - Relations (1:1, 1:N, N:N)
 
-#### 6.3 Key domain rules
+#### 7.3 Key domain rules
 - Invariants
 - State transitions (state machines)
 - Business rules (e.g. "withdrawn users are excluded from search results")
 
 ---
 
-### Chapter 7: Authentication and authorisation
+### Chapter 8: Authentication and authorisation
 
 <!-- meta: security core. Omissions here are critical. -->
 
-#### 7.1 Authentication method
+#### 8.1 Authentication method
 - Session / token / OAuth / SSO
 - Password-hash algorithm
 - Session timeout
 
-#### 7.2 Authorisation model
+#### 8.2 Authorisation model
 - Roles and permissions
 - Role hierarchy
 - Where authorisation checks are implemented
 
-#### 7.3 Authorisation flow
+#### 8.3 Authorisation flow
 - Request → authorisation decision → execute / deny flow
 - Behaviour on authorisation failure
 
-#### 7.4 Session management
+#### 8.4 Session management
 - Session store
 - Conditions for session invalidation
 - Concurrent-login control
 
 ---
 
-### Chapter 8: External interfaces
+### Chapter 9: External interfaces
 
 <!-- meta: all system boundaries — APIs, databases, queues, file transfers, hardware. -->
 
-#### 8.1 External interface inventory
+#### 9.1 External interface inventory
 
 | IF-ID | Name | Type | Protocol | Direction | Consumer / provider | Failure behaviour |
 |:------|:-----|:----|:---------|:--------:|:------------------|:-----------------|
@@ -216,23 +276,23 @@ Per entity:
 | IF-004 | Daily reports | File transfer | SFTP | Upload | Report server | Alert on failure |
 | ... | ... | ... | ... | ... | ... | ... |
 
-#### 8.2 External API integrations
+#### 9.2 External API integrations
 
-##### 8.2.1 Integration partners
+##### 9.2.1 Integration partners
 
 | Partner | Protocol | Purpose | Authentication | Timeout | Behaviour on failure |
 |---------|----------|------|--------------|:-------|-------------------|
 | Payment gateway | HTTPS REST | Payment processing | API Key (X-API-Key) | 10s | Retry 3 times; notify on failure |
 | ... | ... | ... | ... | ... | ... |
 
-##### 8.2.2 Details per integration
+##### 9.2.2 Details per integration
 - Authentication method (API key, OAuth, etc.)
 - Request / response example
 - Timeout / retry policy
 - Idempotency (or lack thereof)
 - Fallback behaviour on failure
 
-#### 8.3 Database connections
+#### 9.3 Database connections
 
 | Database | Type | Host / connection | Auth | Pool | TLS | Usage |
 |:---------|:-----|:-----------------|:----|:----:|:---|:------|
@@ -240,21 +300,21 @@ Per entity:
 | Cache | Redis | cache.example.com:6379 | password | - | optional | Session store |
 | Analytics | BigQuery | - | Service account | - | built-in | Reporting queries |
 
-#### 8.4 Message queues / event streams
+#### 9.4 Message queues / event streams
 
 | Queue / topic | Type | Broker | Direction | Routing | Retry / DLQ | Consumers |
 |:-------------|:----|:------|:--------:|:--------|:-----------|:----------|
 | order.created | topic | RabbitMQ | Publish | exchange: order | DLQ after 3 retries | NotificationService |
 | email.send | queue | SQS | Consume | - | redrive after 5 failures | EmailWorker |
 
-#### 8.5 File transfers
+#### 9.5 File transfers
 
 | Transfer | Source | Destination | Protocol | Schedule | File pattern | Encryption |
 |:---------|:-------|:-----------|:---------|:--------|:------------|:----------|
 | Daily sales | Main DB export | sftp://report.example.com/incoming | SFTP | 03:00 daily | sales_YYYYMMDD.csv | AES-256 |
 | Partner feed | sftp://partner.example.com/outgoing | Import worker | SFTP | Poll every 30min | feed_*.xml | PGP |
 
-#### 8.6 Other interfaces
+#### 9.6 Other interfaces
 
 | Interface | Type | Protocol | Details |
 |:----------|:-----|:---------|:--------|
@@ -263,26 +323,26 @@ Per entity:
 
 ---
 
-### Chapter 9: Operations settings
+### Chapter 10: Operations settings
 
 <!-- meta: deployment, environment variables, monitoring. -->
 
-#### 9.1 Environment composition
+#### 10.1 Environment composition
 - Environment list (dev, staging, prod)
 - Differences between environments
 
-#### 9.2 Environment variables / configuration values
+#### 10.2 Environment variables / configuration values
 | Variable | Required | Default | Purpose |
 |-------|------|----------|------|
 | DB_HOST | required | - | Database connection target |
 | ... | ... | ... | ... |
 
-#### 9.3 Deployment procedure
+#### 10.3 Deployment procedure
 - Build procedure
 - Deploy command
 - Rollback procedure
 
-#### 9.4 Logging
+#### 10.4 Logging
 
 | Log type | Output | Format | Level | Retention | Source config |
 |:---------|:-------|:------|:-----|:---------|:-------------|
@@ -301,26 +361,26 @@ Log level definitions:
 | ERROR | Recoverable errors | Always |
 | FATAL | Unrecoverable errors | Always |
 
-#### 9.5 Monitoring
+#### 10.5 Monitoring
 - Monitoring targets (liveness, performance, errors)
 - Alert conditions and notification channels
 
-#### 9.6 Backup / restore
+#### 10.6 Backup / restore
 - Backup target
 - Frequency and generation management
 - Restore procedure
 
 ---
 
-### Chapter 10: Known constraints and unresolved items
+### Chapter 11: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 10.1 Known technical constraints
+#### 11.1 Known technical constraints
 - Performance ceilings (concurrent connections, response time)
 - Known bugs / workarounds
 
-#### 10.2 Unresolved items
+#### 11.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 - For each item, record "why it could not be resolved", "current inference", "what is needed to resolve it in the future"
 

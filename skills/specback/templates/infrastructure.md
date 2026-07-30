@@ -35,12 +35,72 @@ Designed for AWS / Azure / GCP, Terraform / CloudFormation / CDK / Pulumi, Kuber
 - Use subgraphs for VPC / environment boundaries
 
 ---
+---
 
-### Chapter 2: Resource inventory
+### Chapter 2: Feature specifications
+
+<!-- meta: consolidated feature-level view of the system. Maps features to screens, routes, and data. -->
+
+#### 2.1 Feature catalogue table
+
+| Feature ID | Feature name | Category | Related items (screens/endpoints/jobs/APIs) | Auth required | Summary | Confidence |
+|------------|-------------|----------|-------------------------------------------|-------------|---------|-----------|
+| F-001 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| F-002 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| ... | ... | ... | ... | ... | ... | ... |
+
+The catalogue table exhaustively lists every feature. Confidence labels:
+- 🟢 **VERIFIED**: Feature purpose confirmed by reading the actual code (screen, controller, or service file).
+- 🟡 **INFERRED**: Feature mechanically grouped from endpoint path prefix or class naming convention.
+- 🔴 **ASSUMED**: Feature inferred from use-case description; code evidence is indirect.
+
+#### 2.2 Per-feature processing definitions
+
+For each feature listed above, describe the processing flow structured as below. Generate at minimum the top-5 features by complexity or business criticality; list the remainder in the catalogue table only.
+
+##### F-001: {Feature name}
+
+**Overview**
+- Business value this feature provides
+- Which user / system role uses it
+
+**Trigger**
+- User action / system event / external call that initiates this feature
+
+**Pre-conditions**
+- Conditions that must hold before execution
+
+**Main flow**
+1. Step 1 [REF: src/path:line]
+2. Step 2 [REF: src/path:line]
+3. ...
+
+**Alternative flows**
+- Alt-1: When [condition] → [behaviour] [REF: src/path:line]
+
+**Error handling**
+- Error type → system behaviour [REF: src/path:line]
+
+**Post-conditions**
+- State of the system after successful execution
+
+**Related business rules**
+- → Ch? (Domain rules section) cross-reference
+
+**Related chapters**
+- → Ch? (Screen details / Routes / Data model) cross-reference
+
+**Confidence**: 🟢/🟡/🔴
+
+---
+
+
+
+### Chapter 3: Resource inventory
 
 <!-- meta: exhaustive list of all managed cloud resources. -->
 
-#### 2.1 Compute
+#### 3.1 Compute
 
 | Resource ID | Type | Spec / size | Quantity | Runtime | Managed by |
 |:------------|:-----|:-----------|:--------:|:--------|:----------|
@@ -48,7 +108,7 @@ Designed for AWS / Azure / GCP, Terraform / CloudFormation / CDK / Pulumi, Kuber
 | batch-worker | ECS Fargate | 4 vCPU, 8GB | 2 | ECS | Terraform: batch.tf |
 | ... | ... | ... | ... | ... | ... |
 
-#### 2.2 Networking
+#### 3.2 Networking
 
 | Resource ID | Type | CIDR / config | Purpose | Managed by |
 |:------------|:-----|:-------------|:--------|:----------|
@@ -58,7 +118,7 @@ Designed for AWS / Azure / GCP, Terraform / CloudFormation / CDK / Pulumi, Kuber
 | alb-web | ALB | internet-facing | Web traffic | Terraform: alb.tf |
 | ... | ... | ... | ... | ... |
 
-#### 2.3 Data stores
+#### 3.3 Data stores
 
 | Resource ID | Type | Spec | Storage | Multi-AZ | Managed by |
 |:------------|:-----|:-----|:-------|:--------:|:----------|
@@ -67,7 +127,7 @@ Designed for AWS / Azure / GCP, Terraform / CloudFormation / CDK / Pulumi, Kuber
 | s3-assets | S3 bucket | Standard | Unlimited | - | Terraform: s3.tf |
 | ... | ... | ... | ... | ... | ... |
 
-#### 2.4 Serverless / event-driven
+#### 3.4 Serverless / event-driven
 
 | Resource ID | Type | Trigger | Config | Managed by |
 |:------------|:-----|:--------|:-------|:----------|
@@ -75,7 +135,7 @@ Designed for AWS / Azure / GCP, Terraform / CloudFormation / CDK / Pulumi, Kuber
 | order-queue | SQS | - | Standard queue | Terraform: sqs.tf |
 | ... | ... | ... | ... | ... |
 
-#### 2.5 Security / IAM
+#### 3.5 Security / IAM
 
 | Resource | Type | Policy / trust | Attached to | Managed by |
 |:---------|:-----|:--------------|:------------|:----------|
@@ -85,16 +145,16 @@ Designed for AWS / Azure / GCP, Terraform / CloudFormation / CDK / Pulumi, Kuber
 
 ---
 
-### Chapter 3: Network topology
+### Chapter 4: Network topology
 
 <!-- meta: detailed network structure and connectivity. -->
 
-#### 3.1 VPC structure
+#### 4.1 VPC structure
 - VPC CIDR, subnets (public/private), route tables
 - NAT Gateway / Internet Gateway configuration
 - VPC Endpoints (S3 Gateway, DynamoDB, etc.)
 
-#### 3.2 Network diagram (Mermaid)
+#### 4.2 Network diagram (Mermaid)
 
 ```mermaid
 graph TD
@@ -113,22 +173,22 @@ graph TD
   USR --> ALB
 ```
 
-#### 3.3 Connectivity
+#### 4.3 Connectivity
 - VPN / Direct Connect / Transit Gateway
 - Inter-service communication (service mesh, VPC peering)
 - External system access (third-party APIs, partner networks)
 
-#### 3.4 DNS
+#### 4.4 DNS
 - Route53 zones
 - Certificate management (ACM)
 
 ---
 
-### Chapter 4: Deployment pipeline
+### Chapter 5: Deployment pipeline
 
 <!-- meta: CI/CD and release process. -->
 
-#### 4.1 CI/CD pipeline
+#### 5.1 CI/CD pipeline
 
 | Stage | Tool | Trigger | What it does | Approvals |
 |:------|:-----|:--------|:------------|:---------|
@@ -137,12 +197,12 @@ graph TD
 | Production deploy | ArgoCD | Manual approval | Deploy to prod ECS | Team lead |
 | ... | ... | ... | ... | ... |
 
-#### 4.2 Deployment strategy
+#### 5.2 Deployment strategy
 - Blue/green or rolling update
 - Canary releases (if used)
 - Rollback procedure
 
-#### 4.3 Container / artifact registry
+#### 5.3 Container / artifact registry
 
 | Registry | Repository | Format | Retention |
 |:---------|:-----------|:-------|:---------|
@@ -151,11 +211,11 @@ graph TD
 
 ---
 
-### Chapter 5: Configuration and environment
+### Chapter 6: Configuration and environment
 
 <!-- meta: environment variables, secrets, and configuration management. -->
 
-#### 5.1 Environment comparison
+#### 6.1 Environment comparison
 
 | Aspect | Development | Staging | Production |
 |:-------|:-----------|:--------|:----------|
@@ -165,12 +225,12 @@ graph TD
 | Backup | None | Daily | Hourly |
 | ... | ... | ... | ... |
 
-#### 5.2 Secrets management
+#### 6.2 Secrets management
 - Secrets stored in: AWS Secrets Manager / Parameter Store
 - Rotation policy
 - Access audit
 
-#### 5.3 Environment variables
+#### 6.3 Environment variables
 | Variable | Value source | Scope | Purpose |
 |:---------|:------------|:------|:--------|
 | DB_HOST | Secrets Manager | All envs | Database endpoint |
@@ -179,18 +239,18 @@ graph TD
 
 ---
 
-### Chapter 6: Monitoring and observability
+### Chapter 7: Monitoring and observability
 
 <!-- meta: metrics, alerts, dashboards, and logging infrastructure. -->
 
-#### 6.1 Metrics
+#### 7.1 Metrics
 
 | Service | Metrics collected | Retention | Dashboard |
 |:--------|:----------------|:---------|:----------|
 | ECS | CPU, Memory, Request count | 15 months | CloudWatch / Grafana |
 | RDS | Connections, IOPS, Replica lag | 15 months | CloudWatch / Grafana |
 
-#### 6.2 Alerts
+#### 7.2 Alerts
 
 | Condition | Severity | Channel | Response time |
 |:----------|:--------|:--------|:-------------|
@@ -198,18 +258,18 @@ graph TD
 | RDS connections > 90% | CRITICAL | PagerDuty | 15 min |
 | ... | ... | ... | ... |
 
-#### 6.3 Logging infrastructure
+#### 7.3 Logging infrastructure
 - Log aggregation (CloudWatch Logs / Loki / Elasticsearch)
 - Log retention per environment
 - Audit logging
 
 ---
 
-### Chapter 7: Disaster recovery and backup
+### Chapter 8: Disaster recovery and backup
 
 <!-- meta: RTO/RPO, backup strategy, and recovery procedures. -->
 
-#### 7.1 Backup strategy
+#### 8.1 Backup strategy
 
 | Resource | Backup method | Frequency | Retention | RPO | RTO |
 |:---------|:-------------|:---------|:---------|:---|:---|
@@ -217,18 +277,18 @@ graph TD
 | S3 | Cross-region replication | Continuous | - | 15 min | - |
 | ... | ... | ... | ... | ... | ... |
 
-#### 7.2 DR plan
+#### 8.2 DR plan
 - Multi-AZ vs multi-region
 - Failover procedure
 - Recovery runbook reference
 
 ---
 
-### Chapter 8: Cost and sizing
+### Chapter 9: Cost and sizing
 
 <!-- meta: cost breakdown, budget, and scaling plan. -->
 
-#### 8.1 Monthly cost estimate
+#### 9.1 Monthly cost estimate
 
 | Service | Estimated cost | Notes |
 |:--------|:-------------:|:------|
@@ -237,22 +297,22 @@ graph TD
 | ... | ... | ... |
 | **Total** | **$2,500** | |
 
-#### 8.2 Auto-scaling policy
+#### 9.2 Auto-scaling policy
 - Target tracking: CPU > 70% → scale out
 - Schedule: 9-18 JST → max tasks doubled
 - Cooldown: 120 seconds
 
 ---
 
-### Chapter 9: Known constraints and unresolved items
+### Chapter 10: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 9.1 Known constraints
+#### 10.1 Known constraints
 - Service limits (e.g. API rate limits, max VPC size)
 - Technical debt (e.g. manual steps not yet automated)
 - Compliance requirements (e.g. PCI-DSS, SOC2)
 
-#### 9.2 Unresolved items
+#### 10.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 - Missing IaC coverage (resources managed outside of code)

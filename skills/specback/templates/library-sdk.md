@@ -34,12 +34,72 @@ Designed for packages distributed via npm / pip / composer / gem / NuGet / Maven
 - Current version
 
 ---
+---
 
-### Chapter 2: Installation
+### Chapter 2: Feature specifications
+
+<!-- meta: consolidated feature-level view of the system. Maps features to screens, routes, and data. -->
+
+#### 2.1 Feature catalogue table
+
+| Feature ID | Feature name | Category | Related items (screens/endpoints/jobs/APIs) | Auth required | Summary | Confidence |
+|------------|-------------|----------|-------------------------------------------|-------------|---------|-----------|
+| F-001 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| F-002 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| ... | ... | ... | ... | ... | ... | ... |
+
+The catalogue table exhaustively lists every feature. Confidence labels:
+- 🟢 **VERIFIED**: Feature purpose confirmed by reading the actual code (screen, controller, or service file).
+- 🟡 **INFERRED**: Feature mechanically grouped from endpoint path prefix or class naming convention.
+- 🔴 **ASSUMED**: Feature inferred from use-case description; code evidence is indirect.
+
+#### 2.2 Per-feature processing definitions
+
+For each feature listed above, describe the processing flow structured as below. Generate at minimum the top-5 features by complexity or business criticality; list the remainder in the catalogue table only.
+
+##### F-001: {Feature name}
+
+**Overview**
+- Business value this feature provides
+- Which user / system role uses it
+
+**Trigger**
+- User action / system event / external call that initiates this feature
+
+**Pre-conditions**
+- Conditions that must hold before execution
+
+**Main flow**
+1. Step 1 [REF: src/path:line]
+2. Step 2 [REF: src/path:line]
+3. ...
+
+**Alternative flows**
+- Alt-1: When [condition] → [behaviour] [REF: src/path:line]
+
+**Error handling**
+- Error type → system behaviour [REF: src/path:line]
+
+**Post-conditions**
+- State of the system after successful execution
+
+**Related business rules**
+- → Ch? (Domain rules section) cross-reference
+
+**Related chapters**
+- → Ch? (Screen details / Routes / Data model) cross-reference
+
+**Confidence**: 🟢/🟡/🔴
+
+---
+
+
+
+### Chapter 3: Installation
 
 <!-- meta: steps to start using the library. -->
 
-#### 2.1 Per-package-manager commands
+#### 3.1 Per-package-manager commands
 ```bash
 # npm
 npm install <package-name>
@@ -60,22 +120,22 @@ gem install <package-name>
 dotnet add package <PackageName>
 ```
 
-#### 2.2 Runtime requirements
+#### 3.2 Runtime requirements
 - Supported language versions
 - Supported operating systems
 - Required surrounding tools
 
-#### 2.3 Optional dependencies
+#### 3.3 Optional dependencies
 - Anything extra needed at install time
 - Per-feature additional dependencies
 
 ---
 
-### Chapter 3: Public API catalogue
+### Chapter 4: Public API catalogue
 
 <!-- meta: inventory of all public APIs. The pillar of verification. -->
 
-#### 3.1 API catalogue
+#### 4.1 API catalogue
 | API name | Kind | Signature | Summary | Stability |
 |------|-----|----------|------|-------|
 | `connect()` | function | `connect(config: Config) → Client` | Create a client | stable |
@@ -83,11 +143,11 @@ dotnet add package <PackageName>
 | `parse()` | function | `parse(input: string) → AST` | Parse input | beta |
 | ... | ... | ... | ... | ... |
 
-#### 3.2 Module structure
+#### 4.2 Module structure
 - Module structure inside the package
 - Main exports
 
-#### 3.3 Stability levels
+#### 4.3 Stability levels
 - stable: backward compatibility is guaranteed
 - beta: may have breaking changes within a major version
 - experimental: may change in any version
@@ -95,11 +155,11 @@ dotnet add package <PackageName>
 
 ---
 
-### Chapter 4: Usage examples (quick start)
+### Chapter 5: Usage examples (quick start)
 
 <!-- meta: "read this and start using it" samples. -->
 
-#### 4.1 Minimal example
+#### 5.1 Minimal example
 ```javascript
 import { connect } from 'mylib';
 
@@ -108,7 +168,7 @@ const result = client.query('SELECT 1');
 console.log(result);
 ```
 
-#### 4.2 Examples per major use case
+#### 5.2 Examples per major use case
 - Use case 1: ...
   ```javascript
   // sample code
@@ -118,18 +178,18 @@ console.log(result);
   // sample code
   ```
 
-#### 4.3 Advanced usage
+#### 5.3 Advanced usage
 - Using custom options
 - Error handling
 - Asynchronous-processing patterns
 
 ---
 
-### Chapter 5: Configuration options
+### Chapter 6: Configuration options
 
 <!-- meta: exhaustive list of all options. -->
 
-#### 5.1 Global configuration
+#### 6.1 Global configuration
 | Option | Type | Default | Description |
 |----------|----|----------|------|
 | `host` | string | `localhost` | Target host |
@@ -137,68 +197,68 @@ console.log(result);
 | `retries` | number | `3` | Retry count |
 | ... | ... | ... | ... |
 
-#### 5.2 Per-feature options
+#### 6.2 Per-feature options
 - Detailed options per feature
 - Combinability
 
-#### 5.3 Configuration via environment variables
+#### 6.3 Configuration via environment variables
 - List of available environment variables
 - Precedence order (code > env vars > defaults)
 
 ---
 
-### Chapter 6: Compatibility
+### Chapter 7: Compatibility
 
 <!-- meta: supported runtimes and dependencies. -->
 
-#### 6.1 Supported language versions
+#### 7.1 Supported language versions
 | Language / runtime | Supported versions | Support status |
 |----------------|--------------|------------|
 | Node.js | 18 LTS, 20 LTS | active |
 | Node.js | 16 | maintenance only |
 | ... | ... | ... |
 
-#### 6.2 Dependencies
+#### 7.2 Dependencies
 | Library | Version | Purpose | Required / optional |
 |----------|----------|------|----------|
 | lodash | ^4.17.0 | utility | required |
 | ... | ... | ... | ... |
 
-#### 6.3 Peer dependencies
+#### 7.3 Peer dependencies
 - Peer-dependency libraries
 - Version ranges required of the consuming project
 
-#### 6.4 Compatibility matrix
+#### 7.4 Compatibility matrix
 - Verified status for major combinations
 - Known incompatible combinations
 
 ---
 
-### Chapter 7: Extension points / plugin system
+### Chapter 8: Extension points / plugin system
 
 <!-- meta: how consumers extend the library. -->
 
-#### 7.1 List of extension points
+#### 8.1 List of extension points
 - Hooks / callbacks
 - Middleware
 - Custom providers
 
-#### 7.2 Plugin API
+#### 8.2 Plugin API
 - Plugin-definition interface
 - Plugin lifecycle
 - Inter-plugin dependencies
 
-#### 7.3 Existing plugins
+#### 8.3 Existing plugins
 - Official plugins
 - Notable third-party plugins
 
 ---
 
-### Chapter 8: Migration guide
+### Chapter 9: Migration guide
 
 <!-- meta: migration steps from past versions. -->
 
-#### 8.1 Migration from v1.x to v2.x
+#### 9.1 Migration from v1.x to v2.x
 
 ##### Breaking changes
 - Removed APIs
@@ -218,19 +278,19 @@ client.connect({ url: 'localhost' });
 client.connect({ host: 'localhost' });
 ```
 
-#### 8.2 Migration from v0.x to v1.x
+#### 9.2 Migration from v0.x to v1.x
 - (Same shape as above)
 
 ---
 
-### Chapter 9: Internal structure (optional)
+### Chapter 10: Internal structure (optional)
 
 <!-- meta: internal architecture of the library. For contributors. -->
 
-#### 9.1 Directory structure
+#### 10.1 Directory structure
 - Main directories and their responsibilities
 
-#### 9.2 Major classes / modules
+#### 10.2 Major classes / modules
 
 | Class | Kind | Module | Responsibility | Depends on | Source |
 |:------|:----|:-------|:-------------|:----------|:-------|
@@ -239,23 +299,23 @@ client.connect({ host: 'localhost' });
 - Class diagram (Mermaid `classDiagram`) for key subsystems. Split per module if >15 classes (see SKILL.md Split rule).
 - Module dependency diagram (`graph TD`) for top-level module relationships.
 
-#### 9.3 Build and test
+#### 10.3 Build and test
 - Build commands
 - Test commands
 - Release process
 
 ---
 
-### Chapter 10: Known constraints and unresolved items
+### Chapter 11: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 10.1 Known constraints
+#### 11.1 Known constraints
 - Performance ceilings
 - Known bugs / workarounds
 - Per-platform differences
 
-#### 10.2 Unresolved items
+#### 11.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 
 ---

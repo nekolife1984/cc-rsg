@@ -32,45 +32,105 @@ Designed for API services, microservices, and public APIs over REST, GraphQL, gR
 - Dependencies on related services
 
 ---
+---
 
-### Chapter 2: Architecture overview
+### Chapter 2: Feature specifications
+
+<!-- meta: consolidated feature-level view of the system. Maps features to screens, routes, and data. -->
+
+#### 2.1 Feature catalogue table
+
+| Feature ID | Feature name | Category | Related items (screens/endpoints/jobs/APIs) | Auth required | Summary | Confidence |
+|------------|-------------|----------|-------------------------------------------|-------------|---------|-----------|
+| F-001 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| F-002 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| ... | ... | ... | ... | ... | ... | ... |
+
+The catalogue table exhaustively lists every feature. Confidence labels:
+- 🟢 **VERIFIED**: Feature purpose confirmed by reading the actual code (screen, controller, or service file).
+- 🟡 **INFERRED**: Feature mechanically grouped from endpoint path prefix or class naming convention.
+- 🔴 **ASSUMED**: Feature inferred from use-case description; code evidence is indirect.
+
+#### 2.2 Per-feature processing definitions
+
+For each feature listed above, describe the processing flow structured as below. Generate at minimum the top-5 features by complexity or business criticality; list the remainder in the catalogue table only.
+
+##### F-001: {Feature name}
+
+**Overview**
+- Business value this feature provides
+- Which user / system role uses it
+
+**Trigger**
+- User action / system event / external call that initiates this feature
+
+**Pre-conditions**
+- Conditions that must hold before execution
+
+**Main flow**
+1. Step 1 [REF: src/path:line]
+2. Step 2 [REF: src/path:line]
+3. ...
+
+**Alternative flows**
+- Alt-1: When [condition] → [behaviour] [REF: src/path:line]
+
+**Error handling**
+- Error type → system behaviour [REF: src/path:line]
+
+**Post-conditions**
+- State of the system after successful execution
+
+**Related business rules**
+- → Ch? (Domain rules section) cross-reference
+
+**Related chapters**
+- → Ch? (Screen details / Routes / Data model) cross-reference
+
+**Confidence**: 🟢/🟡/🔴
+
+---
+
+
+
+### Chapter 3: Architecture overview
 
 <!-- meta: technology choices and overall structure. -->
 
-#### 2.1 Technology stack
+#### 3.1 Technology stack
 - Language / framework (Spring Boot / Express / FastAPI / .NET, etc.)
 - API style (REST / GraphQL / gRPC / WebSocket)
 - API spec format (OpenAPI / GraphQL SDL / .proto)
 
-#### 2.2 Internal architecture
+#### 3.2 Internal architecture
 - Layering (Controller / Service / Repository, etc.)
 - Data stores (RDB / NoSQL / Cache)
 - Messaging infrastructure
 
-#### 2.3 Deployment topology
+#### 3.3 Deployment topology
 - Runtime (Kubernetes / ECS / Lambda, etc.)
 - Scaling strategy
 
 ---
 
-### Chapter 3: Endpoint catalogue
+### Chapter 4: Endpoint catalogue
 
 <!-- meta: inventory of all endpoints. The pillar of verification. -->
 
-#### 3.1 Endpoint catalogue
+#### 4.1 Endpoint catalogue
 | Endpoint ID | Method | Path | Summary | Auth | Version |
 |---------------|---------|------|------|------|----------|
 | EP-001 | GET | /v1/users/{id} | Get user | required | v1 |
 | EP-002 | POST | /v1/users | Create user | required | v1 |
 | ... | ... | ... | ... | ... | ... |
 
-#### 3.2 Grouping by resource
+#### 4.2 Grouping by resource
 - Organise endpoints by resource
 - Relationships between resources
 
 ---
 
-### Chapter 4: Request / response specifications
+### Chapter 5: Request / response specifications
 
 <!-- meta: per-endpoint details. If they can be generated from OpenAPI, reference only is acceptable. -->
 
@@ -109,11 +169,11 @@ For each endpoint, describe:
 
 ---
 
-### Chapter 5: Error codes / error responses
+### Chapter 6: Error codes / error responses
 
 <!-- meta: full error-code list and semantics. -->
 
-#### 5.1 Common error-response format
+#### 6.1 Common error-response format
 ```json
 {
   "error": {
@@ -125,7 +185,7 @@ For each endpoint, describe:
 }
 ```
 
-#### 5.2 Error-code list
+#### 6.2 Error-code list
 | Code | HTTP status | Category | Meaning | Consumer action |
 |-------|--------------|---------|------|----------|
 | USER_NOT_FOUND | 404 | client error | User does not exist | Check the ID |
@@ -133,144 +193,144 @@ For each endpoint, describe:
 | INTERNAL_ERROR | 500 | server error | Internal failure | Contact support |
 | ... | ... | ... | ... | ... |
 
-#### 5.3 HTTP status-code policy
+#### 6.3 HTTP status-code policy
 - When to use 200 vs 201 vs 204
 - When to use 400 vs 401 vs 403 vs 404 vs 409 vs 422
 - When to use 500 vs 502 vs 503 vs 504
 
 ---
 
-### Chapter 6: Authentication
+### Chapter 7: Authentication
 
 <!-- meta: authentication-method details. -->
 
-#### 6.1 Authentication method
+#### 7.1 Authentication method
 - API key / OAuth 2.0 / JWT / mTLS / Basic auth
 - Reason for the choice
 
-#### 6.2 Authentication flow
+#### 7.2 Authentication flow
 - Token-acquisition steps
 - Token lifetime
 - Refresh procedure
 
-#### 6.3 Authorisation
+#### 7.3 Authorisation
 - Scopes / permissions
 - Role-based access control (RBAC)
 
-#### 6.4 Credential management
+#### 7.4 Credential management
 - Where keys / secrets are stored
 - Rotation procedure
 
 ---
 
-### Chapter 7: Rate limiting / quotas
+### Chapter 8: Rate limiting / quotas
 
 <!-- meta: usage caps and behaviour. -->
 
-#### 7.1 Rate-limit policy
+#### 8.1 Rate-limit policy
 | Tier | Limit | Unit | Scope |
 |------|-------|---------|---------|
 | Free plan | 100 req/min | per minute | per API key |
 | Paid plan | 10000 req/min | per minute | per API key |
 | ... | ... | ... | ... |
 
-#### 7.2 Behaviour on exceeding the limit
+#### 8.2 Behaviour on exceeding the limit
 - HTTP status (429 Too Many Requests)
 - Retry-After header
 - When the limit resets
 
-#### 7.3 Quotas
+#### 8.3 Quotas
 - Monthly / daily total-call ceilings
 - Behaviour when exceeded
 
 ---
 
-### Chapter 8: Versioning
+### Chapter 9: Versioning
 
 <!-- meta: API evolution and compatibility. -->
 
-#### 8.1 Versioning strategy
+#### 9.1 Versioning strategy
 - URL-path style (/v1/, /v2/)
 - Header style
 - Media-type style
 
-#### 8.2 Supported versions
+#### 9.2 Supported versions
 | Version | Released | Sunset planned | Status |
 |----------|----------|---------------|------|
 | v1 | 2024-01 | 2026-12 | active |
 | v2 | 2026-03 | - | active (recommended) |
 
-#### 8.3 Breaking-change policy
+#### 9.3 Breaking-change policy
 - What counts as a breaking change
 - Advance-notice period
 - Migration-guide commitment
 
-#### 8.4 Backward compatibility
+#### 9.4 Backward compatibility
 - Change patterns that preserve compatibility
 - Deprecation process
 
 ---
 
-### Chapter 9: SLA / performance requirements
+### Chapter 10: SLA / performance requirements
 
 <!-- meta: the quality the service provides. -->
 
-#### 9.1 Availability targets
+#### 10.1 Availability targets
 - Availability SLA (e.g. 99.9%)
 - Measurement method
 - How planned downtime is announced
 
-#### 9.2 Performance targets
+#### 10.2 Performance targets
 | Metric | Target | Measurement |
 |------|-------|---------|
 | Mean response time | < 200ms | p50 |
 | 95th percentile response time | < 500ms | p95 |
 | Peak throughput | 10000 RPS | over 1-minute windows |
 
-#### 9.3 Incident response
+#### 10.3 Incident response
 - Incident classification
 - Communication flow
 - Status page
 
 ---
 
-### Chapter 10: Operations settings
+### Chapter 11: Operations settings
 
 <!-- meta: deployment / monitoring / logging. -->
 
-#### 10.1 Environment variables / configuration values
+#### 11.1 Environment variables / configuration values
 | Variable | Required | Default | Purpose |
 |-------|------|----------|------|
 | DB_HOST | required | - | Database connection target |
 | ... | ... | ... | ... |
 
-#### 10.2 Deployment procedure
+#### 11.2 Deployment procedure
 - Build / deploy pipeline
 - Canary releases (if used)
 - Rollback procedure
 
-#### 10.3 Monitoring
+#### 11.3 Monitoring
 - Monitored metrics
 - Alert conditions
 - Dashboards
 
-#### 10.4 Logging
+#### 11.4 Logging
 - Access-log spec
 - Application-log spec
 - Log retention period
 
 ---
 
-### Chapter 11: Known constraints and unresolved items
+### Chapter 12: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 11.1 Known technical constraints
+#### 12.1 Known technical constraints
 - Request-body size cap
 - Concurrent-connection cap
 - Known bugs / workarounds
 
-#### 11.2 Unresolved items
+#### 12.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 
 ---
