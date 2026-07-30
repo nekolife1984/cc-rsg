@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/nekolife1984/specback/schemas/state.schema.json",
+  "title": "state.json",
+  "description": "specback のセッション状態。現在の Phase、各 Phase の進捗、履歴を記録する。",
+  "type": "object",
+  "properties": {
+    "current_phase": {
+      "type": "integer",
+      "description": "現在の Phase 番号（0-7）",
+      "minimum": 0,
+      "maximum": 7
+    },
+    "phase_progress": {
+      "type": "object",
+      "description": "各 Phase の進捗状況",
+      "patternProperties": {
+        "^phase_\\d+$": {
+          "type": "object",
+          "properties": {
+            "total_subtasks": { "type": "integer", "minimum": 0 },
+            "completed_subtasks": { "type": "integer", "minimum": 0 },
+            "blocked_subtasks": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "required": ["total_subtasks", "completed_subtasks", "blocked_subtasks"],
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "all_quality_gates_passed": {
+      "type": "boolean",
+      "description": "全品質ゲート通過済みか"
+    },
+    "started_at": {
+      "type": "string",
+      "description": "セッション開始日時（ISO 8601）",
+      "format": "date-time"
+    },
+    "last_updated": {
+      "type": "string",
+      "description": "最終更新日時（ISO 8601）",
+      "format": "date-time"
+    },
+    "session_history": {
+      "type": "array",
+      "description": "セッションイベント履歴",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "phase": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "event": {
+            "type": "string"
+          }
+        },
+        "required": ["timestamp", "phase", "event"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "current_phase",
+    "phase_progress",
+    "started_at",
+    "last_updated"
+  ],
+  "additionalProperties": false
+}

@@ -86,22 +86,21 @@ LANG_BY_EXT: dict[str, str] = {
 
 この制約の影響は、大規模プロジェクト（20 チャプター以上）において顕著になる。チャプター間で重複する疑問が手動で統合されないまま Question Bank に蓄積され、Phase 5 の対話セッションでユーザーに同一趣旨の質問が複数回提示される可能性がある。現時点では、重複の検出とマージはサブエージェントの推論に依存しており、決定論的な重複検出アルゴリズムは実装されていない。
 
-### 9.1.7 設定ファイルのスキーマ未定義
+### 9.1.7 設定ファイルのスキーマ検証
 
-`goal.json`, `state.json`, `questions.json` は JSON Schema ファイルを持たず、形式は各フェーズの markdown ファイルで文書的に定義されている。実行時検証は `coverage-check.py` が一部担うが、網羅的なスキーマ検証は行われない。
+`goal.json`, `state.json`, `questions.json` はそれぞれ JSON Schema ファイル (`schemas/goal.schema.json`, `schemas/state.schema.json`, `schemas/questions.schema.json`) を持ち、`validate-schema.py` によって機械検証が可能である。
 
-例えば `goal.json` の各フィールドは以下のように文書定義されているのみであり、機械的なバリデーションは存在しない [REF: phase-0-setup.md:101-115]:
+Phase 0 完了時には `goal.json` のスキーマ検証が自動的に実行され、誤った値が設定された場合は即座にエラーとなって修正を促す [REF: phase-0-setup.md:117-129]。
 
-```json
-{
-  "output_language": "en | ja",
-  "primary_reader": "maintenance_developer | new_engineer | customer",
-  "granularity": "fine | medium | coarse",
-  "perspectives": ["functional_correctness", "operational", "security", "performance"]
-}
-```
+各スキーマは以下の検証を行う:
+- **型チェック**: 各フィールドの期待される型（string, integer, array, boolean）
+- **enum 検証**: `output_language`, `primary_reader`, `status` 等の列挙値が正しいか
+- **必須フィールド検証**: 必須項目が欠落していないか
+- **追加プロパティ検証**: 未知のフィールドが含まれていないか（`additionalProperties: false`）
+- **パターン検証**: ID の書式（`Q-\\d{3}`）、ファイル名の書式等
+- **日時フォーマット検証**: ISO 8601 形式のタイムスタンプ
 
-このため、ユーザーが誤った値を設定してもエラーにならず、後続の Phase で期待とは異なる動作をする可能性がある。将来的には JSON Schema を同梱し、Phase 0 完了時に機械検証を行うことが計画されている [REF: README.md:227-252]。
+スキーマファイルは依存関係のない Python 標準ライブラリのみで実装された `validate-schema.py` によって読み込まれるため、追加のパッケージインストールは不要である。
 
 ### 9.1.8 出力言語は英語と日本語のみ
 

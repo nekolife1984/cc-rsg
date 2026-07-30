@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/nekolife1984/specback/schemas/questions.schema.json",
+  "title": "questions.json",
+  "description": "specback の Question Bank。Phase 1 以降で収集された疑問とその回答を記録する。",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "疑問の一意識別子",
+        "pattern": "^Q-\\d{3}$"
+      },
+      "generated_at_phase": {
+        "type": "string",
+        "description": "疑問が生成された Phase",
+        "enum": ["setup", "investigation", "verification", "dialogue"]
+      },
+      "category": {
+        "type": "string",
+        "description": "カテゴリ",
+        "enum": ["architecture_decision", "business_rule", "operational_requirement"]
+      },
+      "body": {
+        "type": "string",
+        "description": "疑問文",
+        "minLength": 1
+      },
+      "severity": {
+        "type": "string",
+        "description": "深刻度",
+        "enum": ["critical", "important", "nice-to-have"]
+      },
+      "resolution_type": {
+        "type": "string",
+        "description": "解決方法の種別",
+        "enum": ["ask_sme", "agent_inference", "deferred"]
+      },
+      "status": {
+        "type": "string",
+        "description": "状態",
+        "enum": ["open", "answered", "abandoned", "skipped"]
+      },
+      "answer": {
+        "type": "string",
+        "description": "回答内容（answered 時のみ必須）"
+      },
+      "answerer": {
+        "type": "string",
+        "description": "回答者",
+        "enum": ["user", "agent_inference", "sme"]
+      },
+      "answered_at": {
+        "type": "string",
+        "description": "回答日時"
+      },
+      "related_question_ids": {
+        "type": "array",
+        "description": "関連する疑問の ID 一覧",
+        "items": {
+          "type": "string",
+          "pattern": "^Q-\\d{3}$"
+        }
+      }
+    },
+    "required": [
+      "id",
+      "generated_at_phase",
+      "category",
+      "body",
+      "severity",
+      "status"
+    ],
+    "additionalProperties": false
+  }
+}

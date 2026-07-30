@@ -115,7 +115,18 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - `output_dir` specifies the final spec output directory. Default is `.specback` (which the agent resolves to `.specback/final/`). Custom paths like `docs/specs` are stored as-is (final goes to `docs/specs/`). Final spec files go to `{output_dir}/`. Drafts stay at `.specback/drafts/`. State files remain in `.specback/`.
    - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/` (default: `.specback/final/`, custom: per choice).
 
-7. **Phase 0 complete**
+7. **Validate `goal.json` against its schema**
+   - After persisting `goal.json`, run the schema validation script to catch structural errors early:
+     ```bash
+     python $(cat .specback/.skill-path)/scripts/validate-schema.py \
+       --schema $(cat .specback/.skill-path)/schemas/goal.schema.json \
+       --data-file .specback/goal.json
+     ```
+   - If validation fails, fix the reported errors before proceeding. Do NOT continue to Phase 1 until `goal.json` is valid.
+   - The same script can also validate `state.json` and `questions.json` at any point by changing `--schema` and `--data-file`.
+   - Exit codes: 0 = valid, 1 = schema violations, 2 = usage error.
+
+8. **Phase 0 complete**
    - Update `state.json` and proceed to Phase 1.
 
 ### Phase-specific cautions
