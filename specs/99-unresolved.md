@@ -23,5 +23,9 @@
 
 | 項目 | 実績 | 要求 | 備考 |
 |------|:----:|:----:|------|
-| inventory.covered_by | 26.4% | ≥ 90% | Library/SDK テンプレートでは関数レベルカバレッジが低くなる構造的制約 |
-| MECE coverage | 32.5% | ≥ 70% | 同上 |
+| inventory.covered_by | 26.4% | ≥ 90% | Library/SDK テンプレートでは内部関数が spec に記載されないため低くなる。構造的に正しい振る舞いであり品質上の問題ではない。[REF: #80](https://github.com/nekolife1984/specback/issues/80) |
+| MECE coverage | 32.5% | ≥ 70% | 同上。Library/SDK テンプレートでは内部実装の全ユニットを spec セクションに割り当てる必要はない。[REF: #80](https://github.com/nekolife1984/specback/issues/80) |
+
+### 対応方針
+
+これらの検証未達は Library/SDK テンプレートの構造的制約によるものであり、spec の品質を上げるために無理に全関数を記載することはしない。代わりに `coverage-check.py` が `goal.json` のテンプレート種別を参照してデフォルト閾値を自動調整する仕組みを導入する（[#80](https://github.com/nekolife1984/specback/issues/80)）。
