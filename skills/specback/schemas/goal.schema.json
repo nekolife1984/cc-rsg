@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/nekolife1984/specback/schemas/goal.schema.json",
+  "title": "goal.json",
+  "description": "Phase 0 で設定される specback のゴール定義。出力言語、テンプレート選定、granularity 等を記録する。",
+  "type": "object",
+  "properties": {
+    "output_language": {
+      "type": "string",
+      "description": "出力言語",
+      "enum": ["en", "ja"]
+    },
+    "output_dir": {
+      "type": "string",
+      "description": "最終仕様書の出力先ディレクトリ（.specback またはカスタムパス）",
+      "default": ".specback"
+    },
+    "primary_reader": {
+      "type": "string",
+      "description": "仕様書の主な読み手",
+      "enum": ["maintenance_developer", "delivery_customer", "sme", "regulator"]
+    },
+    "reader_action": {
+      "type": "string",
+      "description": "読み手が仕様書を読んだ後に行うアクション",
+      "enum": ["code_change", "approval_decision", "audit", "learning"]
+    },
+    "granularity": {
+      "type": "string",
+      "description": "期待する粒度",
+      "enum": ["high_level_overview", "medium", "detailed"]
+    },
+    "perspectives": {
+      "type": "array",
+      "description": "強調する観点（複数選択可）",
+      "items": {
+        "type": "string",
+        "enum": ["functional_correctness", "business_validity", "security", "operability", "performance"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "existing_docs": {
+      "type": "string",
+      "description": "既存ドキュメントの扱い",
+      "enum": ["none", "update", "coexist", "retire"]
+    },
+    "free_text_notes": {
+      "type": "string",
+      "description": "自由記述メモ"
+    },
+    "user_custom_deliverables": {
+      "type": "array",
+      "description": "ユーザーが free_text_notes で明示的に要求したカスタム成果物ファイル名",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9_-]*\\.md$"
+      }
+    },
+    "depth_mode": {
+      "type": "string",
+      "description": "Depth モード",
+      "enum": ["comprehensive", "outline", "interactive"]
+    }
+  },
+  "required": [
+    "output_language",
+    "output_dir",
+    "primary_reader",
+    "reader_action",
+    "granularity",
+    "perspectives",
+    "existing_docs"
+  ],
+  "additionalProperties": false
+}
