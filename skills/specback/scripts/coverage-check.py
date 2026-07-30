@@ -520,6 +520,62 @@ def detect_depth_mode(specback_dir: Path) -> str:
     return mode
 
 
+# ---------------------------------------------------------------------------
+# Template-aware threshold defaults
+# ---------------------------------------------------------------------------
+
+TEMPLATE_THRESHOLDS: dict[str, dict[str, float]] = {
+    "library-sdk": {
+        "min_covered_by_fill": 0.3,
+        "min_mece_coverage": 0.4,
+    },
+}
+
+_DEFAULT_COVERED_BY_FILL = 0.9
+_DEFAULT_MECE_COVERAGE = 0.7
+
+
+def _detect_template(specback_dir: Path) -> str | None:
+    """Read goal.json and return the template name, or None if unknown."""
+    goal_path = specback_dir / "goal.json"
+    if not goal_path.exists():
+        return None
+    try:
+        with goal_path.open() as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+    tmpl = data.get("template")
+    if not isinstance(tmpl, str) or tmpl not in TEMPLATE_THRESHOLDS:
+        return None
+    return tmpl
+
+
+def _resolve_covered_by_fill(specback_dir: Path, cli_value: float | None) -> float:
+    """Return the effective min-covered-by-fill threshold.
+
+    If the user passed an explicit CLI value, honour it.
+    Otherwise, consult goal.json for the template and return the
+    template-specific default, falling back to 0.9.
+    """
+    if cli_value is not None:
+        return cli_value
+    tmpl = _detect_template(specback_dir)
+    if tmpl is not None and tmpl in TEMPLATE_THRESHOLDS:
+        return TEMPLATE_THRESHOLDS[tmpl]["min_covered_by_fill"]
+    return _DEFAULT_COVERED_BY_FILL
+
+
+def _resolve_mece_coverage(specback_dir: Path, cli_value: float | None) -> float:
+    """Return the effective min-mece-coverage threshold (see _resolve_covered_by_fill)."""
+    if cli_value is not None:
+        return cli_value
+    tmpl = _detect_template(specback_dir)
+    if tmpl is not None and tmpl in TEMPLATE_THRESHOLDS:
+        return TEMPLATE_THRESHOLDS[tmpl]["min_mece_coverage"]
+    return _DEFAULT_MECE_COVERAGE
+
+
 def build_report(
     specback_dir: Path,
     *,
@@ -890,8 +946,10 @@ def main() -> int:
     p.add_argument("--max-macro-ratio", type=float, default=0.2)
     p.add_argument("--min-questions", type=int, default=10)
     p.add_argument("--max-open-ratio", type=float, default=0.2)
-    p.add_argument("--min-covered-by-fill", type=float, default=0.9)
-    p.add_argument("--min-mece-coverage", type=float, default=0.7)
+    p.add_argument("--min-covered-by-fill", type=float, default=None,
+                   help='Minimum covered_by fill rate. Default: 0.9 (auto-adjusted for library-sdk template).')
+    p.add_argument("--min-mece-coverage", type=float, default=None,
+                   help='Minimum MECE coverage rate. Default: 0.7 (auto-adjusted for library-sdk template).')
 
     # backward compatibility
     p.add_argument("--fail-on-uncovered", action="store_true")
@@ -899,6 +957,10 @@ def main() -> int:
 
     args = p.parse_args()
     args.output_dir = args.output_dir or args.specback_dir
+
+    # Resolve template-aware defaults for thresholds
+    min_covered_by_fill = _resolve_covered_by_fill(args.specback_dir, args.min_covered_by_fill)
+    min_mece_coverage = _resolve_mece_coverage(args.specback_dir, args.min_mece_coverage)
 
     try:
         report = build_report(
@@ -909,13 +971,13 @@ def main() -> int:
             max_macro_ratio=args.max_macro_ratio,
             min_questions=args.min_questions,
             max_open_ratio=args.max_open_ratio,
-            min_covered_by_fill=args.min_covered_by_fill,
+            min_covered_by_fill=min_covered_by_fill,
             min_refs_per_chapter=args.min_refs_per_chapter,
             min_lines_per_chapter=args.min_lines_per_chapter,
             min_code_blocks_per_chapter=args.min_code_blocks_per_chapter,
             min_mermaid_per_chapter=args.min_mermaid_per_chapter,
             min_sources_read_per_chapter=args.min_sources_read_per_chapter,
-            min_mece_coverage=args.min_mece_coverage,
+            min_mece_coverage=min_mece_coverage,
         )
     except FileNotFoundError as e:
         print(f"ERROR: {e}", file=sys.stderr)
