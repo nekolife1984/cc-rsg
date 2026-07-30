@@ -98,6 +98,7 @@ class InventoryItem:
     file: str
     line: int | None
     covered_by: list[str] = field(default_factory=list)
+    related_source_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -169,6 +170,7 @@ def load_inventory(path: Path) -> list[InventoryItem]:
                 file=entry.get("file", ""),
                 line=entry.get("line"),
                 covered_by=list(entry.get("covered_by", [])),
+                related_source_ids=list(entry.get("related_source_ids", [])),
             )
         )
     return items
