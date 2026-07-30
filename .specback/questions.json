@@ -123,8 +123,8 @@
     "body": "「design principle #10: Dual-consumer handling reduced to one in goal」の実運用において、同じコードベースに対して保守開発者向けと顧客向けの2種類の仕様書が必要な場合、ユーザーは2回 specback を実行する想定か？それとも1回の実行で両方出力する意図か？",
     "severity": "nice-to-have",
     "resolution_type": "ask_sme",
-    "status": "skipped",
-    "answer": "nice-to-have。重要度選択により Phase 5 でスキップ。",
+    "status": "answered",
+    "answer": "Dual-consumer は非推奨。詳細は specs/09-known-constraints.md §9.4.5 を参照。",
     "answerer": "user",
     "answered_at": "2026-07-30T08:55:04.439976+00:00",
     "related_question_ids": []
