@@ -268,7 +268,7 @@ rg "@(RestController|Controller|RequestMapping|GetMapping|PostMapping)" --type j
 
 ## Mermaid diagram templates
 
-In outline mode, generate at least one of each as Layer 2:
+In outline mode, generate at least one of each as Layer 2. Default direction is `TD` (top-to-bottom) — see SKILL.md Mermaid styling contract for the direction rule.
 
 ### ER diagram (auto-derived from Entities + Data table)
 
@@ -282,7 +282,7 @@ erDiagram
 ### Module dependency diagram
 
 ```mermaid
-graph LR
+graph TD
   controllers --> services
   services --> repositories
   repositories --> database[(DB)]

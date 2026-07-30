@@ -97,6 +97,8 @@ Incorporate the citations into the body. **Per-chapter mandatory requirements**:
 | Mermaid diagrams | ≥ 1 | coverage-check.py |
 | Sources Read items | ≥ 5 | coverage-check.py |
 
+Beyond the minimum, follow the **Active-diagram rule** (see SKILL.md Mermaid styling contract): any section describing something complex — processing, structure, or behavior — MUST be accompanied by an appropriate Mermaid diagram. Text-only explanations of complex subjects are a defect.
+
 Chapters that fail these are rejected in Phase 4 and loop back to Phase 3 for correction.
 
 Around each `[REF: ...]`, add prose explaining "what is happening". Writing only what Rails/Laravel-style frameworks "typically do" is forbidden — write what the **actual code** does after reading it.
@@ -241,6 +243,10 @@ Each Layer 1 chapter **exhaustively lists the "overview table" for that language
 - State-transition diagram (when key entities have `status` columns, etc.)
 
 Each diagram has a **one-line caption** and a "how to read this" hint. If a diagram cell is `[INFERRED]`, say so explicitly.
+
+**Direction rule**: Default to `TD` (top-to-bottom) for graph/flowchart diagrams. Use `LR` only when ≤8 nodes with short labels — see SKILL.md Mermaid styling contract.
+
+**Active-diagram rule**: Beyond the 4 mandatory diagram types above, any section in a deep-dive chapter or comprehensive-mode chapter that describes complex processing (conditional branching, multi-step flows, decision logic, async chains, authorization flows) MUST be accompanied by an appropriate Mermaid diagram. Text-only descriptions of complex processes are a defect.
 
 #### OUT-C: "Deep-dive candidates" list at the end of each Layer 1 chapter
 

@@ -106,6 +106,10 @@ Include **at least one Mermaid diagram** appropriate to the chapter:
 - Data-model chapter → ER diagram
 - Flow chapter → sequence diagram
 - Architecture chapter → component diagram
+
+Default direction is **`TD`** (top-to-bottom) for graph/flowchart diagrams. Use `LR` only when the diagram has ≤8 nodes with short labels (see specback SKILL.md Mermaid styling contract).
+
+**Active-diagram rule**: Beyond the mandatory ≥1 Mermaid, any complex subject in this chapter — processing flows, structure/relationships, behavior, or data models — MUST be accompanied by an appropriate Mermaid diagram. When in doubt, add a diagram.
 - Etc.
 
 ### STEP E: Uncertainty markers
