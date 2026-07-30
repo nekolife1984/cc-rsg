@@ -33,15 +33,7 @@
 
 `README.md` の `## Status` セクションにある Roadmap で、完了した項目を `~~done~~` にします。次の予定項目を backlog から移動します。
 
-### 3. Zenodoプレプリントの更新（該当時）
-
-リリースに設計上の大きな変更や新しい研究内容が含まれる場合、Zenodo プレプリントを更新します：
-
-- プレプリント： https://zenodo.org/records/20541685
-- 更新タイミング：設計思想や実装判断が実質的に変わったとき
-- 不要な場合：バグ修正、軽微な機能追加、ドキュメントのみの更新
-
-### 4. タグ作成とプッシュ
+### 3. タグ作成とプッシュ
 
 ```bash
 # main上で、PRマージ後
@@ -49,7 +41,7 @@ git tag -a v0.8.0 -m "v0.8.0 — UI for custom categories"
 git push origin v0.8.0
 ```
 
-### 5. GitHub Release の作成
+### 4. GitHub Release の作成
 
 ```bash
 gh release create v0.8.0 \
@@ -85,6 +77,5 @@ git push origin v0.8.1
 - [ ] CHANGELOG.md を更新した
 - [ ] README Roadmap を更新した（完了項目に取り消し線）
 - [ ] `skills/specback/SKILL.md` のバージョン文字列を更新した（該当時）
-- [ ] Zenodo プレプリントを更新した（設計変更時のみ）
 - [ ] タグを作成してプッシュした
 - [ ] GitHub Release を作成した

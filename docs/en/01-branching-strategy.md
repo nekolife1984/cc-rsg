@@ -61,7 +61,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every PR. See [03-pr-review-
 
 ## Release Process
 
-See [04-release-process.md](04-release-process.md) for the full release procedure including versioning, CHANGELOG, and Zenodo updates.
+See [04-release-process.md](04-release-process.md) for the full release procedure including versioning and CHANGELOG updates.
 
 Quick tag command:
 
@@ -76,4 +76,4 @@ git push origin v0.8.0
 |----------|-------------|
 | [02-commit-conventions.md](02-commit-conventions.md) | Conventional Commits format, one-change-one-commit rule |
 | [03-pr-review-process.md](03-pr-review-process.md) | PR lifecycle, template, reviewer checklist, squash merge |
-| [04-release-process.md](04-release-process.md) | Versioning, CHANGELOG, Roadmap, Zenodo, release checklist |
+| [04-release-process.md](04-release-process.md) | Versioning, CHANGELOG, release checklist |
