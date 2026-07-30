@@ -34,45 +34,103 @@ Designed for typical web applications: PHP (Laravel/Symfony/CakePHP), Python (Dj
 - Use Mermaid notation when appropriate
 
 ---
+### Chapter 2: Feature specifications
 
-### Chapter 2: Architecture overview
+<!-- meta: consolidated feature-level view of the system. Maps features to screens, routes, and data. -->
+
+#### 2.1 Feature catalogue table
+
+| Feature ID | Feature name | Category | Related items (screens/endpoints/jobs/APIs) | Auth required | Summary | Confidence |
+|------------|-------------|----------|-------------------------------------------|-------------|---------|-----------|
+| F-001 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| F-002 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| ... | ... | ... | ... | ... | ... | ... |
+
+The catalogue table exhaustively lists every feature. Confidence labels:
+- 🟢 **VERIFIED**: Feature purpose confirmed by reading the actual code (screen, controller, or service file).
+- 🟡 **INFERRED**: Feature mechanically grouped from endpoint path prefix or class naming convention.
+- 🔴 **ASSUMED**: Feature inferred from use-case description; code evidence is indirect.
+
+#### 2.2 Per-feature processing definitions
+
+For each feature listed above, describe the processing flow structured as below. Generate at minimum the top-5 features by complexity or business criticality; list the remainder in the catalogue table only.
+
+##### F-001: {Feature name}
+
+**Overview**
+- Business value this feature provides
+- Which user / system role uses it
+
+**Trigger**
+- User action / system event / external call that initiates this feature
+
+**Pre-conditions**
+- Conditions that must hold before execution
+
+**Main flow**
+1. Step 1 [REF: src/path:line]
+2. Step 2 [REF: src/path:line]
+3. ...
+
+**Alternative flows**
+- Alt-1: When [condition] → [behaviour] [REF: src/path:line]
+
+**Error handling**
+- Error type → system behaviour [REF: src/path:line]
+
+**Post-conditions**
+- State of the system after successful execution
+
+**Related business rules**
+- → Ch? (Domain rules section) cross-reference
+
+**Related chapters**
+- → Ch? (Screen details / Routes / Data model) cross-reference
+
+**Confidence**: 🟢/🟡/🔴
+
+---
+
+
+
+### Chapter 3: Architecture overview
 
 <!-- meta: design decisions and overall structure. Capture WHY this shape. -->
 
-#### 2.1 Adopted framework / libraries
+#### 3.1 Adopted framework / libraries
 - Language, framework, and major libraries
 - Version information
 
-#### 2.2 Architecture pattern
+#### 3.2 Architecture pattern
 - MVC / Clean architecture / Hexagonal, etc.
 - Reason for adoption (to the extent it can be inferred)
 
-#### 2.3 Directory structure
+#### 3.3 Directory structure
 - Responsibility of each major directory
 - Conventions (naming rules, placement rules)
 
-#### 2.4 Dependencies
+#### 3.4 Dependencies
 - External systems / APIs
 - Database / cache / message queue
 
 ---
 
-### Chapter 3: Screens and screen transitions
+### Chapter 4: Screens and screen transitions
 
 <!-- meta: UI structure from the user's perspective. -->
 
-#### 3.1 Screen list
+#### 4.1 Screen list
 | Screen ID | Screen name | URL | Auth required | Required role |
 |-------|-------|-----|---------|---------|
 | SC-001 | Login | /login | no | - |
 | SC-002 | Dashboard | /dashboard | yes | regular user or higher |
 | ... | ... | ... | ... | ... |
 
-#### 3.2 Screen-transition diagram
+#### 4.2 Screen-transition diagram
 - Major transition paths (Mermaid notation, etc.)
 - Exceptional transitions (errors, session timeout)
 
-#### 3.3 Details of each screen
+#### 4.3 Details of each screen
 For each screen, describe:
 - Displayed elements
 - Input fields and their validation
@@ -81,35 +139,35 @@ For each screen, describe:
 
 ---
 
-### Chapter 4: Routes / endpoints
+### Chapter 5: Routes / endpoints
 
 <!-- meta: full list of HTTP routes. The pillar of inventory-based verification. -->
 
-#### 4.1 Web screen routes
+#### 5.1 Web screen routes
 | Method | Path | Controller::Action | Auth | Summary |
 |---------|------|-----------------------|------|------|
 | GET | / | HomeController::index | optional | Top page |
 | GET | /users/{id} | UserController::show | required | User details |
 | ... | ... | ... | ... | ... |
 
-#### 4.2 Internal API / Ajax endpoints
+#### 5.2 Internal API / Ajax endpoints
 - Ajax / Fetch APIs called from the screens
 - Response format
 
-#### 4.3 Per-route middleware
+#### 5.3 Per-route middleware
 - Applied middleware and the order of processing
 
 ---
 
-### Chapter 5: Data model
+### Chapter 6: Data model
 
 <!-- meta: structure and semantics of persisted data. -->
 
-#### 5.1 ER diagram
+#### 6.1 ER diagram
 - Relations between key entities
 - Use Mermaid notation, etc.
 
-#### 5.2 Entity list
+#### 6.2 Entity list
 Per entity:
 - Table / class name
 - Field list (type, nullability, default, business meaning)
@@ -117,49 +175,49 @@ Per entity:
 - Foreign keys
 - Relations (1:1, 1:N, N:N)
 
-#### 5.3 Key domain rules
+#### 6.3 Key domain rules
 - Invariants
 - State transitions (state machines)
 - Business rules (e.g. "withdrawn users are excluded from search results")
 
 ---
 
-### Chapter 6: Authentication and authorisation
+### Chapter 7: Authentication and authorisation
 
 <!-- meta: security core. Omissions here are critical. -->
 
-#### 6.1 Authentication method
+#### 7.1 Authentication method
 - Session / token / OAuth / SSO
 - Password-hash algorithm
 - Session timeout
 
-#### 6.2 Authorisation model
+#### 7.2 Authorisation model
 - Roles and permissions
 - Role hierarchy
 - Where authorisation checks are implemented
 
-#### 6.3 Authorisation flow
+#### 7.3 Authorisation flow
 - Request → authorisation decision → execute / deny flow
 - Behaviour on authorisation failure
 
-#### 6.4 Session management
+#### 7.4 Session management
 - Session store
 - Conditions for session invalidation
 - Concurrent-login control
 
 ---
 
-### Chapter 7: External-system integration
+### Chapter 8: External-system integration
 
 <!-- meta: boundaries and failure propagation. -->
 
-#### 7.1 Integration partners
+#### 8.1 Integration partners
 | Partner | Protocol | Purpose | Behaviour on failure |
 |-------|----------|------|----------|
 | Payment gateway | HTTPS REST | Payment processing | Retry 3 times; notify on failure |
 | ... | ... | ... | ... |
 
-#### 7.2 Details per integration
+#### 8.2 Details per integration
 - Authentication method (API key, OAuth, etc.)
 - Request / response example
 - Timeout / retry policy
@@ -168,46 +226,46 @@ Per entity:
 
 ---
 
-### Chapter 8: Operations settings
+### Chapter 9: Operations settings
 
 <!-- meta: deployment, environment variables, monitoring. -->
 
-#### 8.1 Environment composition
+#### 9.1 Environment composition
 - Environment list (dev, staging, prod)
 - Differences between environments
 
-#### 8.2 Environment variables / configuration values
+#### 9.2 Environment variables / configuration values
 | Variable | Required | Default | Purpose |
 |-------|------|----------|------|
 | DB_HOST | required | - | Database connection target |
 | ... | ... | ... | ... |
 
-#### 8.3 Deployment procedure
+#### 9.3 Deployment procedure
 - Build procedure
 - Deploy command
 - Rollback procedure
 
-#### 8.4 Monitoring / logging
+#### 9.4 Monitoring / logging
 - Monitoring targets (liveness, performance, errors)
 - Log destination and retention period
 - Alert conditions
 
-#### 8.5 Backup / restore
+#### 9.5 Backup / restore
 - Backup target
 - Frequency and generation management
 - Restore procedure
 
 ---
 
-### Chapter 9: Known constraints and unresolved items
+### Chapter 10: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 9.1 Known technical constraints
+#### 10.1 Known technical constraints
 - Performance ceilings (concurrent connections, response time)
 - Known bugs / workarounds
 
-#### 9.2 Unresolved items
+#### 10.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 - For each item, record "why it could not be resolved", "current inference", "what is needed to resolve it in the future"
 

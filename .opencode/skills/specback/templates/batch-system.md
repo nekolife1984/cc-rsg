@@ -32,39 +32,99 @@ Designed for COBOL + JCL, cron / systemd timers, Spring Batch, Apache Airflow, C
 - Consumers of output data
 
 ---
+---
 
-### Chapter 2: Architecture overview
+### Chapter 2: Feature specifications
+
+<!-- meta: consolidated feature-level view of the system. Maps features to screens, routes, and data. -->
+
+#### 2.1 Feature catalogue table
+
+| Feature ID | Feature name | Category | Related items (screens/endpoints/jobs/APIs) | Auth required | Summary | Confidence |
+|------------|-------------|----------|-------------------------------------------|-------------|---------|-----------|
+| F-001 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| F-002 | (feature) | (category) | (related items) | yes/no | 1-line summary | 🟢/🟡/🔴 |
+| ... | ... | ... | ... | ... | ... | ... |
+
+The catalogue table exhaustively lists every feature. Confidence labels:
+- 🟢 **VERIFIED**: Feature purpose confirmed by reading the actual code (screen, controller, or service file).
+- 🟡 **INFERRED**: Feature mechanically grouped from endpoint path prefix or class naming convention.
+- 🔴 **ASSUMED**: Feature inferred from use-case description; code evidence is indirect.
+
+#### 2.2 Per-feature processing definitions
+
+For each feature listed above, describe the processing flow structured as below. Generate at minimum the top-5 features by complexity or business criticality; list the remainder in the catalogue table only.
+
+##### F-001: {Feature name}
+
+**Overview**
+- Business value this feature provides
+- Which user / system role uses it
+
+**Trigger**
+- User action / system event / external call that initiates this feature
+
+**Pre-conditions**
+- Conditions that must hold before execution
+
+**Main flow**
+1. Step 1 [REF: src/path:line]
+2. Step 2 [REF: src/path:line]
+3. ...
+
+**Alternative flows**
+- Alt-1: When [condition] → [behaviour] [REF: src/path:line]
+
+**Error handling**
+- Error type → system behaviour [REF: src/path:line]
+
+**Post-conditions**
+- State of the system after successful execution
+
+**Related business rules**
+- → Ch? (Domain rules section) cross-reference
+
+**Related chapters**
+- → Ch? (Screen details / Routes / Data model) cross-reference
+
+**Confidence**: 🟢/🟡/🔴
+
+---
+
+
+
+### Chapter 3: Architecture overview
 
 <!-- meta: structure of the batch execution platform. -->
 
-#### 2.1 Technology stack
+#### 3.1 Technology stack
 - Language / framework
 - Scheduler (cron / Airflow / Spring Batch / JCL, etc.)
 - Job runtime (on-prem / cloud / container)
 
-#### 2.2 Job execution model
+#### 3.2 Job execution model
 - One-shot / chained / DAG-driven
 - Parallelism
 - Resource allocation
 
-#### 2.3 Input/output data stores
+#### 3.3 Input/output data stores
 - Database / file storage / message queue
 - Data formats (CSV, JSON, XML, fixed-length, Parquet, etc.)
 
 ---
 
-### Chapter 3: Job catalogue
+### Chapter 4: Job catalogue
 
 <!-- meta: inventory of all jobs. The pillar of verification. -->
 
-#### 3.1 Job catalogue
+#### 4.1 Job catalogue
 | Job ID | Job name | Kind | Frequency | Expected runtime | Primary data |
 |---------|---------|------|---------|------------|------------|
 | JOB-001 | Daily sales aggregation | aggregation | daily 02:00 | 30 min | sales |
 | JOB-002 | User deactivation | integrity | monthly (1st) | 2 hours | users |
 | ... | ... | ... | ... | ... | ... |
 
-#### 3.2 Per-job details
+#### 4.2 Per-job details
 For each job, describe:
 - Business purpose
 - Input data source
@@ -76,37 +136,37 @@ For each job, describe:
 
 ---
 
-### Chapter 4: Triggers and schedule
+### Chapter 5: Triggers and schedule
 
 <!-- meta: when and on what trigger each job runs. -->
 
-#### 4.1 Schedule definitions
+#### 5.1 Schedule definitions
 | Job ID | Schedule expression | Timezone | Business days only |
 |---------|----------------|-----------|------------|
 | JOB-001 | `0 2 * * *` (cron) | Asia/Tokyo | yes |
 | ... | ... | ... | ... |
 
-#### 4.2 Event triggers
+#### 5.2 Event triggers
 - File-arrival triggers
 - Message-arrival triggers
 - Upstream-job completion triggers
 
-#### 4.3 Business-calendar handling
+#### 5.3 Business-calendar handling
 - Business-day / non-business-day handling
 - Special handling at month start / end
 - Holiday-calendar source
 
 ---
 
-### Chapter 5: Data flow
+### Chapter 6: Data flow
 
 <!-- meta: input → transform → output. Make data movement traceable. -->
 
-#### 5.1 Data-flow diagram
+#### 6.1 Data-flow diagram
 - Data flow across major jobs (Mermaid notation, etc.)
 - Path from data sources to final outputs
 
-#### 5.2 Per-job data I/O
+#### 6.2 Per-job data I/O
 For each job:
 - Input data
   - Source (table / file / API)
@@ -121,17 +181,17 @@ For each job:
   - Format
   - Hand-off to downstream jobs
 
-#### 5.3 Intermediate-data management
+#### 6.3 Intermediate-data management
 - Work tables / temporary files
 - Retention period / cleanup policy
 
 ---
 
-### Chapter 6: Error handling and retry policy
+### Chapter 7: Error handling and retry policy
 
 <!-- meta: behaviour on failure, including idempotency. -->
 
-#### 6.1 Error classification
+#### 7.1 Error classification
 | Error kind | Example | Retryable? | Response |
 |----------|----|-----------|------|
 | Input-data anomaly | malformed format | not retryable | log anomaly separately, continue downstream |
@@ -139,72 +199,72 @@ For each job:
 | Data-integrity anomaly | duplicate key | not retryable | fail the entire job |
 | ... | ... | ... | ... |
 
-#### 6.2 Retry specification
+#### 7.2 Retry specification
 - Retry interval (fixed / exponential backoff)
 - Maximum retry count
 - Logic that decides whether an error is retryable
 
-#### 6.3 Idempotency
+#### 7.3 Idempotency
 - Idempotency guarantees per job
 - Whether the same input may be processed multiple times
 - Presence of a checkpoint mechanism
 
-#### 6.4 Error notifications
+#### 7.4 Error notifications
 - Notification channels (email / Slack / PagerDuty)
 - Notification levels (WARN / ERROR / CRITICAL)
 - Notification body templates
 
 ---
 
-### Chapter 7: Recovery procedures
+### Chapter 8: Recovery procedures
 
 <!-- meta: incident runbook. Detailed enough that an operator can act on it. -->
 
-#### 7.1 Recovery per failure scenario
+#### 8.1 Recovery per failure scenario
 | Scenario | Blast radius | Recovery steps | Expected recovery time |
 |---------|---------|---------|------------|
 | Job-execution failure | single job | check input → manual re-run | 30 min |
 | Data corruption | propagates downstream | restore from backup → re-run | 4 hours |
 | ... | ... | ... | ... |
 
-#### 7.2 Partial re-run
+#### 8.2 Partial re-run
 - Whether the job can resume from the interruption point
 - How to use the checkpoint mechanism
 
-#### 7.3 Undo operations
+#### 8.3 Undo operations
 - How to cancel the result of an already-executed job
 - Data-correction commands
 
-#### 7.4 RTO / RPO
+#### 8.4 RTO / RPO
 - Expected Recovery Time Objective
 - Expected Recovery Point Objective
 
 ---
 
-### Chapter 8: Operations calendar and dependencies
+### Chapter 9: Operations calendar and dependencies
 
 <!-- meta: temporal dependencies between jobs. -->
 
-#### 8.1 Job-dependency graph
+#### 9.1 Job-dependency graph
 - DAG diagram (Mermaid notation, etc.)
 - Dependency conditions (on success / on failure / on completion)
 
-#### 8.2 Execution timeline
+#### 9.2 Execution timeline
 - One day's job schedule visualised on a timeline
 - Identification of peak time windows
 
-#### 8.3 Monthly / yearly cycles
+#### 9.3 Monthly / yearly cycles
 - Day-of-month for monthly batches
 - Fiscal-year rollover processing
 - End-of-period processing
 
 ---
 
-### Chapter 9: Monitoring / alerts
+### Chapter 10: Monitoring / alerts
 
 <!-- meta: what the operators look at. -->
 
-#### 9.1 Monitoring items
+#### 10.1 Monitoring items
 | Target | Method | Threshold | Action |
 |---------|---------|---------|------|
 | Job success/failure | log parsing | immediate on failure | alert |
@@ -212,28 +272,28 @@ For each job:
 | Record count | aggregation query | past mean ± 30% | warning |
 | ... | ... | ... | ... |
 
-#### 9.2 Log specification
+#### 10.2 Log specification
 - Log output format
 - Log destination
 - Retention period
 - Searchability (structured logs / indexes)
 
-#### 9.3 Dashboards
+#### 10.3 Dashboards
 - Links to primary dashboards
 - Displayed items
 
 ---
 
-### Chapter 10: Known constraints and unresolved items
+### Chapter 11: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 10.1 Known technical constraints
+#### 11.1 Known technical constraints
 - Maximum concurrency
 - Maximum data volume that can be processed
 - Known performance issues
 
-#### 10.2 Unresolved items
+#### 11.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 
 ---

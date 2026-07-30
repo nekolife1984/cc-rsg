@@ -338,3 +338,130 @@ Candidate-list format (with IDs):
 ```
 
 When the user says `Deep-dive D-001` or `Tell me more about Issue authorisation`, the main agent recognises the ID and launches `chapter-investigator` (see Phase 6.5).
+
+---
+
+## Feature grouping patterns (for Chapter 2: Feature specifications)
+
+Code is organised by layer (Controller / Service / Model), not by feature. The following strategies infer feature-level groupings to populate the Feature specifications chapter. Each strategy has an expected confidence level.
+
+### Strategy 1: Comment-based grouping (🟢 VERIFIED or 🟡 INFERRED)
+
+Look for explicit feature markers in source code comments:
+
+```
+# Feature: User Registration
+# @feature payment-processing
+/** @feature report-generation */
+```
+
+When a function / class / method has an explicit feature comment, the feature-to-code mapping is confirmed.
+
+| Pattern | Language | Confidence |
+|---------|----------|-----------|
+| `# Feature:` / `# @feature` | Python, Ruby, Shell, YAML | 🟢 when read |
+| `// @feature` / `/* @feature */` | JavaScript, TypeScript, Java, C#, C++, Go, Kotlin | 🟢 when read |
+| `-- @feature` | SQL, Lua | 🟢 when read |
+| docstring / JSDoc `@feature` tag | Python, TypeScript, Java | 🟢 when read |
+
+### Strategy 2: Naming-convention grouping (🟡 INFERRED)
+
+Class / module names that follow a `{Noun}{Verb}` pattern typically represent a feature:
+
+| Pattern | Example | Likely feature name |
+|---------|---------|-------------------|
+| `*Service`, `*UseCase`, `*Handler`, `*Manager` | `UserRegistrationService` | User registration |
+| `*Controller` (singular resource) | `PaymentController` | Payment management |
+| `*Job` | `DailySalesAggregationJob` | Daily sales aggregation |
+| URL path prefix in routes | `/api/users/*` | User management |
+| Module / package name | `app/payments/` | Payment processing |
+
+**Extraction commands** (adjust for target language):
+
+```bash
+# Java / Kotlin: Services
+rg "class (\w+Service)" --type java -o
+rg "class (\w+UseCase)" --type java -o
+
+# Python: Services / Handlers
+rg "class (\w+Service):" --type py -o
+rg "class (\w+Handler):" --type py -o
+
+# TypeScript / JavaScript: Services / Hooks
+rg "^(export )?(default )?(function|const) (\w+Service)" --type ts -o
+
+# Ruby: Services / Interactors
+rg "class (\w+(?:Service|UseCase|Interactor))" --type ruby -o
+```
+
+[🟡 INFERRED] — naming conventions may have false positives (some `*Service` classes are infrastructure, not features).
+
+### Strategy 3: Screen / endpoint aggregation (🟡 INFERRED)
+
+Group code units that serve the same screen or resource:
+
+- **Web app**: Each screen (SC-NNN) defines a feature. Collect all endpoints, models, and domain rules referenced by that screen.
+- **API service**: Each resource (User / Issue / Payment / Project) defines a feature. Collect all endpoints and service methods for that resource.
+- **Batch system**: Each job group (aggregation / transfer / integrity) defines a feature.
+- **Library / SDK**: Each major export category (parsing / transformation / I/O) defines a feature.
+
+**Extraction approach**:
+
+```bash
+# Group endpoints by URL path prefix
+rg "(GET|POST|PUT|DELETE|PATCH)\s+'/api/(\w+)" --type py -o
+
+# Group controllers by module
+rg "^class (\w+)Controller" --type ruby app/controllers/ -o
+```
+
+[🟡 INFERRED] — screen/resource boundaries are structural, not necessarily feature boundaries.
+
+### Strategy 4: Use-case mapping (🔴 ASSUMED)
+
+Map the use cases defined in Chapter 1 (Overview) to candidate features:
+
+1. Extract the 3–5 use cases from Ch1.
+2. For each use case, search for related classes/functions (by keyword match in file names, class names, comments).
+3. If a code path can be identified, upgrade to 🟡 or 🟢.
+
+Example:
+
+```
+Use case: "A user creates an issue"
+→ Candidate feature: "Issue creation" (F-003)
+→ Evidence: IssuesController#create [REF: ...], IssueService::create [REF: ...]
+→ Confidence: 🟡 (code path confirmed)
+```
+
+[🔴 ASSUMED] — use cases are high-level and may not map 1:1 to code features. Only upgrade when specific code paths are identified.
+
+### Strategy 5: Question Bank integration
+
+When a feature cannot be determined from code:
+
+1. Add a `spec_missing` category question to `questions.json`:
+   ```json
+   {
+     "id": "Q-NNN",
+     "category": "spec_missing",
+     "severity": "important",
+     "body": "Does the system have a dedicated 'user deactivation' feature, or is it handled as part of 'user management'?",
+     "status": "open"
+   }
+   ```
+2. Mark the feature row as 🔴 ASSUMED and add `[ASK SME]`.
+3. In Phase 5 dialogue, present these to the SME for confirmation.
+
+### Chapter-investigator procedure for Feature specifications
+
+When a chapter-investigator sub-agent is assigned to the Feature specifications chapter:
+
+1. **Read the Overview chapter first** — understand the use cases and system purpose.
+2. **Apply Strategies 1–4** to extract candidate features.
+3. **Build the Feature catalogue table** — one row per candidate feature with confidence labels.
+4. **For the top-5 most critical or complex features**, write the full Per-feature processing definition.
+5. **For remaining features**, keep only the catalogue table row.
+6. **Cross-reference** each feature to related chapters (screen details, endpoint catalogue, data model).
+7. **Populate questions.json** with `spec_missing` questions for uncertain feature boundaries.
+8. **Output**: `.specback/drafts/02-feature-specifications.md`

@@ -271,8 +271,9 @@ In outline mode:
 ### Phase-specific cautions
 - **In `comprehensive` mode**: writing a chapter without reading the code is forbidden. You may cite only files listed in Sources Read. ≥ 200 lines / ≥ 10 REFs / ≥ 5 Sources Read must be satisfied.
 - **In `outline` / `interactive` mode**: "exhaustive entity listing" takes precedence. Apply Confidence labels honestly per cell — do NOT over-apply 🟢 (only for files actually viewed).
-- Cross-chapter consistency is checked in Phase 4.
-- Do not hide uncertainty markers; keep them explicit in the draft. They are the starting point for Phase 5 dialogue.
+- **Cross-chapter consistency** is checked in Phase 4.
+- **Do not hide uncertainty markers**; keep them explicit in the draft. They are the starting point for Phase 5 dialogue.
 - **Phase 3 progression gate (mandatory)**: do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` (standard, reserved, AND user_custom) has a non-empty body in `.specback/drafts/` (at least 10 non-blank lines outside of code fences). The agent MUST verify this before updating `state.json` to mark Phase 3 complete; declaring "complete" while chapters are still stubs is a contract violation and triggers an immediate Phase 4 fail.
+- **Feature specifications chapter (Ch2)**: This chapter has a different code-reading strategy than other chapters. See `references/outline-tables.md` → **Feature grouping patterns** for the feature extraction strategy. Unlike other chapters, feature-level info may have a higher 🔴 ASSUMED ratio — this is expected and acceptable. The Phase 4 gate for confidence ratio does not apply to this chapter (i.e. the 60% 🔴 ratio warning in `coverage-check.py` is informational only for Ch2).
 
 ---

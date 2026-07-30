@@ -133,6 +133,35 @@ The main agent reads this and appends the questions to `questions.json`.
 
 ---
 
+### 💡 Feature specifications chapter (Chapter 2)
+
+When assigned to the Feature specifications chapter, follow this additional procedure **after STEP A–F**:
+
+#### STEP G: Read the Overview chapter
+Read `.specback/drafts/01-overview.md` (or the final version) to extract the use cases. These define candidate features.
+
+#### STEP H: Apply feature grouping strategies
+Consult `references/outline-tables.md` → **Feature grouping patterns** section. Apply Strategies 1–4 in order:
+
+1. **Comment-based** (🟢): Search for `# Feature:`, `@feature`, docstring feature tags.
+2. **Naming-convention** (🟡): Run `rg` for `*Service`, `*UseCase`, `*Handler`, `*Controller` classes.
+3. **Screen / endpoint aggregation** (🟡): Group code units by screen ID or resource name.
+4. **Use-case mapping** (🔴): Cross-reference Ch1 use cases against code paths.
+
+#### STEP I: Build the Feature catalogue table
+One row per candidate feature. Columns: `Feature ID`, `Feature name`, `Category`, `Related items`, `Auth required`, `Summary`, `Confidence`.
+
+#### STEP J: Write per-feature processing definitions (top-5)
+For the most critical or complex features, write structured processing definitions (trigger, pre-conditions, main flow, alternative flows, error handling, post-conditions, related chapters). Include `[REF: ...]` citations to real code for each step.
+
+#### STEP K: Populate `spec_missing` questions
+For features whose boundaries or existence are uncertain, add a `spec_missing` category question to `questions.json` (at least 1 per 3 features). The main agent reads the returned DETAIL_QUESTIONS and appends them.
+
+#### Output filename
+`.specback/drafts/02-feature-specifications.md`
+
+---
+
 ## Forbidden actions
 
 - **Writing a chapter without opening the code** (filling it with framework "typical behaviour" only)

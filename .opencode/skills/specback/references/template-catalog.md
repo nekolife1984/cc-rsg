@@ -24,6 +24,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ### Chapter outline
 - Overview / system purpose
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
 - Architecture overview
 - Screen list and transitions
 - Routes / endpoint list
@@ -50,6 +51,8 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ### Chapter outline
 - Overview / business purpose
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+- Architecture overview
 - Job catalogue
 - Triggers and schedule
 - Data flow (input → processing → output)
@@ -76,6 +79,8 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ### Chapter outline
 - Overview / API purpose
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+- Architecture overview
 - Endpoint catalogue
 - Request / response specs (per endpoint)
 - Error codes / error responses
@@ -102,6 +107,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ### Chapter outline
 - Overview / library purpose
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
 - Installation
 - Public API catalogue
 - Usage examples (quick start)
