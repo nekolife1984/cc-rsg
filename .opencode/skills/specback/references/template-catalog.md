@@ -52,7 +52,6 @@ The skill ships with the following 4 templates by default. The user may also bri
 ### Chapter outline
 - Overview / business purpose
 - Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
->>>>>>> 07672c3 (feat: add System design chapter to all templates)
 - Architecture overview
 - Job catalogue
 - Triggers and schedule
