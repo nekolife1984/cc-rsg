@@ -231,8 +231,13 @@ client.connect({ host: 'localhost' });
 - Main directories and their responsibilities
 
 #### 9.2 Major classes / modules
-- Internal building blocks
-- Class diagram (when relevant)
+
+| Class | Kind | Module | Responsibility | Depends on | Source |
+|:------|:----|:-------|:-------------|:----------|:-------|
+| ... | ... | ... | ... | ... | [REF: ...] |
+
+- Class diagram (Mermaid `classDiagram`) for key subsystems. Split per module if >15 classes (see SKILL.md Split rule).
+- Module dependency diagram (`graph TD`) for top-level module relationships.
 
 #### 9.3 Build and test
 - Build commands

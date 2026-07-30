@@ -53,7 +53,31 @@ Designed for COBOL + JCL, cron / systemd timers, Spring Batch, Apache Airflow, C
 
 ---
 
-### Chapter 3: Job catalogue
+### Chapter 3: Class / Module Design
+
+<!-- meta: internal structure — classes, modules, and their relationships. -->
+
+#### 3.1 Module overview
+
+| Module / package | Responsibility | Key classes | Dependencies |
+|:----------------|:-------------|:-----------|:------------|
+| ... | ... | ... | ... |
+
+#### 3.2 Class catalogue
+
+| Class | Kind | Module | Responsibility | Depends on | Source |
+|:------|:----|:-------|:-------------|:----------|:-------|
+| ... | ... | ... | ... | ... | [REF: ...] |
+
+#### 3.3 Class diagram (Mermaid)
+Include a `classDiagram` for key subsystems. Split per module if >15 classes (see SKILL.md Split rule).
+
+#### 3.4 Module dependency diagram (Mermaid)
+Show the direction of dependencies between top-level modules using `graph TD` or `flowchart TD`.
+
+---
+
+### Chapter 4: Job catalogue
 
 <!-- meta: inventory of all jobs. The pillar of verification. -->
 
@@ -76,37 +100,37 @@ For each job, describe:
 
 ---
 
-### Chapter 4: Triggers and schedule
+### Chapter 5: Triggers and schedule
 
 <!-- meta: when and on what trigger each job runs. -->
 
-#### 4.1 Schedule definitions
+#### 5.1 Schedule definitions
 | Job ID | Schedule expression | Timezone | Business days only |
 |---------|----------------|-----------|------------|
 | JOB-001 | `0 2 * * *` (cron) | Asia/Tokyo | yes |
 | ... | ... | ... | ... |
 
-#### 4.2 Event triggers
+#### 5.2 Event triggers
 - File-arrival triggers
 - Message-arrival triggers
 - Upstream-job completion triggers
 
-#### 4.3 Business-calendar handling
+#### 5.3 Business-calendar handling
 - Business-day / non-business-day handling
 - Special handling at month start / end
 - Holiday-calendar source
 
 ---
 
-### Chapter 5: Data flow
+### Chapter 6: Data flow
 
 <!-- meta: input → transform → output. Make data movement traceable. -->
 
-#### 5.1 Data-flow diagram
+#### 6.1 Data-flow diagram
 - Data flow across major jobs (Mermaid notation, etc.)
 - Path from data sources to final outputs
 
-#### 5.2 Per-job data I/O
+#### 6.2 Per-job data I/O
 For each job:
 - Input data
   - Source (table / file / API)
@@ -121,17 +145,56 @@ For each job:
   - Format
   - Hand-off to downstream jobs
 
-#### 5.3 Intermediate-data management
+#### 6.3 Intermediate-data management
 - Work tables / temporary files
 - Retention period / cleanup policy
 
 ---
 
-### Chapter 6: Error handling and retry policy
+### Chapter 7: Data Model
+
+<!-- meta: persistent data structures referenced by batch jobs. -->
+
+#### 7.1 Referenced database tables
+
+| Table | Database | Purpose | Read/Write | Key columns | REF |
+|:------|:---------|:-------|:---------:|:----------|:----|
+| orders | Main DB | Order records | Read | id, status, amount | [REF: ...] |
+| users | Main DB | Customer master | Read | id, name, email | [REF: ...] |
+| sales_summary | DW | Aggregated sales | Write | date, total, count | [REF: ...] |
+| ... | ... | ... | ... | ... | ... |
+
+#### 7.2 File record layouts
+
+For batch jobs that process files (CSV, fixed-length, etc.):
+
+| File | Format | Encoding | Delimiter | Record length | Header line |
+|:-----|:------|:--------|:---------|:------------:|:----------:|
+| input/sales_*.csv | CSV | UTF-8 | comma | variable | Yes |
+| output/daily_report.txt | fixed-length | Shift_JIS | - | 200 bytes | No |
+| ... | ... | ... | ... | ... | ... |
+
+Per-file field definitions (expand in chapter body):
+
+| # | Field name | Start | Length | Type | Required | Description |
+|:-:|:----------|:----:|:-----:|:----|:--------:|:-----------|
+| 1 | date | 1 | 10 | date(YYYY-MM-DD) | ✅ | Sales date |
+| 2 | item_code | 11 | 20 | string | ✅ | Item master code |
+| 3 | quantity | 31 | 6 | integer | ✅ | Units sold |
+| ... | ... | ... | ... | ... | ... | ... |
+
+#### 7.3 Domain rules
+- Record-level validation rules
+- Data integrity constraints
+- State transitions for entities tracked across job runs
+
+---
+
+### Chapter 8: Error handling and retry policy
 
 <!-- meta: behaviour on failure, including idempotency. -->
 
-#### 6.1 Error classification
+#### 8.1 Error classification
 | Error kind | Example | Retryable? | Response |
 |----------|----|-----------|------|
 | Input-data anomaly | malformed format | not retryable | log anomaly separately, continue downstream |
@@ -139,72 +202,72 @@ For each job:
 | Data-integrity anomaly | duplicate key | not retryable | fail the entire job |
 | ... | ... | ... | ... |
 
-#### 6.2 Retry specification
+#### 8.2 Retry specification
 - Retry interval (fixed / exponential backoff)
 - Maximum retry count
 - Logic that decides whether an error is retryable
 
-#### 6.3 Idempotency
+#### 8.3 Idempotency
 - Idempotency guarantees per job
 - Whether the same input may be processed multiple times
 - Presence of a checkpoint mechanism
 
-#### 6.4 Error notifications
+#### 8.4 Error notifications
 - Notification channels (email / Slack / PagerDuty)
 - Notification levels (WARN / ERROR / CRITICAL)
 - Notification body templates
 
 ---
 
-### Chapter 7: Recovery procedures
+### Chapter 9: Recovery procedures
 
 <!-- meta: incident runbook. Detailed enough that an operator can act on it. -->
 
-#### 7.1 Recovery per failure scenario
+#### 9.1 Recovery per failure scenario
 | Scenario | Blast radius | Recovery steps | Expected recovery time |
 |---------|---------|---------|------------|
 | Job-execution failure | single job | check input → manual re-run | 30 min |
 | Data corruption | propagates downstream | restore from backup → re-run | 4 hours |
 | ... | ... | ... | ... |
 
-#### 7.2 Partial re-run
+#### 9.2 Partial re-run
 - Whether the job can resume from the interruption point
 - How to use the checkpoint mechanism
 
-#### 7.3 Undo operations
+#### 9.3 Undo operations
 - How to cancel the result of an already-executed job
 - Data-correction commands
 
-#### 7.4 RTO / RPO
+#### 9.4 RTO / RPO
 - Expected Recovery Time Objective
 - Expected Recovery Point Objective
 
 ---
 
-### Chapter 8: Operations calendar and dependencies
+### Chapter 10: Operations calendar and dependencies
 
 <!-- meta: temporal dependencies between jobs. -->
 
-#### 8.1 Job-dependency graph
+#### 10.1 Job-dependency graph
 - DAG diagram (Mermaid notation, etc.)
 - Dependency conditions (on success / on failure / on completion)
 
-#### 8.2 Execution timeline
+#### 10.2 Execution timeline
 - One day's job schedule visualised on a timeline
 - Identification of peak time windows
 
-#### 8.3 Monthly / yearly cycles
+#### 10.3 Monthly / yearly cycles
 - Day-of-month for monthly batches
 - Fiscal-year rollover processing
 - End-of-period processing
 
 ---
 
-### Chapter 9: Monitoring / alerts
+### Chapter 11: Monitoring / alerts
 
 <!-- meta: what the operators look at. -->
 
-#### 9.1 Monitoring items
+#### 11.1 Monitoring items
 | Target | Method | Threshold | Action |
 |---------|---------|---------|------|
 | Job success/failure | log parsing | immediate on failure | alert |
@@ -212,28 +275,61 @@ For each job:
 | Record count | aggregation query | past mean ± 30% | warning |
 | ... | ... | ... | ... |
 
-#### 9.2 Log specification
-- Log output format
-- Log destination
-- Retention period
-- Searchability (structured logs / indexes)
+#### 11.2 Log specification
 
-#### 9.3 Dashboards
+| Log type | Output | Format | Level | Retention | Source config |
+|:---------|:-------|:------|:-----|:---------|:-------------|
+| Job execution log | stdout | JSON (structured) | info~error | 90 days | config/logger.rb:15 |
+| Job scheduler log | scheduler.log | plain text | info~warn | 30 days | config/scheduler.rb:8 |
+| Error log | stderr | JSON (structured) | warn~fatal | 1 year | config/logger.rb:30 |
+| Audit trail | audit.log | CSV | info | 3 years | lib/audit.rb:5 |
+
+Log level definitions:
+| Level | Meaning | Output |
+|:------|:--------|:-------|
+| DEBUG | Detailed diagnostic info (dev only) | Dev environment |
+| INFO | Normal operation messages | Always |
+| WARN | Warning conditions | Always |
+| ERROR | Recoverable errors | Always |
+| FATAL | Unrecoverable errors | Always |
+
+#### 11.3 Dashboards
 - Links to primary dashboards
 - Displayed items
 
 ---
 
-### Chapter 10: Known constraints and unresolved items
+### Chapter 12: External interfaces
+
+<!-- meta: external systems, file transfers, and databases the batch jobs interact with. -->
+
+#### 12.1 External interface inventory
+
+| IF-ID | Name | Type | Protocol | Direction | Purpose |
+|:------|:-----|:----|:---------|:--------:|:--------|
+| BIF-001 | Sales DB | Database | PostgreSQL | Read | Source data for aggregation |
+| BIF-002 | Report server | File transfer | SFTP | Upload | Deliver output files |
+| BIF-003 | Notification API | REST API | HTTPS | Outbound | Alert on job failure |
+| ... | ... | ... | ... | ... | ... |
+
+#### 12.2 Details per interface
+- Connection / authentication method
+- Schedule / trigger
+- Data format and volume
+- Failure behaviour
+
+---
+
+### Chapter 13: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 10.1 Known technical constraints
+#### 12.1 Known technical constraints
 - Maximum concurrency
 - Maximum data volume that can be processed
 - Known performance issues
 
-#### 10.2 Unresolved items
+#### 12.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 
 ---

@@ -25,6 +25,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 ### Chapter outline
 - Overview / system purpose
 - Architecture overview
+- **Class / module design**
 - Screen list and transitions
 - Routes / endpoint list
 - Data model (ER diagram, entity definitions)
@@ -50,13 +51,16 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ### Chapter outline
 - Overview / business purpose
+- **Class / module design**
 - Job catalogue
 - Triggers and schedule
 - Data flow (input → processing → output)
+- Data model (tables, file record layouts)
 - Error handling and retry policy
 - Recovery procedures
 - Operations calendar / dependency graph
 - Monitoring / alerts
+- **External interfaces**
 - Known constraints and unresolved items
 
 ### Selection criteria
@@ -73,16 +77,20 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Endpoints called by other systems.
 - REST, GraphQL, gRPC, WebSocket.
 - Microservices, public APIs, internal APIs.
-
 ### Chapter outline
 - Overview / API purpose
+- Architecture overview
+- **Class / module design**
 - Endpoint catalogue
 - Request / response specs (per endpoint)
+- Data model (data stores, entity definitions)
 - Error codes / error responses
+- **External interfaces**
 - Authentication (API key, OAuth, JWT)
 - Rate limiting / quotas
 - Versioning
 - SLA / performance requirements
+- Operations settings / deployment
 - Known constraints and unresolved items
 
 ### Selection criteria
@@ -108,6 +116,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Configuration options
 - Compatibility (supported language versions, dependencies)
 - Extension points / plugin system
+- Internal structure (class / module design)
 - Migration guide (from older versions)
 - Known constraints and unresolved items
 
