@@ -57,7 +57,7 @@ gh release create v0.8.0 \
   --notes "CHANGELOG.md を参照"
 ```
 
-または手動で https://github.com/nekolife1984/cc-rsg/releases/new から作成します。
+または手動で https://github.com/nekolife1984/specback/releases/new から作成します。
 
 ## ホットフィックスリリース
 
@@ -84,7 +84,7 @@ git push origin v0.8.1
 
 - [ ] CHANGELOG.md を更新した
 - [ ] README Roadmap を更新した（完了項目に取り消し線）
-- [ ] `skills/cc-rsg/SKILL.md` のバージョン文字列を更新した（該当時）
+- [ ] `skills/specback/SKILL.md` のバージョン文字列を更新した（該当時）
 - [ ] Zenodo プレプリントを更新した（設計変更時のみ）
 - [ ] タグを作成してプッシュした
 - [ ] GitHub Release を作成した

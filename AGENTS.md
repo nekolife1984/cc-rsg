@@ -1,4 +1,4 @@
-# cc-rsg — Agent Guide
+# specback — Agent Guide
 
 ## Contributor Docs
 

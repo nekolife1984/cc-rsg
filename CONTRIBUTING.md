@@ -1,6 +1,6 @@
-# Contributing to cc-rsg
+# Contributing to specback
 
-フィードバック・テンプレート追加要望・バグ報告は [GitHub Issues](https://github.com/nekolife1984/cc-rsg/issues) にて受け付けます。
+フィードバック・テンプレート追加要望・バグ報告は [GitHub Issues](https://github.com/nekolife1984/specback/issues) にて受け付けます。
 
 特に以下の貢献を歓迎します：
 
@@ -165,7 +165,7 @@ def test_your_lang_role_typing() -> None:
 
 | # | ファイル | 変更内容 |
 |---|---------|---------|
-| 1 | `skills/cc-rsg/references/inventory-units.md` | 言語セクションを追加。対応フレームワークの典型的な抽出単位を記載 |
+| 1 | `skills/specback/references/inventory-units.md` | 言語セクションを追加。対応フレームワークの典型的な抽出単位を記載 |
 | 2 | `README.md` | 「Supported Languages」セクションに対象言語を追記 |
 | 3 | `README.md` | Roadmap から該当マイルストーンを ~~完了~~ に |
 
@@ -186,14 +186,14 @@ mypy scripts/source_map_v2/ --ignore-missing-imports --follow-imports=skip
 
 ## テンプレートを追加する
 
-`skills/cc-rsg/templates/` に新しい仕様書テンプレートを追加する手順です。
+`skills/specback/templates/` に新しい仕様書テンプレートを追加する手順です。
 
 ### 編集するファイル
 
 | # | ファイル | 変更内容 |
 |---|---------|---------|
-| 1 | `skills/cc-rsg/templates/<name>.md` | **新規作成**。既存テンプレート（例: `web-app.md`）を参考に構造化 |
-| 2 | `skills/cc-rsg/references/template-catalog.md` | 新しいテンプレートのエントリを追加 |
+| 1 | `skills/specback/templates/<name>.md` | **新規作成**。既存テンプレート（例: `web-app.md`）を参考に構造化 |
+| 2 | `skills/specback/references/template-catalog.md` | 新しいテンプレートのエントリを追加 |
 | 3 | `README.md` | 「Templates」セクションにテンプレート名を追記 |
 | 4 | `README.md` | Roadmap から該当マイルストーンを ~~完了~~ に（該当する場合） |
 
@@ -206,13 +206,13 @@ mypy scripts/source_map_v2/ --ignore-missing-imports --follow-imports=skip
 
 ## 検証チェックリストを拡充する
 
-`skills/cc-rsg/references/verification-checklists.md` に新しいチェック項目を追加する手順です。
+`skills/specback/references/verification-checklists.md` に新しいチェック項目を追加する手順です。
 
 ### 編集するファイル
 
 | # | ファイル | 変更内容 |
 |---|---------|---------|
-| 1 | `skills/cc-rsg/references/verification-checklists.md` | 新しいチェック項目を適切なカテゴリに追加 |
+| 1 | `skills/specback/references/verification-checklists.md` | 新しいチェック項目を適切なカテゴリに追加 |
 | 2 | `README.md` | Roadmap から該当マイルストーンを ~~完了~~ に（該当する場合） |
 
 ### 追加時の注意点

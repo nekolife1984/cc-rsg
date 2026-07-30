@@ -31,8 +31,6 @@ Check all that apply:
 - `fix:` — Bug fix
 - `chore:` — CI, refactoring, maintenance, dependencies
 - `docs:` — Documentation only
-- `upstream:` — Upstream sync from `daishir0/cc-rsg`
-
 ### Checklist
 Walk through every item before marking it done:
 

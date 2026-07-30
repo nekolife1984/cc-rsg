@@ -1,8 +1,8 @@
 #!/bin/sh
-# scripts/install-hooks.sh — Install git hooks for cc-rsg
+# scripts/install-hooks.sh — Install git hooks for specback
 set -e
 
-echo "🔧 Installing cc-rsg git hooks..."
+echo "🔧 Installing specback git hooks..."
 
 HOOK_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 

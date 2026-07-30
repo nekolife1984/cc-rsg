@@ -6,7 +6,6 @@
 
 > GitHub Flow を選んだ理由：
 > - 単独開発者 — 最小限のルールで運用可能
-> - 上流（`daishir0/cc-rsg`）との同期が専用ブランチプレフィックスでシンプルに
 > - 既存の規約（PR必須、squash merge、1変更1commit）と完全に合致
 
 ## 永続ブランチ
@@ -25,7 +24,6 @@
 | `fix/<kebab-case>` | `fix/detect-py-encoding` | バグ修正 |
 | `chore/<kebab-case>` | `chore/update-deps` | CI・メンテナンス・リファクタリング・依存関係 |
 | `docs/<kebab-case>` | `docs/branching-strategy` | ドキュメントのみ |
-| `upstream/<kebab-case>` | `upstream/merge-v0.8.0` | `daishir0/cc-rsg` 上流からの同期 |
 
 ## PRライフサイクル
 
@@ -56,25 +54,6 @@ main → feat/xxx → コミット → PR作成 → CI (pytest + mypy + trace ga
 | ソースコード・テスト・機能 | ❌ **PR必須** | CI + trace gates通過 |
 
 単独開発者でも **すべてPR経由が推奨** — 自分自身の変更を再確認する習慣になる。
-
-## 上流同期（daishir0/cc-rsg）
-
-`daishir0/cc-rsg` に取り込むべき更新があった場合：
-
-```bash
-# 上流リモートを追加（初回のみ）
-git remote add upstream https://github.com/daishir0/cc-rsg.git
-
-# 同期ブランチを作成
-git checkout main
-git pull origin main
-git checkout -b upstream/merge-v0.8.0
-git pull upstream main
-
-# コンフリクトがあれば解決 → push
-git push origin upstream/merge-v0.8.0
-# → PR作成 → squash merge → main
-```
 
 ## CIゲート
 

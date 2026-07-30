@@ -1,12 +1,12 @@
-# cc-rsg — Reverse Spec Generator
+# specback — Reverse Spec Generator
 
 > A multi-agent skill that reverse-engineers specification documents from existing codebases
 
 📖 **日本語版は下記にあります** — [Jump to Japanese →](#日本語版)
 
-`cc-rsg` is a general-purpose framework for automatically generating specification documents — for maintenance engineers or end customers — from legacy or active codebases.
+`specback` is a general-purpose framework for automatically generating specification documents — for maintenance engineers or end customers — from legacy or active codebases.
 
-It is the **reverse direction** counterpart of `cc-sdd` (Spec Driven Development): while `cc-sdd` goes "spec → code", `cc-rsg` goes "code → spec".
+It is the **reverse direction** counterpart of `cc-sdd` (Spec Driven Development): while `cc-sdd` goes "spec → code", `specback` goes "code → spec".
 
 ---
 
@@ -16,7 +16,7 @@ Legacy system modernization, codebase onboarding for new engineers, deliverable 
 
 In the LLM era, asking an AI to "make a spec from this code" produces visually polished documents instantly. But in practice, if that document turns out to be "beautiful fiction filled with guesses", it breaks down in production.
 
-`cc-rsg` prioritizes:
+`specback` prioritizes:
 
 - **Honesty**: Don't hide guesses — mark them explicitly. Show "unresolved items" as a dedicated chapter
 - **Traceability**: Every statement has a source code reference with line numbers
@@ -28,7 +28,7 @@ In the LLM era, asking an AI to "make a spec from this code" produces visually p
 
 ## Design Heritage
 
-`cc-rsg` is positioned as the latest generation in the following lineage:
+`specback` is positioned as the latest generation in the following lineage:
 
 - **KDM (Knowledge Discovery Metamodel, ISO/IEC 19506:2012)**: Language-neutral structured knowledge representation
 - **OMG ADM (Architecture-Driven Modernization)**: MDRE (Model-Driven Reverse Engineering)
@@ -36,7 +36,7 @@ In the LLM era, asking an AI to "make a spec from this code" produces visually p
 - **Reversa** (OSS): Modern form of "agent-readable executable specifications"
 - **IBM watsonx Code Assistant for Z / AWS Transform / CAST Imaging**: "Deterministic graph + LLM natural language" hybrid architecture
 
-`cc-rsg` builds on these by maximizing skill-based AI agent features (SKILL.md, subagents, AskUserQuestion, Task) into a general-purpose framework.
+`specback` builds on these by maximizing skill-based AI agent features (SKILL.md, subagents, AskUserQuestion, Task) into a general-purpose framework.
 
 ---
 
@@ -47,29 +47,29 @@ In the LLM era, asking an AI to "make a spec from this code" produces visually p
 Clone the repository and run the installer from the **project root directory** (not inside the repo):
 
 ```bash
-git clone https://github.com/nekolife1984/cc-rsg.git
-./cc-rsg/install.sh
+git clone https://github.com/nekolife1984/specback.git
+./install.sh
 ```
 
 This interactive installer supports: Claude Code, Codex CLI, OpenCode, GitHub Copilot, Cursor, and Other agents.
 
 Windows:
 ```powershell
-git clone https://github.com/nekolife1984/cc-rsg.git
-.\cc-rsg\install.ps1
+git clone https://github.com/nekolife1984/specback.git
+.\install.ps1
 ```
 
 Dry-run mode:
 ```bash
-./cc-rsg/install.sh --dry-run
+./install.sh --dry-run
 ```
 
 Install optional Python dependencies (tree-sitter grammars for precise source-code extraction):
 ```bash
-./cc-rsg/install.sh --install-deps
+./install.sh --install-deps
 ```
 
-> **Note:** All cc-rsg scripts work with Python standard library only. The optional dependencies (`tree-sitter` + per-language grammars) enable fine-grained source-code analysis via `source_map_v2`. Without them, the system falls back to file-level units with a clear warning. See `skills/cc-rsg/scripts/requirements.txt` for the full list.
+> **Note:** All specback scripts work with Python standard library only. The optional dependencies (`tree-sitter` + per-language grammars) enable fine-grained source-code analysis via `source_map_v2`. Without them, the system falls back to file-level units with a clear warning. See `skills/specback/scripts/requirements.txt` for the full list.
 
 ### Manual installation (example)
 
@@ -78,16 +78,16 @@ The installer above is recommended. To install manually, copy to your agent's sk
 ```bash
 # As a project-level skill (e.g. for Claude Code)
 mkdir -p .claude/skills/
-cp -r skills/cc-rsg .claude/skills/
+cp -r skills/specback .claude/skills/
 
 # Or as a user-level skill
 mkdir -p ~/.claude/skills/
-cp -r skills/cc-rsg ~/.claude/skills/
+cp -r skills/specback ~/.claude/skills/
 ```
 
 ### Verify installation
 
-Launch your agent and run `/help` — `cc-rsg` should appear in the skill list.
+Launch your agent and run `/help` — `specback` should appear in the skill list.
 
 ---
 
@@ -97,7 +97,7 @@ Launch your agent and run `/help` — `cc-rsg` should appear in the skill list.
 
 ```
 1. Launch your coding agent at the target codebase root
-2. Invoke the cc-rsg skill
+2. Invoke the specback skill
 3. Answer the 5-question goal definition (Phase 0)
 4. Review recon results and pick a template (Phase 1)
 5. Review the WBS and inventory (Phase 2)
@@ -109,14 +109,14 @@ Launch your agent and run `/help` — `cc-rsg` should appear in the skill list.
 
 ### Pause and Resume
 
-Even if you interrupt the session, progress is saved to `.cc-rsg/state.json`. On the next launch, a resume message appears with options: continue / rewind / full reset.
+Even if you interrupt the session, progress is saved to `.specback/state.json`. On the next launch, a resume message appears with options: continue / rewind / full reset.
 
 ### Output Location
 
-A `.cc-rsg/` directory is created at the root of the target project, containing:
+A `.specback/` directory is created at the root of the target project, containing:
 
 ```
-.cc-rsg/
+.specback/
 ├── state.json              # Progress tracking
 ├── goal.json               # Phase 0 goal definition
 ├── recon-report.md         # Phase 1 reconnaissance
@@ -126,11 +126,11 @@ A `.cc-rsg/` directory is created at the root of the target project, containing:
 ├── wbs.json                # Work breakdown
 ├── questions.json          # Question Bank
 ├── knowledge-graph.jsonld  # JSON-LD Knowledge Graph (machine-queryable)
-├── drafts/                 # Per-chapter drafts (intermediate, always in .cc-rsg/)
+├── drafts/                 # Per-chapter drafts (intermediate, always in .specback/)
 └── final/                  # Final deliverables (default) or {output_dir}/ if custom path set
 ```
 
-Drafts always stay in `.cc-rsg/drafts/` regardless of the output directory choice. Final deliverables go to `{output_dir}/` (default: `.cc-rsg/final/`; custom: e.g. `docs/specs/`).
+Drafts always stay in `.specback/drafts/` regardless of the output directory choice. Final deliverables go to `{output_dir}/` (default: `.specback/final/`; custom: e.g. `docs/specs/`).
 
 ---
 
@@ -152,10 +152,10 @@ Japanese output is fully supported: select `日本語 (Japanese)` in Phase 0 Ste
 | 3 | Investigate | Per-chapter independent sub-agent investigation (comprehensive: STEP A–G / outline: OUT-A–D) |
 | 4 | Verify | Coverage, integrity, 11-item validation with loopback fixes |
 | 5 | Refine via Dialogue | 3-stage (overview / critical clusters / individual) dialog to resolve uncertainty |
-| 6 | Deliver | Output final deliverables to `.cc-rsg/final/` |
+| 6 | Deliver | Output final deliverables to `.specback/final/` |
 | **6.5** | **Interactive Deep-Dive** | (interactive mode only) On-demand deep-dive chapter generation guided by user |
 
-See [`skills/cc-rsg/SKILL.md`](skills/cc-rsg/SKILL.md) for details.
+See [`skills/specback/SKILL.md`](skills/specback/SKILL.md) for details.
 
 ---
 
@@ -204,7 +204,7 @@ Inventory **granularity rules** are also built in: minimum count (`max(50, file_
 `scripts/source_map_v2/` is a framework-aware, **tree-sitter-based** extractor (schema 0.2.0) that maps every unit onto the five universal tables (Modules / Entities / Actions / Data / Dependencies) and role-types it — `endpoint` (with HTTP method + path), `model`, `schema`, `component`, `job`, `route_group`, `migration`, `datastore`, … — across **9 languages**: Python, TypeScript/JavaScript, Ruby/Rails, PHP, Java, C#, Go, SQL, COBOL. Framework detection (FastAPI / Django / Flask / Rails / Laravel / Spring / Next.js / Express / NestJS, …) selects the right unit kinds. It coexists with the v1 `source-map.py` and is backward compatible. tree-sitter is an **optional** dependency; languages without a grammar fall back to file-level units with a loud warning (never a silent drop). Run it standalone:
 
 ```bash
-python -m source_map_v2 --target <root> --output .cc-rsg/source-map.json
+python -m source_map_v2 --target <root> --output .specback/source-map.json
 ```
 
 Unsupported languages or frameworks can be added on request via GitHub Issues.
@@ -226,7 +226,7 @@ Users can also bring their own templates.
 
 ## Question Bank
 
-`cc-rsg` accumulates questions raised during investigation in `.cc-rsg/questions.json`.
+`specback` accumulates questions raised during investigation in `.specback/questions.json`.
 
 ### 7 Standard Categories
 
@@ -255,12 +255,12 @@ This is the foundation of the spec's trustworthiness.
 ## Directory Structure
 
 ```
-cc-rsg/
+specback/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
 └── skills/
-    └── cc-rsg/
+    └── specback/
         ├── SKILL.md                         # Lightweight index (~90 lines)
         ├── phase-0-setup.md                 # Phase 0: Setup & Goal
         ├── phase-1-recon.md                 # Phase 1: Recon & Template
@@ -328,7 +328,7 @@ Currently **v0.7.0** (source-map v2: a role-typed, framework-aware, tree-sitter-
 - ~~v0.3: Depth modes (comprehensive / outline / interactive), Phase 6.5 interactive deep-dive, outline-tables.md~~ (done)
 - ~~v0.4: English-base migration of the entire skill bundle; bilingual output via `output_language`; README flipped to English-first~~ (done)
 - ~~v0.5: Mermaid styling contract (host-themed palette), `user_custom_deliverables` enforcement, strict `[REF: path:line]` format, Phase 5 skip prevention, intent-vs-delivery audit, optional Context Optimization mode B variant~~ (done)
-- ~~v0.6: Phase 0 bundle staging into `.cc-rsg/skill/`, `[REF:]` placeholder consistency (no leading `L`), Sources Read counter fix, Ruby top-level method extraction~~ (done)
+- ~~v0.6: Phase 0 bundle staging into `.specback/skill/`, `[REF:]` placeholder consistency (no leading `L`), Sources Read counter fix, Ruby top-level method extraction~~ (done)
 - ~~v0.7: `scripts/source_map_v2/` — role-typed, framework-aware, tree-sitter-based mechanical source map (schema 0.2.0). Per-language extractors for Python, TS/JS, Ruby/Rails, PHP, Java, C#, Go, SQL, COBOL; framework detection; loud warnings instead of silent drops; coexists with v1 `source-map.py`~~ (done)
 - v0.8: UI for custom categories, templates added based on user feedback; Kotlin extractor; wire source-map v2 role typing into Phase 2 inventory
 - v1.0: Stable release after several real-project applications
@@ -364,7 +364,7 @@ Particularly welcome contributions:
 
 ## Related Projects
 
-- **cc-sdd**: Spec Driven Development. The counterpart concept of `cc-rsg`
+- **cc-sdd**: Spec Driven Development. The counterpart concept of `specback`
 - **Reversa**: Similar OSS with a 5-phase pipeline
 
 ---
@@ -386,18 +386,18 @@ The design draws significant inspiration from:
 
 ---
 > "An honest spec with visible holes is more practically valuable than a polished spec full of fiction."
-> — from the `cc-rsg` design principles
+> — from the `specback` design principles
 ---
 
 # 日本語版
 
-# cc-rsg — Reverse Spec Generator
+# specback — Reverse Spec Generator
 
 > 既存のコードベースから仕様書を逆生成(リバースエンジニアリング)するためのマルチエージェントスキル
 
-📖 **English version is at the top** — [Jump to English →](#cc-rsg--reverse-spec-generator)
+📖 **English version is at the top** — [Jump to English →](#specback--reverse-spec-generator)
 
-`cc-rsg` は、レガシーまたは現役のコードベースから、メンテナンス担当者あるいは納品先顧客に向けた仕様書を自動生成するための汎用フレームワークです。
+`specback` は、レガシーまたは現役のコードベースから、メンテナンス担当者あるいは納品先顧客に向けた仕様書を自動生成するための汎用フレームワークです。
 
 「コード → 仕様」の **reverse 方向** を担うスキルであり、`cc-sdd`(Spec Driven Development、仕様駆動開発)の対概念として位置づけられています。
 
@@ -409,7 +409,7 @@ The design draws significant inspiration from:
 
 LLM時代になり、AIに「このコードから仕様書を作って」と頼むだけで一見綺麗な仕様書が生成されるようになりました。しかし実務では、その仕様書が「推測で埋められた美しいフィクション」だった場合、本番で破綻します。
 
-`cc-rsg` は以下を最優先します。
+`specback` は以下を最優先します。
 
 - **正直さ**: 推測した部分は隠さず明示する。「未確定事項」を独立した章として示す
 - **トレーサビリティ**: すべての記述にソースコードの行番号付き参照を付ける
@@ -421,7 +421,7 @@ LLM時代になり、AIに「このコードから仕様書を作って」と頼
 
 ## 設計の系譜
 
-`cc-rsg` の設計は以下の系譜の最新世代として位置づけられます。
+`specback` の設計は以下の系譜の最新世代として位置づけられます。
 
 - **KDM(Knowledge Discovery Metamodel、ISO/IEC 19506:2012)**: 言語非依存の中立的な構造化知識表現
 - **OMG ADM(Architecture-Driven Modernization)**: MDRE(Model-Driven Reverse Engineering)
@@ -429,7 +429,7 @@ LLM時代になり、AIに「このコードから仕様書を作って」と頼
 - **Reversa**(OSS): エージェント可読な実行可能仕様という現代的形態
 - **IBM watsonx Code Assistant for Z / AWS Transform / CAST Imaging**: 「決定論的グラフ + LLM自然言語化」のハイブリッドアーキテクチャ
 
-`cc-rsg` はこれらを踏まえ、スキルベース AI エージェントの機能(SKILL.md、subagents、AskUserQuestion、Task)を最大限活用したフレームワークとして設計されています。
+`specback` はこれらを踏まえ、スキルベース AI エージェントの機能(SKILL.md、subagents、AskUserQuestion、Task)を最大限活用したフレームワークとして設計されています。
 
 ---
 
@@ -438,18 +438,18 @@ LLM時代になり、AIに「このコードから仕様書を作って」と頼
 ### クイックインストール (推奨)
 
 ```bash
-git clone https://github.com/nekolife1984/cc-rsg.git
-./cc-rsg/install.sh
+git clone https://github.com/nekolife1984/specback.git
+./install.sh
 ```
 
 この対話型インストーラーは Claude Code、Codex CLI、OpenCode、GitHub Copilot、Cursor など複数のエージェントに対応しています。
 
 オプションの Python 依存パッケージ（tree-sitter 各言語パーサー）もインストールする場合:
 ```bash
-./cc-rsg/install.sh --install-deps
+./install.sh --install-deps
 ```
 
-> **注意:** cc-rsg の全スクリプトは Python 標準ライブラリのみで動作します。オプション依存（`tree-sitter` + 各言語 grammar）は `source_map_v2` による精密なソースコード解析を可能にします。なくても file-level のユニットにフォールバックし、警告を表示します。詳細は `skills/cc-rsg/scripts/requirements.txt` を参照してください。
+> **注意:** specback の全スクリプトは Python 標準ライブラリのみで動作します。オプション依存（`tree-sitter` + 各言語 grammar）は `source_map_v2` による精密なソースコード解析を可能にします。なくても file-level のユニットにフォールバックし、警告を表示します。詳細は `skills/specback/scripts/requirements.txt` を参照してください。
 
 ### 手動配置 (例)
 
@@ -458,12 +458,12 @@ git clone https://github.com/nekolife1984/cc-rsg.git
 ```bash
 # 例: Claude Code のプロジェクトレベルスキルとして
 mkdir -p .claude/skills/
-cp -r skills/cc-rsg .claude/skills/
+cp -r skills/specback .claude/skills/
 ```
 
 ### 動作確認
 
-エージェントを起動し、`/help` でスキル一覧に `cc-rsg` が表示されれば成功。
+エージェントを起動し、`/help` でスキル一覧に `specback` が表示されれば成功。
 
 ---
 
@@ -473,7 +473,7 @@ cp -r skills/cc-rsg .claude/skills/
 
 ```
 1. 対象コードベースのルートでエージェントを起動
-2. cc-rsg スキルを呼び出す
+2. specback スキルを呼び出す
 3. ゴール定義5問に回答(Phase 0)
 4. 偵察結果を確認しテンプレート選定(Phase 1)
 5. WBS と インベントリをレビュー(Phase 2)
@@ -485,14 +485,14 @@ cp -r skills/cc-rsg .claude/skills/
 
 ### 中断と再開
 
-セッションを中断しても、`.cc-rsg/state.json` に進捗が保存されます。次回エージェント起動時に再開メッセージが表示され、続きから / 巻き戻し / 全リセット のいずれかを選択できます。
+セッションを中断しても、`.specback/state.json` に進捗が保存されます。次回エージェント起動時に再開メッセージが表示され、続きから / 巻き戻し / 全リセット のいずれかを選択できます。
 
 ### 出力場所
 
-利用プロジェクトの直下に `.cc-rsg/` ディレクトリが作成され、以下が保存されます。
+利用プロジェクトの直下に `.specback/` ディレクトリが作成され、以下が保存されます。
 
-```{.cc-rsg/ tree}
-.cc-rsg/
+```{.specback/ tree}
+.specback/
 ├── state.json              # 進捗管理
 ├── goal.json               # Phase 0 のゴール定義
 ├── recon-report.md         # Phase 1 の偵察結果
@@ -502,11 +502,11 @@ cp -r skills/cc-rsg .claude/skills/
 ├── wbs.json                # 作業分解
 ├── questions.json          # Question Bank
 ├── knowledge-graph.jsonld  # JSON-LD 知識グラフ (機械クエリ可能)
-├── drafts/                 # 各章のドラフト（中間成果物、常に .cc-rsg/ 内）
+├── drafts/                 # 各章のドラフト（中間成果物、常に .specback/ 内）
 └── final/                  # 最終成果物（デフォルト）／カスタムパス指定時は {output_dir}/
 ```
 
-Drafts（中間ドラフト）は出力先に関わらず常に `.cc-rsg/drafts/` に配置されます。最終成果物は `{output_dir}/` に出力されます（デフォルト: `.cc-rsg/final/`、カスタム例: `docs/specs/`）。
+Drafts（中間ドラフト）は出力先に関わらず常に `.specback/drafts/` に配置されます。最終成果物は `{output_dir}/` に出力されます（デフォルト: `.specback/final/`、カスタム例: `docs/specs/`）。
 
 ---
 
@@ -528,10 +528,10 @@ Drafts（中間ドラフト）は出力先に関わらず常に `.cc-rsg/drafts/
 | 3 | Investigate | サブエージェントで各章を独立調査(comprehensive: STEP A〜G / outline: OUT-A〜D) |
 | 4 | Verify | カバレッジ・整合性・11項目検証・ループバック修正 |
 | 5 | Refine via Dialogue | 3段階(全体像/criticalクラスタ/個別)対話で不確実性を解消 |
-| 6 | Deliver | 最終成果物を `.cc-rsg/final/` に出力 |
+| 6 | Deliver | 最終成果物を `.specback/final/` に出力 |
 | **6.5** | **Interactive Deep-Dive** | (interactive モード時のみ) 利用者の指示で深掘り章を on-demand 生成 |
 
-詳細は [`skills/cc-rsg/SKILL.md`](skills/cc-rsg/SKILL.md) を参照してください。
+詳細は [`skills/specback/SKILL.md`](skills/specback/SKILL.md) を参照してください。
 
 ---
 
@@ -580,7 +580,7 @@ Drafts（中間ドラフト）は出力先に関わらず常に `.cc-rsg/drafts/
 `scripts/source_map_v2/` は、フレームワーク対応・**tree-sitter ベース**の抽出器(schema 0.2.0)で、すべてのユニットを5つの普遍テーブル(Modules / Entities / Actions / Data / Dependencies)へ写像し、役割型付け(`endpoint`〔HTTP メソッド+パス付き〕/ `model` / `schema` / `component` / `job` / `route_group` / `migration` / `datastore` …)します。対応は **9言語**: Python、TypeScript/JavaScript、Ruby/Rails、PHP、Java、C#、Go、SQL、COBOL。フレームワーク検出(FastAPI / Django / Flask / Rails / Laravel / Spring / Next.js / Express / NestJS …)で適切なユニット種別を選びます。v1 `source-map.py` と並存し後方互換。tree-sitter は **オプション依存**で、grammar の無い言語はファイルレベル単位＋ loud warning にフォールバックします(黙殺しない)。単体実行:
 
 ```bash
-python -m source_map_v2 --target <root> --output .cc-rsg/source-map.json
+python -m source_map_v2 --target <root> --output .specback/source-map.json
 ```
 
 未対応言語・フレームワークは利用者要望で随時追加していきます(GitHub Issues)。
@@ -602,7 +602,7 @@ python -m source_map_v2 --target <root> --output .cc-rsg/source-map.json
 
 ## Question Bank
 
-`cc-rsg` は調査中に湧いた疑問を構造化して `.cc-rsg/questions.json` に蓄積します。
+`specback` は調査中に湧いた疑問を構造化して `.specback/questions.json` に蓄積します。
 
 ### 7標準カテゴリ
 
@@ -631,12 +631,12 @@ python -m source_map_v2 --target <root> --output .cc-rsg/source-map.json
 ## ディレクトリ構造
 
 ```
-cc-rsg/
+specback/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
 └── skills/
-    └── cc-rsg/
+    └── specback/
         ├── SKILL.md                         # Lightweight index (~90 lines)
         ├── phase-0-setup.md                 # Phase 0: Setup & Goal
         ├── phase-1-recon.md                 # Phase 1: Recon & Template
@@ -704,7 +704,7 @@ cc-rsg/
 - ~~v0.3: depth モード(comprehensive / outline / interactive)、Phase 6.5 対話深掘りモード、outline-tables.md~~(済)
 - ~~v0.4: スキル本体一式の英語ベース化、`output_language` によるバイリンガル出力、README 英語先頭化~~(済)
 - ~~v0.5: Mermaid 配色契約(ホストテーマパレット)、`user_custom_deliverables` 強制化、strict `[REF: path:line]` 形式、Phase 5 skip 防止、intent-vs-delivery 監査、Context Optimization mode B(オプション)~~(済)
-- ~~v0.6: Phase 0 でのバンドル `.cc-rsg/skill/` への stage、`[REF:]` プレースホルダの整合(先頭 `L` 廃止)、Sources Read カウンタ修正、Ruby トップレベルメソッド抽出~~(済)
+- ~~v0.6: Phase 0 でのバンドル `.specback/skill/` への stage、`[REF:]` プレースホルダの整合(先頭 `L` 廃止)、Sources Read カウンタ修正、Ruby トップレベルメソッド抽出~~(済)
 - ~~v0.7: `scripts/source_map_v2/` — 役割型付き・フレームワーク対応・tree-sitter ベースの機械ソースマップ(schema 0.2.0)。Python / TS・JS / Ruby・Rails / PHP / Java / C# / Go / SQL / COBOL の言語別エクストラクタ、フレームワーク検出、未対応言語は黙殺せず loud warning、v1 `source-map.py` と並存~~(済)
 - v0.8: カスタムカテゴリのUI追加、利用フィードバックを受けたテンプレート追加、Kotlin エクストラクタ、source-map v2 の役割型付けを Phase 2 インベントリへ接続
 - v1.0: 数件の実プロジェクト適用後、安定版として公開
@@ -727,7 +727,7 @@ MIT License。詳細は [LICENSE](LICENSE) を参照。
 
 |## Contributing
 |
-|利用フィードバック・テンプレート追加要望・バグ報告は [GitHub Issues](https://github.com/nekolife1984/cc-rsg/issues) にて受け付けます。
+|利用フィードバック・テンプレート追加要望・バグ報告は [GitHub Issues](https://github.com/nekolife1984/specback/issues) にて受け付けます。
 |
 |特に以下の貢献を歓迎します。
 |
@@ -745,7 +745,7 @@ MIT License。詳細は [LICENSE](LICENSE) を参照。
 
 ## 関連プロジェクト
 
-- **cc-sdd**: Spec Driven Development(仕様駆動開発)。`cc-rsg` の対概念
+- **cc-sdd**: Spec Driven Development(仕様駆動開発)。`specback` の対概念
 - **Reversa**: 類似OSS。5フェーズパイプライン
 
 ---
@@ -762,4 +762,4 @@ MIT License。詳細は [LICENSE](LICENSE) を参照。
 ---
 
 > "綺麗で完成度の高い仕様書よりも、正直で穴が見えている仕様書のほうが実務的価値が高い。"
-> — `cc-rsg` 設計原則より
+> — `specback` 設計原則より

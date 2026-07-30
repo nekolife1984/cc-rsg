@@ -20,7 +20,7 @@ assignees: nekolife1984
 
 - エージェント（Claude Code / Codex CLI / OpenCode / その他）:
 - OS:
-- cc-rsg バージョン（コミットハッシュ）:
+- specback バージョン（コミットハッシュ）:
 
 ## 補足情報
 
