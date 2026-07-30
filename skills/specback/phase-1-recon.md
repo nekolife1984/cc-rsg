@@ -30,7 +30,24 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    - If the user accepts Claude's recommendation, display the chapter outline and ask "Are there chapters to add, remove, or rename?".
    - Reflect any additions/removals.
 
-4. **Register high-level questions**
+4. **Persist template name to goal.json**
+   - Write the chosen template name to `goal.json` under the `template` field. This allows downstream tools (e.g. `coverage-check.py`) to adjust their behaviour based on the template type.
+   - Use the template identifier from the selection (e.g. `"web-app"`, `"batch-system"`, `"api-service"`, `"library-sdk"`).
+   - If the user brought their own template, write `"custom"`.
+   - Update the existing `goal.json` file in-place:
+     ```bash
+     python3 -c "
+     import json
+     with open('.specback/goal.json') as f:
+         g = json.load(f)
+     g['template'] = 'library-sdk'
+     with open('.specback/goal.json', 'w') as f:
+         json.dump(g, f, indent=2, ensure_ascii=False)
+         f.write('\n')
+     "
+     ```
+
+5. **Register high-level questions**
    - Add the fundamental questions surfaced during reconnaissance (questions that block big-picture understanding) into `questions.json`.
    - Examples:
      - What business problem is this system trying to solve?
@@ -38,7 +55,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      - When existing docs disagree with the code, which is authoritative?
    - See "Question Bank operation" below for the structure used at registration.
 
-5. **🆕 depth-mode decision (scale-based)**
+6. **🆕 depth-mode decision (scale-based)**
    - Record the **total file count** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` in `.specback/state.json`.
    - **If file count > 200**, ask the user with `AskUserQuestion` to choose a **depth mode**:
      - `comprehensive`: classic behaviour. All chapters detailed, full MECE, full REFs. **Recommended only when exhaustive coverage is required (audit, regulatory).** Takes hours to days.
@@ -50,7 +67,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      > The target codebase is large (N files / X lines). Choose a depth mode for the spec.
      > (Overview-only → deep-dive items of interest later, in practice, is recommended.)
 
-6. **Phase 1 complete**
+7. **Phase 1 complete**
    - Update `state.json` and proceed to Phase 2.
 
 ### Phase-specific cautions

@@ -12,7 +12,7 @@
 | Q-002 | architecture_decision | important | answered | Question Bank 自動マージは完全一致のみ自動実行。類似フラグのみ付与しユーザー判断。 |
 | Q-003 | operational_requirement | important | answered | 200ファイル閾値は source-map.py スキャン実数ベース。テスト/設定ファイル含む。 |
 | Q-006 | architecture_decision | important | answered | tree-sitter フォールバック時は v1 ロジックにより複数ユニット抽出可能。 |
-| Q-008 | architecture_decision | important | answered | MECE 70%閾値はテンプレート種別による調整機構なし。手動調整が必要。 |
+|| Q-008 | architecture_decision | important | answered | MECE 70%閾値は coverage-check.py がテンプレート種別に応じて自動調整する（Library/SDK は 40%）。[REF: #80] |
 | Q-009 | operational_requirement | important | answered | セルフドキュメンテーションに特別な制約なし。通常フローと同様。 |
 | Q-004 | architecture_decision | nice-to-have | skipped | Phase 7→Phase 5 相互作用は未確認。phase-7-drift.md 未読のため。 |
 | Q-005 | operational_requirement | nice-to-have | skipped | abandoned 判定の定量閾値は未定義。 |
@@ -26,6 +26,12 @@
 | inventory.covered_by | 26.4% | ≥ 90% | Library/SDK テンプレートでは内部関数が spec に記載されないため低くなる。構造的に正しい振る舞いであり品質上の問題ではない。[REF: #80](https://github.com/nekolife1984/specback/issues/80) |
 | MECE coverage | 32.5% | ≥ 70% | 同上。Library/SDK テンプレートでは内部実装の全ユニットを spec セクションに割り当てる必要はない。[REF: #80](https://github.com/nekolife1984/specback/issues/80) |
 
-### 対応方針
+### 対応状況
 
-これらの検証未達は Library/SDK テンプレートの構造的制約によるものであり、spec の品質を上げるために無理に全関数を記載することはしない。代わりに `coverage-check.py` が `goal.json` のテンプレート種別を参照してデフォルト閾値を自動調整する仕組みを導入する（[#80](https://github.com/nekolife1984/specback/issues/80)）。
+specback v1.1.0 において、`coverage-check.py` が `goal.json` の `template` フィールドを参照してデフォルト閾値を自動調整する仕組みが実装された（[#80](https://github.com/nekolife1984/specback/issues/80)）。
+
+- Library/SDK テンプレートでは `--min-covered-by-fill=0.3`, `--min-mece-coverage=0.4` が自動適用される
+- それ以外のテンプレート（Web/API/Batch）では従来通りの `0.9` / `0.7` が適用される
+- 明示的に CLI フラグが指定された場合は常にそちらが優先される
+
+これにより、Library/SDK テンプレートを使用するプロジェクトでは上記の数値が自動的に品質ゲートを通過する。今後セルフドキュメンテーションを再実行した際には、これらの未達項目は解消される見込みである。

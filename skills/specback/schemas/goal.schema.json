@@ -61,6 +61,11 @@
       "type": "string",
       "description": "Depth モード",
       "enum": ["comprehensive", "outline", "interactive"]
+    },
+    "template": {
+      "type": "string",
+      "description": "Phase 1 で選択されたテンプレート名。coverage-check.py のデフォルト閾値の調整に使用される。",
+      "enum": ["web-app", "batch-system", "api-service", "library-sdk"]
     }
   },
   "required": [
