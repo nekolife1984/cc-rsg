@@ -21,7 +21,7 @@
 
 | Hook | 役割 | ファイル |
 |------|------|---------|
-| **pre-commit** | 新規 `.py` 追加時に対応テストファイルの存在をチェック | `.githooks/pre-commit` |
+| **pre-commit** | secretsスキャン(gitleaks) + 新規 `.py` 追加時に対応テストファイルの存在チェック | `.githooks/pre-commit` |
 | **pre-push** | main 直pushをブロック | `.githooks/pre-push` |
 
 ```bash
@@ -38,6 +38,7 @@ sh scripts/install-hooks.sh
   - `pytest` (scripts/ + source_map_v2/)
   - `mypy` (advisory, warnings displayed)
   - Smoke import check (source_map_v2 module + pytest collect)
+  - `gitleaks` (secret scan)
   - All steps must pass before merge (mypy advisory exempted)
 - **Docs sync** — update both EN + JA docs when behaviors change
 
