@@ -17,7 +17,7 @@
 | Q-004 | architecture_decision | nice-to-have | skipped | Phase 7→Phase 5 相互作用は未確認。phase-7-drift.md 未読のため。 |
 | Q-005 | operational_requirement | nice-to-have | skipped | abandoned 判定の定量閾値は未定義。 |
 | Q-007 | architecture_decision | nice-to-have | skipped | スキル本体の日本語化方針は未確定。 |
-| Q-010 | business_rule | nice-to-have | skipped | Dual-consumer の実運用パターンは未確認。 |
+|| Q-010 | business_rule | nice-to-have | answered | Dual-consumer は非推奨。理由・代替ガイドラインは 09-known-constraints.md §9.4.5 に追記。 |
 
 ## Phase 4 検証未達項目
 
