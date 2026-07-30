@@ -284,16 +284,157 @@ For each job:
 
 ---
 
-### Chapter 11: Known constraints and unresolved items
+### Chapter 11: System design
+
+<!-- meta: architectural decisions, cross-cutting concerns, module dependencies, and design trade-offs derived from code. Complements Architecture overview (which describes WHAT) by explaining WHY and HOW cross-cutting concerns are handled. -->
+
+#### 11.1 Architecture Decision Records (ADR)
+
+Code-derived record of design decisions. Confidence is typically low since rationale is rarely written in code; use Question Bank integration for SME confirmation.
+
+| ID | Topic | Decision (as observed in code) | Rationale (inferred) | Alternatives (inferred) | Confidence | Supporting REF |
+|----|-------|------------------------------|---------------------|----------------------|-----------|---------------|
+| ADR-001 | (topic) | (decision) | (inferred rationale) | (inferred alternatives) | 🟢/🟡/🔴 | [REF: ...] |
+| ... | ... | ... | ... | ... | ... | ... |
+
+Extraction strategy:
+- Search for design-related comments (`// Why:`, `# Reason:`, `/* Decision: */`)
+- Read README / CONTRIBUTING / design docs for explicit rationale
+- When no explicit rationale exists, mark 🔴 ASSUMED and add `[ASK SME]`
+
+[CONFIDENCE: LOW — ADR entries are almost always inferred unless explicitly documented]
+
+#### 11.2 Module / component dependency
+
+Import/require/include graph extracted from source code. Enumerates dependencies between layers or modules.
+
+**Extraction approach:**
+
+| Language | Pattern | Example | Confidence |
+|----------|---------|---------|-----------|
+| Python | `rg "^import |^from "` then filter to own project | `import app.models` → depends on `app.models` | 🟢 |
+| TypeScript/JS | `rg "^(import |const .* = require\()"` | `import { User } from '../models'` | 🟢 |
+| Java/Kotlin | `rg "^import "` | `import com.example.service.UserService` | 🟢 |
+| Ruby | `rg "^(require |require_relative )"` | `require_relative 'models/user'` | 🟢 |
+| Go | `rg ""github\.com/.*/"` filtered to own module | `"project/internal/service"` | 🟢 |
+| PHP | `rg "^(use |require_once )"` | `use App\Service\UserService` | 🟢 |
+| C# | `rg "^(using |using static )"` | `using Project.Data.Models` | 🟢 |
+
+Render the result as a Mermaid graph:
+
+```mermaid
+graph TD
+  layer1 --> layer2
+  layer2 --> layer3
+```
+
+Label each edge with the dependency strength (direct / transitive / circular). Flag circular dependencies explicitly.
+
+[🟢 VERIFIED] — import statements are mechanically extractable with near-zero false positives.
+
+#### 11.3 Cross-cutting design patterns
+
+Code-wide patterns that span multiple modules.
+
+| Pattern | Detection method | Example REF | Confidence |
+|---------|----------------|-------------|-----------|
+| Error handling strategy | Search for `try`/`catch`/`except`/`raise`/`throw` patterns, custom exception classes | [REF: src/errors.py:1-50] | 🟢 |
+| Logging approach | Search for `logger`/`logging`/`console.log`/`print`/`warn` calls | [REF: src/middleware/logging.py:10-30] | 🟢 |
+| Validation pattern | Search for decorators (`@validate`/`@assert`), validator classes, assertions | [REF: src/validators/] | 🟢 |
+| Dependency injection | Constructor injection / DI container / service provider | [REF: src/di/container.py:1-80] | 🟡 |
+| Retry / resilience | Search for `retry`/`backoff`/`timeout`/`circuit_breaker` patterns | [REF: src/utils/retry.py] | 🟡 |
+| Batch / chunk processing | Search for `batch`/`chunk`/`bulk` in method/class names | [REF: src/jobs/batch_processor.py] | 🟢 |
+
+For each pattern found, note:
+- **Consistency**: Does the whole project use one pattern, or are multiple approaches mixed?
+- **Coverage**: Are there modules that SHOULD use this pattern but don't?
+- **Exceptions**: Any deliberate deviations from the pattern?
+
+[🟢 VERIFIED for most patterns] — language-level constructs (try/catch, import patterns) are mechanically detectable.
+
+#### 11.4 Security design
+
+Security-related mechanisms observed in code. Detailed auth flows go in the Authentication chapter; this section covers the remaining security posture.
+
+| Aspect | Detection method | Confidence |
+|--------|----------------|-----------|
+| Input sanitisation | Search for `escape`/`sanitize`/`strip_tags`/parameterised queries | 🟡 |
+| Secrets management | Search for `.env`/`secrets`/`vault` references, env-var reads for credentials | 🟢 |
+| Encryption at rest | Search for `encrypt`/`decrypt`/`hash`/`bcrypt`/`argon2` calls | 🟢 |
+| Transport security | Search for HTTPS/TLS/SSL configuration | 🟡 |
+| CORS / CSP | Search for CORS middleware, Content-Security-Policy headers | 🟢 |
+| Authorisation guards | Cross-reference with auth chapter; note any unauthorised endpoints | 🟢 |
+
+→ Detailed auth flows → see Chapter ? (Authentication and authorisation)
+
+[🟢 VERIFIED for most — security code is explicit and searchable]
+
+#### 11.5 Performance design
+
+Performance-related patterns and potential bottlenecks detected in code. **Does not include benchmarks** (not extractable from code alone).
+
+| Pattern | Detection method | Confidence |
+|---------|----------------|-----------|
+| Caching | Search for `cache`/`redis`/`memcache`/`memoize`/`lru_cache` | 🟢 |
+| N+1 prevention | Search for `eager_load`/`includes`/`prefetch`/`select_related` | 🟢 |
+| Async processing | Search for `async`/`await`/`thread`/`worker`/`queue`/`celery`/`sidekiq` | 🟢 |
+| Bulk operations | Search for `bulk_`/`batch_`/`chunk` methods | 🟢 |
+| Connection pooling | Search for `pool`/`connection_limit`/`max_connections` | 🟡 |
+| Query optimisation | Search for `EXPLAIN`/`index`/`materialized view` hints | 🟡 |
+| Concurrency control | Search for `lock`/`mutex`/`transaction`/`optimistic`/`pessimistic` | 🟢 |
+
+For each pattern, list which files/modules use it. Note modules that might need these patterns but don't use them (potential performance debt).
+
+[🟢 VERIFIED for most patterns — code-level keywords are mechanically searchable]
+
+#### 11.6 Integration design
+
+External-system integration patterns. Detailed per-integration specs go in the External-system integration chapter; this section provides the overarching design.
+
+| Aspect | Detection method | Confidence |
+|--------|----------------|-----------|
+| External HTTP calls | Search for `requests`/`HTTPX`/`axios`/`fetch`/`HttpClient` calls | 🟢 |
+| Message queue usage | Search for `publish`/`subscribe`/`produce`/`consume`/`rabbit`/`kafka`/`sqs` | 🟢 |
+| File-based integration | Search for file read/write with specific formats (CSV/XML/JSON/Parquet) | 🟢 |
+| Protocol distribution | Classify external calls by protocol (REST / GraphQL / gRPC / SOAP) | 🟢 |
+| Resiliency | Search for `timeout`/`retry`/`fallback`/`circuit_breaker` around external calls | 🟡 |
+
+→ Detailed per-integration specs → see Chapter ? (External-system integration)
+
+[🟢 VERIFIED — external call code is explicit]
+
+#### 11.7 Known trade-offs and constraints
+
+Technical trade-offs and constraints visible in code comments.
+
+| Marker | Detection method | Meaning | Example |
+|--------|----------------|---------|---------|
+| `TODO` | `rg "TODO"` (with context) | Planned improvement; may indicate known limitation | `// TODO: paginate this query` |
+| `FIXME` | `rg "FIXME"` | Defect or known issue | `# FIXME: race condition on concurrent writes` |
+| `HACK` / `WORKAROUND` | `rg "HACK|WORKAROUND"` | Deliberate suboptimal solution | `/* HACK: SDK bug, remove after v2 upgrade */` |
+| `XXX` | `rg "XXX"` | Something suspicious that needs review | `// XXX: this silently ignores errors` |
+| `OPTIMIZE` | `rg "OPTIMIZE|PERF|SLOW"` | Performance concern | `# OPTIMIZE: N+1 query, eager-load` |
+| `@deprecated` / `DEPRECATED` | Search for deprecation markers | Planned removal | `@deprecated use createV2 instead` |
+
+→ Critical items → see Chapter ? (Known constraints and unresolved items)
+
+For each marker, include the surrounding context (next 2 lines) to explain the trade-off. Group by severity (CRITICAL / MAJOR / MINOR).
+
+[🟢 VERIFIED — markers are mechanically extractable; context needs manual review for accurate grouping]
+
+---
+
+
+### Chapter 12: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 11.1 Known technical constraints
+#### 12.1 Known technical constraints
 - Maximum concurrency
 - Maximum data volume that can be processed
 - Known performance issues
 
-#### 11.2 Unresolved items
+#### 12.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 
 ---
