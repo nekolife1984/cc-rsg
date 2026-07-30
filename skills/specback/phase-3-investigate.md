@@ -97,7 +97,7 @@ Incorporate the citations into the body. **Per-chapter mandatory requirements**:
 | Mermaid diagrams | ≥ 1 | coverage-check.py |
 | Sources Read items | ≥ 5 | coverage-check.py |
 
-Beyond the minimum, follow the **Active-diagram rule** (see SKILL.md Mermaid styling contract): any section describing complex processing (conditional branching, multi-step flows, state transitions, decision logic, async/callback chains, authorization flows) MUST be accompanied by an appropriate Mermaid diagram (flowchart, sequence, state-diagram, etc.).
+Beyond the minimum, follow the **Active-diagram rule** (see SKILL.md Mermaid styling contract): any section describing something complex — processing, structure, or behavior — MUST be accompanied by an appropriate Mermaid diagram. Text-only explanations of complex subjects are a defect.
 
 Chapters that fail these are rejected in Phase 4 and loop back to Phase 3 for correction.
 

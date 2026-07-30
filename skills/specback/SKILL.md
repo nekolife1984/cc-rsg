@@ -48,7 +48,7 @@ Every Mermaid diagram MUST be **structure-only — no color, no node-level fill,
 
 **Direction rule**: `graph TD` / `flowchart TD` (top-to-bottom) is the default for all graph/flowchart diagrams. Use `graph LR` (left-to-right) **only** when the diagram has ≤8 nodes AND the node labels are short enough to fit horizontally. For any diagram with many nodes, complex labels, or subgraphs, always prefer `TD`. This prevents the cramped/squished appearance that occurs when `LR` diagrams have many blocks.
 
-**Active-diagram rule**: Every section describing complex processing (conditional branching, multi-step flows, state transitions, decision logic with ≥3 outcomes, async/callback chains, or authorization flows) MUST be accompanied by an appropriate Mermaid diagram. A section that "describes in text alone" a process that would be clearer as a flowchart/sequence/state-diagram is a defect. When in doubt, add a diagram — readers always benefit from the visual.
+**Active-diagram rule**: Every section describing something complex — whether processing (conditional branching, multi-step flows, state transitions, decision logic, async/callback chains), structure (module relationships, data flow, class hierarchies, ER), or behavior (authorization flows, screen transitions, integration sequences) — MUST be accompanied by an appropriate Mermaid diagram (flowchart, sequence, state-diagram, ER, component, class, etc.). A section that uses text alone where a diagram would make things clearer is a defect. When in doubt, add a diagram — readers always benefit from the visual.
 
 Use **shape** (not color) for visual emphasis.
 
