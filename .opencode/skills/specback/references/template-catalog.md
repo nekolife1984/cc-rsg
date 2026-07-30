@@ -32,6 +32,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Authentication and authorisation
 - External-system integration
 - Operations settings / deployment
+- System design
 - Known constraints and unresolved items
 
 ### Selection criteria
@@ -48,10 +49,10 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Scheduled or event-driven background processing.
 - COBOL + JCL, cron / systemd timers, Spring Batch, Apache Airflow, Celery, Sidekiq, AWS Batch / Lambda scheduled runs.
 - Includes data pipelines (ETL).
-
 ### Chapter outline
 - Overview / business purpose
 - Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+>>>>>>> 07672c3 (feat: add System design chapter to all templates)
 - Architecture overview
 - Job catalogue
 - Triggers and schedule
@@ -60,6 +61,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Recovery procedures
 - Operations calendar / dependency graph
 - Monitoring / alerts
+- System design
 - Known constraints and unresolved items
 
 ### Selection criteria
@@ -76,7 +78,6 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Endpoints called by other systems.
 - REST, GraphQL, gRPC, WebSocket.
 - Microservices, public APIs, internal APIs.
-
 ### Chapter outline
 - Overview / API purpose
 - Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
@@ -88,8 +89,9 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Rate limiting / quotas
 - Versioning
 - SLA / performance requirements
+- Operations settings
+- System design
 - Known constraints and unresolved items
-
 ### Selection criteria
 - Presence of OpenAPI / Swagger / GraphQL schema.
 - Routing definitions centred on endpoints (`/api/...`).
@@ -115,6 +117,8 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Compatibility (supported language versions, dependencies)
 - Extension points / plugin system
 - Migration guide (from older versions)
+- Internal structure (optional)
+- System design
 - Known constraints and unresolved items
 
 ### Selection criteria

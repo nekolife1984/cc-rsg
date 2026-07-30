@@ -63,5 +63,6 @@ Run inventory cross-check, per-chapter quality metrics, MECE check, and consiste
 - Missing cross-chapter inconsistencies makes Phase 5 dialogue explode. Squash them in Phase 4.
 - **`coverage_rate` < 100% with `all_quality_gates_passed: true` is a contradiction** and is never permitted. If full coverage is impossible within 3 iterations, leave `all_quality_gates_passed: false`, record the unfinished chapters, and surface to the user instead of advancing.
 - **Feature specifications chapter (Ch2) note**: This chapter often has a higher 🔴 ASSUMED ratio than other chapters because code is organised by layer, not by feature. The Phase 3 investigation compensates by using multiple grouping strategies (see `references/outline-tables.md`). The 🔴 ratio warning in `coverage-check.py` is **informational only** for Ch2; it does not block the Phase 4 gate. The body-length and REF-count requirements still apply in `comprehensive` mode.
+- **System design chapter note**: This chapter uses import analysis and pattern detection. The ADR section may have many 🔴 entries (design rationale is rarely in code). The 🔴 ratio warning in `coverage-check.py` is **informational only** for this chapter. Body-length and REF-count requirements still apply in `comprehensive` mode.
 
 ---

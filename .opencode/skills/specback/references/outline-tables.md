@@ -465,3 +465,71 @@ When a chapter-investigator sub-agent is assigned to the Feature specifications 
 6. **Cross-reference** each feature to related chapters (screen details, endpoint catalogue, data model).
 7. **Populate questions.json** with `spec_missing` questions for uncertain feature boundaries.
 8. **Output**: `.specback/drafts/02-feature-specifications.md`
+## System design extraction patterns (for Chapter N: System design)
+
+### Module / component dependency extraction
+
+Import/require/include graphs are mechanically extractable. Per-language ripgrep patterns:
+
+| Language | ripgrep pattern | Filtering |
+|----------|----------------|-----------|
+| Python | `rg "^import " --type py`, `rg "^from " --type py` | Keep only own-project paths; strip stdlib |
+| TypeScript/JS | `rg "^(import |const .* = require\\()" --type ts` | Keep only relative (`./` or `../`) imports |
+| Java/Kotlin | `rg "^import " --type java --type kotlin` | Keep only `com.yourproject.*` |
+| Ruby | `rg "^(require |require_relative )" --type ruby` | `require_relative` is always internal |
+| Go | `rg '\\"(github\\.com/yourorg)' --type go -o` | Strip to package name |
+| PHP | `rg "^use " --type php` | Keep only `App\\*` |
+| C# | `rg "^using " --type cs` | Keep only `YourProject.*` |
+
+**Output format** — group by layer/directory:
+
+```
+Layer: controllers
+  depends_on: [services, auth]
+Layer: services
+  depends_on: [repositories, external]
+...
+```
+
+Then render as a Mermaid `graph TD` or `graph LR`:
+
+```mermaid
+graph TD
+  controllers --> services
+  services --> repositories
+  services --> external
+```
+
+Note circular dependencies with `x-->x` style: `repositories -.->|circular| services`.
+
+### Cross-cutting pattern detection
+
+| Pattern | Detection command |
+|---------|-----------------|
+| Error handling | `rg "\\b(try|catch|except|raise|throw|reraise)\\b"` — also search for custom exception classes |
+| Logging | `rg "\\b(logger|logging|console\\.log|print|warn|error)\\b"` |
+| Validation | `rg "\\b(validate|validator|assert|sanitize|sanitise)\\b"` |
+| Retry/resilience | `rg "\\b(retry|backoff|timeout|circuit_breaker|fallback)\\b"` |
+| Caching | `rg "\\b(cache|redis|memcache|memoize|lru_cache)\\b"` |
+| Async | `rg "\\b(async|await|thread|worker|queue|celery|sidekiq|job)\\b"` |
+| Batch/bulk | `rg "\\b(batch|chunk|bulk)\\b"` (class/method names) |
+| Secrets | `rg "\\b(SECRET|API_KEY|PASSWORD|TOKEN|CREDENTIAL)\\b"` in config files, env reads |
+| Encryption | `rg "\\b(encrypt|decrypt|hash|bcrypt|argon2|aes|rsa)\\b"` |
+| TODO markers | `rg "(TODO|FIXME|HACK|WORKAROUND|XXX|OPTIMIZE|DEPRECATED)"` with 2 lines context |
+
+For each pattern, count occurrences across modules. High occurrence counts indicate a systematic pattern; low counts in unexpected places indicate inconsistencies.
+
+### Chapter-investigator procedure for System design
+
+When a chapter-investigator sub-agent is assigned to the System design chapter:
+
+1. **Read the Overview chapter** to understand the system type and purpose.
+2. **Read the Architecture overview chapter** to understand the tech stack.
+3. **Run extraction commands** for each of the 7 sections (ADR, dependencies, patterns, security, performance, integration, trade-offs).
+4. **Build ADR table** from code comments, README, and design docs. Mark most entries 🔴 ASSUMED.
+5. **Generate module dependency graph** from import analysis. Flag circular dependencies.
+6. **Enumerate cross-cutting patterns** with counts and consistency notes.
+7. **Cross-reference** security/performance/integration sections to their detailed chapters.
+8. **Extract TODO/FIXME/HACK markers** with surrounding context.
+9. **Populate questions.json** with `spec_missing` and `architecture_decision` questions for 🔴 entries.
+10. **Output**: `.specback/drafts/NN-system-design.md`

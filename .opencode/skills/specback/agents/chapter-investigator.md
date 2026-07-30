@@ -159,6 +159,32 @@ For features whose boundaries or existence are uncertain, add a `spec_missing` c
 
 #### Output filename
 `.specback/drafts/02-feature-specifications.md`
+### 💡 System design chapter (Chapter N)
+
+When assigned to the System design chapter, follow this additional procedure **after STEP A–F**:
+
+#### STEP G: Read Overview and Architecture overview
+Read `.specback/drafts/01-overview.md` and the Architecture overview chapter to understand system type and tech stack.
+
+#### STEP H: Apply extraction strategies
+Consult `references/outline-tables.md` → **System design extraction patterns** section. Apply the 7-section extraction:
+
+1. **ADR**: Search for design-decision comments (`# Why:`, `// Decision:`, `/* Rationale: */`). Read README/CONTRIBUTING for explicit rationale.
+2. **Module dependency**: Run the per-language `rg` import patterns from outline-tables.md. Build a dependency graph.
+3. **Cross-cutting patterns**: Run `rg` for error handling, logging, validation, retry, cache, async patterns. Count occurrences.
+4. **Security**: Search for secrets/encryption/auth guard patterns.
+5. **Performance**: Search for cache/bulk/async/concurrency patterns.
+6. **Integration**: Search for external HTTP/queue/file calls.
+7. **Trade-offs**: Run `rg "(TODO|FIXME|HACK|WORKAROUND|XXX|OPTIMIZE|DEPRECATED)"` with 2-line context.
+
+#### STEP I: Build the chapter
+For each section write structured content. Use the template chapter definition (in the template file) as the outline skeleton. Cross-reference to detailed chapters wherever possible.
+
+#### STEP J: Populate questions
+Add `architecture_decision` and `spec_missing` questions for 🔴 entries. Minimum 3 questions for this chapter.
+
+#### Output filename
+`.specback/drafts/NN-system-design.md`
 
 ---
 
