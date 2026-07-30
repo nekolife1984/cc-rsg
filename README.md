@@ -313,25 +313,14 @@ specback/
 
 ## Status
 
-Currently **v0.7.0** (source-map v2: a role-typed, framework-aware, tree-sitter-based mechanical extractor spanning 9 languages).
+Currently **v1.0.0** — initial stable release.
 
-### Known Limitations
+### API Stability
 
-- Custom category addition requires manual JSON editing (UI mechanism is a future extension)
-- MCP integration is not implemented (designed for standalone agent execution)
-- Slash command options (`--restart`, etc.) are not implemented
+The following are considered stable and will not change without a MAJOR version bump:
 
-### Roadmap (tentative)
-
-- ~~v0.2: Enforce chapter file naming and required files; naming/required-file checks in the verification script~~ (done)
-- ~~v0.2: Per-chapter sub-agent delegation, Phase 4 loopback verification, granularity rules, Rails catalog, output-language selection~~ (done)
-- ~~v0.3: Depth modes (comprehensive / outline / interactive), Phase 6.5 interactive deep-dive, outline-tables.md~~ (done)
-- ~~v0.4: English-base migration of the entire skill bundle; bilingual output via `output_language`; README flipped to English-first~~ (done)
-- ~~v0.5: Mermaid styling contract (host-themed palette), `user_custom_deliverables` enforcement, strict `[REF: path:line]` format, Phase 5 skip prevention, intent-vs-delivery audit, optional Context Optimization mode B variant~~ (done)
-- ~~v0.6: Phase 0 bundle staging into `.specback/skill/`, `[REF:]` placeholder consistency (no leading `L`), Sources Read counter fix, Ruby top-level method extraction~~ (done)
-- ~~v0.7: `scripts/source_map_v2/` — role-typed, framework-aware, tree-sitter-based mechanical source map (schema 0.2.0). Per-language extractors for Python, TS/JS, Ruby/Rails, PHP, Java, C#, Go, SQL, COBOL; framework detection; loud warnings instead of silent drops; coexists with v1 `source-map.py`~~ (done)
-- v0.8: UI for custom categories, templates added based on user feedback; Kotlin extractor; wire source-map v2 role typing into Phase 2 inventory
-- v1.0: Stable release after several real-project applications
+- **Pipeline phases** (Phase 1–7) and their input/output contracts
+- **`source_map_v2/` output schemas** (`source-map.json`, `inventory.json`)
 
 ---
 
@@ -687,31 +676,9 @@ specback/
 
 ---
 
-## 開発状況
-
-現在 **v0.7.0**(source-map v2: 役割型付き・フレームワーク対応・tree-sitter ベースの機械抽出器、9言語対応)。
-
-### 既知の制約
-
-- カスタムカテゴリ追加は手動JSON編集のみ(UI機構は将来拡張)
-- MCP統合は未実装(単体エージェント動作を前提)
-- スラッシュコマンドのオプション(`--restart` 等)は未実装
-
-### ロードマップ(暫定)
-
-- ~~v0.2: 章ファイル命名規約と必須3ファイルの強制化、検証スクリプトに命名チェック追加~~(済)
-- ~~v0.2: 章単位サブエージェント delegation、Phase 4 ループバック検証、粒度規定、Rails カタログ、出力言語選択~~(済)
-- ~~v0.3: depth モード(comprehensive / outline / interactive)、Phase 6.5 対話深掘りモード、outline-tables.md~~(済)
-- ~~v0.4: スキル本体一式の英語ベース化、`output_language` によるバイリンガル出力、README 英語先頭化~~(済)
-- ~~v0.5: Mermaid 配色契約(ホストテーマパレット)、`user_custom_deliverables` 強制化、strict `[REF: path:line]` 形式、Phase 5 skip 防止、intent-vs-delivery 監査、Context Optimization mode B(オプション)~~(済)
-- ~~v0.6: Phase 0 でのバンドル `.specback/skill/` への stage、`[REF:]` プレースホルダの整合(先頭 `L` 廃止)、Sources Read カウンタ修正、Ruby トップレベルメソッド抽出~~(済)
-- ~~v0.7: `scripts/source_map_v2/` — 役割型付き・フレームワーク対応・tree-sitter ベースの機械ソースマップ(schema 0.2.0)。Python / TS・JS / Ruby・Rails / PHP / Java / C# / Go / SQL / COBOL の言語別エクストラクタ、フレームワーク検出、未対応言語は黙殺せず loud warning、v1 `source-map.py` と並存~~(済)
-- v0.8: カスタムカテゴリのUI追加、利用フィードバックを受けたテンプレート追加、Kotlin エクストラクタ、source-map v2 の役割型付けを Phase 2 インベントリへ接続
-- v1.0: 数件の実プロジェクト適用後、安定版として公開
-
 ---
 
-## プレプリント / Citation
+## 出版・引用情報
 
 本スキルの設計思想・系譜・実装上の意思決定については以下のプレプリントに詳述しています。論文・発表で言及される場合は引用ください。
 

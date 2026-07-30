@@ -61,7 +61,7 @@ GitHub Actions（`.github/workflows/ci.yml`）がすべてのPRで自動実行�
 
 ## リリース手順
 
-完全なリリース手順（バージョニング、CHANGELOG、Zenodo更新）は [04-release-process.md](04-release-process.md) を参照してください。
+完全なリリース手順（バージョニング、CHANGELOG）は [04-release-process.md](04-release-process.md) を参照してください。
 
 簡単なタグ作成コマンド：
 
@@ -76,4 +76,4 @@ git push origin v0.8.0
 |-------------|------|
 | [02-commit-conventions.md](02-commit-conventions.md) | Conventional Commits形式、1変更1コミットルール |
 | [03-pr-review-process.md](03-pr-review-process.md) | PRライフサイクル、テンプレート、レビュアーチェックリスト、squash merge |
-| [04-release-process.md](04-release-process.md) | バージョニング、CHANGELOG、Roadmap、Zenodo、リリースチェックリスト |
+| [04-release-process.md](04-release-process.md) | バージョニング、CHANGELOG、リリースチェックリスト |

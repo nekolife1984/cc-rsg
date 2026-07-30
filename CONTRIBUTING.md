@@ -33,7 +33,7 @@ git push origin feat/your-feature
 | [ブランチ戦略](docs/ja/01-branching-strategy.md) | GitHub Flow、ブランチ命名規則、上流同期 |
 | [コミット規約](docs/ja/02-commit-conventions.md) | Conventional Commits、1変更1コミット、メッセージ形式 |
 | [PRレビュープロセス](docs/ja/03-pr-review-process.md) | PRテンプレート、レビュアーチェックリスト、squash merge |
-| [リリース手順](docs/ja/04-release-process.md) | バージョニング、CHANGELOG、Zenodo |
+| [リリース手順](docs/ja/04-release-process.md) | バージョニング、CHANGELOG |
 
 ## ルール
 

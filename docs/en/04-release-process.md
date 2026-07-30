@@ -35,15 +35,7 @@ Mark completed items as `~~done~~` in the Roadmap section. Move the next planned
 
 The Roadmap lives in [`README.md`](../README.md) under the `## Status` section.
 
-### 3. Update Zenodo Preprint (if applicable)
-
-If the release includes significant design changes or new research content, update the Zenodo preprint:
-
-- Preprint: https://zenodo.org/records/20541685
-- Update timing: when the design rationale, intellectual lineage, or implementation decisions change substantially
-- Not needed for: bug fixes, minor enhancements, documentation-only updates
-
-### 4. Tag and Push
+### 3. Tag and Push
 
 ```bash
 # From main, after PR merge
@@ -51,7 +43,7 @@ git tag -a v0.8.0 -m "v0.8.0 — UI for custom categories"
 git push origin v0.8.0
 ```
 
-### 5. Create GitHub Release
+### 4. Create GitHub Release
 
 ```bash
 gh release create v0.8.0 \
@@ -87,6 +79,5 @@ Current trajectory: `v0.7.x` → `v0.8.x` (feature additions) → `v1.0` (stable
 - [ ] CHANGELOG.md updated
 - [ ] README Roadmap updated (completed items struck through)
 - [ ] Version string in `skills/specback/SKILL.md` updated (if applicable)
-- [ ] Zenodo preprint updated (only for significant design changes)
 - [ ] Tag created and pushed
 - [ ] GitHub Release created
