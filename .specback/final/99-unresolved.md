@@ -16,7 +16,7 @@
 | Q-009 | operational_requirement | important | answered | セルフドキュメンテーションに特別な制約なし。通常フローと同様。 |
 | Q-004 | architecture_decision | nice-to-have | skipped | Phase 7→Phase 5 相互作用は未確認。phase-7-drift.md 未読のため。 |
 | Q-005 | operational_requirement | nice-to-have | skipped | abandoned 判定の定量閾値は未定義。 |
-| Q-007 | architecture_decision | nice-to-have | skipped | スキル本体の日本語化方針は未確定。 |
+|| Q-007 | architecture_decision | nice-to-have | answered | スキル内部（phase-*.md, templates/）の読み手は AI エージェントであるため、日本語化不要。README の日英 bilingual で十分。 |
 || Q-010 | business_rule | nice-to-have | answered | Dual-consumer は非推奨。理由・代替ガイドラインは 09-known-constraints.md §9.4.5 に追記。 |
 
 ## Phase 4 検証未達項目
