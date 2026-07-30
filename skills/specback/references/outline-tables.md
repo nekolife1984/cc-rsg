@@ -268,7 +268,7 @@ rg "@(RestController|Controller|RequestMapping|GetMapping|PostMapping)" --type j
 
 ## Mermaid diagram templates
 
-In outline mode, generate at least one of each as Layer 2. Default direction is `TD` (top-to-bottom) — see SKILL.md Mermaid styling contract for the direction rule.
+In outline mode, generate at least one of each as Layer 2:
 
 ### ER diagram (auto-derived from Entities + Data table)
 
@@ -282,7 +282,7 @@ erDiagram
 ### Module dependency diagram
 
 ```mermaid
-graph TD
+graph LR
   controllers --> services
   services --> repositories
   repositories --> database[(DB)]
@@ -338,3 +338,198 @@ Candidate-list format (with IDs):
 ```
 
 When the user says `Deep-dive D-001` or `Tell me more about Issue authorisation`, the main agent recognises the ID and launches `chapter-investigator` (see Phase 6.5).
+
+---
+
+## Feature grouping patterns (for Chapter 2: Feature specifications)
+
+Code is organised by layer (Controller / Service / Model), not by feature. The following strategies infer feature-level groupings to populate the Feature specifications chapter. Each strategy has an expected confidence level.
+
+### Strategy 1: Comment-based grouping (🟢 VERIFIED or 🟡 INFERRED)
+
+Look for explicit feature markers in source code comments:
+
+```
+# Feature: User Registration
+# @feature payment-processing
+/** @feature report-generation */
+```
+
+When a function / class / method has an explicit feature comment, the feature-to-code mapping is confirmed.
+
+| Pattern | Language | Confidence |
+|---------|----------|-----------|
+| `# Feature:` / `# @feature` | Python, Ruby, Shell, YAML | 🟢 when read |
+| `// @feature` / `/* @feature */` | JavaScript, TypeScript, Java, C#, C++, Go, Kotlin | 🟢 when read |
+| `-- @feature` | SQL, Lua | 🟢 when read |
+| docstring / JSDoc `@feature` tag | Python, TypeScript, Java | 🟢 when read |
+
+### Strategy 2: Naming-convention grouping (🟡 INFERRED)
+
+Class / module names that follow a `{Noun}{Verb}` pattern typically represent a feature:
+
+| Pattern | Example | Likely feature name |
+|---------|---------|-------------------|
+| `*Service`, `*UseCase`, `*Handler`, `*Manager` | `UserRegistrationService` | User registration |
+| `*Controller` (singular resource) | `PaymentController` | Payment management |
+| `*Job` | `DailySalesAggregationJob` | Daily sales aggregation |
+| URL path prefix in routes | `/api/users/*` | User management |
+| Module / package name | `app/payments/` | Payment processing |
+
+**Extraction commands** (adjust for target language):
+
+```bash
+# Java / Kotlin: Services
+rg "class (\w+Service)" --type java -o
+rg "class (\w+UseCase)" --type java -o
+
+# Python: Services / Handlers
+rg "class (\w+Service):" --type py -o
+rg "class (\w+Handler):" --type py -o
+
+# TypeScript / JavaScript: Services / Hooks
+rg "^(export )?(default )?(function|const) (\w+Service)" --type ts -o
+
+# Ruby: Services / Interactors
+rg "class (\w+(?:Service|UseCase|Interactor))" --type ruby -o
+```
+
+[🟡 INFERRED] — naming conventions may have false positives (some `*Service` classes are infrastructure, not features).
+
+### Strategy 3: Screen / endpoint aggregation (🟡 INFERRED)
+
+Group code units that serve the same screen or resource:
+
+- **Web app**: Each screen (SC-NNN) defines a feature. Collect all endpoints, models, and domain rules referenced by that screen.
+- **API service**: Each resource (User / Issue / Payment / Project) defines a feature. Collect all endpoints and service methods for that resource.
+- **Batch system**: Each job group (aggregation / transfer / integrity) defines a feature.
+- **Library / SDK**: Each major export category (parsing / transformation / I/O) defines a feature.
+
+**Extraction approach**:
+
+```bash
+# Group endpoints by URL path prefix
+rg "(GET|POST|PUT|DELETE|PATCH)\s+'/api/(\w+)" --type py -o
+
+# Group controllers by module
+rg "^class (\w+)Controller" --type ruby app/controllers/ -o
+```
+
+[🟡 INFERRED] — screen/resource boundaries are structural, not necessarily feature boundaries.
+
+### Strategy 4: Use-case mapping (🔴 ASSUMED)
+
+Map the use cases defined in Chapter 1 (Overview) to candidate features:
+
+1. Extract the 3–5 use cases from Ch1.
+2. For each use case, search for related classes/functions (by keyword match in file names, class names, comments).
+3. If a code path can be identified, upgrade to 🟡 or 🟢.
+
+Example:
+
+```
+Use case: "A user creates an issue"
+→ Candidate feature: "Issue creation" (F-003)
+→ Evidence: IssuesController#create [REF: ...], IssueService::create [REF: ...]
+→ Confidence: 🟡 (code path confirmed)
+```
+
+[🔴 ASSUMED] — use cases are high-level and may not map 1:1 to code features. Only upgrade when specific code paths are identified.
+
+### Strategy 5: Question Bank integration
+
+When a feature cannot be determined from code:
+
+1. Add a `spec_missing` category question to `questions.json`:
+   ```json
+   {
+     "id": "Q-NNN",
+     "category": "spec_missing",
+     "severity": "important",
+     "body": "Does the system have a dedicated 'user deactivation' feature, or is it handled as part of 'user management'?",
+     "status": "open"
+   }
+   ```
+2. Mark the feature row as 🔴 ASSUMED and add `[ASK SME]`.
+3. In Phase 5 dialogue, present these to the SME for confirmation.
+
+### Chapter-investigator procedure for Feature specifications
+
+When a chapter-investigator sub-agent is assigned to the Feature specifications chapter:
+
+1. **Read the Overview chapter first** — understand the use cases and system purpose.
+2. **Apply Strategies 1–4** to extract candidate features.
+3. **Build the Feature catalogue table** — one row per candidate feature with confidence labels.
+4. **For the top-5 most critical or complex features**, write the full Per-feature processing definition.
+5. **For remaining features**, keep only the catalogue table row.
+6. **Cross-reference** each feature to related chapters (screen details, endpoint catalogue, data model).
+7. **Populate questions.json** with `spec_missing` questions for uncertain feature boundaries.
+8. **Output**: `.specback/drafts/02-feature-specifications.md`
+## System design extraction patterns (for Chapter N: System design)
+
+### Module / component dependency extraction
+
+Import/require/include graphs are mechanically extractable. Per-language ripgrep patterns:
+
+| Language | ripgrep pattern | Filtering |
+|----------|----------------|-----------|
+| Python | `rg "^import " --type py`, `rg "^from " --type py` | Keep only own-project paths; strip stdlib |
+| TypeScript/JS | `rg "^(import |const .* = require\\()" --type ts` | Keep only relative (`./` or `../`) imports |
+| Java/Kotlin | `rg "^import " --type java --type kotlin` | Keep only `com.yourproject.*` |
+| Ruby | `rg "^(require |require_relative )" --type ruby` | `require_relative` is always internal |
+| Go | `rg '\\"(github\\.com/yourorg)' --type go -o` | Strip to package name |
+| PHP | `rg "^use " --type php` | Keep only `App\\*` |
+| C# | `rg "^using " --type cs` | Keep only `YourProject.*` |
+
+**Output format** — group by layer/directory:
+
+```
+Layer: controllers
+  depends_on: [services, auth]
+Layer: services
+  depends_on: [repositories, external]
+...
+```
+
+Then render as a Mermaid `graph TD` or `graph LR`:
+
+```mermaid
+graph TD
+  controllers --> services
+  services --> repositories
+  services --> external
+```
+
+Note circular dependencies with `x-->x` style: `repositories -.->|circular| services`.
+
+### Cross-cutting pattern detection
+
+| Pattern | Detection command |
+|---------|-----------------|
+| Error handling | `rg "\\b(try|catch|except|raise|throw|reraise)\\b"` — also search for custom exception classes |
+| Logging | `rg "\\b(logger|logging|console\\.log|print|warn|error)\\b"` |
+| Validation | `rg "\\b(validate|validator|assert|sanitize|sanitise)\\b"` |
+| Retry/resilience | `rg "\\b(retry|backoff|timeout|circuit_breaker|fallback)\\b"` |
+| Caching | `rg "\\b(cache|redis|memcache|memoize|lru_cache)\\b"` |
+| Async | `rg "\\b(async|await|thread|worker|queue|celery|sidekiq|job)\\b"` |
+| Batch/bulk | `rg "\\b(batch|chunk|bulk)\\b"` (class/method names) |
+| Secrets | `rg "\\b(SECRET|API_KEY|PASSWORD|TOKEN|CREDENTIAL)\\b"` in config files, env reads |
+| Encryption | `rg "\\b(encrypt|decrypt|hash|bcrypt|argon2|aes|rsa)\\b"` |
+| TODO markers | `rg "(TODO|FIXME|HACK|WORKAROUND|XXX|OPTIMIZE|DEPRECATED)"` with 2 lines context |
+
+For each pattern, count occurrences across modules. High occurrence counts indicate a systematic pattern; low counts in unexpected places indicate inconsistencies.
+
+### Chapter-investigator procedure for System design
+
+When a chapter-investigator sub-agent is assigned to the System design chapter:
+
+1. **Read the Overview chapter** to understand the system type and purpose.
+2. **Read the Architecture overview chapter** to understand the tech stack.
+3. **Run extraction commands** for each of the 7 sections (ADR, dependencies, patterns, security, performance, integration, trade-offs).
+4. **Build ADR table** from code comments, README, and design docs. Mark most entries 🔴 ASSUMED.
+5. **Generate module dependency graph** from import analysis. Flag circular dependencies.
+6. **Enumerate cross-cutting patterns** with counts and consistency notes.
+7. **Cross-reference** security/performance/integration sections to their detailed chapters.
+8. **Extract TODO/FIXME/HACK markers** with surrounding context.
+9. **Populate questions.json** with `spec_missing` and `architecture_decision` questions for 🔴 entries.
+10. **Output**: `.specback/drafts/NN-system-design.md`

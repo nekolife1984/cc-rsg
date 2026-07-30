@@ -97,10 +97,6 @@ Incorporate the citations into the body. **Per-chapter mandatory requirements**:
 | Mermaid diagrams | ≥ 1 | coverage-check.py |
 | Sources Read items | ≥ 5 | coverage-check.py |
 
-Beyond the minimum, follow the **Active-diagram rule** (see SKILL.md Mermaid styling contract): any section describing something complex — processing, structure, or behavior — MUST be accompanied by an appropriate Mermaid diagram. Text-only explanations of complex subjects are a defect.
-
-For **screen detail chapters** (Section 3.3 of the web-app template), use the structured-table format defined in the template (Input fields table + Actions table + Display conditions table) instead of free-text bullet points. Each row in the Input fields table should map to a real field in the view/template source code with a `[REF:]` marker. Action rows should cite the corresponding endpoint or controller action.
-
 Chapters that fail these are rejected in Phase 4 and loop back to Phase 3 for correction.
 
 Around each `[REF: ...]`, add prose explaining "what is happening". Writing only what Rails/Laravel-style frameworks "typically do" is forbidden — write what the **actual code** does after reading it.
@@ -246,12 +242,6 @@ Each Layer 1 chapter **exhaustively lists the "overview table" for that language
 
 Each diagram has a **one-line caption** and a "how to read this" hint. If a diagram cell is `[INFERRED]`, say so explicitly.
 
-**Direction rule**: Default to `TD` (top-to-bottom) for graph/flowchart diagrams. Use `LR` only when ≤8 nodes with short labels — see SKILL.md Mermaid styling contract.
-
-**Split rule**: Apply the SKILL.md split thresholds (e.g. ER≥20 entities → split by domain). Label split diagrams with `-a`, `-b` suffixes and explain the split rationale.
-
-**Active-diagram rule**: Beyond the 4 mandatory diagram types above, any section in a deep-dive chapter or comprehensive-mode chapter that describes complex processing (conditional branching, multi-step flows, decision logic, async chains, authorization flows) MUST be accompanied by an appropriate Mermaid diagram. Text-only descriptions of complex processes are a defect.
-
 #### OUT-C: "Deep-dive candidates" list at the end of each Layer 1 chapter
 
 Place at the end of each chapter, using this format:
@@ -281,8 +271,10 @@ In outline mode:
 ### Phase-specific cautions
 - **In `comprehensive` mode**: writing a chapter without reading the code is forbidden. You may cite only files listed in Sources Read. ≥ 200 lines / ≥ 10 REFs / ≥ 5 Sources Read must be satisfied.
 - **In `outline` / `interactive` mode**: "exhaustive entity listing" takes precedence. Apply Confidence labels honestly per cell — do NOT over-apply 🟢 (only for files actually viewed).
-- Cross-chapter consistency is checked in Phase 4.
-- Do not hide uncertainty markers; keep them explicit in the draft. They are the starting point for Phase 5 dialogue.
+- **Cross-chapter consistency** is checked in Phase 4.
+- **Do not hide uncertainty markers**; keep them explicit in the draft. They are the starting point for Phase 5 dialogue.
 - **Phase 3 progression gate (mandatory)**: do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` (standard, reserved, AND user_custom) has a non-empty body in `.specback/drafts/` (at least 10 non-blank lines outside of code fences). The agent MUST verify this before updating `state.json` to mark Phase 3 complete; declaring "complete" while chapters are still stubs is a contract violation and triggers an immediate Phase 4 fail.
+- **Feature specifications chapter (Ch2)**: This chapter has a different code-reading strategy than other chapters. See `references/outline-tables.md` → **Feature grouping patterns** for the feature extraction strategy. Unlike other chapters, feature-level info may have a higher 🔴 ASSUMED ratio — this is expected and acceptable. The Phase 4 gate for confidence ratio does not apply to this chapter (i.e. the 60% 🔴 ratio warning in `coverage-check.py` is informational only for Ch2).
+- **System design chapter (last detailed chapter)**: This chapter uses import analysis and cross-cutting pattern detection rather than per-file deep reading. See `references/outline-tables.md` → **System design extraction patterns** for the extraction strategy. The ADR section may have many 🔴 ASSUMED entries (design rationale is rarely explicit in code) — this is expected and acceptable.
 
 ---

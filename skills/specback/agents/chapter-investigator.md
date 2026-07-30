@@ -106,14 +106,6 @@ Include **at least one Mermaid diagram** appropriate to the chapter:
 - Data-model chapter → ER diagram
 - Flow chapter → sequence diagram
 - Architecture chapter → component diagram
-
-Default direction is **`TD`** (top-to-bottom) for graph/flowchart diagrams. Use `LR` only when the diagram has ≤8 nodes with short labels (see specback SKILL.md Mermaid styling contract).
-
-**Split rule**: Apply the SKILL.md split thresholds (ER≥20 entities, classDiagram≥15 classes, etc.). Label split diagrams with `-a`, `-b` suffixes.
-
-**Active-diagram rule**: Beyond the mandatory ≥1 Mermaid, any complex subject in this chapter — processing flows, structure/relationships, behavior, or data models — MUST be accompanied by an appropriate Mermaid diagram. When in doubt, add a diagram.
-
-For **screen detail sections** (Section 3.3 of web-app template), always use the structured-table format (Input fields table + Actions table + Display conditions table) as defined in the template. Map each field row to a real view/template source reference with `[REF:]`.
 - Etc.
 
 ### STEP E: Uncertainty markers
@@ -138,6 +130,61 @@ List questions raised while writing the chapter **at the end of the chapter** as
 ```
 
 The main agent reads this and appends the questions to `questions.json`.
+
+---
+
+### 💡 Feature specifications chapter (Chapter 2)
+
+When assigned to the Feature specifications chapter, follow this additional procedure **after STEP A–F**:
+
+#### STEP G: Read the Overview chapter
+Read `.specback/drafts/01-overview.md` (or the final version) to extract the use cases. These define candidate features.
+
+#### STEP H: Apply feature grouping strategies
+Consult `references/outline-tables.md` → **Feature grouping patterns** section. Apply Strategies 1–4 in order:
+
+1. **Comment-based** (🟢): Search for `# Feature:`, `@feature`, docstring feature tags.
+2. **Naming-convention** (🟡): Run `rg` for `*Service`, `*UseCase`, `*Handler`, `*Controller` classes.
+3. **Screen / endpoint aggregation** (🟡): Group code units by screen ID or resource name.
+4. **Use-case mapping** (🔴): Cross-reference Ch1 use cases against code paths.
+
+#### STEP I: Build the Feature catalogue table
+One row per candidate feature. Columns: `Feature ID`, `Feature name`, `Category`, `Related items`, `Auth required`, `Summary`, `Confidence`.
+
+#### STEP J: Write per-feature processing definitions (top-5)
+For the most critical or complex features, write structured processing definitions (trigger, pre-conditions, main flow, alternative flows, error handling, post-conditions, related chapters). Include `[REF: ...]` citations to real code for each step.
+
+#### STEP K: Populate `spec_missing` questions
+For features whose boundaries or existence are uncertain, add a `spec_missing` category question to `questions.json` (at least 1 per 3 features). The main agent reads the returned DETAIL_QUESTIONS and appends them.
+
+#### Output filename
+`.specback/drafts/02-feature-specifications.md`
+### 💡 System design chapter (Chapter N)
+
+When assigned to the System design chapter, follow this additional procedure **after STEP A–F**:
+
+#### STEP G: Read Overview and Architecture overview
+Read `.specback/drafts/01-overview.md` and the Architecture overview chapter to understand system type and tech stack.
+
+#### STEP H: Apply extraction strategies
+Consult `references/outline-tables.md` → **System design extraction patterns** section. Apply the 7-section extraction:
+
+1. **ADR**: Search for design-decision comments (`# Why:`, `// Decision:`, `/* Rationale: */`). Read README/CONTRIBUTING for explicit rationale.
+2. **Module dependency**: Run the per-language `rg` import patterns from outline-tables.md. Build a dependency graph.
+3. **Cross-cutting patterns**: Run `rg` for error handling, logging, validation, retry, cache, async patterns. Count occurrences.
+4. **Security**: Search for secrets/encryption/auth guard patterns.
+5. **Performance**: Search for cache/bulk/async/concurrency patterns.
+6. **Integration**: Search for external HTTP/queue/file calls.
+7. **Trade-offs**: Run `rg "(TODO|FIXME|HACK|WORKAROUND|XXX|OPTIMIZE|DEPRECATED)"` with 2-line context.
+
+#### STEP I: Build the chapter
+For each section write structured content. Use the template chapter definition (in the template file) as the outline skeleton. Cross-reference to detailed chapters wherever possible.
+
+#### STEP J: Populate questions
+Add `architecture_decision` and `spec_missing` questions for 🔴 entries. Minimum 3 questions for this chapter.
+
+#### Output filename
+`.specback/drafts/NN-system-design.md`
 
 ---
 
