@@ -4,6 +4,15 @@
 
 Generate a **human-readable change specification document** (`change-spec.md`) from source code changes. Unlike the raw diff, ChangeSpec explains *what changed, why, and what it means* in natural language.
 
+### 🆕 Multi-scope execution
+
+When `goal.multi_scope == true`, iterate over each scope and run the procedure for each:
+1. Read `goal.scopes[]`.
+2. For each scope, set `SPECBACK_DIR = ".specback-{scope.name}"` and run the procedure below.
+3. Each scope generates its own `change-spec.md` under `{output_dir}/{scope.name}/`.
+
+When `goal.multi_scope == false` (default), run the procedure once with `.specback/`.
+
 ### Prerequisites
 
 - Phase 7 drift report must exist (`drift-report.md` / `drift-report.json`)

@@ -3,6 +3,26 @@
 ### Purpose
 Run inventory cross-check, per-chapter quality metrics, MECE check, and consistency checks automatically, looping failing chapters back to Phase 3.
 
+### 🆕 Multi-scope execution
+
+When `goal.multi_scope == true`, the following steps apply:
+
+1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
+2. **Set scope-specific paths**:
+   - `SPECBACK_DIR = ".specback-{scope.name}"` (e.g. `.specback-auth`)
+   - `TARGET_ROOT = scope.root` (e.g. `services/auth`)
+   - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `.specback/final/auth`)
+3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
+4. **Run the phase procedure below** using `{SPECBACK_DIR}` as the specback directory (for scripts: `--specback-dir {SPECBACK_DIR}`) and `{TARGET_ROOT}` as the target codebase root (for source-map: `--target {TARGET_ROOT}`).
+5. **On completion**: Increment `goal.current_scope` in `.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).
+6. **Resume support**: After each scope completes, save `state.json` with `current_scope` so the session can resume from the correct scope.
+7. **At the START of this phase**: If `goal.current_scope > 0` and `goal.multi_scope == true`, this is a resume — skip already-completed scopes and start from `goal.current_scope`.
+
+When `goal.multi_scope == false` (default), run the phase procedure once with `.specback/` and the project root as before.
+
+---
+
+
 ### Procedure
 
 1. **Generate trace.json**

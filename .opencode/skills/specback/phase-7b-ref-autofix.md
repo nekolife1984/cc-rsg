@@ -4,6 +4,15 @@
 
 Auto-correct `[REF: path:line]` markers in spec files that have become stale due to source code changes. Run `scripts/fix-refs.py` to parse `git diff -U0` hunk headers and update line numbers.
 
+### 🆕 Multi-scope execution
+
+When `goal.multi_scope == true`, iterate over each scope and run the procedure for each:
+1. Read `goal.scopes[]`.
+2. For each scope, set `SPECBACK_DIR = ".specback-{scope.name}"` and run the procedure below.
+3. The `--output-dir` should include the scope name: `{output_dir}/{scope.name}` or the combined output.
+
+When `goal.multi_scope == false` (default), run the procedure once with `.specback/`.
+
 ### Procedure
 
 1. **Run fix-refs.py** (default: dry-run)

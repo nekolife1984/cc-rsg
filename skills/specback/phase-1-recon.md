@@ -30,22 +30,54 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    - If the user accepts Claude's recommendation, display the chapter outline and ask "Are there chapters to add, remove, or rename?".
    - Reflect any additions/removals.
 
-4. **Persist template name to goal.json**
-   - Write the chosen template name to `goal.json` under the `template` field. This allows downstream tools (e.g. `coverage-check.py`) to adjust their behaviour based on the template type.
-   - Use the template identifier from the selection (e.g. `"web-app"`, `"batch-system"`, `"api-service"`, `"library-sdk"`).
-   - If the user brought their own template, write `"custom"`.
-   - Update the existing `goal.json` file in-place:
-     ```bash
-     python3 -c "
-     import json
-     with open('.specback/goal.json') as f:
-         g = json.load(f)
-     g['template'] = 'library-sdk'
-     with open('.specback/goal.json', 'w') as f:
-         json.dump(g, f, indent=2, ensure_ascii=False)
-         f.write('\n')
-     "
+4. **🆕 Monorepo detection and scope setup**
+
+   After the template is finalised, check whether the target codebase is a monorepo containing multiple independent systems.
+
+   **Detection heuristics** (check in order):
+   1. **Workspace manifests**: Does `pnpm-workspace.yaml`, `lerna.json`, `turbo.json`, `nx.json`, or `package.json.workspaces` exist?
+   2. **Multi-service directories**: Do `services/`, `apps/`, or `packages/` directories contain independent package manifests (`package.json`, `setup.py`, `go.mod`, `composer.json`)?
+   3. **Multiple entrypoints**: Are there multiple `main` files, `Dockerfile`s, or deployment configs across different subdirectories?
+
+   If ANY heuristic matches, use `AskUserQuestion` to present the option:
+
+   ```
+   This repository appears to contain [N] independent systems/components.
+   How would you like to generate specs?
+
+   1. Individual specs per system (recommended for monorepos)
+      → Each system gets its own state dir and spec output
+   2. One combined spec for the whole repo
+      → All systems merged into a single document
+   3. Select specific systems only
+      → Free-form: list the systems you want
+   ```
+
+   - If the user chooses option 1 or 3, set `goal.multi_scope = true`.
+   - **Auto-detect scope boundaries**: For each candidate system, determine its root directory and assign a short `name` slug (derived from the directory name, e.g. `auth`, `payment`, `frontend`). Use the following rules:
+     - `services/{name}/` or `apps/{name}/` → `{name}`
+     - `packages/{name}/` with a package manifest → `{name}`
+     - Top-level directories with their own `Dockerfile` → `{dir_name}`
+   - Populate `goal.scopes = [{"name": "auth", "root": "services/auth"}, ...]`
+   - **When option 3** (select specific systems): parse the user's free-form input, match each entry against detected systems, and include only the matched ones. If a name doesn't match, ask for clarification.
+   - **Confirmation**: Show the final scope list and ask for confirmation:
      ```
+     Scopes to generate:
+       auth      → services/auth/    (Web application spec)
+       payment   → services/payment/ (API service spec)
+       frontend  → apps/frontend/    (Library/SDK spec)
+
+     OK? (yes / redo)
+     ```
+   - Each scope may have a **different template** (detected independently in Phase 2).
+
+   **State isolation**: When `multi_scope == true`:
+   - Each scope uses its own state directory: `.specback-{name}/` (e.g. `.specback-auth/`)
+   - `.skill-path` is shared (symlink or copy): `ln -sf $(cat .specback/.skill-path) .specback-auth/.skill-path`
+   - The project root `.specback/` stores only the shared `goal.json` and `state.json` (which tracks `current_scope` across phases).
+   - Script invocations use `--specback-dir .specback-{name}`.
+
+   When `multi_scope == false` (default), proceed with the original `.specback/` flow unchanged.
 
 5. **Register high-level questions**
    - Add the fundamental questions surfaced during reconnaissance (questions that block big-picture understanding) into `questions.json`.
@@ -57,8 +89,6 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
 
 6. **🆕 depth-mode decision (scale-based)**
    - Record the **total file count** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` in `.specback/state.json`.
-   - **What counts as a file**: the total number of files discovered by the reconnaissance scan (i.e. the raw file-tree listing excluding well-known noise directories such as `.git`, `node_modules`, `vendor`, `__pycache__`, `.DS_Store`). This includes source code, test files, config files, documentation, and any other non-excluded file. It is **not** limited to `LANG_BY_EXT` registered extensions.
-   - **Rationale**: the 200-file threshold is a heuristic for "how long will the spec generation take?" — a repo with 300 config-only files + 10 source files should still trigger outline mode, because the absolute scan/processing time scales with total file count, not just source-file count.
    - **If file count > 200**, ask the user with `AskUserQuestion` to choose a **depth mode**:
      - `comprehensive`: classic behaviour. All chapters detailed, full MECE, full REFs. **Recommended only when exhaustive coverage is required (audit, regulatory).** Takes hours to days.
      - `outline` (**recommended default**): each level's entities are **listed exhaustively in tables** + Mermaid diagrams + a "deep-dive candidates" list at the end of each table. Details are produced on-demand in dialogue after Phase 6. **Best for typical use.**
