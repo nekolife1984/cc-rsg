@@ -631,3 +631,111 @@ For Rails applications, always extract by the following units. **An `inventory.j
 | Large (1,000+ .rb) | 90+ | controllers 80, models 80, concerns 20, services 30, jobs 20, migrations 100+, routes 30 |
 
 Example: a medium Rails codebase with ~1,000 .rb files → at least ~90 INVs are required (an agent that stops at 30 is under-granular).
+
+---
+
+## Infrastructure as Code (IaC)
+
+IaC files (Terraform, CloudFormation, CDK, Pulumi, Kubernetes) are treated as primary source units when the chosen template is `infrastructure`.
+
+### Terraform / OpenTofu
+
+#### Macro units
+- Root modules (`main.tf`, root `terraform { ... }` block)
+- Child modules (`module "..." { ... }` references)
+
+#### Middle units
+- Resource blocks (`resource "aws_xxx" "name" { ... }`)
+- Data sources (`data "aws_xxx" "name" { ... }`)
+- Variable definitions (`variable "name" { ... }`)
+- Output definitions (`output "name" { ... }`)
+- Provider configurations (`provider "aws" { ... }`)
+- Local values (`locals { ... }`)
+
+#### Micro units
+- Resource attributes and computed values
+- Terraform state references (`terraform_remote_state`)
+
+#### Extraction examples
+```
+# Resource blocks
+rg "^resource\s+"[^"]+"\s+"[^"]+"" --type tf
+
+# Data sources
+rg "^data\s+"[^"]+"\s+"[^"]+"" --type tf
+
+# Variables
+rg "^variable\s+"[^"]+"" --type tf
+```
+
+### CloudFormation / SAM
+
+#### Macro units
+- Stack templates (`*.template.yaml`, `template.yaml`)
+- Nested stacks
+
+#### Middle units
+- Resource definitions (`Type: AWS::...`)
+- Parameters (`Parameters:` section)
+- Outputs (`Outputs:` section)
+- Conditions (`Conditions:` section)
+
+#### Extraction examples
+```
+# AWS resource types
+rg "Type:\s+AWS::" template.yaml
+```
+
+### Kubernetes manifests
+
+#### Macro units
+- Namespaces (`kind: Namespace`)
+- Helm charts (`Chart.yaml`)
+
+#### Middle units
+- Deployments / StatefulSets / DaemonSets
+- Services / Ingresses
+- ConfigMaps / Secrets
+- PersistentVolumeClaims
+- Custom Resource Definitions (CRDs)
+- NetworkPolicies
+- RBAC (Roles, RoleBindings, ClusterRoles)
+
+#### Micro units
+- Container specs (image, resources, env, ports, volume mounts)
+- Selector labels and annotations
+- Resource requests / limits
+
+#### Extraction examples
+```
+# Deployments
+rg "kind:\s+Deployment" -A1 --type yaml
+
+# Services
+rg "kind:\s+Service" -A1 --type yaml
+```
+
+### CDK (AWS CDK)
+
+#### Macro units
+- Stack classes (`class XxxStack extends Stack`)
+- App entry point
+
+#### Middle units
+- Construct instantiations (`new XxxConstruct(this, ...)`)
+- L2/L3 construct classes
+- Custom construct classes
+
+#### Extraction examples
+```
+# Stack definitions
+rg "class \w+Stack extends Stack" --type ts
+
+# Constructs
+rg "new \w+\(" --type ts lib/
+```
+
+### IaC-specific cautions
+- Terraform `terraform show -json` provides actual state; use it to validate against `.tf` files.
+- Resources configured via web console (not IaC) must be marked 🔴 ASSUMED.
+- Environment-specific differences (dev/staging/prod) should be called out explicitly.

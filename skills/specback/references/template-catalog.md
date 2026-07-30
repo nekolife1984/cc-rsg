@@ -4,14 +4,15 @@ Selection guide used in Phase 1 when presenting template candidates to the user.
 
 ---
 
-## Initial set of 4
+## Initial set of 5
 
-The skill ships with the following 4 templates by default. The user may also bring their own template (by specifying a path).
+The skill ships with the following 5 templates by default. The user may also bring their own template (by specifying a path).
 
 1. **Web application spec** (`templates/web-app.md`)
 2. **Batch-system spec** (`templates/batch-system.md`)
 3. **API service spec** (`templates/api-service.md`)
 4. **Library / SDK spec** (`templates/library-sdk.md`)
+5. **Infrastructure spec** (`templates/infrastructure.md`) — cloud resources, networking, deployment pipelines
 
 ---
 
@@ -31,6 +32,8 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Data model (ER diagram, entity definitions)
 - Authentication and authorisation
 - External-system integration
+- **External interfaces**
+- **File specifications**
 - Operations settings / deployment
 - Known constraints and unresolved items
 
@@ -61,6 +64,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Operations calendar / dependency graph
 - Monitoring / alerts
 - **External interfaces**
+- **File specifications / record layouts**
 - Known constraints and unresolved items
 
 ### Selection criteria
@@ -77,6 +81,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Endpoints called by other systems.
 - REST, GraphQL, gRPC, WebSocket.
 - Microservices, public APIs, internal APIs.
+
 ### Chapter outline
 - Overview / API purpose
 - Architecture overview
@@ -86,6 +91,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 - Data model (data stores, entity definitions)
 - Error codes / error responses
 - **External interfaces**
+- **File specifications**
 - Authentication (API key, OAuth, JWT)
 - Rate limiting / quotas
 - Versioning
@@ -127,6 +133,31 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ---
 
+## 5. Infrastructure spec
+
+### Target
+- Systems managed via Infrastructure as Code (IaC).
+- AWS / Azure / GCP cloud resources, Kubernetes, Terraform / CDK / Pulumi.
+
+### Chapter outline
+- Overview / cloud provider and account structure
+- Resource inventory (compute, networking, data stores, serverless, IAM)
+- Network topology (VPC, subnets, connectivity)
+- Deployment pipeline (CI/CD, container registry)
+- Configuration and environment (secrets, env vars, environment comparison)
+- Monitoring and observability (metrics, alerts, logging)
+- Disaster recovery and backup (RTO/RPO, backup strategy)
+- Cost and sizing
+- Known constraints and unresolved items
+
+### Selection criteria
+- Presence of IaC files (`.tf`, `template.yaml`, `cdk.json`, `Pulumi.yaml`).
+- Container configuration (`Dockerfile`, `docker-compose.yml`).
+- Cloud provider configuration.
+- No application source code, or app code is secondary to infrastructure.
+
+---
+
 ## Decision tree (Claude's recommendation logic)
 
 Based on the Phase 1 reconnaissance, Claude follows this procedure to recommend a template:
@@ -145,7 +176,10 @@ Based on the Phase 1 reconnaissance, Claude follows this procedure to recommend 
 3. Are scheduler configuration / batch scripts the main subject?
    YES → Recommend Batch-system spec
 
-4. None of the above / composite type
+4. Are IaC files (Terraform / CloudFormation / CDK / K8s) the primary content?
+   YES → Recommend Infrastructure spec
+
+5. None of the above / composite type
    → Present multiple candidates and ask the user.
    → Example: "Includes both web app and API; recommend a merged custom outline."
 ```
@@ -193,9 +227,7 @@ Claude: "I recommend the Web application spec. The outline is:
 - Data model
 - Authentication and authorisation
 - External integration
-- Operations settings
-
-Any chapters to add, remove, or rename?"
+- Operations settings"
 
 User: "Add a 'non-functional requirements' chapter. Place it before 'Operations settings'."
 
@@ -235,7 +267,6 @@ After OSS release, the following templates may be added in response to user requ
 
 - Data warehouse / DWH spec
 - Machine-learning pipeline spec
-- Infrastructure spec (IaC, Terraform, Kubernetes)
 - Mobile app spec (iOS / Android / React Native / Flutter)
 - Blockchain / smart-contract spec
 - Game-design spec
