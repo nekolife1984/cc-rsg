@@ -61,17 +61,17 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - Other (free-form)
 
    **Q3. What level of granularity is preferred?**
-   - High-level overview
-   - Medium
-   - Detailed
+   - High-level overview (modules/packages only — for system diagram / catalog)
+   - Medium (classes/functions/endpoints — standard spec depth)
+   - Detailed (including public methods/fields/config — full enumeration)
    - Other (free-form)
 
    **Q4. Which perspectives should be emphasised? (multi-select)**
-   - Functional correctness
-   - Business validity
-   - Security
-   - Operability
-   - Performance
+   - Functional correctness (logic, edge cases, error handling)
+   - Business validity (domain rules, compliance, regulatory fit)
+   - Security (authentication, authorization, data protection)
+   - Operability (deployment, monitoring, recovery, config)
+   - Performance (throughput, latency, scalability, concurrency)
    - Other (free-form)
 
    **Q5. What about existing documentation?**
