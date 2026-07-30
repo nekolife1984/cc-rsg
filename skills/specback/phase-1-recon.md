@@ -57,6 +57,8 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
 
 6. **🆕 depth-mode decision (scale-based)**
    - Record the **total file count** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` in `.specback/state.json`.
+   - **What counts as a file**: the total number of files discovered by the reconnaissance scan (i.e. the raw file-tree listing excluding well-known noise directories such as `.git`, `node_modules`, `vendor`, `__pycache__`, `.DS_Store`). This includes source code, test files, config files, documentation, and any other non-excluded file. It is **not** limited to `LANG_BY_EXT` registered extensions.
+   - **Rationale**: the 200-file threshold is a heuristic for "how long will the spec generation take?" — a repo with 300 config-only files + 10 source files should still trigger outline mode, because the absolute scan/processing time scales with total file count, not just source-file count.
    - **If file count > 200**, ask the user with `AskUserQuestion` to choose a **depth mode**:
      - `comprehensive`: classic behaviour. All chapters detailed, full MECE, full REFs. **Recommended only when exhaustive coverage is required (audit, regulatory).** Takes hours to days.
      - `outline` (**recommended default**): each level's entities are **listed exhaustively in tables** + Mermaid diagrams + a "deep-dive candidates" list at the end of each table. Details are produced on-demand in dialogue after Phase 6. **Best for typical use.**
