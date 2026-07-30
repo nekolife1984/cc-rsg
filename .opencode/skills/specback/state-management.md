@@ -25,6 +25,8 @@
 
 When the skill detects an existing `.specback/state.json` at startup, present the situation in the resume message and confirm the user's intent. If `.specback/goal.json` is readable, the resume message is rendered in its `output_language`. Only when `goal.json` itself is missing (so the language is unknown) the bilingual format (English first, then Japanese) is used — identical in shape to Phase 0 Step 3 — to prompt the language selection again.
 
+**🆕 Multi-scope resume**: When `goal.multi_scope == true`, the scope context is included in the resume message:
+
 **Resume-message template (English version, when `output_language: "en"`)**:
 
 ```
@@ -34,6 +36,7 @@ A previous specback session is in progress. The current state is:
 - Progress: 8 of 12 sub-tasks completed; 2 BLOCKED on critical questions
 - Question Bank: 23 unresolved questions (2 critical)
 - Last updated: 2026-05-01 14:32
+- Multi-scope: 3 scopes configured (auth, payment, frontend); current scope index: 1 (payment)
 
 What would you like to do?
 (A) Resume from where it stopped (finish remaining Phase 3 tasks)
@@ -51,6 +54,7 @@ What would you like to do?
 - 進捗: 12サブタスク中8件完了、2件は critical な疑問により BLOCKED 状態
 - Question Bank: 未解決疑問 23件(うち critical: 2件)
 - 最終更新: 2026-05-01 14:32
+- マルチスコープ: 3スコープ設定済み(auth, payment, frontend)、現在のスコープ: 1番目(payment)
 
 以下のいずれを実施しますか?
 (A) 続きから再開(Phase 3 残タスクを完了させる)

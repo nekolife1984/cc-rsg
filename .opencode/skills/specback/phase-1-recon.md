@@ -30,7 +30,56 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    - If the user accepts Claude's recommendation, display the chapter outline and ask "Are there chapters to add, remove, or rename?".
    - Reflect any additions/removals.
 
-4. **Register high-level questions**
+4. **🆕 Monorepo detection and scope setup**
+
+   After the template is finalised, check whether the target codebase is a monorepo containing multiple independent systems.
+
+   **Detection heuristics** (check in order):
+   1. **Workspace manifests**: Does `pnpm-workspace.yaml`, `lerna.json`, `turbo.json`, `nx.json`, or `package.json.workspaces` exist?
+   2. **Multi-service directories**: Do `services/`, `apps/`, or `packages/` directories contain independent package manifests (`package.json`, `setup.py`, `go.mod`, `composer.json`)?
+   3. **Multiple entrypoints**: Are there multiple `main` files, `Dockerfile`s, or deployment configs across different subdirectories?
+
+   If ANY heuristic matches, use `AskUserQuestion` to present the option:
+
+   ```
+   This repository appears to contain [N] independent systems/components.
+   How would you like to generate specs?
+
+   1. Individual specs per system (recommended for monorepos)
+      → Each system gets its own state dir and spec output
+   2. One combined spec for the whole repo
+      → All systems merged into a single document
+   3. Select specific systems only
+      → Free-form: list the systems you want
+   ```
+
+   - If the user chooses option 1 or 3, set `goal.multi_scope = true`.
+   - **Auto-detect scope boundaries**: For each candidate system, determine its root directory and assign a short `name` slug (derived from the directory name, e.g. `auth`, `payment`, `frontend`). Use the following rules:
+     - `services/{name}/` or `apps/{name}/` → `{name}`
+     - `packages/{name}/` with a package manifest → `{name}`
+     - Top-level directories with their own `Dockerfile` → `{dir_name}`
+   - Populate `goal.scopes = [{"name": "auth", "root": "services/auth"}, ...]`
+   - **When option 3** (select specific systems): parse the user's free-form input, match each entry against detected systems, and include only the matched ones. If a name doesn't match, ask for clarification.
+   - **Confirmation**: Show the final scope list and ask for confirmation:
+     ```
+     Scopes to generate:
+       auth      → services/auth/    (Web application spec)
+       payment   → services/payment/ (API service spec)
+       frontend  → apps/frontend/    (Library/SDK spec)
+
+     OK? (yes / redo)
+     ```
+   - Each scope may have a **different template** (detected independently in Phase 2).
+
+   **State isolation**: When `multi_scope == true`:
+   - Each scope uses its own state directory: `.specback-{name}/` (e.g. `.specback-auth/`)
+   - `.skill-path` is shared (symlink or copy): `ln -sf $(cat .specback/.skill-path) .specback-auth/.skill-path`
+   - The project root `.specback/` stores only the shared `goal.json` and `state.json` (which tracks `current_scope` across phases).
+   - Script invocations use `--specback-dir .specback-{name}`.
+
+   When `multi_scope == false` (default), proceed with the original `.specback/` flow unchanged.
+
+5. **Register high-level questions**
    - Add the fundamental questions surfaced during reconnaissance (questions that block big-picture understanding) into `questions.json`.
    - Examples:
      - What business problem is this system trying to solve?
@@ -38,7 +87,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      - When existing docs disagree with the code, which is authoritative?
    - See "Question Bank operation" below for the structure used at registration.
 
-5. **🆕 depth-mode decision (scale-based)**
+6. **🆕 depth-mode decision (scale-based)**
    - Record the **total file count** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` in `.specback/state.json`.
    - **If file count > 200**, ask the user with `AskUserQuestion` to choose a **depth mode**:
      - `comprehensive`: classic behaviour. All chapters detailed, full MECE, full REFs. **Recommended only when exhaustive coverage is required (audit, regulatory).** Takes hours to days.
@@ -50,7 +99,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      > The target codebase is large (N files / X lines). Choose a depth mode for the spec.
      > (Overview-only → deep-dive items of interest later, in practice, is recommended.)
 
-6. **Phase 1 complete**
+7. **Phase 1 complete**
    - Update `state.json` and proceed to Phase 2.
 
 ### Phase-specific cautions

@@ -61,17 +61,17 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
    - Other (free-form)
 
    **Q3. What level of granularity is preferred?**
-   - High-level overview (modules/packages only — for system diagram / catalog)
-   - Medium (classes/functions/endpoints — standard spec depth)
-   - Detailed (including public methods/fields/config — full enumeration)
+   - High-level overview
+   - Medium
+   - Detailed
    - Other (free-form)
 
    **Q4. Which perspectives should be emphasised? (multi-select)**
-   - Functional correctness (logic, edge cases, error handling)
-   - Business validity (domain rules, compliance, regulatory fit)
-   - Security (authentication, authorization, data protection)
-   - Operability (deployment, monitoring, recovery, config)
-   - Performance (throughput, latency, scalability, concurrency)
+   - Functional correctness
+   - Business validity
+   - Security
+   - Operability
+   - Performance
    - Other (free-form)
 
    **Q5. What about existing documentation?**
@@ -108,25 +108,21 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
      "perspectives": ["functional_correctness", "operational"],
      "existing_docs": "none",
      "free_text_notes": "...",
-     "user_custom_deliverables": ["manual.md"]
+     "user_custom_deliverables": ["manual.md"],
+
+     "multi_scope": false,
+     "scopes": [],
+     "current_scope": 0
    }
    ```
    - `output_language` is required and must be `"en"` or `"ja"`. Other enum fields (`primary_reader`, `reader_action`, `granularity`, `perspectives`, `existing_docs`) are language-independent English enums (localized only at display time using `output_language`).
    - `output_dir` specifies the final spec output directory. Default is `.specback` (which the agent resolves to `.specback/final/`). Custom paths like `docs/specs` are stored as-is (final goes to `docs/specs/`). Final spec files go to `{output_dir}/`. Drafts stay at `.specback/drafts/`. State files remain in `.specback/`.
    - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/` (default: `.specback/final/`, custom: per choice).
+   - 🆕 **`multi_scope`** (boolean, default `false`): set to `true` when the target is a monorepo and the user chooses to generate separate specs per system.
+   - 🆕 **`scopes[]`** (array of objects, empty by default): each entry specifies `{"name": "...", "root": "..."}` where `name` is a short slug (e.g. `auth`) and `root` is the relative path to the system root (e.g. `services/auth`). Populated in Phase 1 when `multi_scope` becomes `true`.
+   - 🆕 **`current_scope`** (integer, default `0`): index into `scopes[]` tracking which scope is currently being processed. Used for resume across multi-scope phases. When `scopes.length > 0` and all scopes have been processed, this resets to `0` before advancing to the next phase.
 
-7. **Validate `goal.json` against its schema**
-   - After persisting `goal.json`, run the schema validation script to catch structural errors early:
-     ```bash
-     python $(cat .specback/.skill-path)/scripts/validate-schema.py \
-       --schema $(cat .specback/.skill-path)/schemas/goal.schema.json \
-       --data-file .specback/goal.json
-     ```
-   - If validation fails, fix the reported errors before proceeding. Do NOT continue to Phase 1 until `goal.json` is valid.
-   - The same script can also validate `state.json` and `questions.json` at any point by changing `--schema` and `--data-file`.
-   - Exit codes: 0 = valid, 1 = schema violations, 2 = usage error.
-
-8. **Phase 0 complete**
+7. **Phase 0 complete**
    - Update `state.json` and proceed to Phase 1.
 
 ### Phase-specific cautions
