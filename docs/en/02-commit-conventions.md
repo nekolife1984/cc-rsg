@@ -12,7 +12,6 @@ This project follows the [Conventional Commits](https://www.conventionalcommits.
 | `fix:` | Bug fix | `fix: detect encoding in py files` |
 | `chore:` | CI, maintenance, refactoring, dependencies | `chore: update pytest to 8.x` |
 | `docs:` | Documentation only (no code change) | `docs: fix typo in branching-strategy` |
-| `upstream:` | Sync from `daishir0/cc-rsg` upstream | `upstream: merge v0.8.0` |
 | `test:` | Test addition or modification | `test: add coverage for build-trace.py` |
 
 When in doubt, use `chore:` for changes that don't add a feature or fix a bug.

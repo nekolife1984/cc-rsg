@@ -4,7 +4,7 @@ set -e
 
 echo "🔍 Checking staged scripts for test coverage..."
 
-SCRIPT_DIR="skills/cc-rsg/scripts"
+SCRIPT_DIR="skills/specback/scripts"
 CHECKER="${SCRIPT_DIR}/tests/check_test_coverage.py"
 HAS_VIOLATION=0
 
@@ -36,7 +36,7 @@ echo "$staged_scripts" | while IFS= read -r script; do
             echo "  ❌ New script: $script"
             echo "     Missing test: $test_file"
             echo "     Tests are required for new scripts."
-            echo "1" > /tmp/.cc-rsg-hook-violation.tmp
+            echo "1" > /tmp/.specback-hook-violation.tmp
         else
             echo "  ✅ New script + test: $base"
         fi
@@ -49,7 +49,7 @@ echo "$staged_scripts" | while IFS= read -r script; do
                 echo "  ⚠️  Modified script: $script"
                 echo "     Test exists but NOT staged: $test_file"
                 echo "     Did you forget to update the test? (git add $test_file)"
-                echo "1" > /tmp/.cc-rsg-hook-violation.tmp
+                echo "1" > /tmp/.specback-hook-violation.tmp
             else
                 echo "  ✅ Modified script + test staged: $base"
                 # Function-level coverage check (WARN only)
@@ -73,8 +73,8 @@ echo "$staged_scripts" | while IFS= read -r script; do
     fi
 done
 
-if [ -f /tmp/.cc-rsg-hook-violation.tmp ]; then
-    rm -f /tmp/.cc-rsg-hook-violation.tmp
+if [ -f /tmp/.specback-hook-violation.tmp ]; then
+    rm -f /tmp/.specback-hook-violation.tmp
     echo ""
     echo "💡 To bypass: git commit --no-verify"
     exit 1

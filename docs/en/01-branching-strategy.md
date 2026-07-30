@@ -6,7 +6,6 @@ This project uses **GitHub Flow** — a lightweight, branch-based workflow with 
 
 > GitHub Flow is chosen because:
 > - Single developer — minimal ceremony
-> - Upstream (`daishir0/cc-rsg`) sync is straightforward via dedicated branch prefix
 > - Aligns with existing conventions (PR mandatory, squash merge, one-change-one-commit)
 
 ## Permanent Branches
@@ -25,7 +24,6 @@ All work branches branch from `main` and are deleted after merge.
 | `fix/<kebab-case>` | `fix/detect-py-encoding` | Bug fix |
 | `chore/<kebab-case>` | `chore/update-deps` | CI, maintenance, refactoring, dependencies |
 | `docs/<kebab-case>` | `docs/branching-strategy` | Documentation only |
-| `upstream/<kebab-case>` | `upstream/merge-v0.8.0` | Sync from `daishir0/cc-rsg` upstream |
 
 ## PR Lifecycle
 
@@ -56,25 +54,6 @@ main → feat/xxx → commits → open PR → CI (pytest + mypy + trace gates)
 | Source code / tests / features | ❌ **PR required** | Must pass CI + trace gates |
 
 For this project, **prefer PR for everything** — it forces a review pass even as a single developer.
-
-## Upstream Sync (daishir0/cc-rsg)
-
-When the upstream `daishir0/cc-rsg` has updates worth merging:
-
-```bash
-# Add upstream remote (one-time)
-git remote add upstream https://github.com/daishir0/cc-rsg.git
-
-# Create sync branch
-git checkout main
-git pull origin main
-git checkout -b upstream/merge-v0.8.0
-git pull upstream main
-
-# Resolve conflicts if any, then
-git push origin upstream/merge-v0.8.0
-# → Open PR → squash merge → main
-```
 
 ## CI Gates
 

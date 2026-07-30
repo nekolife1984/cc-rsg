@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-  cc-rsg installer — interactive or CLI-driven skill installer for coding agents
+  specback installer — interactive or CLI-driven skill installer for coding agents
 
 .DESCRIPTION
-  Installs the cc-rsg skill to one or more coding agents:
+  Installs the specback skill to one or more coding agents:
   Claude Code, Codex CLI, OpenCode, GitHub Copilot, Cursor, Other.
 
 .PARAMETER Agent
@@ -22,7 +22,7 @@
   .\install.ps1 -Agent all -Level both   all agents, both levels
 
 .NOTES
-  Environment variables (fallback): $env:CC_RSG_AGENT, $env:CC_RSG_LEVEL
+  Environment variables (fallback): $env:SPECBACK_AGENT, $env:SPECBACK_LEVEL
 #>
 
 param(
@@ -33,11 +33,11 @@ param(
 )
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$SkillSrc = Join-Path $ScriptDir "skills\cc-rsg"
+$SkillSrc = Join-Path $ScriptDir "skills\specback"
 
 if (-not (Test-Path $SkillSrc)) {
-  Write-Host "Error: skills/cc-rsg/ not found alongside this script."
-  Write-Host "Run this script from the root of the cc-rsg repository."
+  Write-Host "Error: skills/specback/ not found alongside this script."
+  Write-Host "Run this script from the root of the specback repository."
   exit 1
 }
 
@@ -65,23 +65,23 @@ function Is-ValidKey($key) {
 # ── Helper: install paths ─────────────────────────────────────────────
 function Get-UserPath($key) {
   switch ($key) {
-    "claude"   { return "$HOME\.claude\skills\cc-rsg" }
-    "codex"    { return "$HOME\.codex\skills\cc-rsg" }
-    "opencode" { return "$HOME\.opencode\skills\cc-rsg" }
-    "copilot"  { return "$HOME\.copilot\skills\cc-rsg" }
-    "cursor"   { return "$HOME\.cursor\skills\cc-rsg" }
-    "other"    { return "$HOME\.agents\skills\cc-rsg" }
+    "claude"   { return "$HOME\.claude\skills\specback" }
+    "codex"    { return "$HOME\.codex\skills\specback" }
+    "opencode" { return "$HOME\.opencode\skills\specback" }
+    "copilot"  { return "$HOME\.copilot\skills\specback" }
+    "cursor"   { return "$HOME\.cursor\skills\specback" }
+    "other"    { return "$HOME\.agents\skills\specback" }
   }
 }
 
 function Get-ProjPath($key) {
   switch ($key) {
-    "claude"   { return ".claude\skills\cc-rsg" }
-    "codex"    { return ".codex\skills\cc-rsg" }
-    "opencode" { return ".opencode\skills\cc-rsg" }
-    "copilot"  { return ".github\skills\cc-rsg" }
-    "cursor"   { return ".cursor\skills\cc-rsg" }
-    "other"    { return ".agents\skills\cc-rsg" }
+    "claude"   { return ".claude\skills\specback" }
+    "codex"    { return ".codex\skills\specback" }
+    "opencode" { return ".opencode\skills\specback" }
+    "copilot"  { return ".github\skills\specback" }
+    "cursor"   { return ".cursor\skills\specback" }
+    "other"    { return ".agents\skills\specback" }
   }
 }
 
@@ -117,12 +117,12 @@ function Install-Deps {
 }
 
 # ── Resolve input source: CLI > env > interactive ────────────────────
-$ResolvedAgent = if ($Agent) { $Agent } else { $env:CC_RSG_AGENT }
-$ResolvedLevel = if ($Level) { $Level } else { $env:CC_RSG_LEVEL }
+$ResolvedAgent = if ($Agent) { $Agent } else { $env:SPECBACK_AGENT }
+$ResolvedLevel = if ($Level) { $Level } else { $env:SPECBACK_LEVEL }
 
 # ── Main ──────────────────────────────────────────────────────────────
 Write-Host ""
-Write-Host "cc-rsg installer v0.2.0"
+Write-Host "specback installer v0.2.0"
 Write-Host "======================="
 Write-Host ""
 
@@ -157,7 +157,7 @@ if ($ResolvedAgent) {
     exit 1
   }
 
-  Write-Host "Installing cc-rsg to:"
+  Write-Host "Installing specback to:"
   Write-Host ""
 
   $installed = 0
@@ -187,7 +187,7 @@ if ($ResolvedAgent) {
     Write-Host "Dry-run complete. No changes were made."
   } else {
     if ($InstallDeps) { Install-Deps }
-    Write-Host "Done. cc-rsg is now installed."
+    Write-Host "Done. specback is now installed."
   }
   Write-Host ""
   exit 0
@@ -255,7 +255,7 @@ if ($ResolvedAgent) {
 
 # ── Install ───────────────────────────────────────────────────────────
 Write-Host ""
-Write-Host "Installing cc-rsg to:"
+Write-Host "Installing specback to:"
 Write-Host ""
 
 $installed = 0
@@ -283,6 +283,6 @@ if ($DryRun) {
   Write-Host "Dry-run complete. No changes were made."
 } else {
   if ($InstallDeps) { Install-Deps }
-  Write-Host "Done. cc-rsg is now installed."
+  Write-Host "Done. specback is now installed."
 }
 Write-Host ""

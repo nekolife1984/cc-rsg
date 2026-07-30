@@ -59,7 +59,7 @@ gh release create v0.8.0 \
   --notes "See CHANGELOG.md for details"
 ```
 
-Or create it manually at https://github.com/nekolife1984/cc-rsg/releases/new
+Or create it manually at https://github.com/nekolife1984/specback/releases/new
 
 ## Hotfix Release
 
@@ -86,7 +86,7 @@ Current trajectory: `v0.7.x` → `v0.8.x` (feature additions) → `v1.0` (stable
 
 - [ ] CHANGELOG.md updated
 - [ ] README Roadmap updated (completed items struck through)
-- [ ] Version string in `skills/cc-rsg/SKILL.md` updated (if applicable)
+- [ ] Version string in `skills/specback/SKILL.md` updated (if applicable)
 - [ ] Zenodo preprint updated (only for significant design changes)
 - [ ] Tag created and pushed
 - [ ] GitHub Release created

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# cc-rsg installer — interactive or CLI-driven skill installer
+# specback installer — interactive or CLI-driven skill installer
 #
 # Usage:
 #   ./install.sh                                          interactive mode
@@ -12,17 +12,17 @@ set -euo pipefail
 #   ./install.sh --agent copilot --level project --dry-run  dry-run with flags
 #
 # Environment variables (lower priority than CLI flags):
-#   CC_RSG_AGENT=claude,opencode   CC_RSG_LEVEL=user
+#   SPECBACK_AGENT=claude,opencode   SPECBACK_LEVEL=user
 #
 # Supports: Claude Code, Codex CLI, OpenCode, GitHub Copilot, Cursor, Other
 # ---------------------------------------------------------------------------
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILL_SRC="$SCRIPT_DIR/skills/cc-rsg"
+SKILL_SRC="$SCRIPT_DIR/skills/specback"
 
 if [[ ! -d "$SKILL_SRC" ]]; then
-  echo "Error: skills/cc-rsg/ not found alongside this script."
-  echo "Run this script from the root of the cc-rsg repository."
+  echo "Error: skills/specback/ not found alongside this script."
+  echo "Run this script from the root of the specback repository."
   exit 1
 fi
 
@@ -67,8 +67,8 @@ while [[ $# -gt 0 ]]; do
       echo "  --help, -h          Show this message"
       echo ""
       echo "Environment:"
-      echo "  CC_RSG_AGENT=claude    (fallback when --agent not given)"
-      echo "  CC_RSG_LEVEL=user      (fallback when --level not given)"
+      echo "  SPECBACK_AGENT=claude    (fallback when --agent not given)"
+      echo "  SPECBACK_LEVEL=user      (fallback when --level not given)"
       echo ""
       echo "Examples:"
       echo "  $0"
@@ -99,8 +99,8 @@ populate_agents() {
 populate_agents
 
 # ── Resolve input source: CLI > env > interactive ────────────────────
-RESOLVED_AGENT="${CLI_AGENT:-${CC_RSG_AGENT:-}}"
-RESOLVED_LEVEL="${CLI_LEVEL:-${CC_RSG_LEVEL:-}}"
+RESOLVED_AGENT="${CLI_AGENT:-${SPECBACK_AGENT:-}}"
+RESOLVED_LEVEL="${CLI_LEVEL:-${SPECBACK_LEVEL:-}}"
 
 # ── Helper: validate agent key ───────────────────────────────────────
 is_valid_agent_key() {
@@ -115,12 +115,12 @@ is_valid_agent_key() {
 USER_PATHS() {
   local key="$1"
   case "$key" in
-    claude)   echo "$HOME/.claude/skills/cc-rsg" ;;
-    codex)    echo "$HOME/.codex/skills/cc-rsg" ;;
-    opencode) echo "$HOME/.opencode/skills/cc-rsg" ;;
-    copilot)  echo "$HOME/.copilot/skills/cc-rsg" ;;
-    cursor)   echo "$HOME/.cursor/skills/cc-rsg" ;;
-    other)    echo "$HOME/.agents/skills/cc-rsg" ;;
+    claude)   echo "$HOME/.claude/skills/specback" ;;
+    codex)    echo "$HOME/.codex/skills/specback" ;;
+    opencode) echo "$HOME/.opencode/skills/specback" ;;
+    copilot)  echo "$HOME/.copilot/skills/specback" ;;
+    cursor)   echo "$HOME/.cursor/skills/specback" ;;
+    other)    echo "$HOME/.agents/skills/specback" ;;
     *)        echo "" ;;
   esac
 }
@@ -128,12 +128,12 @@ USER_PATHS() {
 PROJ_PATHS() {
   local key="$1"
   case "$key" in
-    claude)   echo ".claude/skills/cc-rsg" ;;
-    codex)    echo ".codex/skills/cc-rsg" ;;
-    opencode) echo ".opencode/skills/cc-rsg" ;;
-    copilot)  echo ".github/skills/cc-rsg" ;;
-    cursor)   echo ".cursor/skills/cc-rsg" ;;
-    other)    echo ".agents/skills/cc-rsg" ;;
+    claude)   echo ".claude/skills/specback" ;;
+    codex)    echo ".codex/skills/specback" ;;
+    opencode) echo ".opencode/skills/specback" ;;
+    copilot)  echo ".github/skills/specback" ;;
+    cursor)   echo ".cursor/skills/specback" ;;
+    other)    echo ".agents/skills/specback" ;;
     *)        echo "" ;;
   esac
 }
@@ -176,7 +176,7 @@ install_deps() {
 
 # ── Main ──────────────────────────────────────────────────────────────
 echo ""
-echo "cc-rsg installer v0.2.0"
+echo "specback installer v0.2.0"
 echo "======================="
 echo ""
 
@@ -209,7 +209,7 @@ if [[ -n "$RESOLVED_AGENT" ]]; then
     exit 1
   fi
 
-  echo "Installing cc-rsg to:"
+  echo "Installing specback to:"
   echo ""
 
   INSTALLED=0
@@ -243,7 +243,7 @@ if [[ -n "$RESOLVED_AGENT" ]]; then
     echo "Dry-run complete. No changes were made."
   else
     $INSTALL_DEPS && install_deps
-    echo "Done. cc-rsg is now installed."
+    echo "Done. specback is now installed."
   fi
   echo ""
   exit 0
@@ -321,7 +321,7 @@ fi
 
 # ── Install ───────────────────────────────────────────────────────────
 echo ""
-echo "Installing cc-rsg to:"
+echo "Installing specback to:"
 echo ""
 
 INSTALLED=0
@@ -349,6 +349,6 @@ if $DRY_RUN; then
   echo "Dry-run complete. No changes were made."
 else
   $INSTALL_DEPS && install_deps
-  echo "Done. cc-rsg is now installed."
+  echo "Done. specback is now installed."
 fi
 echo ""

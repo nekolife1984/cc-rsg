@@ -12,7 +12,6 @@
 | `fix:` | バグ修正 | `fix: detect encoding in py files` |
 | `chore:` | CI・メンテナンス・リファクタリング・依存関係 | `chore: update pytest to 8.x` |
 | `docs:` | ドキュメントのみ（コード変更なし） | `docs: fix typo in branching-strategy` |
-| `upstream:` | `daishir0/cc-rsg` 上流からの同期 | `upstream: merge v0.8.0` |
 | `test:` | テストの追加・修正 | `test: add coverage for build-trace.py` |
 
 迷ったら `chore:` を使ってください。機能追加でもバグ修正でもない変更はすべて `chore:` です。
