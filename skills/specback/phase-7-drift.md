@@ -19,7 +19,7 @@ After Phase 6 delivers the final spec, the codebase continues to evolve. Phase 7
 
 2. **Run detect-drift.py**
    ```bash
-   python .specback/skill/scripts/detect-drift.py \
+   python "$(cat .specback/.skill-path)/scripts/detect-drift.py" \
      --specback-dir .specback \
      --output-dir {output_dir}
    ```
@@ -38,19 +38,19 @@ After Phase 6 delivers the final spec, the codebase continues to evolve. Phase 7
 
 ```bash
 # Default (auto mode: git if available, hash if source-hashes.json exists)
-python .specback/skill/scripts/detect-drift.py --specback-dir .specback
+python "$(cat .specback/.skill-path)/scripts/detect-drift.py" --specback-dir .specback
 
 # Explicit git mode
-python .specback/skill/scripts/detect-drift.py --specback-dir .specback --mode git --base v1.0
+python "$(cat .specback/.skill-path)/scripts/detect-drift.py" --specback-dir .specback --mode git --base v1.0
 
 # Hash mode (non-Git projects)
-python .specback/skill/scripts/detect-drift.py --specback-dir .specback --mode hash
+python "$(cat .specback/.skill-path)/scripts/detect-drift.py" --specback-dir .specback --mode hash
 
 # Pipe diff from CI
-git diff --name-status main...HEAD | python .specback/skill/scripts/detect-drift.py --diff -
+git diff --name-status main...HEAD | python "$(cat .specback/.skill-path)/scripts/detect-drift.py" --diff -
 
 # JSON output
-python .specback/skill/scripts/detect-drift.py --specback-dir .specback --json
+python "$(cat .specback/.skill-path)/scripts/detect-drift.py" --specback-dir .specback --json
 ```
 
 ### Output

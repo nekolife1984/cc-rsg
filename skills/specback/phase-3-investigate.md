@@ -219,7 +219,7 @@ This section does NOT apply in `comprehensive` mode. In outline mode, Phase 3's 
 
 Each Layer 1 chapter **exhaustively lists the "overview table" for that language**. Procedure:
 
-1. Consult `.specback/skill/references/outline-tables.md` for the per-language catalogue.
+1. Consult `$(cat .specback/.skill-path)/references/outline-tables.md` for the per-language catalogue.
 2. **Use `glob` + `grep` to mechanically extract every entity**:
    - Ruby/Rails models: `grep "^class \\w+" --type ruby app/models/`
    - Controllers: `grep "^class \\w+Controller" --type ruby app/controllers/`

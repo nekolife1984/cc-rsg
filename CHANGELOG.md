@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - SKILL.md split into per-phase files with lightweight index ([#18])
 - Multi-agent skill installer (install.sh / install.ps1)
 - Pre-commit hook enforcing tests for new scripts ([#13])
+- Phase 0: skill path recording via `.specback/.skill-path` (replaces bundle staging copy)
 - Customizable output directory for specification documents ([#10])
 - Pre-push hook blocking direct pushes to main ([#1])
 - GitHub Flow branching strategy docs (EN + JA)

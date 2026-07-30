@@ -11,13 +11,13 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
 
 2. **Initialize the state directory**
    - Create the `.specback/` directory.
-   - **Stage the skill bundle into `.specback/skill/`**: every helper invocation in this document refers to the scripts and references through a `.specback/skill/...` path (e.g. `python .specback/skill/scripts/source-map.py ...`, `Consult .specback/skill/references/outline-tables.md`). Those paths only resolve if the bundle is copied next to the target repo's working directory. Copy this skill's `scripts/`, `references/`, `templates/`, and `agents/` directories into `.specback/skill/` once, at the start of Phase 0:
+   - **Record the skill path**: every helper invocation in this document refers to scripts and references through a path derived from `.specback/.skill-path`. Write the absolute path to the skill root (the directory containing `SKILL.md`) into `.specback/.skill-path`:
      ```bash
-     mkdir -p .specback/skill
-     cp -r <skill_dir>/{scripts,references,templates,agents} .specback/skill/
+     mkdir -p .specback
+     echo "/absolute/path/to/specback/skill/root" > .specback/.skill-path
      ```
-     `<skill_dir>` is the directory that contains this SKILL.md (the installed skill root). This copy is idempotent — re-running it on resume simply refreshes the staged bundle. Skip nothing: until this step runs, the very first script call of every phase fails with "No such file or directory".
-   - If an existing `.specback/state.json` is found, branch to resume mode (see "State management and resume" below). Resume mode still re-stages the bundle (the step above) before continuing, in case the skill was reinstalled or upgraded.
+     **Replace `/absolute/path/to/specback/skill/root`** with the real path. The agent reading this instruction knows where `SKILL.md` is installed (e.g. `.claude/skills/specback/` for Claude Code; the agent substitutes the actual absolute path). Once written, all later phases resolve files via `$(cat .specback/.skill-path)/scripts/xxx.py`.
+   - If an existing `.specback/state.json` is found, branch to resume mode (see "State management and resume" below). Resume mode re-reads `.skill-path` before continuing, in case the skill was reinstalled or upgraded.
 
 3. **Output language selection**
 

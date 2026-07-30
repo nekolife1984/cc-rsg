@@ -135,7 +135,7 @@ Finalise the skeleton of the spec, decompose the work to fill each chapter into 
 
    **STEP A (required)**: Run `scripts/source-map.py` (v1, original) OR `source_map_v2` (v2, role-typed) to extract source units automatically:
    ```bash
-   python .specback/skill/scripts/source-map.py \
+   python "$(cat .specback/.skill-path)/scripts/source-map.py" \
      --target <target root> \
      --output .specback/source-map.json
    ```
@@ -149,7 +149,7 @@ Finalise the skeleton of the spec, decompose the work to fill each chapter into 
 
    **STEP B (required)**: Run `scripts/build-inventory-from-sourcemap.py` to mechanically convert `source-map.json` → `inventory.json`:
    ```bash
-   python .specback/skill/scripts/build-inventory-from-sourcemap.py \
+   python "$(cat .specback/.skill-path)/scripts/build-inventory-from-sourcemap.py" \
      --source-map .specback/source-map.json \
      --output .specback/inventory.json
    ```

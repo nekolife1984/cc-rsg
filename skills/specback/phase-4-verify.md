@@ -7,13 +7,13 @@ Run inventory cross-check, per-chapter quality metrics, MECE check, and consiste
 
 1. **Generate trace.json**
    ```bash
-   python .specback/skill/scripts/build-trace.py --specback-dir .specback --output-dir {output_dir} --target-dir-for-required drafts
+   python "$(cat .specback/.skill-path)/scripts/build-trace.py" --specback-dir .specback --output-dir {output_dir} --target-dir-for-required drafts
    ```
    This resolves every `[REF: path:line]` in `drafts/*.md` to a SRC unit and produces the MECE aggregation.
 
 2. **Run coverage-check.py (mandatory; exit code is binding)**
    ```bash
-   python .specback/skill/scripts/coverage-check.py \
+   python "$(cat .specback/.skill-path)/scripts/coverage-check.py" \
      --specback-dir .specback \
      --output-dir {output_dir} \
      --target-dir-for-required drafts \

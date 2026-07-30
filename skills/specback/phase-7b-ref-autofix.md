@@ -8,7 +8,7 @@ Auto-correct `[REF: path:line]` markers in spec files that have become stale due
 
 1. **Run fix-refs.py** (default: dry-run)
    ```bash
-   python .specback/skill/scripts/fix-refs.py \
+   python "$(cat .specback/.skill-path)/scripts/fix-refs.py" \
      --specback-dir .specback \
      --output-dir {output_dir}
    ```
@@ -17,7 +17,7 @@ Auto-correct `[REF: path:line]` markers in spec files that have become stale due
 
 3. **Apply corrections**
    ```bash
-   python .specback/skill/scripts/fix-refs.py \
+   python "$(cat .specback/.skill-path)/scripts/fix-refs.py" \
      --specback-dir .specback \
      --output-dir {output_dir} \
      --apply
@@ -25,7 +25,7 @@ Auto-correct `[REF: path:line]` markers in spec files that have become stale due
 
 4. **CI check mode**
    ```bash
-   python .specback/skill/scripts/fix-refs.py \
+   python "$(cat .specback/.skill-path)/scripts/fix-refs.py" \
      --specback-dir .specback \
      --output-dir {output_dir} \
      --check
@@ -42,7 +42,7 @@ Auto-correct `[REF: path:line]` markers in spec files that have become stale due
 For non-Git projects, generate a hash snapshot after Phase 6 completes:
 
 ```bash
-python .specback/skill/scripts/snapshot-hashes.py --specback-dir .specback
+python "$(cat .specback/.skill-path)/scripts/snapshot-hashes.py" --specback-dir .specback
 ```
 
 This creates `.specback/source-hashes.json` which `detect-drift.py --mode hash` uses as its comparison baseline.
