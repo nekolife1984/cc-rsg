@@ -1,7 +1,24 @@
 #!/bin/sh
-# .githooks/pre-commit — Enforce test coverage for script changes
+# .githooks/pre-commit — Security + test coverage checks
 set -e
 
+# ── Phase 1: Gitleaks (secret scanning) ──────────────────────
+if command -v gitleaks >/dev/null 2>&1; then
+  echo "🔐 Scanning staged changes for secrets..."
+  gitleaks git --staged --no-banner --verbose 2>/dev/null
+  result=$?
+  if [ $result -eq 1 ]; then
+    echo ""
+    echo "❌ Secrets detected! Please remove them before committing."
+    echo "💡 To bypass: git commit --no-verify"
+    exit 1
+  fi
+else
+  echo "⚠️  gitleaks not found — skipping secret scan"
+  echo "   Install: brew install gitleaks"
+fi
+
+# ── Phase 2: Test coverage for new/modified scripts ───────────
 echo "🔍 Checking staged scripts for test coverage..."
 
 SCRIPT_DIR="skills/specback/scripts"
