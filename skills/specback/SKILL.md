@@ -48,6 +48,18 @@ Every Mermaid diagram MUST be **structure-only — no color, no node-level fill,
 
 **Direction rule**: `graph TD` / `flowchart TD` (top-to-bottom) is the default for all graph/flowchart diagrams. Use `graph LR` (left-to-right) **only** when the diagram has ≤8 nodes AND the node labels are short enough to fit horizontally. For any diagram with many nodes, complex labels, or subgraphs, always prefer `TD`. This prevents the cramped/squished appearance that occurs when `LR` diagrams have many blocks.
 
+**Split rule**: When a diagram exceeds the following size thresholds, split it into multiple focused diagrams rather than cramming everything into one:
+
+| Diagram type | Max size before split | Split strategy |
+|:------------|:--------------------:|:---------------|
+| ER diagram | 20 entities | Split by domain / module / bounded context |
+| Sequence diagram | 15 messages | Split by use case / scenario |
+| classDiagram | 15 classes | Split by package / namespace |
+| stateDiagram-v2 | 10 states | Split by entity state machine |
+| graph/flowchart | 15 nodes | Split by sub-system / layer |
+
+Split diagrams use the same base heading with a suffix: `### 5.1-a: Sales domain` / `### 5.1-b: Inventory domain`. When splitting, add a brief sentence at the parent section explaining the split rationale.
+
 **Active-diagram rule**: Every section describing something complex — whether processing (conditional branching, multi-step flows, state transitions, decision logic, async/callback chains), structure (module relationships, data flow, class hierarchies, ER), or behavior (authorization flows, screen transitions, integration sequences) — MUST be accompanied by an appropriate Mermaid diagram (flowchart, sequence, state-diagram, ER, component, class, etc.). A section that uses text alone where a diagram would make things clearer is a defect. When in doubt, add a diagram — readers always benefit from the visual.
 
 Use **shape** (not color) for visual emphasis.

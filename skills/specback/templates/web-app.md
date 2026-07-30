@@ -57,59 +57,112 @@ Designed for typical web applications: PHP (Laravel/Symfony/CakePHP), Python (Dj
 
 ---
 
-### Chapter 3: Screens and screen transitions
+### Chapter 3: Class / Module Design
+
+<!-- meta: internal structure of the codebase — classes, modules, and their relationships. -->
+
+#### 3.1 Module overview
+
+| Module / package | Responsibility | Key classes | Dependencies |
+|:----------------|:-------------|:-----------|:------------|
+| app/controllers | HTTP request handling | IssuesController, UsersController | app/services |
+| app/models | Domain entities & persistence | Issue, User, Project | app/validators |
+| app/services | Business logic | IssueService, NotificationService | app/models |
+| ... | ... | ... | ... |
+
+#### 3.2 Class catalogue
+
+| Class | Kind | Module | Responsibility | Depends on | Source |
+|:------|:----|:-------|:-------------|:----------|:-------|
+| IssuesController | Controller | app/controllers | CRUD for Issues | IssueService | [REF: ...] |
+| IssueService | Service | app/services | Issue business logic | Issue, NotificationService | [REF: ...] |
+| Issue | Model | app/models | Issue entity & persistence | User, Project | [REF: ...] |
+| ... | ... | ... | ... | ... | ... |
+
+#### 3.3 Class diagram (Mermaid)
+
+For key subsystems, include a `classDiagram` showing inheritance, interfaces, and associations. Split per module if >15 classes (see SKILL.md Split rule).
+
+#### 3.4 Module dependency diagram (Mermaid)
+
+Show the direction of dependencies between top-level modules using `graph TD` or `flowchart TD`.
+
+---
+
+### Chapter 4: Screens and screen transitions
 
 <!-- meta: UI structure from the user's perspective. -->
 
-#### 3.1 Screen list
+#### 4.1 Screen list
 | Screen ID | Screen name | URL | Auth required | Required role |
 |-------|-------|-----|---------|---------|
 | SC-001 | Login | /login | no | - |
 | SC-002 | Dashboard | /dashboard | yes | regular user or higher |
 | ... | ... | ... | ... | ... |
 
-#### 3.2 Screen-transition diagram
+#### 4.2 Screen-transition diagram
 - Major transition paths (Mermaid notation, etc.)
 - Exceptional transitions (errors, session timeout)
 
-#### 3.3 Details of each screen
-For each screen, describe:
-- Displayed elements
-- Input fields and their validation
-- Actions (behaviour when buttons are pressed)
-- Display conditions (role, data state)
+#### 4.3 Details of each screen
+
+For each screen, describe using structured tables:
+
+###### Input fields
+
+| # | Field name | Type | Required | Validation / Constraints | Default | Source |
+|:-:|:----------|:----|:--------:|:----------------------|:------|:-------|
+| 1 | email | email | ✅ | format: email, maxlength: 255 | - | User.email |
+| 2 | password | password | ✅ | minlength: 8 | - | User.password |
+| ... | ... | ... | ... | ... | ... | ... |
+
+###### Actions
+
+| Button / Trigger | HTTP method | Endpoint | Destination | Auth required | Side effects |
+|:---------------|:----------:|:--------|:-----------|:------------:|:------------|
+| Login | POST | /login | Dashboard | no | Session created |
+| Cancel | GET | / | Login page | no | - |
+| ... | ... | ... | ... | ... | ... |
+
+###### Display conditions
+
+| Element | Visibility condition | Role restriction | Data state |
+|:--------|:-------------------|:---------------|:----------|
+| Admin panel link | User is admin | admin | - |
+| Edit button | Own record or admin | user, admin | status != deleted |
+| ... | ... | ... | ... |
 
 ---
 
-### Chapter 4: Routes / endpoints
+### Chapter 5: Routes / endpoints
 
 <!-- meta: full list of HTTP routes. The pillar of inventory-based verification. -->
 
-#### 4.1 Web screen routes
+#### 5.1 Web screen routes
 | Method | Path | Controller::Action | Auth | Summary |
 |---------|------|-----------------------|------|------|
 | GET | / | HomeController::index | optional | Top page |
 | GET | /users/{id} | UserController::show | required | User details |
 | ... | ... | ... | ... | ... |
 
-#### 4.2 Internal API / Ajax endpoints
+#### 5.2 Internal API / Ajax endpoints
 - Ajax / Fetch APIs called from the screens
 - Response format
 
-#### 4.3 Per-route middleware
+#### 5.3 Per-route middleware
 - Applied middleware and the order of processing
 
 ---
 
-### Chapter 5: Data model
+### Chapter 6: Data model
 
 <!-- meta: structure and semantics of persisted data. -->
 
-#### 5.1 ER diagram
+#### 6.1 ER diagram
 - Relations between key entities
 - Use Mermaid notation, etc.
 
-#### 5.2 Entity list
+#### 6.2 Entity list
 Per entity:
 - Table / class name
 - Field list (type, nullability, default, business meaning)
@@ -117,97 +170,157 @@ Per entity:
 - Foreign keys
 - Relations (1:1, 1:N, N:N)
 
-#### 5.3 Key domain rules
+#### 6.3 Key domain rules
 - Invariants
 - State transitions (state machines)
 - Business rules (e.g. "withdrawn users are excluded from search results")
 
 ---
 
-### Chapter 6: Authentication and authorisation
+### Chapter 7: Authentication and authorisation
 
 <!-- meta: security core. Omissions here are critical. -->
 
-#### 6.1 Authentication method
+#### 7.1 Authentication method
 - Session / token / OAuth / SSO
 - Password-hash algorithm
 - Session timeout
 
-#### 6.2 Authorisation model
+#### 7.2 Authorisation model
 - Roles and permissions
 - Role hierarchy
 - Where authorisation checks are implemented
 
-#### 6.3 Authorisation flow
+#### 7.3 Authorisation flow
 - Request → authorisation decision → execute / deny flow
 - Behaviour on authorisation failure
 
-#### 6.4 Session management
+#### 7.4 Session management
 - Session store
 - Conditions for session invalidation
 - Concurrent-login control
 
 ---
 
-### Chapter 7: External-system integration
+### Chapter 8: External interfaces
 
-<!-- meta: boundaries and failure propagation. -->
+<!-- meta: all system boundaries — APIs, databases, queues, file transfers, hardware. -->
 
-#### 7.1 Integration partners
-| Partner | Protocol | Purpose | Behaviour on failure |
-|-------|----------|------|----------|
-| Payment gateway | HTTPS REST | Payment processing | Retry 3 times; notify on failure |
-| ... | ... | ... | ... |
+#### 8.1 External interface inventory
 
-#### 7.2 Details per integration
+| IF-ID | Name | Type | Protocol | Direction | Consumer / provider | Failure behaviour |
+|:------|:-----|:----|:---------|:--------:|:------------------|:-----------------|
+| IF-001 | Payment gateway | REST API | HTTPS | Outbound | Payment service | Retry 3x, notify |
+| IF-002 | User database | Database | PostgreSQL | Bidirectional | Main DB | Connection pool |
+| IF-003 | Order events | Message queue | AMQP | Publish | RabbitMQ | Reconnect, DLQ |
+| IF-004 | Daily reports | File transfer | SFTP | Upload | Report server | Alert on failure |
+| ... | ... | ... | ... | ... | ... | ... |
+
+#### 8.2 External API integrations
+
+##### 8.2.1 Integration partners
+
+| Partner | Protocol | Purpose | Authentication | Timeout | Behaviour on failure |
+|---------|----------|------|--------------|:-------|-------------------|
+| Payment gateway | HTTPS REST | Payment processing | API Key (X-API-Key) | 10s | Retry 3 times; notify on failure |
+| ... | ... | ... | ... | ... | ... |
+
+##### 8.2.2 Details per integration
 - Authentication method (API key, OAuth, etc.)
 - Request / response example
 - Timeout / retry policy
 - Idempotency (or lack thereof)
 - Fallback behaviour on failure
 
+#### 8.3 Database connections
+
+| Database | Type | Host / connection | Auth | Pool | TLS | Usage |
+|:---------|:-----|:-----------------|:----|:----:|:---|:------|
+| Main DB | PostgreSQL | db.example.com:5432 | SCRAM-SHA-256 | max: 10 | required | Primary persistence |
+| Cache | Redis | cache.example.com:6379 | password | - | optional | Session store |
+| Analytics | BigQuery | - | Service account | - | built-in | Reporting queries |
+
+#### 8.4 Message queues / event streams
+
+| Queue / topic | Type | Broker | Direction | Routing | Retry / DLQ | Consumers |
+|:-------------|:----|:------|:--------:|:--------|:-----------|:----------|
+| order.created | topic | RabbitMQ | Publish | exchange: order | DLQ after 3 retries | NotificationService |
+| email.send | queue | SQS | Consume | - | redrive after 5 failures | EmailWorker |
+
+#### 8.5 File transfers
+
+| Transfer | Source | Destination | Protocol | Schedule | File pattern | Encryption |
+|:---------|:-------|:-----------|:---------|:--------|:------------|:----------|
+| Daily sales | Main DB export | sftp://report.example.com/incoming | SFTP | 03:00 daily | sales_YYYYMMDD.csv | AES-256 |
+| Partner feed | sftp://partner.example.com/outgoing | Import worker | SFTP | Poll every 30min | feed_*.xml | PGP |
+
+#### 8.6 Other interfaces
+
+| Interface | Type | Protocol | Details |
+|:----------|:-----|:---------|:--------|
+| Barcode scanner | Hardware | RS-232C | /dev/ttyUSB0, 9600 baud |
+| SMS gateway | API | SMPP | provider.example.com:2775 |
+
 ---
 
-### Chapter 8: Operations settings
+### Chapter 9: Operations settings
 
 <!-- meta: deployment, environment variables, monitoring. -->
 
-#### 8.1 Environment composition
+#### 9.1 Environment composition
 - Environment list (dev, staging, prod)
 - Differences between environments
 
-#### 8.2 Environment variables / configuration values
+#### 9.2 Environment variables / configuration values
 | Variable | Required | Default | Purpose |
 |-------|------|----------|------|
 | DB_HOST | required | - | Database connection target |
 | ... | ... | ... | ... |
 
-#### 8.3 Deployment procedure
+#### 9.3 Deployment procedure
 - Build procedure
 - Deploy command
 - Rollback procedure
 
-#### 8.4 Monitoring / logging
-- Monitoring targets (liveness, performance, errors)
-- Log destination and retention period
-- Alert conditions
+#### 9.4 Logging
 
-#### 8.5 Backup / restore
+| Log type | Output | Format | Level | Retention | Source config |
+|:---------|:-------|:------|:-----|:---------|:-------------|
+| Access log | stdout | JSON (structured) | info | 90 days | config/logging.rb:10 |
+| Application log | stdout | JSON (structured) | debug~error | 90 days | config/logging.rb:25 |
+| Error log | stderr | JSON (structured) | warn~fatal | 1 year | config/logging.rb:40 |
+| Audit log | audit.log | CSV | info | 3 years | lib/audit.rb:8 |
+| Slow query log | slow-query.log | plain text | - | 30 days | config/database.yml:15 |
+
+Log level definitions:
+| Level | Meaning | Output |
+|:------|:--------|:-------|
+| DEBUG | Detailed diagnostic info (dev only) | Dev environment |
+| INFO | Normal operation messages | Always |
+| WARN | Warning conditions | Always |
+| ERROR | Recoverable errors | Always |
+| FATAL | Unrecoverable errors | Always |
+
+#### 9.5 Monitoring
+- Monitoring targets (liveness, performance, errors)
+- Alert conditions and notification channels
+
+#### 9.6 Backup / restore
 - Backup target
 - Frequency and generation management
 - Restore procedure
 
 ---
 
-### Chapter 9: Known constraints and unresolved items
+### Chapter 10: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 9.1 Known technical constraints
+#### 10.1 Known technical constraints
 - Performance ceilings (concurrent connections, response time)
 - Known bugs / workarounds
 
-#### 9.2 Unresolved items
+#### 10.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 - For each item, record "why it could not be resolved", "current inference", "what is needed to resolve it in the future"
 

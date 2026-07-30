@@ -99,6 +99,8 @@ Incorporate the citations into the body. **Per-chapter mandatory requirements**:
 
 Beyond the minimum, follow the **Active-diagram rule** (see SKILL.md Mermaid styling contract): any section describing something complex — processing, structure, or behavior — MUST be accompanied by an appropriate Mermaid diagram. Text-only explanations of complex subjects are a defect.
 
+For **screen detail chapters** (Section 3.3 of the web-app template), use the structured-table format defined in the template (Input fields table + Actions table + Display conditions table) instead of free-text bullet points. Each row in the Input fields table should map to a real field in the view/template source code with a `[REF:]` marker. Action rows should cite the corresponding endpoint or controller action.
+
 Chapters that fail these are rejected in Phase 4 and loop back to Phase 3 for correction.
 
 Around each `[REF: ...]`, add prose explaining "what is happening". Writing only what Rails/Laravel-style frameworks "typically do" is forbidden — write what the **actual code** does after reading it.
@@ -245,6 +247,8 @@ Each Layer 1 chapter **exhaustively lists the "overview table" for that language
 Each diagram has a **one-line caption** and a "how to read this" hint. If a diagram cell is `[INFERRED]`, say so explicitly.
 
 **Direction rule**: Default to `TD` (top-to-bottom) for graph/flowchart diagrams. Use `LR` only when ≤8 nodes with short labels — see SKILL.md Mermaid styling contract.
+
+**Split rule**: Apply the SKILL.md split thresholds (e.g. ER≥20 entities → split by domain). Label split diagrams with `-a`, `-b` suffixes and explain the split rationale.
 
 **Active-diagram rule**: Beyond the 4 mandatory diagram types above, any section in a deep-dive chapter or comprehensive-mode chapter that describes complex processing (conditional branching, multi-step flows, decision logic, async chains, authorization flows) MUST be accompanied by an appropriate Mermaid diagram. Text-only descriptions of complex processes are a defect.
 

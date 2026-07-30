@@ -98,7 +98,11 @@ Include **at least one Mermaid diagram** appropriate to the chapter:
 
 Default direction is **`TD`** (top-to-bottom) for graph/flowchart diagrams. Use `LR` only when the diagram has ≤8 nodes with short labels (see specback SKILL.md Mermaid styling contract).
 
+**Split rule**: Apply the SKILL.md split thresholds (ER≥20 entities, classDiagram≥15 classes, etc.). Label split diagrams with `-a`, `-b` suffixes.
+
 **Active-diagram rule**: Beyond the mandatory ≥1 Mermaid, any complex subject in this chapter — processing flows, structure/relationships, behavior, or data models — MUST be accompanied by an appropriate Mermaid diagram. When in doubt, add a diagram.
+
+For **screen detail sections** (Section 3.3 of web-app template), always use the structured-table format (Input fields table + Actions table + Display conditions table) as defined in the template. Map each field row to a real view/template source reference with `[REF:]`.
 - Etc.
 
 ### STEP E: Uncertainty markers
