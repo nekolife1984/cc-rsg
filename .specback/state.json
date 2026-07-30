@@ -1,0 +1,31 @@
+{
+  "current_phase": 6,
+  "phase_progress": {
+    "phase_0": {"total_subtasks": 7, "completed_subtasks": 7, "blocked_subtasks": []},
+    "phase_1": {"total_subtasks": 6, "completed_subtasks": 6, "blocked_subtasks": []},
+    "phase_2": {"total_subtasks": 5, "completed_subtasks": 5, "blocked_subtasks": []},
+    "phase_3": {"total_subtasks": 9, "completed_subtasks": 9, "blocked_subtasks": []},
+    "phase_4": {"total_subtasks": 5, "completed_subtasks": 5, "blocked_subtasks": []},
+    "phase_5": {"total_subtasks": 3, "completed_subtasks": 3, "blocked_subtasks": []},
+    "phase_6": {"total_subtasks": 6, "completed_subtasks": 6, "blocked_subtasks": []}
+  },
+  "all_quality_gates_passed": false,
+  "started_at": "2026-07-30T00:00:00+09:00",
+  "last_updated": "2026-07-30T17:56:00+09:00",
+  "session_history": [
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 0, "event": "started"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 0, "event": "completed"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 1, "event": "transitioned"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 1, "event": "completed"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 2, "event": "transitioned"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 2, "event": "completed"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 3, "event": "transitioned"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 3, "event": "completed"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 4, "event": "transitioned"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 4, "event": "completed"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 5, "event": "transitioned"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 5, "event": "completed"},
+    {"timestamp": "2026-07-30T00:00:00+09:00", "phase": 6, "event": "transitioned"},
+    {"timestamp": "2026-07-30T17:56:00+09:00", "phase": 6, "event": "completed"}
+  ]
+}

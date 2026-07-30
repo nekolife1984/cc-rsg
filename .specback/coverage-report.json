@@ -1,0 +1,3689 @@
+{
+  "total_inventory": 686,
+  "inventory_required_min": 50,
+  "macro_inventory_count": 0,
+  "macro_inventory_ratio": 0.0,
+  "covered_by_fill_rate": 0.26384839650145775,
+  "coverage_rate": 26.384839650145775,
+  "drafts_scanned": 12,
+  "uncovered_inventory": [
+    {
+      "id": "INV-0001",
+      "type": "py_function",
+      "name": "run_git_diff_name_status",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 75
+    },
+    {
+      "id": "INV-0002",
+      "type": "py_function",
+      "name": "parse_diff_text",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 120
+    },
+    {
+      "id": "INV-0004",
+      "type": "py_function",
+      "name": "load_trace",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 187
+    },
+    {
+      "id": "INV-0005",
+      "type": "py_function",
+      "name": "load_state",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 201
+    },
+    {
+      "id": "INV-0006",
+      "type": "py_function",
+      "name": "load_source_hashes",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 211
+    },
+    {
+      "id": "INV-0008",
+      "type": "py_function",
+      "name": "compute_hash_changes",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 256
+    },
+    {
+      "id": "INV-0009",
+      "type": "py_function",
+      "name": "analyze_impact",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 314
+    },
+    {
+      "id": "INV-0010",
+      "type": "py_function",
+      "name": "_determine_impact",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 431
+    },
+    {
+      "id": "INV-0011",
+      "type": "py_function",
+      "name": "_check_deleted_path_in_trace",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 455
+    },
+    {
+      "id": "INV-0012",
+      "type": "py_function",
+      "name": "generate_markdown",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 487
+    },
+    {
+      "id": "INV-0013",
+      "type": "py_function",
+      "name": "generate_json",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 724
+    },
+    {
+      "id": "INV-0014",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 762
+    },
+    {
+      "id": "INV-0015",
+      "type": "py_function",
+      "name": "resolve_base",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 807
+    },
+    {
+      "id": "INV-0016",
+      "type": "py_function",
+      "name": "print_base_info",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 827
+    },
+    {
+      "id": "INV-0017",
+      "type": "py_function",
+      "name": "resolve_mode",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 843
+    },
+    {
+      "id": "INV-0018",
+      "type": "py_function",
+      "name": "print_mode_info",
+      "file": "specback/skills/specback/scripts/detect-drift.py",
+      "line": 882
+    },
+    {
+      "id": "INV-0023",
+      "type": "py_function",
+      "name": "load_inventory",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 159
+    },
+    {
+      "id": "INV-0024",
+      "type": "py_function",
+      "name": "load_questions",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 179
+    },
+    {
+      "id": "INV-0025",
+      "type": "py_function",
+      "name": "load_source_map_ids",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 190
+    },
+    {
+      "id": "INV-0026",
+      "type": "py_function",
+      "name": "load_source_map_count",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 202
+    },
+    {
+      "id": "INV-0027",
+      "type": "py_function",
+      "name": "load_trace",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 214
+    },
+    {
+      "id": "INV-0028",
+      "type": "py_function",
+      "name": "load_user_custom_deliverables",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 221
+    },
+    {
+      "id": "INV-0029",
+      "type": "py_function",
+      "name": "scan_chapter_files",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 248
+    },
+    {
+      "id": "INV-0030",
+      "type": "py_function",
+      "name": "compute_chapter_metrics",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 265
+    },
+    {
+      "id": "INV-0031",
+      "type": "py_function",
+      "name": "evaluate_chapter_gates",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 324
+    },
+    {
+      "id": "INV-0032",
+      "type": "py_function",
+      "name": "detect_mentions",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 356
+    },
+    {
+      "id": "INV-0033",
+      "type": "py_function",
+      "name": "is_macro_type",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 372
+    },
+    {
+      "id": "INV-0034",
+      "type": "py_function",
+      "name": "check_question_integrity",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 376
+    },
+    {
+      "id": "INV-0035",
+      "type": "py_function",
+      "name": "check_naming_convention",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 422
+    },
+    {
+      "id": "INV-0036",
+      "type": "py_function",
+      "name": "check_user_custom_deliverables",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 442
+    },
+    {
+      "id": "INV-0037",
+      "type": "py_function",
+      "name": "check_required_files",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 489
+    },
+    {
+      "id": "INV-0038",
+      "type": "py_function",
+      "name": "detect_depth_mode",
+      "file": "specback/skills/specback/scripts/coverage-check.py",
+      "line": 503
+    },
+    {
+      "id": "INV-0043",
+      "type": "py_function",
+      "name": "_slugify",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 73
+    },
+    {
+      "id": "INV-0044",
+      "type": "py_function",
+      "name": "_line_range_str",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 80
+    },
+    {
+      "id": "INV-0045",
+      "type": "py_function",
+      "name": "_load_json",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 86
+    },
+    {
+      "id": "INV-0046",
+      "type": "py_function",
+      "name": "build_source_unit_node",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 102
+    },
+    {
+      "id": "INV-0047",
+      "type": "py_function",
+      "name": "build_inventory_node",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 129
+    },
+    {
+      "id": "INV-0048",
+      "type": "py_function",
+      "name": "build_spec_chapter_node",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 145
+    },
+    {
+      "id": "INV-0049",
+      "type": "py_function",
+      "name": "build_question_node",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 163
+    },
+    {
+      "id": "INV-0050",
+      "type": "py_function",
+      "name": "build_knowledge_graph",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 188
+    },
+    {
+      "id": "INV-0051",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 245
+    },
+    {
+      "id": "INV-0053",
+      "type": "py_function",
+      "name": "_ext_from_path",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 114
+    },
+    {
+      "id": "INV-0054",
+      "type": "py_function",
+      "name": "_detect_symbols",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 120
+    },
+    {
+      "id": "INV-0055",
+      "type": "py_function",
+      "name": "parse_unified_diff",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 164
+    },
+    {
+      "id": "INV-0056",
+      "type": "py_function",
+      "name": "analyze_structural_changes",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 250
+    },
+    {
+      "id": "INV-0057",
+      "type": "py_function",
+      "name": "extract_snippets",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 295
+    },
+    {
+      "id": "INV-0059",
+      "type": "py_function",
+      "name": "load_trace",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 363
+    },
+    {
+      "id": "INV-0060",
+      "type": "py_function",
+      "name": "load_state",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 370
+    },
+    {
+      "id": "INV-0061",
+      "type": "py_function",
+      "name": "load_source_hashes",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 380
+    },
+    {
+      "id": "INV-0062",
+      "type": "py_function",
+      "name": "cross_reference_sections",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 392
+    },
+    {
+      "id": "INV-0063",
+      "type": "py_function",
+      "name": "run_git_unified_diff",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 433
+    },
+    {
+      "id": "INV-0064",
+      "type": "py_function",
+      "name": "run_git_diff_name_status",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 456
+    },
+    {
+      "id": "INV-0065",
+      "type": "py_function",
+      "name": "compute_hash_changes",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 501
+    },
+    {
+      "id": "INV-0066",
+      "type": "py_function",
+      "name": "read_current_file",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 543
+    },
+    {
+      "id": "INV-0067",
+      "type": "py_function",
+      "name": "analyze_current_structure",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 551
+    },
+    {
+      "id": "INV-0068",
+      "type": "py_function",
+      "name": "resolve_mode",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 571
+    },
+    {
+      "id": "INV-0069",
+      "type": "py_function",
+      "name": "resolve_base",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 597
+    },
+    {
+      "id": "INV-0070",
+      "type": "py_function",
+      "name": "build_change_spec",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 614
+    },
+    {
+      "id": "INV-0071",
+      "type": "py_function",
+      "name": "_parse_name_status_from_unified",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 766
+    },
+    {
+      "id": "INV-0072",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/skills/specback/scripts/change-spec.py",
+      "line": 797
+    },
+    {
+      "id": "INV-0077",
+      "type": "py_function",
+      "name": "get_git_diff",
+      "file": "specback/skills/specback/scripts/fix-refs.py",
+      "line": 196
+    },
+    {
+      "id": "INV-0078",
+      "type": "py_function",
+      "name": "find_refs_in_file",
+      "file": "specback/skills/specback/scripts/fix-refs.py",
+      "line": 223
+    },
+    {
+      "id": "INV-0079",
+      "type": "py_function",
+      "name": "load_state",
+      "file": "specback/skills/specback/scripts/fix-refs.py",
+      "line": 260
+    },
+    {
+      "id": "INV-0080",
+      "type": "py_function",
+      "name": "resolve_base",
+      "file": "specback/skills/specback/scripts/fix-refs.py",
+      "line": 270
+    },
+    {
+      "id": "INV-0081",
+      "type": "py_function",
+      "name": "format_ref",
+      "file": "specback/skills/specback/scripts/fix-refs.py",
+      "line": 287
+    },
+    {
+      "id": "INV-0085",
+      "type": "py_function",
+      "name": "compute_hashes",
+      "file": "specback/skills/specback/scripts/snapshot-hashes.py",
+      "line": 76
+    },
+    {
+      "id": "INV-0086",
+      "type": "py_function",
+      "name": "detect_scan_patterns",
+      "file": "specback/skills/specback/scripts/snapshot-hashes.py",
+      "line": 125
+    },
+    {
+      "id": "INV-0087",
+      "type": "py_function",
+      "name": "build_output",
+      "file": "specback/skills/specback/scripts/snapshot-hashes.py",
+      "line": 170
+    },
+    {
+      "id": "INV-0088",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/skills/specback/scripts/snapshot-hashes.py",
+      "line": 188
+    },
+    {
+      "id": "INV-0091",
+      "type": "py_function",
+      "name": "load_exclusions",
+      "file": "specback/skills/specback/scripts/build-trace.py",
+      "line": 74
+    },
+    {
+      "id": "INV-0092",
+      "type": "py_function",
+      "name": "is_excluded",
+      "file": "specback/skills/specback/scripts/build-trace.py",
+      "line": 102
+    },
+    {
+      "id": "INV-0093",
+      "type": "py_function",
+      "name": "parse_section_at",
+      "file": "specback/skills/specback/scripts/build-trace.py",
+      "line": 113
+    },
+    {
+      "id": "INV-0097",
+      "type": "py_function",
+      "name": "resolve_type",
+      "file": "specback/skills/specback/scripts/build-inventory-from-sourcemap.py",
+      "line": 67
+    },
+    {
+      "id": "INV-0098",
+      "type": "py_function",
+      "name": "build_inventory",
+      "file": "specback/skills/specback/scripts/build-inventory-from-sourcemap.py",
+      "line": 84
+    },
+    {
+      "id": "INV-0100",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/skills/specback/scripts/build-inventory-from-sourcemap.py",
+      "line": 145
+    },
+    {
+      "id": "INV-0109",
+      "type": "py_function",
+      "name": "extract_file_unit",
+      "file": "specback/skills/specback/scripts/source-map.py",
+      "line": 249
+    },
+    {
+      "id": "INV-0111",
+      "type": "py_function",
+      "name": "matches_any",
+      "file": "specback/skills/specback/scripts/source-map.py",
+      "line": 304
+    },
+    {
+      "id": "INV-0112",
+      "type": "py_function",
+      "name": "iter_target_files",
+      "file": "specback/skills/specback/scripts/source-map.py",
+      "line": 308
+    },
+    {
+      "id": "INV-0115",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_build_traceability_output_dir.py",
+      "line": 11
+    },
+    {
+      "id": "INV-0116",
+      "type": "py_function",
+      "name": "test_help_includes_stage",
+      "file": "specback/skills/specback/scripts/tests/test_build_traceability_output_dir.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0117",
+      "type": "py_function",
+      "name": "test_output_dir_and_stage_with_help_allowed",
+      "file": "specback/skills/specback/scripts/tests/test_build_traceability_output_dir.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0119",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_snapshot_hashes.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0120",
+      "type": "py_function",
+      "name": "test_help_includes_output",
+      "file": "specback/skills/specback/scripts/tests/test_snapshot_hashes.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0121",
+      "type": "py_function",
+      "name": "test_args_with_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_snapshot_hashes.py",
+      "line": 39
+    },
+    {
+      "id": "INV-0122",
+      "type": "py_function",
+      "name": "get_public_symbols",
+      "file": "specback/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 33
+    },
+    {
+      "id": "INV-0123",
+      "type": "py_function",
+      "name": "get_test_symbols",
+      "file": "specback/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 55
+    },
+    {
+      "id": "INV-0124",
+      "type": "py_function",
+      "name": "_test_name_candidates",
+      "file": "specback/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 71
+    },
+    {
+      "id": "INV-0125",
+      "type": "py_function",
+      "name": "check_coverage",
+      "file": "specback/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 96
+    },
+    {
+      "id": "INV-0128",
+      "type": "py_class",
+      "name": "TestParseUnifiedDiff",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 184
+    },
+    {
+      "id": "INV-0129",
+      "type": "py_class",
+      "name": "TestDetectSymbols",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 243
+    },
+    {
+      "id": "INV-0130",
+      "type": "py_class",
+      "name": "TestAnalyzeStructuralChanges",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 336
+    },
+    {
+      "id": "INV-0131",
+      "type": "py_class",
+      "name": "TestExtractSnippets",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 384
+    },
+    {
+      "id": "INV-0132",
+      "type": "py_class",
+      "name": "TestCrossReferenceSections",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 415
+    },
+    {
+      "id": "INV-0133",
+      "type": "py_class",
+      "name": "TestParseNameStatusFromUnified",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 460
+    },
+    {
+      "id": "INV-0134",
+      "type": "py_class",
+      "name": "TestBuildChangeSpec",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 483
+    },
+    {
+      "id": "INV-0135",
+      "type": "py_class",
+      "name": "TestResolveMode",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 590
+    },
+    {
+      "id": "INV-0136",
+      "type": "py_class",
+      "name": "TestResolveBase",
+      "file": "specback/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 607
+    },
+    {
+      "id": "INV-0137",
+      "type": "py_function",
+      "name": "run_script",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 123
+    },
+    {
+      "id": "INV-0138",
+      "type": "py_function",
+      "name": "load_kg",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 130
+    },
+    {
+      "id": "INV-0139",
+      "type": "py_function",
+      "name": "write_json",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 134
+    },
+    {
+      "id": "INV-0140",
+      "type": "py_function",
+      "name": "test_help",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 145
+    },
+    {
+      "id": "INV-0141",
+      "type": "py_function",
+      "name": "test_skip_kg",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 153
+    },
+    {
+      "id": "INV-0142",
+      "type": "py_function",
+      "name": "test_missing_source_map",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 161
+    },
+    {
+      "id": "INV-0143",
+      "type": "py_function",
+      "name": "test_no_units_key",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 167
+    },
+    {
+      "id": "INV-0144",
+      "type": "py_function",
+      "name": "test_basic_graph_structure",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 180
+    },
+    {
+      "id": "INV-0145",
+      "type": "py_function",
+      "name": "test_source_unit_nodes",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 202
+    },
+    {
+      "id": "INV-0146",
+      "type": "py_function",
+      "name": "test_inventory_nodes",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 234
+    },
+    {
+      "id": "INV-0147",
+      "type": "py_function",
+      "name": "test_spec_chapter_nodes",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 261
+    },
+    {
+      "id": "INV-0148",
+      "type": "py_function",
+      "name": "test_question_nodes",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 286
+    },
+    {
+      "id": "INV-0149",
+      "type": "py_function",
+      "name": "test_stats",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 314
+    },
+    {
+      "id": "INV-0150",
+      "type": "py_function",
+      "name": "test_empty_trace_and_inventory",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 339
+    },
+    {
+      "id": "INV-0151",
+      "type": "py_function",
+      "name": "test_skip_questions_flag",
+      "file": "specback/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 365
+    },
+    {
+      "id": "INV-0153",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0154",
+      "type": "py_function",
+      "name": "test_help_includes_mode",
+      "file": "specback/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0155",
+      "type": "py_function",
+      "name": "test_help_includes_json",
+      "file": "specback/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 42
+    },
+    {
+      "id": "INV-0156",
+      "type": "py_function",
+      "name": "test_args_with_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0157",
+      "type": "py_function",
+      "name": "test_args_with_mode_hash",
+      "file": "specback/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 60
+    },
+    {
+      "id": "INV-0158",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_build_trace_output_dir.py",
+      "line": 11
+    },
+    {
+      "id": "INV-0160",
+      "type": "py_function",
+      "name": "test_output_dir_with_help_allowed",
+      "file": "specback/skills/specback/scripts/tests/test_build_trace_output_dir.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0162",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0163",
+      "type": "py_function",
+      "name": "test_help_includes_apply",
+      "file": "specback/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0164",
+      "type": "py_function",
+      "name": "test_help_includes_check",
+      "file": "specback/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 38
+    },
+    {
+      "id": "INV-0165",
+      "type": "py_function",
+      "name": "test_args_with_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0166",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/skills/specback/scripts/tests/test_coverage_check_output_dir.py",
+      "line": 11
+    },
+    {
+      "id": "INV-0168",
+      "type": "py_function",
+      "name": "test_output_dir_with_help_allowed",
+      "file": "specback/skills/specback/scripts/tests/test_coverage_check_output_dir.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0169",
+      "type": "py_function",
+      "name": "run_script",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 86
+    },
+    {
+      "id": "INV-0170",
+      "type": "py_function",
+      "name": "write_source_map",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 94
+    },
+    {
+      "id": "INV-0171",
+      "type": "py_function",
+      "name": "load_inventory",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 100
+    },
+    {
+      "id": "INV-0172",
+      "type": "py_function",
+      "name": "test_help",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 109
+    },
+    {
+      "id": "INV-0173",
+      "type": "py_function",
+      "name": "test_missing_source_map",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 117
+    },
+    {
+      "id": "INV-0174",
+      "type": "py_function",
+      "name": "test_invalid_json",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 123
+    },
+    {
+      "id": "INV-0175",
+      "type": "py_function",
+      "name": "test_no_units_key",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 131
+    },
+    {
+      "id": "INV-0176",
+      "type": "py_function",
+      "name": "test_invalid_role_to_type",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 139
+    },
+    {
+      "id": "INV-0177",
+      "type": "py_function",
+      "name": "test_v2_conversion",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 154
+    },
+    {
+      "id": "INV-0178",
+      "type": "py_function",
+      "name": "test_v2_related_source_ids",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 175
+    },
+    {
+      "id": "INV-0179",
+      "type": "py_function",
+      "name": "test_v2_fields_preserved",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 187
+    },
+    {
+      "id": "INV-0180",
+      "type": "py_function",
+      "name": "test_v2_covered_by_empty",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 201
+    },
+    {
+      "id": "INV-0181",
+      "type": "py_function",
+      "name": "test_v2_role_to_type_override",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 211
+    },
+    {
+      "id": "INV-0182",
+      "type": "py_function",
+      "name": "test_v1_fallback_to_kind",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 234
+    },
+    {
+      "id": "INV-0183",
+      "type": "py_function",
+      "name": "test_v1_related_source_ids",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 252
+    },
+    {
+      "id": "INV-0184",
+      "type": "py_function",
+      "name": "test_v1_line_range_start",
+      "file": "specback/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 264
+    },
+    {
+      "id": "INV-0191",
+      "type": "py_function",
+      "name": "role_for_kind",
+      "file": "specback/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 99
+    },
+    {
+      "id": "INV-0192",
+      "type": "py_function",
+      "name": "tier_for_kind",
+      "file": "specback/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 104
+    },
+    {
+      "id": "INV-0193",
+      "type": "py_function",
+      "name": "table_for_role",
+      "file": "specback/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 109
+    },
+    {
+      "id": "INV-0194",
+      "type": "py_function",
+      "name": "is_valid_role",
+      "file": "specback/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 116
+    },
+    {
+      "id": "INV-0195",
+      "type": "py_function",
+      "name": "registered_kinds",
+      "file": "specback/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 120
+    },
+    {
+      "id": "INV-0196",
+      "type": "py_function",
+      "name": "_matches_any",
+      "file": "specback/skills/specback/scripts/source_map_v2/pipeline.py",
+      "line": 28
+    },
+    {
+      "id": "INV-0202",
+      "type": "py_function",
+      "name": "_read",
+      "file": "specback/skills/specback/scripts/source_map_v2/detect.py",
+      "line": 68
+    },
+    {
+      "id": "INV-0203",
+      "type": "py_function",
+      "name": "_hint",
+      "file": "specback/skills/specback/scripts/source_map_v2/detect.py",
+      "line": 75
+    },
+    {
+      "id": "INV-0207",
+      "type": "py_function",
+      "name": "_extract",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 36
+    },
+    {
+      "id": "INV-0208",
+      "type": "py_function",
+      "name": "test_interface_type_enum_get_real_names",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 41
+    },
+    {
+      "id": "INV-0209",
+      "type": "py_function",
+      "name": "test_class_has_real_block_range",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0210",
+      "type": "py_function",
+      "name": "test_non_exported_declarations_recovered",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 53
+    },
+    {
+      "id": "INV-0211",
+      "type": "py_function",
+      "name": "test_express_routes_typed_as_endpoints",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0212",
+      "type": "py_class",
+      "name": "RecipeIn",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0213",
+      "type": "py_class",
+      "name": "RecipeService",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 23
+    },
+    {
+      "id": "INV-0214",
+      "type": "py_function",
+      "name": "sync_helper",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 34
+    },
+    {
+      "id": "INV-0215",
+      "type": "py_function",
+      "name": "_extract",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 39
+    },
+    {
+      "id": "INV-0216",
+      "type": "py_function",
+      "name": "test_async_endpoints_recovered_with_method_and_path",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 44
+    },
+    {
+      "id": "INV-0217",
+      "type": "py_function",
+      "name": "test_pydantic_schema_typed_as_schema",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 53
+    },
+    {
+      "id": "INV-0218",
+      "type": "py_function",
+      "name": "test_plain_class_and_function_kept",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0219",
+      "type": "py_function",
+      "name": "test_block_ranges_are_multiline",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 65
+    },
+    {
+      "id": "INV-0221",
+      "type": "py_function",
+      "name": "test_rust_types_funcs",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 71
+    },
+    {
+      "id": "INV-0222",
+      "type": "py_function",
+      "name": "test_rust_methods",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 107
+    },
+    {
+      "id": "INV-0223",
+      "type": "py_function",
+      "name": "test_rust_roles",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 119
+    },
+    {
+      "id": "INV-0224",
+      "type": "py_function",
+      "name": "test_rust_line_ranges",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 141
+    },
+    {
+      "id": "INV-0225",
+      "type": "py_function",
+      "name": "test_rust_fingerprint_uniqueness",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 153
+    },
+    {
+      "id": "INV-0227",
+      "type": "py_class",
+      "name": "MyClass",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 19
+    },
+    {
+      "id": "INV-0228",
+      "type": "py_class",
+      "name": "Internal",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 36
+    },
+    {
+      "id": "INV-0229",
+      "type": "py_class",
+      "name": "Container",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 40
+    },
+    {
+      "id": "INV-0230",
+      "type": "py_function",
+      "name": "test_cpp_types_funcs",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0232",
+      "type": "py_function",
+      "name": "test_c_types_funcs",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_c_ext.py",
+      "line": 44
+    },
+    {
+      "id": "INV-0234",
+      "type": "py_class",
+      "name": "UserController",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0236",
+      "type": "py_function",
+      "name": "test_php_types_routes_models",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 30
+    },
+    {
+      "id": "INV-0237",
+      "type": "py_class",
+      "name": "UserController",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0238",
+      "type": "py_function",
+      "name": "test_java_spring_and_types",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 60
+    },
+    {
+      "id": "INV-0239",
+      "type": "py_function",
+      "name": "test_csharp_aspnet_and_types",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 91
+    },
+    {
+      "id": "INV-0241",
+      "type": "py_class",
+      "name": "MyClass",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_swift_ext.py",
+      "line": 19
+    },
+    {
+      "id": "INV-0242",
+      "type": "py_function",
+      "name": "test_swift_types_funcs",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_swift_ext.py",
+      "line": 46
+    },
+    {
+      "id": "INV-0245",
+      "type": "py_function",
+      "name": "test_controller_and_actions",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 42
+    },
+    {
+      "id": "INV-0246",
+      "type": "py_function",
+      "name": "test_model_path_typing",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0247",
+      "type": "py_function",
+      "name": "test_job_path_typing",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 56
+    },
+    {
+      "id": "INV-0248",
+      "type": "py_function",
+      "name": "test_routes_groups_and_single",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 61
+    },
+    {
+      "id": "INV-0249",
+      "type": "py_class",
+      "name": "PostsController",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 73
+    },
+    {
+      "id": "INV-0250",
+      "type": "py_function",
+      "name": "test_private_filters_excluded_from_actions",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 88
+    },
+    {
+      "id": "INV-0251",
+      "type": "py_function",
+      "name": "test_draw_wrapper_not_a_route_group",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 96
+    },
+    {
+      "id": "INV-0252",
+      "type": "py_function",
+      "name": "test_generic_ruby_outside_rails_dirs",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 101
+    },
+    {
+      "id": "INV-0253",
+      "type": "py_function",
+      "name": "test_every_role_maps_to_a_universal_table",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 22
+    },
+    {
+      "id": "INV-0254",
+      "type": "py_function",
+      "name": "test_register_kind_binds_role_and_tier",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 27
+    },
+    {
+      "id": "INV-0255",
+      "type": "py_function",
+      "name": "test_register_kind_rejects_unknown_role_and_tier",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 33
+    },
+    {
+      "id": "INV-0256",
+      "type": "py_function",
+      "name": "test_register_kind_refuses_conflicting_rebind",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 40
+    },
+    {
+      "id": "INV-0257",
+      "type": "py_function",
+      "name": "test_unit_to_dict_carries_table_and_endpoint",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0258",
+      "type": "py_function",
+      "name": "test_endpoint_metadata_only_on_endpoint_role",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 65
+    },
+    {
+      "id": "INV-0259",
+      "type": "py_function",
+      "name": "test_sourcemap_stats_and_schema_version",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 74
+    },
+    {
+      "id": "INV-0260",
+      "type": "py_function",
+      "name": "_make_project",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 97
+    },
+    {
+      "id": "INV-0261",
+      "type": "py_function",
+      "name": "test_layer1_framework_detection_with_evidence",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 110
+    },
+    {
+      "id": "INV-0262",
+      "type": "py_function",
+      "name": "test_unsupported_language_falls_back_with_loud_warning",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 118
+    },
+    {
+      "id": "INV-0263",
+      "type": "py_function",
+      "name": "test_supported_languages_are_not_warned",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 133
+    },
+    {
+      "id": "INV-0264",
+      "type": "py_function",
+      "name": "test_registered_extractor_is_dispatched_with_framework",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 144
+    },
+    {
+      "id": "INV-0265",
+      "type": "py_class",
+      "name": "DummyPhp",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 148
+    },
+    {
+      "id": "INV-0267",
+      "type": "py_function",
+      "name": "test_go_types_funcs_endpoints",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m6_langs.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0268",
+      "type": "py_function",
+      "name": "test_sql_ddl_objects",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m6_langs.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0269",
+      "type": "py_function",
+      "name": "test_cobol_units",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_m6_langs.py",
+      "line": 77
+    },
+    {
+      "id": "INV-0271",
+      "type": "py_class",
+      "name": "MyClass",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_dart_ext.py",
+      "line": 19
+    },
+    {
+      "id": "INV-0272",
+      "type": "py_function",
+      "name": "test_dart_types_funcs",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_dart_ext.py",
+      "line": 38
+    },
+    {
+      "id": "INV-0274",
+      "type": "py_class",
+      "name": "UserController",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 35
+    },
+    {
+      "id": "INV-0275",
+      "type": "py_class",
+      "name": "UserService",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 44
+    },
+    {
+      "id": "INV-0276",
+      "type": "py_class",
+      "name": "PlainClass",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 54
+    },
+    {
+      "id": "INV-0277",
+      "type": "py_function",
+      "name": "test_kotlin_spring_and_types",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0278",
+      "type": "py_class",
+      "name": "Calculator",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 88
+    },
+    {
+      "id": "INV-0279",
+      "type": "py_function",
+      "name": "test_kotlin_specific_constructs",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 101
+    },
+    {
+      "id": "INV-0280",
+      "type": "py_function",
+      "name": "test_kotlin_ktor_endpoints",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 138
+    },
+    {
+      "id": "INV-0281",
+      "type": "py_class",
+      "name": "ItemRepository",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 168
+    },
+    {
+      "id": "INV-0282",
+      "type": "py_function",
+      "name": "test_kotlin_android_style",
+      "file": "specback/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 173
+    },
+    {
+      "id": "INV-0284",
+      "type": "py_function",
+      "name": "_modifiers_child",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 55
+    },
+    {
+      "id": "INV-0285",
+      "type": "py_function",
+      "name": "_class_body_child",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 63
+    },
+    {
+      "id": "INV-0286",
+      "type": "py_function",
+      "name": "_annotation_name_of",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 71
+    },
+    {
+      "id": "INV-0287",
+      "type": "py_function",
+      "name": "_annotation_names",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 86
+    },
+    {
+      "id": "INV-0288",
+      "type": "py_function",
+      "name": "_collect_anns",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 129
+    },
+    {
+      "id": "INV-0289",
+      "type": "py_function",
+      "name": "_is_data_class",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 137
+    },
+    {
+      "id": "INV-0290",
+      "type": "py_function",
+      "name": "_is_suspend_function",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 150
+    },
+    {
+      "id": "INV-0291",
+      "type": "py_function",
+      "name": "_is_extension_function",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 163
+    },
+    {
+      "id": "INV-0292",
+      "type": "py_function",
+      "name": "_annotation_string_arg",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 180
+    },
+    {
+      "id": "INV-0293",
+      "type": "py_function",
+      "name": "_ktor_path_from_call",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 211
+    },
+    {
+      "id": "INV-0295",
+      "type": "py_function",
+      "name": "_rails_class_kind",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 43
+    },
+    {
+      "id": "INV-0296",
+      "type": "py_function",
+      "name": "_name_text",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 69
+    },
+    {
+      "id": "INV-0297",
+      "type": "py_function",
+      "name": "_call_name",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 74
+    },
+    {
+      "id": "INV-0298",
+      "type": "py_function",
+      "name": "_first_arg_literal",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 85
+    },
+    {
+      "id": "INV-0300",
+      "type": "py_function",
+      "name": "_annotations",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 35
+    },
+    {
+      "id": "INV-0301",
+      "type": "py_function",
+      "name": "_annotation_arg",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0302",
+      "type": "py_function",
+      "name": "_descend",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0303",
+      "type": "py_class",
+      "name": "JavaExtractor",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 65
+    },
+    {
+      "id": "INV-0304",
+      "type": "py_class",
+      "name": "CobolExtractor",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/cobol_ext.py",
+      "line": 36
+    },
+    {
+      "id": "INV-0305",
+      "type": "py_function",
+      "name": "_is_pub",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/rust_ext.py",
+      "line": 46
+    },
+    {
+      "id": "INV-0306",
+      "type": "py_function",
+      "name": "_decl_name",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/rust_ext.py",
+      "line": 54
+    },
+    {
+      "id": "INV-0307",
+      "type": "py_function",
+      "name": "_impl_trait_name",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/rust_ext.py",
+      "line": 69
+    },
+    {
+      "id": "INV-0311",
+      "type": "py_function",
+      "name": "get_extractor",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/__init__.py",
+      "line": 63
+    },
+    {
+      "id": "INV-0312",
+      "type": "py_function",
+      "name": "supported_languages",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/__init__.py",
+      "line": 67
+    },
+    {
+      "id": "INV-0314",
+      "type": "py_class",
+      "name": "GoExtractor",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/go_ext.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0315",
+      "type": "py_class",
+      "name": "PhpExtractor",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/php_ext.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0316",
+      "type": "py_class",
+      "name": "SqlExtractor",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/sql_ext.py",
+      "line": 31
+    },
+    {
+      "id": "INV-0319",
+      "type": "py_function",
+      "name": "_class_kind_from_decorators",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/typescript_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0321",
+      "type": "py_function",
+      "name": "_descend",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/csharp_ext.py",
+      "line": 35
+    },
+    {
+      "id": "INV-0322",
+      "type": "py_function",
+      "name": "_attr_names_and_arg",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/csharp_ext.py",
+      "line": 41
+    },
+    {
+      "id": "INV-0323",
+      "type": "py_class",
+      "name": "CSharpExtractor",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/csharp_ext.py",
+      "line": 56
+    },
+    {
+      "id": "INV-0325",
+      "type": "py_function",
+      "name": "name_of",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/tshelpers.py",
+      "line": 76
+    },
+    {
+      "id": "INV-0331",
+      "type": "py_function",
+      "name": "_string_value",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/tshelpers.py",
+      "line": 117
+    },
+    {
+      "id": "INV-0332",
+      "type": "py_function",
+      "name": "_first_string_descendant",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/tshelpers.py",
+      "line": 124
+    },
+    {
+      "id": "INV-0336",
+      "type": "py_function",
+      "name": "_endpoint_kind",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 75
+    },
+    {
+      "id": "INV-0339",
+      "type": "py_class",
+      "name": "whose",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 106
+    },
+    {
+      "id": "INV-0340",
+      "type": "py_function",
+      "name": "_base_names",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 132
+    },
+    {
+      "id": "INV-0341",
+      "type": "py_function",
+      "name": "_class_role",
+      "file": "specback/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 140
+    },
+    {
+      "id": "INV-0344",
+      "type": "config_file",
+      "name": "config.yml",
+      "file": "specback/.github/ISSUE_TEMPLATE/config.yml",
+      "line": 1
+    },
+    {
+      "id": "INV-0345",
+      "type": "py_function",
+      "name": "run_git_diff_name_status",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 75
+    },
+    {
+      "id": "INV-0346",
+      "type": "py_function",
+      "name": "parse_diff_text",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 120
+    },
+    {
+      "id": "INV-0348",
+      "type": "py_function",
+      "name": "load_trace",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 187
+    },
+    {
+      "id": "INV-0349",
+      "type": "py_function",
+      "name": "load_state",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 201
+    },
+    {
+      "id": "INV-0350",
+      "type": "py_function",
+      "name": "load_source_hashes",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 211
+    },
+    {
+      "id": "INV-0352",
+      "type": "py_function",
+      "name": "compute_hash_changes",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 256
+    },
+    {
+      "id": "INV-0353",
+      "type": "py_function",
+      "name": "analyze_impact",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 314
+    },
+    {
+      "id": "INV-0354",
+      "type": "py_function",
+      "name": "_determine_impact",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 431
+    },
+    {
+      "id": "INV-0355",
+      "type": "py_function",
+      "name": "_check_deleted_path_in_trace",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 455
+    },
+    {
+      "id": "INV-0356",
+      "type": "py_function",
+      "name": "generate_markdown",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 487
+    },
+    {
+      "id": "INV-0357",
+      "type": "py_function",
+      "name": "generate_json",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 724
+    },
+    {
+      "id": "INV-0358",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 762
+    },
+    {
+      "id": "INV-0359",
+      "type": "py_function",
+      "name": "resolve_base",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 807
+    },
+    {
+      "id": "INV-0360",
+      "type": "py_function",
+      "name": "print_base_info",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 827
+    },
+    {
+      "id": "INV-0361",
+      "type": "py_function",
+      "name": "resolve_mode",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 843
+    },
+    {
+      "id": "INV-0362",
+      "type": "py_function",
+      "name": "print_mode_info",
+      "file": "specback/.opencode/skills/specback/scripts/detect-drift.py",
+      "line": 882
+    },
+    {
+      "id": "INV-0367",
+      "type": "py_function",
+      "name": "load_inventory",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 159
+    },
+    {
+      "id": "INV-0368",
+      "type": "py_function",
+      "name": "load_questions",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 179
+    },
+    {
+      "id": "INV-0369",
+      "type": "py_function",
+      "name": "load_source_map_ids",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 190
+    },
+    {
+      "id": "INV-0370",
+      "type": "py_function",
+      "name": "load_source_map_count",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 202
+    },
+    {
+      "id": "INV-0371",
+      "type": "py_function",
+      "name": "load_trace",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 214
+    },
+    {
+      "id": "INV-0372",
+      "type": "py_function",
+      "name": "load_user_custom_deliverables",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 221
+    },
+    {
+      "id": "INV-0373",
+      "type": "py_function",
+      "name": "scan_chapter_files",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 248
+    },
+    {
+      "id": "INV-0374",
+      "type": "py_function",
+      "name": "compute_chapter_metrics",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 265
+    },
+    {
+      "id": "INV-0375",
+      "type": "py_function",
+      "name": "evaluate_chapter_gates",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 324
+    },
+    {
+      "id": "INV-0376",
+      "type": "py_function",
+      "name": "detect_mentions",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 356
+    },
+    {
+      "id": "INV-0377",
+      "type": "py_function",
+      "name": "is_macro_type",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 372
+    },
+    {
+      "id": "INV-0378",
+      "type": "py_function",
+      "name": "check_question_integrity",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 376
+    },
+    {
+      "id": "INV-0379",
+      "type": "py_function",
+      "name": "check_naming_convention",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 422
+    },
+    {
+      "id": "INV-0380",
+      "type": "py_function",
+      "name": "check_user_custom_deliverables",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 442
+    },
+    {
+      "id": "INV-0381",
+      "type": "py_function",
+      "name": "check_required_files",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 489
+    },
+    {
+      "id": "INV-0382",
+      "type": "py_function",
+      "name": "detect_depth_mode",
+      "file": "specback/.opencode/skills/specback/scripts/coverage-check.py",
+      "line": 503
+    },
+    {
+      "id": "INV-0387",
+      "type": "py_function",
+      "name": "_slugify",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 73
+    },
+    {
+      "id": "INV-0388",
+      "type": "py_function",
+      "name": "_line_range_str",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 80
+    },
+    {
+      "id": "INV-0389",
+      "type": "py_function",
+      "name": "_load_json",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 86
+    },
+    {
+      "id": "INV-0390",
+      "type": "py_function",
+      "name": "build_source_unit_node",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 102
+    },
+    {
+      "id": "INV-0391",
+      "type": "py_function",
+      "name": "build_inventory_node",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 129
+    },
+    {
+      "id": "INV-0392",
+      "type": "py_function",
+      "name": "build_spec_chapter_node",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 145
+    },
+    {
+      "id": "INV-0393",
+      "type": "py_function",
+      "name": "build_question_node",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 163
+    },
+    {
+      "id": "INV-0394",
+      "type": "py_function",
+      "name": "build_knowledge_graph",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 188
+    },
+    {
+      "id": "INV-0395",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/.opencode/skills/specback/scripts/build-knowledge-graph.py",
+      "line": 245
+    },
+    {
+      "id": "INV-0397",
+      "type": "py_function",
+      "name": "_ext_from_path",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 114
+    },
+    {
+      "id": "INV-0398",
+      "type": "py_function",
+      "name": "_detect_symbols",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 120
+    },
+    {
+      "id": "INV-0399",
+      "type": "py_function",
+      "name": "parse_unified_diff",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 164
+    },
+    {
+      "id": "INV-0400",
+      "type": "py_function",
+      "name": "analyze_structural_changes",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 250
+    },
+    {
+      "id": "INV-0401",
+      "type": "py_function",
+      "name": "extract_snippets",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 295
+    },
+    {
+      "id": "INV-0403",
+      "type": "py_function",
+      "name": "load_trace",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 363
+    },
+    {
+      "id": "INV-0404",
+      "type": "py_function",
+      "name": "load_state",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 370
+    },
+    {
+      "id": "INV-0405",
+      "type": "py_function",
+      "name": "load_source_hashes",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 380
+    },
+    {
+      "id": "INV-0406",
+      "type": "py_function",
+      "name": "cross_reference_sections",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 392
+    },
+    {
+      "id": "INV-0407",
+      "type": "py_function",
+      "name": "run_git_unified_diff",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 433
+    },
+    {
+      "id": "INV-0408",
+      "type": "py_function",
+      "name": "run_git_diff_name_status",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 456
+    },
+    {
+      "id": "INV-0409",
+      "type": "py_function",
+      "name": "compute_hash_changes",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 501
+    },
+    {
+      "id": "INV-0410",
+      "type": "py_function",
+      "name": "read_current_file",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 543
+    },
+    {
+      "id": "INV-0411",
+      "type": "py_function",
+      "name": "analyze_current_structure",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 551
+    },
+    {
+      "id": "INV-0412",
+      "type": "py_function",
+      "name": "resolve_mode",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 571
+    },
+    {
+      "id": "INV-0413",
+      "type": "py_function",
+      "name": "resolve_base",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 597
+    },
+    {
+      "id": "INV-0414",
+      "type": "py_function",
+      "name": "build_change_spec",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 614
+    },
+    {
+      "id": "INV-0415",
+      "type": "py_function",
+      "name": "_parse_name_status_from_unified",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 766
+    },
+    {
+      "id": "INV-0416",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/.opencode/skills/specback/scripts/change-spec.py",
+      "line": 797
+    },
+    {
+      "id": "INV-0421",
+      "type": "py_function",
+      "name": "get_git_diff",
+      "file": "specback/.opencode/skills/specback/scripts/fix-refs.py",
+      "line": 196
+    },
+    {
+      "id": "INV-0422",
+      "type": "py_function",
+      "name": "find_refs_in_file",
+      "file": "specback/.opencode/skills/specback/scripts/fix-refs.py",
+      "line": 223
+    },
+    {
+      "id": "INV-0423",
+      "type": "py_function",
+      "name": "load_state",
+      "file": "specback/.opencode/skills/specback/scripts/fix-refs.py",
+      "line": 260
+    },
+    {
+      "id": "INV-0424",
+      "type": "py_function",
+      "name": "resolve_base",
+      "file": "specback/.opencode/skills/specback/scripts/fix-refs.py",
+      "line": 270
+    },
+    {
+      "id": "INV-0425",
+      "type": "py_function",
+      "name": "format_ref",
+      "file": "specback/.opencode/skills/specback/scripts/fix-refs.py",
+      "line": 287
+    },
+    {
+      "id": "INV-0429",
+      "type": "py_function",
+      "name": "compute_hashes",
+      "file": "specback/.opencode/skills/specback/scripts/snapshot-hashes.py",
+      "line": 76
+    },
+    {
+      "id": "INV-0430",
+      "type": "py_function",
+      "name": "detect_scan_patterns",
+      "file": "specback/.opencode/skills/specback/scripts/snapshot-hashes.py",
+      "line": 125
+    },
+    {
+      "id": "INV-0431",
+      "type": "py_function",
+      "name": "build_output",
+      "file": "specback/.opencode/skills/specback/scripts/snapshot-hashes.py",
+      "line": 170
+    },
+    {
+      "id": "INV-0432",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/.opencode/skills/specback/scripts/snapshot-hashes.py",
+      "line": 188
+    },
+    {
+      "id": "INV-0435",
+      "type": "py_function",
+      "name": "load_exclusions",
+      "file": "specback/.opencode/skills/specback/scripts/build-trace.py",
+      "line": 74
+    },
+    {
+      "id": "INV-0436",
+      "type": "py_function",
+      "name": "is_excluded",
+      "file": "specback/.opencode/skills/specback/scripts/build-trace.py",
+      "line": 102
+    },
+    {
+      "id": "INV-0437",
+      "type": "py_function",
+      "name": "parse_section_at",
+      "file": "specback/.opencode/skills/specback/scripts/build-trace.py",
+      "line": 113
+    },
+    {
+      "id": "INV-0441",
+      "type": "py_function",
+      "name": "resolve_type",
+      "file": "specback/.opencode/skills/specback/scripts/build-inventory-from-sourcemap.py",
+      "line": 67
+    },
+    {
+      "id": "INV-0442",
+      "type": "py_function",
+      "name": "build_inventory",
+      "file": "specback/.opencode/skills/specback/scripts/build-inventory-from-sourcemap.py",
+      "line": 84
+    },
+    {
+      "id": "INV-0444",
+      "type": "py_function",
+      "name": "parse_args",
+      "file": "specback/.opencode/skills/specback/scripts/build-inventory-from-sourcemap.py",
+      "line": 145
+    },
+    {
+      "id": "INV-0453",
+      "type": "py_function",
+      "name": "extract_file_unit",
+      "file": "specback/.opencode/skills/specback/scripts/source-map.py",
+      "line": 249
+    },
+    {
+      "id": "INV-0455",
+      "type": "py_function",
+      "name": "matches_any",
+      "file": "specback/.opencode/skills/specback/scripts/source-map.py",
+      "line": 304
+    },
+    {
+      "id": "INV-0456",
+      "type": "py_function",
+      "name": "iter_target_files",
+      "file": "specback/.opencode/skills/specback/scripts/source-map.py",
+      "line": 308
+    },
+    {
+      "id": "INV-0459",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_traceability_output_dir.py",
+      "line": 11
+    },
+    {
+      "id": "INV-0460",
+      "type": "py_function",
+      "name": "test_help_includes_stage",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_traceability_output_dir.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0461",
+      "type": "py_function",
+      "name": "test_output_dir_and_stage_with_help_allowed",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_traceability_output_dir.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0463",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_snapshot_hashes.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0464",
+      "type": "py_function",
+      "name": "test_help_includes_output",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_snapshot_hashes.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0465",
+      "type": "py_function",
+      "name": "test_args_with_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_snapshot_hashes.py",
+      "line": 39
+    },
+    {
+      "id": "INV-0466",
+      "type": "py_function",
+      "name": "get_public_symbols",
+      "file": "specback/.opencode/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 33
+    },
+    {
+      "id": "INV-0467",
+      "type": "py_function",
+      "name": "get_test_symbols",
+      "file": "specback/.opencode/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 55
+    },
+    {
+      "id": "INV-0468",
+      "type": "py_function",
+      "name": "_test_name_candidates",
+      "file": "specback/.opencode/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 71
+    },
+    {
+      "id": "INV-0469",
+      "type": "py_function",
+      "name": "check_coverage",
+      "file": "specback/.opencode/skills/specback/scripts/tests/check_test_coverage.py",
+      "line": 96
+    },
+    {
+      "id": "INV-0472",
+      "type": "py_class",
+      "name": "TestParseUnifiedDiff",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 184
+    },
+    {
+      "id": "INV-0473",
+      "type": "py_class",
+      "name": "TestDetectSymbols",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 243
+    },
+    {
+      "id": "INV-0474",
+      "type": "py_class",
+      "name": "TestAnalyzeStructuralChanges",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 336
+    },
+    {
+      "id": "INV-0475",
+      "type": "py_class",
+      "name": "TestExtractSnippets",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 384
+    },
+    {
+      "id": "INV-0476",
+      "type": "py_class",
+      "name": "TestCrossReferenceSections",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 415
+    },
+    {
+      "id": "INV-0477",
+      "type": "py_class",
+      "name": "TestParseNameStatusFromUnified",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 460
+    },
+    {
+      "id": "INV-0478",
+      "type": "py_class",
+      "name": "TestBuildChangeSpec",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 483
+    },
+    {
+      "id": "INV-0479",
+      "type": "py_class",
+      "name": "TestResolveMode",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 590
+    },
+    {
+      "id": "INV-0480",
+      "type": "py_class",
+      "name": "TestResolveBase",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_change_spec.py",
+      "line": 607
+    },
+    {
+      "id": "INV-0481",
+      "type": "py_function",
+      "name": "run_script",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 123
+    },
+    {
+      "id": "INV-0482",
+      "type": "py_function",
+      "name": "load_kg",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 130
+    },
+    {
+      "id": "INV-0483",
+      "type": "py_function",
+      "name": "write_json",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 134
+    },
+    {
+      "id": "INV-0484",
+      "type": "py_function",
+      "name": "test_help",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 145
+    },
+    {
+      "id": "INV-0485",
+      "type": "py_function",
+      "name": "test_skip_kg",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 153
+    },
+    {
+      "id": "INV-0486",
+      "type": "py_function",
+      "name": "test_missing_source_map",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 161
+    },
+    {
+      "id": "INV-0487",
+      "type": "py_function",
+      "name": "test_no_units_key",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 167
+    },
+    {
+      "id": "INV-0488",
+      "type": "py_function",
+      "name": "test_basic_graph_structure",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 180
+    },
+    {
+      "id": "INV-0489",
+      "type": "py_function",
+      "name": "test_source_unit_nodes",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 202
+    },
+    {
+      "id": "INV-0490",
+      "type": "py_function",
+      "name": "test_inventory_nodes",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 234
+    },
+    {
+      "id": "INV-0491",
+      "type": "py_function",
+      "name": "test_spec_chapter_nodes",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 261
+    },
+    {
+      "id": "INV-0492",
+      "type": "py_function",
+      "name": "test_question_nodes",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 286
+    },
+    {
+      "id": "INV-0493",
+      "type": "py_function",
+      "name": "test_stats",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 314
+    },
+    {
+      "id": "INV-0494",
+      "type": "py_function",
+      "name": "test_empty_trace_and_inventory",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 339
+    },
+    {
+      "id": "INV-0495",
+      "type": "py_function",
+      "name": "test_skip_questions_flag",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_knowledge_graph.py",
+      "line": 365
+    },
+    {
+      "id": "INV-0497",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0498",
+      "type": "py_function",
+      "name": "test_help_includes_mode",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0499",
+      "type": "py_function",
+      "name": "test_help_includes_json",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 42
+    },
+    {
+      "id": "INV-0500",
+      "type": "py_function",
+      "name": "test_args_with_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0501",
+      "type": "py_function",
+      "name": "test_args_with_mode_hash",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_detect_drift.py",
+      "line": 60
+    },
+    {
+      "id": "INV-0502",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_trace_output_dir.py",
+      "line": 11
+    },
+    {
+      "id": "INV-0504",
+      "type": "py_function",
+      "name": "test_output_dir_with_help_allowed",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_trace_output_dir.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0506",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0507",
+      "type": "py_function",
+      "name": "test_help_includes_apply",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0508",
+      "type": "py_function",
+      "name": "test_help_includes_check",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 38
+    },
+    {
+      "id": "INV-0509",
+      "type": "py_function",
+      "name": "test_args_with_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_fix_refs.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0510",
+      "type": "py_function",
+      "name": "test_help_includes_output_dir",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_coverage_check_output_dir.py",
+      "line": 11
+    },
+    {
+      "id": "INV-0512",
+      "type": "py_function",
+      "name": "test_output_dir_with_help_allowed",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_coverage_check_output_dir.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0513",
+      "type": "py_function",
+      "name": "run_script",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 86
+    },
+    {
+      "id": "INV-0514",
+      "type": "py_function",
+      "name": "write_source_map",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 94
+    },
+    {
+      "id": "INV-0515",
+      "type": "py_function",
+      "name": "load_inventory",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 100
+    },
+    {
+      "id": "INV-0516",
+      "type": "py_function",
+      "name": "test_help",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 109
+    },
+    {
+      "id": "INV-0517",
+      "type": "py_function",
+      "name": "test_missing_source_map",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 117
+    },
+    {
+      "id": "INV-0518",
+      "type": "py_function",
+      "name": "test_invalid_json",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 123
+    },
+    {
+      "id": "INV-0519",
+      "type": "py_function",
+      "name": "test_no_units_key",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 131
+    },
+    {
+      "id": "INV-0520",
+      "type": "py_function",
+      "name": "test_invalid_role_to_type",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 139
+    },
+    {
+      "id": "INV-0521",
+      "type": "py_function",
+      "name": "test_v2_conversion",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 154
+    },
+    {
+      "id": "INV-0522",
+      "type": "py_function",
+      "name": "test_v2_related_source_ids",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 175
+    },
+    {
+      "id": "INV-0523",
+      "type": "py_function",
+      "name": "test_v2_fields_preserved",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 187
+    },
+    {
+      "id": "INV-0524",
+      "type": "py_function",
+      "name": "test_v2_covered_by_empty",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 201
+    },
+    {
+      "id": "INV-0525",
+      "type": "py_function",
+      "name": "test_v2_role_to_type_override",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 211
+    },
+    {
+      "id": "INV-0526",
+      "type": "py_function",
+      "name": "test_v1_fallback_to_kind",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 234
+    },
+    {
+      "id": "INV-0527",
+      "type": "py_function",
+      "name": "test_v1_related_source_ids",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 252
+    },
+    {
+      "id": "INV-0528",
+      "type": "py_function",
+      "name": "test_v1_line_range_start",
+      "file": "specback/.opencode/skills/specback/scripts/tests/test_build_inventory_from_sourcemap.py",
+      "line": 264
+    },
+    {
+      "id": "INV-0535",
+      "type": "py_function",
+      "name": "role_for_kind",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 99
+    },
+    {
+      "id": "INV-0536",
+      "type": "py_function",
+      "name": "tier_for_kind",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 104
+    },
+    {
+      "id": "INV-0537",
+      "type": "py_function",
+      "name": "table_for_role",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 109
+    },
+    {
+      "id": "INV-0538",
+      "type": "py_function",
+      "name": "is_valid_role",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 116
+    },
+    {
+      "id": "INV-0539",
+      "type": "py_function",
+      "name": "registered_kinds",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/taxonomy.py",
+      "line": 120
+    },
+    {
+      "id": "INV-0540",
+      "type": "py_function",
+      "name": "_matches_any",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/pipeline.py",
+      "line": 28
+    },
+    {
+      "id": "INV-0546",
+      "type": "py_function",
+      "name": "_read",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/detect.py",
+      "line": 68
+    },
+    {
+      "id": "INV-0547",
+      "type": "py_function",
+      "name": "_hint",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/detect.py",
+      "line": 75
+    },
+    {
+      "id": "INV-0551",
+      "type": "py_function",
+      "name": "_extract",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 36
+    },
+    {
+      "id": "INV-0552",
+      "type": "py_function",
+      "name": "test_interface_type_enum_get_real_names",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 41
+    },
+    {
+      "id": "INV-0553",
+      "type": "py_function",
+      "name": "test_class_has_real_block_range",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0554",
+      "type": "py_function",
+      "name": "test_non_exported_declarations_recovered",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 53
+    },
+    {
+      "id": "INV-0555",
+      "type": "py_function",
+      "name": "test_express_routes_typed_as_endpoints",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_typescript_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0556",
+      "type": "py_class",
+      "name": "RecipeIn",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0557",
+      "type": "py_class",
+      "name": "RecipeService",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 23
+    },
+    {
+      "id": "INV-0558",
+      "type": "py_function",
+      "name": "sync_helper",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 34
+    },
+    {
+      "id": "INV-0559",
+      "type": "py_function",
+      "name": "_extract",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 39
+    },
+    {
+      "id": "INV-0560",
+      "type": "py_function",
+      "name": "test_async_endpoints_recovered_with_method_and_path",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 44
+    },
+    {
+      "id": "INV-0561",
+      "type": "py_function",
+      "name": "test_pydantic_schema_typed_as_schema",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 53
+    },
+    {
+      "id": "INV-0562",
+      "type": "py_function",
+      "name": "test_plain_class_and_function_kept",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0563",
+      "type": "py_function",
+      "name": "test_block_ranges_are_multiline",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_python_ext.py",
+      "line": 65
+    },
+    {
+      "id": "INV-0565",
+      "type": "py_function",
+      "name": "test_rust_types_funcs",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 71
+    },
+    {
+      "id": "INV-0566",
+      "type": "py_function",
+      "name": "test_rust_methods",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 107
+    },
+    {
+      "id": "INV-0567",
+      "type": "py_function",
+      "name": "test_rust_roles",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 119
+    },
+    {
+      "id": "INV-0568",
+      "type": "py_function",
+      "name": "test_rust_line_ranges",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 141
+    },
+    {
+      "id": "INV-0569",
+      "type": "py_function",
+      "name": "test_rust_fingerprint_uniqueness",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_rust_ext.py",
+      "line": 153
+    },
+    {
+      "id": "INV-0571",
+      "type": "py_class",
+      "name": "MyClass",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 19
+    },
+    {
+      "id": "INV-0572",
+      "type": "py_class",
+      "name": "Internal",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 36
+    },
+    {
+      "id": "INV-0573",
+      "type": "py_class",
+      "name": "Container",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 40
+    },
+    {
+      "id": "INV-0574",
+      "type": "py_function",
+      "name": "test_cpp_types_funcs",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_cpp_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0576",
+      "type": "py_function",
+      "name": "test_c_types_funcs",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_c_ext.py",
+      "line": 44
+    },
+    {
+      "id": "INV-0578",
+      "type": "py_class",
+      "name": "UserController",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 20
+    },
+    {
+      "id": "INV-0580",
+      "type": "py_function",
+      "name": "test_php_types_routes_models",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 30
+    },
+    {
+      "id": "INV-0581",
+      "type": "py_class",
+      "name": "UserController",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0582",
+      "type": "py_function",
+      "name": "test_java_spring_and_types",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 60
+    },
+    {
+      "id": "INV-0583",
+      "type": "py_function",
+      "name": "test_csharp_aspnet_and_types",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m5_langs.py",
+      "line": 91
+    },
+    {
+      "id": "INV-0585",
+      "type": "py_class",
+      "name": "MyClass",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_swift_ext.py",
+      "line": 19
+    },
+    {
+      "id": "INV-0586",
+      "type": "py_function",
+      "name": "test_swift_types_funcs",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_swift_ext.py",
+      "line": 46
+    },
+    {
+      "id": "INV-0589",
+      "type": "py_function",
+      "name": "test_controller_and_actions",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 42
+    },
+    {
+      "id": "INV-0590",
+      "type": "py_function",
+      "name": "test_model_path_typing",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0591",
+      "type": "py_function",
+      "name": "test_job_path_typing",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 56
+    },
+    {
+      "id": "INV-0592",
+      "type": "py_function",
+      "name": "test_routes_groups_and_single",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 61
+    },
+    {
+      "id": "INV-0593",
+      "type": "py_class",
+      "name": "PostsController",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 73
+    },
+    {
+      "id": "INV-0594",
+      "type": "py_function",
+      "name": "test_private_filters_excluded_from_actions",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 88
+    },
+    {
+      "id": "INV-0595",
+      "type": "py_function",
+      "name": "test_draw_wrapper_not_a_route_group",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 96
+    },
+    {
+      "id": "INV-0596",
+      "type": "py_function",
+      "name": "test_generic_ruby_outside_rails_dirs",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_ruby_ext.py",
+      "line": 101
+    },
+    {
+      "id": "INV-0597",
+      "type": "py_function",
+      "name": "test_every_role_maps_to_a_universal_table",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 22
+    },
+    {
+      "id": "INV-0598",
+      "type": "py_function",
+      "name": "test_register_kind_binds_role_and_tier",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 27
+    },
+    {
+      "id": "INV-0599",
+      "type": "py_function",
+      "name": "test_register_kind_rejects_unknown_role_and_tier",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 33
+    },
+    {
+      "id": "INV-0600",
+      "type": "py_function",
+      "name": "test_register_kind_refuses_conflicting_rebind",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 40
+    },
+    {
+      "id": "INV-0601",
+      "type": "py_function",
+      "name": "test_unit_to_dict_carries_table_and_endpoint",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0602",
+      "type": "py_function",
+      "name": "test_endpoint_metadata_only_on_endpoint_role",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 65
+    },
+    {
+      "id": "INV-0603",
+      "type": "py_function",
+      "name": "test_sourcemap_stats_and_schema_version",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 74
+    },
+    {
+      "id": "INV-0604",
+      "type": "py_function",
+      "name": "_make_project",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 97
+    },
+    {
+      "id": "INV-0605",
+      "type": "py_function",
+      "name": "test_layer1_framework_detection_with_evidence",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 110
+    },
+    {
+      "id": "INV-0606",
+      "type": "py_function",
+      "name": "test_unsupported_language_falls_back_with_loud_warning",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 118
+    },
+    {
+      "id": "INV-0607",
+      "type": "py_function",
+      "name": "test_supported_languages_are_not_warned",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 133
+    },
+    {
+      "id": "INV-0608",
+      "type": "py_function",
+      "name": "test_registered_extractor_is_dispatched_with_framework",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 144
+    },
+    {
+      "id": "INV-0609",
+      "type": "py_class",
+      "name": "DummyPhp",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m0.py",
+      "line": 148
+    },
+    {
+      "id": "INV-0611",
+      "type": "py_function",
+      "name": "test_go_types_funcs_endpoints",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m6_langs.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0612",
+      "type": "py_function",
+      "name": "test_sql_ddl_objects",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m6_langs.py",
+      "line": 51
+    },
+    {
+      "id": "INV-0613",
+      "type": "py_function",
+      "name": "test_cobol_units",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_m6_langs.py",
+      "line": 77
+    },
+    {
+      "id": "INV-0615",
+      "type": "py_class",
+      "name": "MyClass",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_dart_ext.py",
+      "line": 19
+    },
+    {
+      "id": "INV-0616",
+      "type": "py_function",
+      "name": "test_dart_types_funcs",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_dart_ext.py",
+      "line": 38
+    },
+    {
+      "id": "INV-0618",
+      "type": "py_class",
+      "name": "UserController",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 35
+    },
+    {
+      "id": "INV-0619",
+      "type": "py_class",
+      "name": "UserService",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 44
+    },
+    {
+      "id": "INV-0620",
+      "type": "py_class",
+      "name": "PlainClass",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 54
+    },
+    {
+      "id": "INV-0621",
+      "type": "py_function",
+      "name": "test_kotlin_spring_and_types",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0622",
+      "type": "py_class",
+      "name": "Calculator",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 88
+    },
+    {
+      "id": "INV-0623",
+      "type": "py_function",
+      "name": "test_kotlin_specific_constructs",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 101
+    },
+    {
+      "id": "INV-0624",
+      "type": "py_function",
+      "name": "test_kotlin_ktor_endpoints",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 138
+    },
+    {
+      "id": "INV-0625",
+      "type": "py_class",
+      "name": "ItemRepository",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 168
+    },
+    {
+      "id": "INV-0626",
+      "type": "py_function",
+      "name": "test_kotlin_android_style",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/tests/test_kotlin_ext.py",
+      "line": 173
+    },
+    {
+      "id": "INV-0628",
+      "type": "py_function",
+      "name": "_modifiers_child",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 55
+    },
+    {
+      "id": "INV-0629",
+      "type": "py_function",
+      "name": "_class_body_child",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 63
+    },
+    {
+      "id": "INV-0630",
+      "type": "py_function",
+      "name": "_annotation_name_of",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 71
+    },
+    {
+      "id": "INV-0631",
+      "type": "py_function",
+      "name": "_annotation_names",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 86
+    },
+    {
+      "id": "INV-0632",
+      "type": "py_function",
+      "name": "_collect_anns",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 129
+    },
+    {
+      "id": "INV-0633",
+      "type": "py_function",
+      "name": "_is_data_class",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 137
+    },
+    {
+      "id": "INV-0634",
+      "type": "py_function",
+      "name": "_is_suspend_function",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 150
+    },
+    {
+      "id": "INV-0635",
+      "type": "py_function",
+      "name": "_is_extension_function",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 163
+    },
+    {
+      "id": "INV-0636",
+      "type": "py_function",
+      "name": "_annotation_string_arg",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 180
+    },
+    {
+      "id": "INV-0637",
+      "type": "py_function",
+      "name": "_ktor_path_from_call",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/kotlin_ext.py",
+      "line": 211
+    },
+    {
+      "id": "INV-0639",
+      "type": "py_function",
+      "name": "_rails_class_kind",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 43
+    },
+    {
+      "id": "INV-0640",
+      "type": "py_function",
+      "name": "_name_text",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 69
+    },
+    {
+      "id": "INV-0641",
+      "type": "py_function",
+      "name": "_call_name",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 74
+    },
+    {
+      "id": "INV-0642",
+      "type": "py_function",
+      "name": "_first_arg_literal",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/ruby_ext.py",
+      "line": 85
+    },
+    {
+      "id": "INV-0644",
+      "type": "py_function",
+      "name": "_annotations",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 35
+    },
+    {
+      "id": "INV-0645",
+      "type": "py_function",
+      "name": "_annotation_arg",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0646",
+      "type": "py_function",
+      "name": "_descend",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 59
+    },
+    {
+      "id": "INV-0647",
+      "type": "py_class",
+      "name": "JavaExtractor",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/java_ext.py",
+      "line": 65
+    },
+    {
+      "id": "INV-0648",
+      "type": "py_class",
+      "name": "CobolExtractor",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/cobol_ext.py",
+      "line": 36
+    },
+    {
+      "id": "INV-0649",
+      "type": "py_function",
+      "name": "_is_pub",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/rust_ext.py",
+      "line": 46
+    },
+    {
+      "id": "INV-0650",
+      "type": "py_function",
+      "name": "_decl_name",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/rust_ext.py",
+      "line": 54
+    },
+    {
+      "id": "INV-0651",
+      "type": "py_function",
+      "name": "_impl_trait_name",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/rust_ext.py",
+      "line": 69
+    },
+    {
+      "id": "INV-0655",
+      "type": "py_function",
+      "name": "get_extractor",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/__init__.py",
+      "line": 63
+    },
+    {
+      "id": "INV-0656",
+      "type": "py_function",
+      "name": "supported_languages",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/__init__.py",
+      "line": 67
+    },
+    {
+      "id": "INV-0658",
+      "type": "py_class",
+      "name": "GoExtractor",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/go_ext.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0659",
+      "type": "py_class",
+      "name": "PhpExtractor",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/php_ext.py",
+      "line": 29
+    },
+    {
+      "id": "INV-0660",
+      "type": "py_class",
+      "name": "SqlExtractor",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/sql_ext.py",
+      "line": 31
+    },
+    {
+      "id": "INV-0663",
+      "type": "py_function",
+      "name": "_class_kind_from_decorators",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/typescript_ext.py",
+      "line": 47
+    },
+    {
+      "id": "INV-0665",
+      "type": "py_function",
+      "name": "_descend",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/csharp_ext.py",
+      "line": 35
+    },
+    {
+      "id": "INV-0666",
+      "type": "py_function",
+      "name": "_attr_names_and_arg",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/csharp_ext.py",
+      "line": 41
+    },
+    {
+      "id": "INV-0667",
+      "type": "py_class",
+      "name": "CSharpExtractor",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/csharp_ext.py",
+      "line": 56
+    },
+    {
+      "id": "INV-0669",
+      "type": "py_function",
+      "name": "name_of",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/tshelpers.py",
+      "line": 76
+    },
+    {
+      "id": "INV-0675",
+      "type": "py_function",
+      "name": "_string_value",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/tshelpers.py",
+      "line": 117
+    },
+    {
+      "id": "INV-0676",
+      "type": "py_function",
+      "name": "_first_string_descendant",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/tshelpers.py",
+      "line": 124
+    },
+    {
+      "id": "INV-0680",
+      "type": "py_function",
+      "name": "_endpoint_kind",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 75
+    },
+    {
+      "id": "INV-0683",
+      "type": "py_class",
+      "name": "whose",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 106
+    },
+    {
+      "id": "INV-0684",
+      "type": "py_function",
+      "name": "_base_names",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 132
+    },
+    {
+      "id": "INV-0685",
+      "type": "py_function",
+      "name": "_class_role",
+      "file": "specback/.opencode/skills/specback/scripts/source_map_v2/extractors/python_ext.py",
+      "line": 140
+    }
+  ],
+  "questions_total": 10,
+  "questions_open": 10,
+  "open_question_ratio": 1.0,
+  "integrity_issues": [
+    "draft contains [BLOCKED: see Q-XXX] but the question is missing from questions.json",
+    "draft contains [BLOCKED: see Q-XXX] but the question is missing from questions.json"
+  ],
+  "naming_warnings": [],
+  "missing_required": [],
+  "chapter_metrics": [
+    {
+      "file": "00-metadata.md",
+      "total_lines": 3,
+      "body_lines": 2,
+      "refs": 0,
+      "code_blocks": 0,
+      "mermaid_blocks": 0,
+      "sources_read_count": 0,
+      "failures": []
+    },
+    {
+      "file": "01-overview.md",
+      "total_lines": 431,
+      "body_lines": 200,
+      "refs": 48,
+      "code_blocks": 7,
+      "mermaid_blocks": 1,
+      "sources_read_count": 7,
+      "failures": []
+    },
+    {
+      "file": "02-installation.md",
+      "total_lines": 590,
+      "body_lines": 207,
+      "refs": 49,
+      "code_blocks": 29,
+      "mermaid_blocks": 1,
+      "sources_read_count": 7,
+      "failures": []
+    },
+    {
+      "file": "03-public-api-catalogue.md",
+      "total_lines": 583,
+      "body_lines": 241,
+      "refs": 38,
+      "code_blocks": 6,
+      "mermaid_blocks": 2,
+      "sources_read_count": 9,
+      "failures": []
+    },
+    {
+      "file": "04-usage-examples.md",
+      "total_lines": 892,
+      "body_lines": 223,
+      "refs": 38,
+      "code_blocks": 35,
+      "mermaid_blocks": 1,
+      "sources_read_count": 9,
+      "failures": []
+    },
+    {
+      "file": "05-configuration-options.md",
+      "total_lines": 547,
+      "body_lines": 205,
+      "refs": 41,
+      "code_blocks": 12,
+      "mermaid_blocks": 2,
+      "sources_read_count": 11,
+      "failures": []
+    },
+    {
+      "file": "06-compatibility.md",
+      "total_lines": 459,
+      "body_lines": 200,
+      "refs": 67,
+      "code_blocks": 7,
+      "mermaid_blocks": 2,
+      "sources_read_count": 11,
+      "failures": []
+    },
+    {
+      "file": "07-extension-points.md",
+      "total_lines": 446,
+      "body_lines": 200,
+      "refs": 48,
+      "code_blocks": 8,
+      "mermaid_blocks": 4,
+      "sources_read_count": 11,
+      "failures": []
+    },
+    {
+      "file": "08-internal-structure.md",
+      "total_lines": 606,
+      "body_lines": 200,
+      "refs": 96,
+      "code_blocks": 14,
+      "mermaid_blocks": 1,
+      "sources_read_count": 26,
+      "failures": []
+    },
+    {
+      "file": "09-known-constraints.md",
+      "total_lines": 448,
+      "body_lines": 200,
+      "refs": 25,
+      "code_blocks": 9,
+      "mermaid_blocks": 1,
+      "sources_read_count": 7,
+      "failures": []
+    },
+    {
+      "file": "99-unresolved.md",
+      "total_lines": 3,
+      "body_lines": 2,
+      "refs": 0,
+      "code_blocks": 0,
+      "mermaid_blocks": 0,
+      "sources_read_count": 0,
+      "failures": []
+    },
+    {
+      "file": "traceability.md",
+      "total_lines": 3,
+      "body_lines": 2,
+      "refs": 0,
+      "code_blocks": 0,
+      "mermaid_blocks": 0,
+      "sources_read_count": 0,
+      "failures": []
+    }
+  ],
+  "mece_total": 686,
+  "mece_covered": 223,
+  "mece_excluded": 0,
+  "mece_uncovered": 463,
+  "mece_coverage_rate": 0.3250728862973761,
+  "user_custom_expected": [],
+  "user_custom_failures": [],
+  "gate_failures": [
+    "inventory.covered_by fill rate 26.4% < 90.0%",
+    "open-status ratio 100.0% > cap 20.0% (complete the Phase 5 three-stage dialogue)",
+    "MECE coverage 32.5% < 70.0% (uncovered=463/686)"
+  ]
+}
