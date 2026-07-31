@@ -90,7 +90,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
 6. **🆕 depth-mode decision (scale-based)**
    - Record the **total file count** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` in `.specback/state.json`.
    - **If file count > 200**, ask the user with `AskUserQuestion` to choose a **depth mode**:
-     - `comprehensive`: classic behaviour. All chapters detailed, full MECE, full REFs. **Recommended only when exhaustive coverage is required (audit, regulatory).** Takes hours to days.
+     - `comprehensive`: classic behaviour. All chapters detailed, full MECE, full REFs. **Recommended only when exhaustive coverage is required (audit, regulatory).** Estimated 2–4 hours for most projects (Phase 3 parallel investigation scales with concurrency).
      - `outline` (**recommended default**): each level's entities are **listed exhaustively in tables** + Mermaid diagrams + a "deep-dive candidates" list at the end of each table. Details are produced on-demand in dialogue after Phase 6. **Best for typical use.**
      - `interactive`: same flow as outline, plus continued deep-dive acceptance after Phase 6 completes. **Use when a team will continue referencing the spec.**
    - **If file count ≤ 200**, default to `comprehensive` automatically (no question). The user may still override.
