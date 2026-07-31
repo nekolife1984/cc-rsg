@@ -133,6 +133,29 @@ The main agent reads this and appends the questions to `questions.json`.
 
 ---
 
+### 💡 Sources Read format (mandatory)
+
+The `## Sources Read` section MUST use **bullet-list format** — one file per line starting with `-`. Coverage-check.py parses this format mechanically.
+
+✅ Correct:
+```markdown
+## Sources Read
+- `path/to/file.py` (lines 1-100)
+- `path/to/other.py` (lines 1-50)
+```
+
+❌ NOT recognised:
+```markdown
+## Sources Read
+| # | File | Lines |
+|---|------|-------|
+| 1 | path/to/file.py | 1-100 |
+```
+
+テーブル形式やコードブロック形式は coverage-check.py が認識しません。必ず箇条書き形式で記述してください。
+
+---
+
 ### 💡 Feature specifications chapter (Chapter 2)
 
 When assigned to the Feature specifications chapter, follow this additional procedure **after STEP A–F**:

@@ -250,6 +250,7 @@ def main(argv: list[str] | None = None) -> int:
 
     output_dir = Path(args.output_dir) if args.output_dir else specback_path
     output_path = args.output or str(output_dir / "source-hashes.json")
+    output_dir.mkdir(parents=True, exist_ok=True)
     Path(output_path).write_text(
         json.dumps(output, ensure_ascii=False, indent=2),
         encoding="utf-8",

@@ -209,6 +209,8 @@ def main(argv: list[str] | None = None) -> int:
     output_path = output_dir / "trace.json"
     exclusions_path = sb_dir / "exclusions.yaml"
 
+    output_dir.mkdir(parents=True, exist_ok=True)
+
     if not source_map_path.exists():
         print(
             f"ERROR: {source_map_path} not found. Run scripts/source-map.py first.",
