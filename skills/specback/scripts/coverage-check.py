@@ -593,7 +593,16 @@ def build_report(
     min_sources_read_per_chapter: int,
     min_mece_coverage: float,
 ) -> CoverageReport:
+    # Resolve the target directory:
+    # 1. Try output_dir / target_dir_name (e.g. .specback/final or specs/final)
+    # 2. If that doesn't exist, try target_dir_name as a standalone path
+    #    (e.g. .specback/drafts when --output-dir points elsewhere)
     target_dir = output_dir / target_dir_name
+    if not target_dir.exists():
+        fallback = Path(target_dir_name)
+        if fallback.exists():
+            target_dir = fallback
+
     inventory_path = specback_dir / "inventory.json"
     questions_path = specback_dir / "questions.json"
 
@@ -928,7 +937,11 @@ def render_json(report: CoverageReport) -> str:
 def main() -> int:
     p = argparse.ArgumentParser(description="specback Phase 4 verification (v2)")
     p.add_argument("--specback-dir", type=Path, default=Path.cwd() / ".specback")
-    p.add_argument("--target-dir-for-required", default="final", choices=["drafts", "final"])
+    p.add_argument("--target-dir-for-required", default="final",
+                   help="Target subdirectory under --output-dir (e.g. 'drafts', 'final'), "
+                        "or a standalone path (e.g. '.specback/drafts'). "
+                        "If the resolved path does not exist, the value is also tried as a "
+                        "standalone path before failing. Default: 'final'.")
     p.add_argument("--output-dir", type=Path, default=None,
                    help="Spec output directory (default: same as --specback-dir)")
     p.add_argument("--output-format", choices=["text", "json"], default="text")
