@@ -15,6 +15,7 @@ import fnmatch
 from pathlib import Path
 
 from . import detect, extractors
+from .extractors import tshelpers as H
 from .model import IdFactory, SourceMap, SourceUnit, fingerprint
 
 DEFAULT_EXCLUDES = [
@@ -86,10 +87,19 @@ def build_source_map(target: Path, exclude_globs: list[str] | None = None) -> So
     for language, files in by_language.items():
         extractor = extractors.get_extractor(language)
         if extractor is None:
-            smap.warnings.append(
-                f"language '{language}' has no v2 extractor yet — emitting file-level units only "
-                f"({len(files)} file(s), first: {files[0][0]})"
-            )
+            if language in H.TREE_SITTER_BACKED:
+                pkg = H.PIP_PACKAGE.get(language, f"tree-sitter-{language}")
+                smap.warnings.append(
+                    f"language '{language}' is tree-sitter backed but its grammar is not "
+                    f"installed — emitting file-level units only ({len(files)} file(s), "
+                    f"first: {files[0][0]}). Fix: pip install -r requirements.txt "
+                    f"(or: pip install {pkg})"
+                )
+            else:
+                smap.warnings.append(
+                    f"language '{language}' has no v2 extractor yet — emitting file-level "
+                    f"units only ({len(files)} file(s), first: {files[0][0]})"
+                )
             for rel, source in files:
                 smap.units.append(_file_level_unit(rel, source, language, id_factory))
             continue
