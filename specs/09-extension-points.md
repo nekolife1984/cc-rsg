@@ -1,3 +1,5 @@
+# 第9章: 拡張ポイント
+
 ## Sources Read
 - `.opencode/skills/specback/SKILL.md` (lines 1-88)
 - `.opencode/skills/specback/templates/web-app.md` (lines 1-232)
@@ -11,7 +13,6 @@
 - `.opencode/skills/specback/variants/B/chapter-investigator.md` (lines 1-162)
 - `skills/specback/scripts/source_map_v2/extractors/python_ext.py` (lines 1-219)
 
-# Chapter 7: Extension Points (拡張ポイント)
 
 specback は、コードベースの性質やチームのワークフローに合わせて振る舞いを拡張できるよう設計されている。拡張はテンプレート追加、抽出器追加、サブエージェント定義、Phase 追加の 4 つの軸で行う。本章では各拡張ポイントの仕組みと、既に同梱されている拡張群を説明する。
 
@@ -44,9 +45,9 @@ graph TD
 
 [REF: .opencode/skills/specback/SKILL.md:55-68]
 
-## 7.1 拡張ポイント一覧
+## 9.1 拡張ポイント一覧
 
-### 7.1.1 テンプレート追加
+### 9.1.1 テンプレート追加
 
 テンプレートは `.opencode/skills/specback/templates/` 配下に YAML frontmatter を持つ Markdown ファイルとして配置される。各テンプレートは `template_name`、`template_version`、`last_updated` を frontmatter に持ち、チャプターごとに `<!-- meta: ... -->` コメントでカバー範囲を記述する [REF: .opencode/skills/specback/templates/web-app.md:1-6]。
 
@@ -104,7 +105,7 @@ last_updated: 2026-05-01
 
 コンポジットプロジェクトの場合は、プライマリ/セカンダリの関係に基づいてテンプレートをマージするか、モノレポの場合はサービスごとに個別のスペックを生成する [REF: .opencode/skills/specback/references/template-catalog.md:148-160]。
 
-### 7.1.2 新しい言語/フレームワークの抽出器
+### 9.1.2 新しい言語/フレームワークの抽出器
 
 ソースコードの自動抽出は `skills/specback/scripts/source_map_v2/extractors/` 配下の言語別抽出器が担う。各抽出器は `Extractor` 基底クラスを継承し、`language` 属性と `extract()` メソッドを実装する [REF: skills/specback/scripts/source_map_v2/extractors/python_ext.py:152-215]。
 
@@ -171,7 +172,7 @@ FUNCTION_QUERY = "(function_definition) @function"
 | `cobol_ext.py` | COBOL |
 | `sql_ext.py` | SQL (スキーマ抽出) |
 
-### 7.1.3 サブエージェント定義
+### 9.1.3 サブエージェント定義
 
 サブエージェントは `.opencode/skills/specback/agents/` 配下の Markdown ファイルで定義される。各定義は YAML frontmatter で `name`、`description`、`model`、`color`、`tools` を宣言する [REF: .opencode/skills/specback/agents/chapter-investigator.md:1-10]。
 
@@ -206,7 +207,7 @@ else:
     report completion
 ```
 
-### 7.1.4 Phase 追加
+### 9.1.4 Phase 追加
 
 各 Phase は `.opencode/skills/specback/` 直下の `phase-N-name.md` ファイルで定義される。現在 10 の Phase ファイルが存在する [REF: .opencode/skills/specback/SKILL.md:55-68]:
 
@@ -224,11 +225,11 @@ else:
 
 新しい Phase を追加する場合は上記の命名規則に従ったファイルを作成し、`SKILL.md` の Phase overview テーブルにエントリを追加する。Phase 間の依存関係は `state.json` の `current_phase` フィールドで管理される [REF: .opencode/skills/specback/SKILL.md:81-85]。
 
-## 7.2 Variant B (Context Optimization Mode)
+## 9.2 Variant B (Context Optimization Mode)
 
 Variant B は specback の標準実行モード（モード A: メインエージェントが自らチャプター本文を執筆する）に対する代替モードである。このモードでは、各チャプターの執筆を `Task` ツール経由で独立したサブエージェントに委譲し、メインエージェントのコンテキスト消費を抑制する [REF: .opencode/skills/specback/variants/B/README.md:8-16]。
 
-### 7.2.1 活性化条件
+### 9.2.1 活性化条件
 
 `goal.json` に以下のフィールドを追加することで有効化される [REF: .opencode/skills/specback/variants/B/README.md:27-37]:
 
@@ -240,7 +241,7 @@ Variant B は specback の標準実行モード（モード A: メインエー�
 
 Phase 3 以降、メインエージェントは `variants/B/SKILL.phase3-stepG.md` の指示に従い、`subagent_type = "chapter-investigator"` で Task を起動する。
 
-### 7.2.2 委譲プロトコル
+### 9.2.2 委譲プロトコル
 
 モード B では Phase 3 STEP G が以下の 4 ステップで進行する [REF: .opencode/skills/specback/variants/B/SKILL.phase3-stepG.md:1-4]:
 
@@ -266,7 +267,7 @@ Manifest line to append:
 
 [REF: .opencode/skills/specback/variants/B/chapter-investigator.md:136-156]
 
-### 7.2.3 Manifest 管理
+### 9.2.3 Manifest 管理
 
 生成された manifest は以下の構造を持ち、Phase 4/5/6 でチャプターの概要確認に使用される [REF: .opencode/skills/specback/variants/B/SKILL.phase3-stepG.md:60-70]:
 
@@ -278,7 +279,7 @@ Manifest line to append:
 | 05 | data-model | .specback/drafts/05-data-model.md | INV-012,INV-013,INV-014,INV-015 | 234 | Project / Issue / User / Role relationships |
 ```
 
-### 7.2.4 トレードオフ
+### 9.2.4 トレードオフ
 
 | 観点 | モード A (標準) | モード B (Context Optimization) |
 |------|----------------|--------------------------------|
@@ -290,7 +291,7 @@ Manifest line to append:
 
 [REF: .opencode/skills/specback/variants/B/README.md:43-51]
 
-### 7.2.5 新規バリアントの作成手順
+### 9.2.5 新規バリアントの作成手順
 
 新たなバリアントを作成する場合、以下の手順に従う:
 
@@ -302,9 +303,9 @@ Manifest line to append:
 
 バリアントは Phase 0 で `goal.json` のフィールドによって選択される。メインの SKILL.md は読み替えられず、各 Phase ファイル内で条件分岐によりバリアントの動作が切り替わる設計である [REF: .opencode/skills/specback/SKILL.md:55-68]。モード B と同様に、Task ツールに依存するバリアントは利用不可時にモード A へフォールバックする仕組みを設けることが推奨される。
 
-## 7.3 既存の拡張
+## 9.3 既存の拡張
 
-### 7.3.1 4 つの標準テンプレート
+### 9.3.1 4 つの標準テンプレート
 
 | テンプレート | ファイル | ターゲット |
 |-------------|----------|-----------|
@@ -315,11 +316,11 @@ Manifest line to append:
 
 [REF: .opencode/skills/specback/references/template-catalog.md:9-14]
 
-### 7.3.2 14 言語の抽出器
+### 9.3.2 14 言語の抽出器
 
 前述の通り、14 のプログラミング言語に対応する tree-sitter ベースの抽出器が同梱されている。各抽出器は言語固有の構文構造を解析し、`SourceUnit` のリストを生成する [REF: skills/specback/scripts/source_map_v2/extractors/python_ext.py:152-215]。抽出結果は `source-map.json` に保存され、Phase 2 の inventory 抽出の基礎となる。
 
-### 7.3.3 6 言語の outline-tables
+### 9.3.3 6 言語の outline-tables
 
 `references/outline-tables.md` は以下の言語/フレームワークについて、Modules / Entities / Actions / Data / Dependencies の 5 つの共通テーブル定義と抽出パターンを提供する [REF: .opencode/skills/specback/references/outline-tables.md:5-17]:
 
@@ -368,7 +369,7 @@ sequenceDiagram
   C-->>U: 201 Created
 ```
 
-## 7.4 拡張のベストプラクティス
+## 9.4 拡張のベストプラクティス
 
 1. **テンプレートのバージョン管理**: 各テンプレートには `template_version` フィールドを必ず記述し、`wbs.json` と整合させる [REF: .opencode/skills/specback/references/template-catalog.md:210-212]。
 2. **抽出器のテスト義務**: 新規抽出器には対応するテストファイルの作成が pre-commit hook によって強制される。
@@ -381,11 +382,11 @@ sequenceDiagram
 
 ---
 
-## 7.5 拡張間の互換性とガバナンス
+## 9.5 拡張間の互換性とガバナンス
 
 拡張ポイントが増えるにつれ、各コンポーネント間の互換性を維持するためのガバナンスが必要となる。以下に現時点での互換性ルールを示す。
 
-### 7.5.1 Extract API の安定契約
+### 9.5.1 Extract API の安定契約
 
 `Extractor` 基底クラスは `SourceUnit` のフィールドセットを公開契約として定義する [REF: skills/specback/scripts/source_map_v2/extractors/python_ext.py:152-215]。カスタム抽出器は以下の契約を順守しなければならない:
 
@@ -394,15 +395,15 @@ sequenceDiagram
 - 各 `SourceUnit` の `kind` は `taxonomy.register_kind()` で事前登録済みであること [REF: skills/specback/scripts/source_map_v2/taxonomy.py:1-45]
 - カスタム抽出器は既存の抽出器と同じテスト基準を満たす必要がある
 
-### 7.5.2 Phase ファイルと state.json の依存関係
+### 9.5.2 Phase ファイルと state.json の依存関係
 
 新規 Phase を追加する場合、`state-management.md` の phase→file マッピングテーブルにエントリを追加し、`SKILL.md` のフェーズ概要テーブルも同時に更新する必要がある [REF: .opencode/skills/specback/state-management.md:76-91]。この二重登録を怠ると、再開時に該当 Phase の detail file が動的ローディングされない。また、`state.json` の `current_phase` フィールドが新しい Phase 番号を正しく解釈できることも確認する必要がある。
 
-### 7.5.3 テンプレートと抽出器の暗黙の依存
+### 9.5.3 テンプレートと抽出器の暗黙の依存
 
 テンプレートは特定の抽出器の存在を前提としていない。例えば `web-app.md` テンプレートは Python でも Ruby でも使用できる。ただし、outline-tables は特定の言語・フレームワークに紐づいており、該当言語の抽出器が存在しない場合は `[REF: ]` が生成されない [REF: .opencode/skills/specback/references/outline-tables.md:5-17]。この非対称性は既知の設計上のトレードオフである。
 
-### 7.5.4 拡張のテスト要件
+### 9.5.4 拡張のテスト要件
 
 新規拡張を追加する際は以下のテストが必須となる:
 
@@ -410,11 +411,11 @@ sequenceDiagram
 - テンプレート: `template-catalog.md` にエントリを追加し、選定条件と章構成を明記する [REF: .opencode/skills/specback/references/template-catalog.md:9-14]
 - Phase: 追加した Phase の各ステップが期待通り動作することを手動または自動テストで確認する
 
-### 7.5.5 バリアントの分離設計
+### 9.5.5 バリアントの分離設計
 
 `variants/B/` 以下のファイルは標準モードのファイルとは独立して管理される。バリアントは `goal.json` のフィールドで活性化され、標準ファイルを上書きせずに動作を変更する [REF: .opencode/skills/specback/variants/B/README.md:8-16]。この分離設計により、標準モードとバリアントモードの間でファイル競合が発生しない。
 
-### 7.5.6 スクリプト拡張のライフサイクル
+### 9.5.6 スクリプト拡張のライフサイクル
 
 `scripts/` 配下のユーティリティスクリプトは拡張のライフサイクル管理において重要な役割を果たす。新規スクリプトを追加する場合、以下のライフサイクルに従う:
 

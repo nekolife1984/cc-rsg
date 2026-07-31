@@ -1,4 +1,4 @@
-# 第5章: 設定オプション
+# 第7章: 設定オプション
 
 ## Sources Read
 
@@ -14,7 +14,7 @@
 - `.specback/goal.json` (lines 1-12)
 - `.specback/state.json` (lines 1-22)
 
-## 5.1 specback の設定体系
+## 7.1 specback の設定体系
 
 specback は**3種類の設定ファイル**で動作を制御する。すべて `.specback/` ディレクトリ配下に JSON 形式で格納される。加えて、調査対象コードベースの構造を記録する `source-map.json` と `inventory.json` が WBS とともに生成される。
 
@@ -55,7 +55,7 @@ graph TD
 
 specback は環境変数に一切依存しない。すべての設定は `.specback/*.json` に集約される。
 
-## 5.2 グローバル設定 (goal.json)
+## 7.2 グローバル設定 (goal.json)
 
 [REF: .opencode/skills/specback/phase-0-setup.md:99-116] に示すスキーマに従い、Phase 0 でユーザーとの対話を通じて生成される。
 
@@ -89,7 +89,7 @@ specback は環境変数に一切依存しない。すべての設定は `.specb
 | `user_custom_deliverables` | string[] | `[]` | `free_text_notes` から抽出されたカスタム成果物ファイル名リスト [REF: .opencode/skills/specback/phase-0-setup.md:92-96] |
 | `depth_mode` | string | `"comprehensive"` | 調査深度モード。3値 (`comprehensive`, `outline`, `interactive`) [REF: .opencode/skills/specback/phase-3-investigate.md:6-21] |
 
-### 5.2.1 depth_mode の3モード
+### 7.2.1 depth_mode の3モード
 
 [REF: .opencode/skills/specback/phase-3-investigate.md:6-21] で定義される3つの深度モード:
 
@@ -109,7 +109,7 @@ specback は環境変数に一切依存しない。すべての設定は `.specb
 | 成果物の性質 | レビュー可能な最終品質の仕様書 | 構造化された目次＋発見事項一覧 | 対話で補完された構造化文書 |
 | 書き直しの許容度 | 各チャプターの大幅な書き直しを許可 | スキーマに従った整形を優先、深堀りは候補リストに限定 | 調査後にユーザー対話で内容を確定 |
 
-### 5.2.2 出力先ディレクトリ解決ルール
+### 7.2.2 出力先ディレクトリ解決ルール
 
 [REF: .opencode/skills/specback/phase-0-setup.md:88] に従い、出力先は以下のように解決される:
 
@@ -129,7 +129,7 @@ specback は環境変数に一切依存しない。すべての設定は `.specb
 
 `output_dir` がカスタムパスに設定されている場合でも、再開 (resume) 時は常に `.specback/` の状態ファイルを読み取る。この設計により、最終成果物の出力先を変更しても実行状態が失われることはない。
 
-### 5.2.3 設定検証ルール
+### 7.2.3 設定検証ルール
 
 goal.json の各フィールドは、以下のルールで検証される。検証は主に Phase 0 の初期化時と `coverage-check.py` の実行時に行われる。
 
@@ -155,7 +155,7 @@ goal.json の各フィールドは、以下のルールで検証される。検�
 - デフォルト値を持たないフィールド (`primary_reader`, `reader_action`, `granularity` など) は Phase 0 で必ずユーザー入力が必要となる。
 - デフォルト値の適用は Phase 0 の `goal.json` 書き込み時に行われる。Phase 3 以降で `goal.json` が読まれる際には、すべてのフィールドが明示的に値を持つことが保証される。
 
-### 5.2.4 設定フィールド間の相互作用
+### 7.2.4 設定フィールド間の相互作用
 
 各設定フィールドは独立して定義されるが、組み合わせによって Phase 3 以降の挙動が変化する。
 
@@ -186,7 +186,7 @@ goal.json の各フィールドは、以下のルールで検証される。検�
 - カスタム成果物は `comprehensive` モードでも品質ゲートが免除される [REF: .opencode/skills/specback/phase-0-setup.md:96]。
 - 免除対象はチェック1-5 (REF数・行数・コードブロック数・Mermaid数・Sources Read数) であり、チェック12 (ファイル存在 + 空でない本文) は適用される。
 
-## 5.3 実行時状態 (state.json)
+## 7.3 実行時状態 (state.json)
 
 [REF: .opencode/skills/specback/state-management.md:3-22] でスキーマが定義される。
 
@@ -219,7 +219,7 @@ goal.json の各フィールドは、以下のルールで検証される。検�
 | `last_updated` | string (ISO 8601) | 最終更新時刻 |
 | `session_history` | array | イベント履歴。各エントリは `timestamp` / `phase` / `event` を持つ |
 
-### 5.3.1 レジューム動作
+### 7.3.1 レジューム動作
 
 [REF: .opencode/skills/specback/state-management.md:24-63] に従い、既存の `state.json` を検出するとレジュームフローが起動する。以下の選択肢をユーザーに提示する:
 
@@ -230,7 +230,7 @@ goal.json の各フィールドは、以下のルールで検証される。検�
 
 レジューム時のメッセージは `goal.json.output_language` でレンダリングされる [REF: .opencode/skills/specback/state-management.md:26]。
 
-## 5.4 Question Bank (questions.json)
+## 7.4 Question Bank (questions.json)
 
 [REF: .opencode/skills/specback/question-bank.md:3-27] でデータ構造と運用ルールが定義される。
 
@@ -256,7 +256,7 @@ goal.json の各フィールドは、以下のルールで検証される。検�
 }
 ```
 
-### 5.4.1 7カテゴリ
+### 7.4.1 7カテゴリ
 
 [REF: .opencode/skills/specback/question-bank.md:29-37]:
 
@@ -268,7 +268,7 @@ goal.json の各フィールドは、以下のルールで検証される。検�
 6. `operational_requirement` — 運用要件に関する疑問
 7. `security_compliance` — セキュリティ・コンプライアンスに関する疑問
 
-### 5.4.2 3段階の Severity
+### 7.4.2 3段階の Severity
 
 [REF: .opencode/skills/specback/question-bank.md:41-45]:
 
@@ -276,7 +276,7 @@ goal.json の各フィールドは、以下のルールで検証される。検�
 - **`important`**: 推論で記述可能だが信頼度が低い。`[CONFIDENCE: LOW]` マーカーを残す。
 - **`nice-to-have`**: 細部の確認。推論で記述し Phase 5 で軽く確認する。
 
-### 5.4.3 Status 遷移
+### 7.4.3 Status 遷移
 
 [REF: .opencode/skills/specback/question-bank.md:47-53]:
 
@@ -293,7 +293,7 @@ open → asked → answered
 
 Question Bank は **3つのタイミング** で更新される [REF: .opencode/skills/specback/SKILL.md:31]: フェーズ1 (偵察後)、フェーズ3 (調査中に各サブエージェントが追加)、フェーズ4 (検証時)。完了時には `coverage-check.py` により最低10件以上の質問が要求される [REF: .opencode/skills/specback/scripts/coverage-check.py:44]。
 
-## 5.5 WBS (wbs.json)
+## 7.5 WBS (wbs.json)
 
 [REF: .opencode/skills/specback/phase-2-wbs.md:99-133] でスキーマが定義される。Phase 2 で生成され、全チャプターとインベントリアイテムの対応付けを保持する。
 
@@ -302,8 +302,8 @@ Question Bank は **3つのタイミング** で更新される [REF: .opencode/
   "chapters": [
     {
       "chapter_id": "ch-configuration-options",
-      "chapter_title": "第5章: 設定オプション",
-      "file_name": "05-configuration-options.md",
+      "chapter_title": "第7章: 設定オプション",
+      "file_name": "07-configuration-options.md",
       "kind": "standard",
       "assigned_inventory_ids": [],
       "status": "pending"
@@ -318,9 +318,9 @@ Question Bank は **3つのタイミング** で更新される [REF: .opencode/
 - **`reserved`**: 予約章。`00-metadata.md` / `99-unresolved.md` / `traceability.md` の3つ。
 - **`user_custom`**: ユーザーカスタム章。ファイル名は `free_text_notes` から抽出され、`^[a-z][a-z0-9_-]*\.md$` に従う [REF: .opencode/skills/specback/phase-0-setup.md:92-96]。
 
-## 5.6 source-map.json と inventory.json
+## 7.6 source-map.json と inventory.json
 
-### 5.6.1 source-map.json
+### 7.6.1 source-map.json
 
 [REF: .opencode/skills/specback/scripts/source-map.py:25-48] で出力スキーマが定義される。ソースコードから言語固有の正規表現でユニットを抽出する。
 
@@ -349,7 +349,7 @@ Question Bank は **3つのタイミング** で更新される [REF: .opencode/
 }
 ```
 
-### 5.6.2 inventory.json
+### 7.6.2 inventory.json
 
 [REF: .opencode/skills/specback/phase-2-wbs.md:134-199] の手順で `source-map.json` から機械的に変換される。
 
@@ -371,7 +371,7 @@ Question Bank は **3つのタイミング** で更新される [REF: .opencode/
 
 最小 INVs 数は `max(50, files_scanned // 20)` で自動計算される [REF: .opencode/skills/specback/phase-2-wbs.md:166-168]。
 
-## 5.7 品質ゲートと設定の関係
+## 7.7 品質ゲートと設定の関係
 
 `depth_mode` は品質ゲートの適用条件を決定する [REF: .opencode/skills/specback/scripts/coverage-check.py:586-594]:
 
@@ -386,7 +386,7 @@ Question Bank は **3つのタイミング** で更新される [REF: .opencode/
 
 ユーザーカスタム成果物 (`user_custom_deliverables`) は上記ゲートが免除され、代わりに「存在 + 空でない本文」のみがチェックされる [REF: .opencode/skills/specback/scripts/coverage-check.py:24-30]。
 
-## 5.8 環境変数
+## 7.8 環境変数
 
 specback は環境変数に一切依存しない。全設定は `.specback/` 配下の JSON ファイルに集約される。これは設計原則として明文化されており、プロジェクトルートからの再配置や CI/CD パイプラインでの再現性を保証する。
 
@@ -399,7 +399,7 @@ specback は環境変数に一切依存しない。全設定は `.specback/` 配
 
 このパス解決方式により、スクリプト呼び出しは `$(cat .specback/.skill-path)/scripts/<name>.py` の形式で記述でき、インストール場所の変更に柔軟に対応できる。
 
-### 5.8.1 .skill-path の解決詳細
+### 7.8.1 .skill-path の解決詳細
 
 `.skill-path` によるパス解決は以下の手順で動作する [REF: .opencode/skills/specback/phase-0-setup.md:14-19]:
 
@@ -417,7 +417,7 @@ specback は環境変数に一切依存しない。全設定は `.specback/` 配
 
 この設計により、スキルのアップグレードやインストール場所の変更が発生しても、進行中のセッションが破綻しない。また、`.skill-path` の内容は実行中に変更されることはない。変更が必要な場合は必ずレジュームフローを経由する。
 
-## 5.9 設定間の依存関係
+## 7.9 設定間の依存関係
 
 各設定ファイルの依存関係を以下に示す。
 
@@ -450,11 +450,11 @@ graph LR
 
 全ファイルは `.specback/` 配下に格納され、スキーマは各フェーズのマークダウンファイルで定義される。JSON スキーマファイル (.schema.json) は提供されていないが、`coverage-check.py` が実行時に整合性を検証する [REF: .opencode/skills/specback/scripts/coverage-check.py:1-55]。
 
-## 5.10 設定がパイプラインに与える影響の具体例
+## 7.10 設定がパイプラインに与える影響の具体例
 
 各設定値の組み合わせが実際のパイプライン挙動にどう影響するか、代表的なシナリオを示す。
 
-### 5.10.1 シナリオA: 監査向け包括的仕様書
+### 7.10.1 シナリオA: 監査向け包括的仕様書
 
 ```json
 {
@@ -471,7 +471,7 @@ graph LR
 - Phase 5: スキップ (任意)。すべての疑問は Phase 3 の調査で解決済みであることが期待される。
 - Phase 6: ドラフトが `.specback/final/` にコピーされる。
 
-### 5.10.2 シナリオB: チーム内知識共有のための概要資料
+### 7.10.2 シナリオB: チーム内知識共有のための概要資料
 
 ```json
 {
@@ -488,7 +488,7 @@ graph LR
 - Phase 5: スキップ (任意)。概要目的のため詳細な確認は不要。
 - WBS構成: `depth_mode = outline` により、標準チャプターの代わりにレイヤー構成が WBS に反映される。
 
-### 5.10.3 シナリオC: 顧客向け仕様書の対話的作成
+### 7.10.3 シナリオC: 顧客向け仕様書の対話的作成
 
 ```json
 {
@@ -506,7 +506,7 @@ graph LR
 - Phase 5: 必須。質問バンクの未解決アイテムをユーザーに提示し、回答を得る。
 - Phase 6: 既存ドキュメントと共存する形で最終成果物が配置される。
 
-### 5.10.4 シナリオD: セキュリティ評価目的の詳細仕様書
+### 7.10.4 シナリオD: セキュリティ評価目的の詳細仕様書
 
 ```json
 {
@@ -528,18 +528,18 @@ graph LR
 
 specback の設定 JSON 群には公式の JSON Schema ファイル (`.schema.json`) が存在しない。代わりに `coverage-check.py` が実行時に整合性を検証する。この設計には後方互換性に関する以下の含意がある。
 
-### 5.11.1 フィールド追加の互換性
+### 7.11.1 フィールド追加の互換性
 
 新しいバージョンの specback で `goal.json` に未知のフィールドが追加された場合、旧バージョンの specback はそのフィールドを無視する。`coverage-check.py` は未知フィールドに対してエラーを出さないため、前方互換性が確保されている。逆に、旧バージョンの specback で新しいフィールドを含む `goal.json` を読み込んでも、既存フィールドの動作は変わらない。
 
-### 5.11.2 列挙値の拡張
+### 7.11.2 列挙値の拡張
 
 `primary_reader`, `reader_action`, `granularity` などの列挙型フィールドに新しい値が追加された場合、従来の値を持つ設定ファイルは引き続き読み込み可能である。新しい値が設定されたファイルを旧バージョンで読み込んだ場合、未知の値はデフォルト値として扱われる。ただし、`depth_mode` に未知の文字列が指定された場合は `coverage-check.py` がエラーとする。
 
-### 5.11.3 state.json のスキーマ進化
+### 7.11.3 state.json のスキーマ進化
 
 `state.json` は実行時にのみ書き換えられるため、スキーマの進化は自動的に行われる。旧バージョンで生成された `state.json` は新しいフィールドが不足している可能性があるが、レジューム時にデフォルト値で補完される。`phase_progress` の構造が変更された場合でも、旧形式のデータは読み取り時に正規化される。
 
-### 5.11.4 将来のJSON Schema導入計画
+### 7.11.4 将来のJSON Schema導入計画
 
 現在 `.schema.json` は提供されていないが、バリデーションロジックが `coverage-check.py` に集中しているため、将来的に JSON Schema ファイルを生成することは容易である。その場合も、`coverage-check.py` 側の検証を残すことで二重のバリデーションが可能になる。JSON Schema 導入の主な動機は、IDE 上での入力補完と、CI パイプラインでの事前検証である。

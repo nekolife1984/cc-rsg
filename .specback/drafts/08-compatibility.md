@@ -1,4 +1,4 @@
-# Chapter 6: Compatibility (互換性)
+# 第8章: 互換性
 
 本章では specback が対応する言語・ランタイム・依存関係・CI/CD 環境を定義する。specback は AI コーディングエージェント（OpenCode, Claude Code, Codex CLI, GitHub Copilot, Cursor）上で動作するスキルであり、かつ任意の言語で書かれたコードベースを解析の対象とする。したがって互換性には **ホストエージェント互換性**、**解析対象言語互換性**、**依存関係互換性** の三軸が存在する。
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 6.1 対応言語 / ランタイム（ホストエージェント）
+## 8.1 対応言語 / ランタイム（ホストエージェント）
 
 specback のスキル自体は `install.sh` により各エージェントのスキルディレクトリに配置される。以下のエージェントがインストール対象として明示的にサポートされている [REF: install.sh:88-97]。
 
@@ -33,7 +33,7 @@ specback のスキル自体は `install.sh` により各エージェントのス
 
 ---
 
-## 6.2 依存関係
+## 8.2 依存関係
 
 specback のコアスクリプトは **Python 標準ライブラリのみで動作する**。以下の依存関係はすべて optional であり、欠落時はファイルレベルのフォールバックユニットを生成する [REF: requirements.txt:1-8]。
 
@@ -57,7 +57,7 @@ specback のコアスクリプトは **Python 標準ライブラリのみで動�
 
 `@opencode-ai/plugin` は OpenCode のスキル定義で参照される [REF: package.json:2-4]。`tree-sitter` 系は `requirements.txt` で管理され、`install.sh --install-deps` または `pip install -r requirements.txt` で導入する [REF: install.sh:160-175]。
 
-### 6.2.1 依存関係ツリー
+### 8.2.1 依存関係ツリー
 
 specback の依存関係は三層構造を持つ。最下層は Python 標準ライブラリのみで構成され、すべてのスクリプトが必須として依存する。中間層は tree-sitter コアライブラリであり、AST ベースの精密抽出を提供する。最上層は各言語の tree-sitter 文法パッケージであり、各 extractor が対応言語のパースに使用する。
 
@@ -136,11 +136,11 @@ tree-sitter がない場合、`source_map_v2` パイプラインは全スクリ�
 
 ---
 
-## 6.3 対応言語（解析対象コードベース）
+## 8.3 対応言語（解析対象コードベース）
 
 specback の source map v2 はファイル拡張子ベースの言語分類 (`LANG_BY_EXT`) とフレームワーク検出 (`detect_frameworks`) の二段階で対象コードベースの言語を特定する [REF: detect.py:19-35]。
 
-### 6.3.1 拡張子ベース分類
+### 8.3.1 拡張子ベース分類
 
 以下は `source_map_v2/detect.py` の `LANG_BY_EXT` 辞書に登録されている全言語である [REF: detect.py:19-35]。各言語に対して extractor の実装状況と tree-sitter 文法の提供状況を示す。
 
@@ -195,7 +195,7 @@ LANG_BY_EXT: dict[str, str] = {
 ```
 [REF: detect.py:19-35]
 
-### 6.3.2 フレームワーク検出
+### 8.3.2 フレームワーク検出
 
 `detect_frameworks()` はプロジェクトルートのマニフェストファイルをスキャンし、フレームワークヒントを生成する [REF: detect.py:79-165]。対応するフレームワーク一覧:
 
@@ -227,7 +227,7 @@ def detect_frameworks(root: Path) -> list[dict[str, Any]]:
 ```
 [REF: detect.py:79-165]
 
-### 6.3.3 言語マトリクス（Mermaid）
+### 8.3.3 言語マトリクス（Mermaid）
 
 ```mermaid
 graph TD
@@ -255,7 +255,7 @@ graph TD
 
 ---
 
-## 6.4 CI/CD 互換性
+## 8.4 CI/CD 互換性
 
 specback の CI パイプラインは GitHub Actions で構成される [REF: ci.yml:1-83]。
 
@@ -293,7 +293,7 @@ pip install -r skills/specback/scripts/requirements.txt
 
 ---
 
-## 6.5 バージョン互換性ポリシー
+## 8.5 バージョン互換性ポリシー
 
 | コンポーネント | ポリシー |
 |--------------|---------|
@@ -302,7 +302,7 @@ pip install -r skills/specback/scripts/requirements.txt
 | Python | 3.8+（標準ライブラリのみの動作保証） |
 | tree-sitter パーサー | core 0.25.1 固定（Language version 14/15 対応）；grammar は最新追従 + CI smoke テストでロード検証 |
 
-### 6.5.1 source-map.json スキーマ後方互換性
+### 8.5.1 source-map.json スキーマ後方互換性
 
 source-map schema 0.2.0 は 0.1.0 との後方互換性を明示的に宣言している。`IdFactory` は SRC-NNNN 形式の ID を生成し、フォーマットは v0.1.0 から変更されていない [REF: model.py:118-126]。この互換性ポリシーにより、バージョンアップ後も既存の source-map.json を読み取るコンシューマ（build-traceability.py や coverage-check.py など）は修正なしで動作し続ける。
 
@@ -324,7 +324,7 @@ source-map schema 0.2.0 は 0.1.0 との後方互換性を明示的に宣言し�
 
 `SourceMap.to_dict()` のシリアライズ形式は `schema_version` フィールドをトップレベルに含むため、コンシューマはバージョン文字列で処理を分岐できる [REF: model.py:106-115]。`SourceUnit.validate()` はロールと tier の組み立て契約を施行し、不正なデータが map に含まれることを防ぐ [REF: model.py:43-52]。
 
-### 6.5.2 Python バージョン要件
+### 8.5.2 Python バージョン要件
 
 specback のスクリプトスイートは Python バージョンに関して以下の階層要件を持つ：
 
@@ -342,7 +342,7 @@ specback のスクリプトスイートは Python バージョンに関して以
 
 開発者が specback をローカルで実行する場合、使用する Python バージョンは実行するスクリプトに応じて選択する。source_map_v2 のビルドには Python 3.8 以上、スタンドアロンスクリプトの実行には Python 3.10 以上が必要である。最も安全な選択はプロジェクトの CI が使用する Python 3.11 以上である。
 
-### 6.5.3 tree-sitter バージョン互換性
+### 8.5.3 tree-sitter バージョン互換性
 
 tree-sitter 系依存関係は `requirements.txt` で管理され、**コアライブラリは 0.25.1 に固定**している [REF: requirements.txt:10]。固定の理由は以下の通り：
 
@@ -407,7 +407,7 @@ specback のコアワークフロー（Phase 0–7）はすべてこのツール
 
 specback は `SKILL.md` の `allowed-tools` フィールドで要求ツールを宣言し、ホストエージェントはこの宣言に従ってツールアクセスを許可する [REF: SKILL.md:4]。`allowed-tools` にリストされていないツールは specback のワークフローで使用されない。たとえば specback は Docker 操作やクラウド API 呼び出しを一切行わない。
 
-### 6.7.1 サブエージェント互換性
+### 8.7.1 サブエージェント互換性
 
 `chapter-investigator` サブエージェントは以下のツールセットで動作するよう設計されている [REF: chapter-investigator.md:9]：
 
