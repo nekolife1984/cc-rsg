@@ -47,7 +47,8 @@ Usage:
       --min-questions 10 \\
       --max-open-ratio 0.2 \\
       --min-covered-by-fill 0.9 \\
-      --min-mece-coverage 0.7
+      --min-mece-coverage 0.7 \\
+      --code-block-line-weight 0.5
 
 Exit codes:
     0 = all checks PASS
@@ -110,6 +111,7 @@ class ChapterMetrics:
     code_blocks: int
     mermaid_blocks: int
     sources_read_count: int
+    code_block_lines: int = 0  # non-blank lines inside fenced code blocks (for weighted adjustment)
     failures: list[str] = field(default_factory=list)
 
 
@@ -267,8 +269,10 @@ def compute_chapter_metrics(name: str, content: str) -> ChapterMetrics:
     total = len(raw_lines)
 
     # Body lines = lines excluding blanks, code fences, and auto-generated comments.
+    # code_block_lines = non-blank lines inside fenced code blocks (weighted later).
     in_code = False
     body_lines = 0
+    code_block_lines = 0
     code_blocks = 0
     mermaid_blocks = 0
     refs = 0
@@ -287,6 +291,9 @@ def compute_chapter_metrics(name: str, content: str) -> ChapterMetrics:
                 in_code = False
             continue
         if in_code:
+            stripped = line.strip()
+            if stripped:
+                code_block_lines += 1
             continue
         stripped = line.strip()
         if SOURCES_READ_RE.match(line):
@@ -318,6 +325,7 @@ def compute_chapter_metrics(name: str, content: str) -> ChapterMetrics:
         code_blocks=code_blocks,
         mermaid_blocks=mermaid_blocks,
         sources_read_count=sources_read_count,
+        code_block_lines=code_block_lines,
     )
 
 
@@ -329,16 +337,26 @@ def evaluate_chapter_gates(
     min_code_blocks: int,
     min_mermaid: int,
     min_sources_read: int,
+    code_block_line_weight: float = 0.5,
 ) -> None:
-    """Populate `failures` on each ChapterMetrics (per-chapter threshold violations)."""
+    """Populate `failures` on each ChapterMetrics (per-chapter threshold violations).
+
+    ``code_block_line_weight`` controls what fraction of non-blank code-block
+    lines is added to the effective body-line count.  Default 0.5 means that
+    every two lines inside a code fence count as one body line toward the
+    ``min_lines`` threshold.
+    """
     skipped_files = {"00-metadata.md", "99-unresolved.md", "traceability.md", "README.md"}
     for m in metrics:
         if m.file in skipped_files:
             continue
+        effective_lines = m.body_lines + int(m.code_block_lines * code_block_line_weight)
         if m.refs < min_refs:
             m.failures.append(f"[REF:] count is {m.refs} < required {min_refs}")
-        if m.body_lines < min_lines:
-            m.failures.append(f"body lines {m.body_lines} < required {min_lines}")
+        if effective_lines < min_lines:
+            m.failures.append(
+                f"body lines {m.body_lines} (code-block-adjusted: {effective_lines}) < required {min_lines}"
+            )
         if m.code_blocks < min_code_blocks:
             m.failures.append(f"code blocks {m.code_blocks} < required {min_code_blocks}")
         if m.mermaid_blocks < min_mermaid:
@@ -439,12 +457,17 @@ def check_naming_convention(drafts_dir: Path, user_custom: list[str] | None = No
     return warnings
 
 
-def check_user_custom_deliverables(target_dir: Path, user_custom: list[str], min_body_lines: int = 10) -> list[str]:
+def check_user_custom_deliverables(
+    target_dir: Path,
+    user_custom: list[str],
+    min_body_lines: int = 10,
+    code_block_line_weight: float = 0.5,
+) -> list[str]:
     """Verify every user-custom deliverable exists in the target dir with a non-empty body.
 
-    "Non-empty body" means at least `min_body_lines` non-blank lines outside
-    of code fences. This catches the case where the agent stubs the file but
-    never fills it.
+    "Non-empty body" means at least `min_body_lines` effective non-blank lines outside
+    of code fences, where code-block lines are weighted by ``code_block_line_weight``.
+    This catches the case where the agent stubs the file but never fills it.
 
     Per-chapter comprehensive quality gates (200 lines, REFs, Mermaid, etc.)
     do NOT apply to user_custom files — those are handled by the caller via
@@ -467,11 +490,15 @@ def check_user_custom_deliverables(target_dir: Path, user_custom: list[str], min
             content = p.read_text(encoding="utf-8", errors="replace")
         in_code = False
         body_lines = 0
+        code_block_lines = 0
         for line in content.splitlines():
             if CODE_FENCE_RE.match(line):
                 in_code = not in_code
                 continue
             if in_code:
+                stripped = line.strip()
+                if stripped:
+                    code_block_lines += 1
                 continue
             stripped = line.strip()
             if not stripped:
@@ -479,9 +506,12 @@ def check_user_custom_deliverables(target_dir: Path, user_custom: list[str], min
             if stripped.startswith("<!--") or stripped.startswith("-->"):
                 continue
             body_lines += 1
-        if body_lines < min_body_lines:
+        effective_lines = body_lines + int(code_block_lines * code_block_line_weight)
+        if effective_lines < min_body_lines:
             failures.append(
-                f"user-custom deliverable {name} exists but body has only {body_lines} non-blank lines (need >= {min_body_lines})"
+                f"user-custom deliverable {name} exists but body has only {body_lines} "
+                f"effective lines (code-block-adjusted: {effective_lines}) "
+                f"(need >= {min_body_lines})"
             )
     return failures
 
@@ -592,6 +622,7 @@ def build_report(
     min_mermaid_per_chapter: int,
     min_sources_read_per_chapter: int,
     min_mece_coverage: float,
+    code_block_line_weight: float = 0.5,
 ) -> CoverageReport:
     # Resolve the target directory:
     # 1. Try output_dir / target_dir_name (e.g. .specback/final or specs/final)
@@ -629,7 +660,9 @@ def build_report(
     user_custom = load_user_custom_deliverables(specback_dir)
     naming_warnings = check_naming_convention(target_dir, user_custom=user_custom)
     missing_required = check_required_files(target_dir)
-    user_custom_failures = check_user_custom_deliverables(target_dir, user_custom)
+    user_custom_failures = check_user_custom_deliverables(
+        target_dir, user_custom, code_block_line_weight=code_block_line_weight,
+    )
 
     # Chapter metrics
     chapter_metrics: list[ChapterMetrics] = []
@@ -656,6 +689,7 @@ def build_report(
             min_code_blocks=min_code_blocks_per_chapter,
             min_mermaid=min_mermaid_per_chapter,
             min_sources_read=min_sources_read_per_chapter,
+            code_block_line_weight=code_block_line_weight,
         )
 
     # inventory min auto
@@ -863,8 +897,13 @@ def render_text(report: CoverageReport) -> str:
     lines.append("[Per-chapter quality metrics]")
     for m in report.chapter_metrics:
         flag = "❌" if m.failures else "✅"
+        code_extra = ""
+        if m.code_block_lines:
+            effective = m.body_lines + int(m.code_block_lines * 0.5)
+            if effective != m.body_lines:
+                code_extra = f" (code-block-adjusted: {effective})"
         lines.append(
-            f"  {flag} {m.file}: body={m.body_lines} lines, refs={m.refs} "
+            f"  {flag} {m.file}: body={m.body_lines}{code_extra}, refs={m.refs} "
             f"code={m.code_blocks} mermaid={m.mermaid_blocks} sources_read={m.sources_read_count}"
         )
         for f in m.failures:
@@ -911,6 +950,7 @@ def render_json(report: CoverageReport) -> str:
                 "file": m.file,
                 "total_lines": m.total_lines,
                 "body_lines": m.body_lines,
+                "code_block_lines": m.code_block_lines,
                 "refs": m.refs,
                 "code_blocks": m.code_blocks,
                 "mermaid_blocks": m.mermaid_blocks,
@@ -952,6 +992,11 @@ def main() -> int:
     p.add_argument("--min-code-blocks-per-chapter", type=int, default=3)
     p.add_argument("--min-mermaid-per-chapter", type=int, default=1)
     p.add_argument("--min-sources-read-per-chapter", type=int, default=5)
+    p.add_argument("--code-block-line-weight", type=float, default=0.5,
+                   help='Weight for non-blank code-block lines when counting body lines '
+                        '(default: 0.5 — every two code lines count as one body line). '
+                        'Set to 0.0 to exclude code-block lines entirely, '
+                        'or 1.0 to count them as full body lines.')
 
     # inventory / questions / MECE
     p.add_argument("--min-inventory", default="auto",
@@ -991,6 +1036,7 @@ def main() -> int:
             min_mermaid_per_chapter=args.min_mermaid_per_chapter,
             min_sources_read_per_chapter=args.min_sources_read_per_chapter,
             min_mece_coverage=min_mece_coverage,
+            code_block_line_weight=args.code_block_line_weight,
         )
     except FileNotFoundError as e:
         print(f"ERROR: {e}", file=sys.stderr)
