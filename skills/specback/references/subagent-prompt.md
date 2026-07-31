@@ -156,6 +156,7 @@ blocked_sections: [{section_name}, ...]
 - **Use exactly the `{output_file_name}` handed down by the main agent.**
   Free-form naming is forbidden (no `chapter2_architecture.md`-style names).
   Save location is fixed at `drafts/{output_file_name}`.
+- **内部ファイル非表示ルール**: 生成ドキュメント本文内で `inventory.json`、`wbs.json`、`.specback/` などの specback 内部ファイルパスを参照しないこと。テーブル列の説明はユーザー向け表現にし、内部ファイル名で説明しない。Agent が内部で参照するファイルと、読者に表示する内容は別物である。
 
 ================================
 [Completion report]

@@ -59,5 +59,6 @@ When the user sends a completion word ("end", "complete", "OK, done", etc.):
 - If a deep-dive is **requested for a target already covered**, surface the existing deep-dive chapter and ask "Regenerate it?".
 - Sub-agent return values during deep-dive also follow the **mode B contract** (path + summary), not the full body.
 - Be mindful of cumulative cost: each deep-dive equals roughly one comprehensive chapter. Periodically report "N deep-dives so far, cumulative cost ~$X".
+- **内部ファイル非表示ルール**: Deep-dive モードでのユーザー応対時も、`wbs.json`、`inventory.json` などの specback 内部ファイルパスをユーザーに向けて発言しない。内部ルックアップは裏で行い、「該当する deep-dive 候補を確認しました」のようにユーザー向け表現にすること。
 
 ---

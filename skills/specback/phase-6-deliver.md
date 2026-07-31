@@ -128,6 +128,7 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 - Omitting the metadata chapter (`00-metadata.md`) loses "when, from which version of the code" the spec was generated.
 - Omitting the traceability table (`traceability.md`) makes every statement's origin untraceable.
 - The presence of the three required files (`00-metadata.md` / `99-unresolved.md` / `traceability.md`) AND every file in `goal.json.user_custom_deliverables` is verified by `scripts/coverage-check.py`; missing files raise errors.
-- **Pushing a user-promised deliverable into "future improvements" of `99-unresolved.md` is a contract breach**, not a graceful degradation. The user did not ask for a recommendation that the file be made; they asked for the file. If the file cannot be made, ask the user, do not invent a workaround.
+|- **Pushing a user-promised deliverable into "future improvements" of `99-unresolved.md` is a contract breach**, not a graceful degradation. The user did not ask for a recommendation that the file be made; they asked for the file. If the file cannot be made, ask the user, do not invent a workaround.
+|- **内部ファイル非表示ルール**: 最終出力ドキュメント内で `.specback/inventory.json`、`.specback/wbs.json` などの specback 内部ファイルパスを参照しないこと（Phase 3 から持ち越された記述も含む）。出力前に全チャプターをスキャンし、内部ファイルパスが含まれていればユーザー向け表現に書き換える。
 
 ---
