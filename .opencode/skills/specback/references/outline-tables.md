@@ -465,6 +465,47 @@ When a chapter-investigator sub-agent is assigned to the Feature specifications 
 6. **Cross-reference** each feature to related chapters (screen details, endpoint catalogue, data model).
 7. **Populate questions.json** with `spec_missing` questions for uncertain feature boundaries.
 8. **Output**: `.specback/drafts/02-feature-specifications.md`
+
+## Module architecture (overview) extraction patterns (for Chapter 3: Module architecture / Architecture overview)
+
+Overview-level structure chapter: WHAT the modules are and how they relate at a glance. Keep it short — detailed internals belong to Internal structure, deep rationale to System design.
+
+### Module composition (directory structure)
+
+Mechanically extractable with `glob` / `ls` of the top-level source layout:
+
+| Signal | Command | Confidence |
+|--------|---------|-----------|
+| Source root layout | `glob src/*`, `glob lib/*`, top-level package dirs | 🟢 |
+| Package entry point | manifest `main` / `module` / `exports` field | 🟢 |
+| Distribution layout | `dist/`, `build/`, `lib/` (compiled output) vs source | 🟢 |
+
+One row per module/package: `Module / package | Responsibility | Key files | Confidence`. Responsibility may need reading the module's main file or README — mark 🟡 when inferred from naming alone.
+
+### Tech stack (manifest)
+
+| Signal | Command | Confidence |
+|--------|---------|-----------|
+| Language / runtime | `package.json` (`engines`), `pyproject.toml` (`requires-python`), `*.gemspec`, `composer.json` | 🟢 |
+| Major dependencies | manifest dependency lists; `pip freeze` / `npm ls --depth=0` output | 🟢 |
+| Build tooling | `devDependencies` / build scripts / Makefile targets | 🟢 |
+
+### Module dependency overview (top-level only)
+
+Same `rg` import patterns as System design (see below) — but **group at package / top-level-directory granularity**, not per file. Render one `graph TD` with ≤ 15 nodes (SKILL.md Split rule); flag circular dependencies; defer the detailed graph to System design.
+
+### Chapter-investigator procedure for Module architecture (overview)
+
+When a chapter-investigator sub-agent is assigned to the Module architecture (overview) chapter:
+
+1. **Read the Overview chapter** for library purpose and features.
+2. **Glob the directory structure**; list top-level modules/packages and their responsibilities.
+3. **Read the package manifest** for language/runtime/major dependencies.
+4. **Run import analysis** at top-level granularity; build a `graph TD` dependency overview.
+5. **Cross-reference** detailed internals → Internal structure, detailed dependency analysis → System design.
+6. **Populate questions.json** with `spec_missing` questions for unclear module responsibilities.
+7. **Output**: `.specback/drafts/03-module-architecture.md`
+
 ## System design extraction patterns (for Chapter N: System design)
 
 ### Module / component dependency extraction
