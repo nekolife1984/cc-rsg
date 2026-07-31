@@ -85,7 +85,11 @@ def _line_range_str(lr: list[int] | None) -> str | None:
 
 def _load_json(path: Path, label: str) -> dict[str, Any]:
     if not path.exists():
-        print(f"WARNING: {label} not found: {path}", file=sys.stderr)
+        print(
+            f"WARNING: {label} not found: {path} — proceeding with an empty {label}; "
+            f"the knowledge graph will have fewer nodes.",
+            file=sys.stderr,
+        )
         return {}
     try:
         return json.loads(path.read_text(encoding="utf-8"))

@@ -231,7 +231,11 @@ def main(argv: list[str] | None = None) -> int:
     sm = json.loads(source_map_path.read_text(encoding="utf-8"))
     units = sm.get("units", [])
     if not units:
-        print("WARNING: source-map.json has no units. Nothing to hash.", file=sys.stderr)
+        print(
+            "WARNING: source-map.json has no units. Nothing to hash — writing an empty "
+            "source-hashes.json.",
+            file=sys.stderr,
+        )
 
     target_root = sm.get("target_root", ".")
 

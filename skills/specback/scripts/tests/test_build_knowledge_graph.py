@@ -383,3 +383,21 @@ def test_skip_questions_flag(tmp_path: Path):
     q_nodes = [n for n in kg["@graph"] if n.get("@type") == "ccrsg:Question"]
     assert len(q_nodes) == 0
     assert kg["ccrsg:stats"]["questions"] == 0
+
+
+def test_missing_optional_input_warns_consequence(tmp_path: Path):
+    """Missing trace/inventory warns the graph will be incomplete, not silently."""
+    write_json(tmp_path, SAMPLE_SOURCE_MAP, "source-map.json")
+    out = tmp_path / "kg.jsonld"
+
+    result = run_script(tmp_path, [
+        "--source-map", str(tmp_path / "source-map.json"),
+        "--trace", str(tmp_path / "missing-trace.json"),
+        "--inventory", str(tmp_path / "missing-inventory.json"),
+        "--skip-questions",
+        "--output", str(out),
+    ])
+    assert result.returncode == 0
+    assert "proceeding with an empty trace.json" in result.stderr
+    assert "proceeding with an empty inventory.json" in result.stderr
+    assert "knowledge graph will have fewer nodes" in result.stderr

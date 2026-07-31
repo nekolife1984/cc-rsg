@@ -88,13 +88,22 @@ def build_source_map(target: Path, exclude_globs: list[str] | None = None) -> So
         extractor = extractors.get_extractor(language)
         if extractor is None:
             if language in H.TREE_SITTER_BACKED:
-                pkg = H.PIP_PACKAGE.get(language, f"tree-sitter-{language}")
-                smap.warnings.append(
-                    f"language '{language}' is tree-sitter backed but its grammar is not "
-                    f"installed — emitting file-level units only ({len(files)} file(s), "
-                    f"first: {files[0][0]}). Fix: pip install -r requirements.txt "
-                    f"(or: pip install {pkg})"
-                )
+                if H.have(language):
+                    # Grammar is installed, so the extractor module failed to
+                    # register (import-time bug) — don't blame the dependency.
+                    smap.warnings.append(
+                        f"language '{language}' has its tree-sitter grammar installed but "
+                        f"the extractor did not register (module import error) — emitting "
+                        f"file-level units only ({len(files)} file(s), first: {files[0][0]})"
+                    )
+                else:
+                    pkg = H.PIP_PACKAGE.get(language, f"tree-sitter-{language}")
+                    smap.warnings.append(
+                        f"language '{language}' is tree-sitter backed but its grammar is not "
+                        f"installed — emitting file-level units only ({len(files)} file(s), "
+                        f"first: {files[0][0]}). Fix: pip install -r requirements.txt "
+                        f"(or: pip install {pkg})"
+                    )
             else:
                 smap.warnings.append(
                     f"language '{language}' has no v2 extractor yet — emitting file-level "
