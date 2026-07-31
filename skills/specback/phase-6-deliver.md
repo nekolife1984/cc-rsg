@@ -74,7 +74,37 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
    - Use `--skip-kg` to disable this step (useful when the additional output is not needed).
 
 6. **Intent-vs-delivery audit (mandatory; the final gate before completion)**
-   - Re-run `coverage-check.py` against `--target-dir-for-required {output_dir}`. Exit code must be 0.
+   - Re-run `coverage-check.py` against the final output directory. Exit code must be 0.
+
+     **Recommended invocation:**
+     ```bash
+     python "$(cat .specback/.skill-path)/scripts/coverage-check.py" \
+       --specback-dir .specback \
+       --output-dir {output_dir} \
+       --target-dir-for-required final \
+       --output-format text
+     ```
+     This resolves to `{output_dir}/final/` (e.g. `.specback/final/final`).
+
+     **Alternative (when final files are directly under `{output_dir}`):**
+     ```bash
+     python "$(cat .specback/.skill-path)/scripts/coverage-check.py" \
+       --specback-dir .specback \
+       --output-dir {output_dir} \
+       --target-dir-for-required {output_dir} \
+       --output-format text
+     ```
+     The script's fallback logic handles both styles automatically (see table below).
+
+     **`--output-dir` vs `--target-dir-for-required` resolution in Phase 6:**
+
+     | `--target-dir-for-required` | `--output-dir` | Resolved path | Notes |
+     |----------------------------|----------------|---------------|-------|
+     | `final` | `{output_dir}` (e.g. `.specback/final`) | `{output_dir}/final/` ✅ | Standard pattern when files are under `{output_dir}/final/` |
+     | `{output_dir}` (e.g. `.specback/final`) | `.specback` (default) | `.specback/.specback/final/` ❌ → **fallback**: `.specback/final/` ✅ | When `--output-dir` is the default; fallback saves explicit re-routing |
+     | `drafts` | any | `{output_dir}/drafts/` ❌ → fallback tries `drafts/` → fails ❌ | Correct: Phase 6 should never scan drafts |
+
+     Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path. This allows passing an absolute or relative path directly without path arithmetic.
    - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` (default: `.specback/final/{name}`) AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
    - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `{output_dir}/`.
    - **Verify state.json invariants**:

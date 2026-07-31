@@ -40,6 +40,17 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
      --output-format text
    ```
    This invocation is **non-optional**. The script's exit code is the gate:
+
+   **`--output-dir` vs `--target-dir-for-required` resolution:**
+
+   | `--target-dir-for-required` | `--output-dir` (default: `.specback`) | Resolved path | Notes |
+   |----------------------------|---------------------------------------|---------------|-------|
+   | `drafts` | `.specback` | `.specback/drafts/` ✅ | Drafts always live here in Phase 4 |
+   | `drafts` | `specs` (or any other dir) | `specs/drafts/` ❌ → **fallback**: `specs/drafts/` does not exist; the script tries `drafts/` as a standalone path → still missing → fails as expected |
+   | `.specback/drafts` | `specs` | `specs/.specback/drafts/` ❌ → **fallback**: tries `.specback/drafts/` ✅ | Useful when `--output-dir` is custom and drafts are at `.specback/drafts/` |
+   | `final` | `.specback` | `.specback/final/` ✅ | Used in Phase 6; not normally needed in Phase 4 |
+
+   Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path (absolute or relative). This allows passing `.specback/drafts` directly without path arithmetic.
    - `0` → all checks pass; Phase 4 may proceed.
    - `1` → at least one check failed; go to step 3 (loopback). Recording `all_quality_gates_passed: true` in `state.json` while exit is 1 is forbidden.
    - `2` → required artefacts (e.g. `inventory.json`) missing; surface to user.
