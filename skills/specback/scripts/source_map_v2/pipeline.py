@@ -88,15 +88,39 @@ def build_source_map(target: Path, exclude_globs: list[str] | None = None) -> So
         extractor = extractors.get_extractor(language)
         if extractor is None:
             if language in H.TREE_SITTER_BACKED:
-                if H.have(language):
-                    # Grammar is installed, so the extractor module failed to
+                state = H.install_state(language)
+                if state == H.STATE_OK:
+                    # Grammar is installed and loads, so the extractor module failed to
                     # register (import-time bug) — don't blame the dependency.
                     smap.warnings.append(
                         f"language '{language}' has its tree-sitter grammar installed but "
                         f"the extractor did not register (module import error) — emitting "
                         f"file-level units only ({len(files)} file(s), first: {files[0][0]})"
                     )
-                else:
+                elif state == H.STATE_INCOMPATIBLE:
+                    # Grammar is installed but its Language version doesn't match the
+                    # installed core. pip install alone won't fix this; the version pin
+                    # in requirements.txt must be restored.
+                    pkg = H.PIP_PACKAGE.get(language, f"tree-sitter-{language}")
+                    smap.warnings.append(
+                        f"language '{language}' has its tree-sitter grammar installed but "
+                        f"it is incompatible with the installed tree-sitter core (language "
+                        f"version mismatch) — emitting file-level units only "
+                        f"({len(files)} file(s), first: {files[0][0]}). Fix: reinstall the "
+                        f"pinned version from requirements.txt (e.g. pip install "
+                        f"--force-reinstall {pkg}==<pinned>), or upgrade tree-sitter core "
+                        f"to a compatible version"
+                    )
+                elif state == H.STATE_IMPORT_ERROR:
+                    # Grammar is installed but crashes at load time (module bug).
+                    pkg = H.PIP_PACKAGE.get(language, f"tree-sitter-{language}")
+                    smap.warnings.append(
+                        f"language '{language}' has its tree-sitter grammar installed but "
+                        f"it failed to load (module error) — emitting file-level units "
+                        f"only ({len(files)} file(s), first: {files[0][0]}). Fix: check "
+                        f"the {pkg} package for a broken release and pin a working version"
+                    )
+                else:  # H.STATE_MISSING
                     pkg = H.PIP_PACKAGE.get(language, f"tree-sitter-{language}")
                     smap.warnings.append(
                         f"language '{language}' is tree-sitter backed but its grammar is not "

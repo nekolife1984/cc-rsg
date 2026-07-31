@@ -180,10 +180,10 @@ def test_missing_grammar_warns_with_install_hint(tmp_path, monkeypatch):
     """
     root = _make_project(tmp_path)
     # Simulate the python grammar being unavailable (as if deps not installed).
-    original_have = tshelpers.have
+    original_state = tshelpers.install_state
     monkeypatch.setattr(
-        tshelpers, "have",
-        lambda lang: False if lang == "python" else original_have(lang),
+        tshelpers, "install_state",
+        lambda lang: tshelpers.STATE_MISSING if lang == "python" else original_state(lang),
     )
     monkeypatch.setattr(
         extractors, "get_extractor",

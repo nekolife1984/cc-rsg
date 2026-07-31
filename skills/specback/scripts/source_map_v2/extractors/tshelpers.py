@@ -7,6 +7,7 @@ not register, so the pipeline falls back to file-level units + a loud warning.
 
 from __future__ import annotations
 
+import importlib
 from functools import lru_cache
 
 try:
@@ -46,63 +47,98 @@ PIP_PACKAGE: dict[str, str] = {
     "rust": "tree-sitter-rust",
 }
 
+# language -> (python module name, function returning the grammar Language).
+# Some grammars expose more than one language (typescript -> tsx, javascript);
+# this mapping mirrors the old if/elif chain in ``_parser``.
+_LANG_MODULE_FN: dict[str, tuple[str, str]] = {
+    "python": ("tree_sitter_python", "language"),
+    "ruby": ("tree_sitter_ruby", "language"),
+    "typescript": ("tree_sitter_typescript", "language_typescript"),
+    "tsx": ("tree_sitter_typescript", "language_tsx"),
+    "javascript": ("tree_sitter_typescript", "language_typescript"),
+    "php": ("tree_sitter_php", "language_php"),
+    "java": ("tree_sitter_java", "language"),
+    "csharp": ("tree_sitter_c_sharp", "language"),
+    "kotlin": ("tree_sitter_kotlin", "language"),
+    "go": ("tree_sitter_go", "language"),
+    "c": ("tree_sitter_c", "language"),
+    "cpp": ("tree_sitter_cpp", "language"),
+    "dart": ("tree_sitter_dart", "language"),
+    "swift": ("tree_sitter_swift", "language"),
+    "rust": ("tree_sitter_rust", "language"),
+}
+
+
+def _load_language(language: str):
+    """Import the grammar module and return a ``tree_sitter.Language``.
+
+    Raises ImportError when the grammar (or core) is not installed, ValueError
+    when the grammar's Language version is incompatible with the installed
+    core, or any other exception raised by the grammar package at load time.
+    """
+    mod_name, fn_name = _LANG_MODULE_FN[language]
+    mod = importlib.import_module(mod_name)
+    return _ts.Language(getattr(mod, fn_name)())
+
 
 @lru_cache(maxsize=None)
 def _parser(language: str):
     if not _HAVE_CORE:
         return None
     try:
-        if language == "python":
-            import tree_sitter_python as m
-            lang = _ts.Language(m.language())
-        elif language == "ruby":
-            import tree_sitter_ruby as m
-            lang = _ts.Language(m.language())
-        elif language == "typescript":
-            import tree_sitter_typescript as m
-            lang = _ts.Language(m.language_typescript())
-        elif language == "tsx":
-            import tree_sitter_typescript as m
-            lang = _ts.Language(m.language_tsx())
-        elif language == "javascript":
-            # JS is parsed by the typescript grammar (see typescript_ext).
-            import tree_sitter_typescript as m
-            lang = _ts.Language(m.language_typescript())
-        elif language == "php":
-            import tree_sitter_php as m
-            lang = _ts.Language(m.language_php())
-        elif language == "java":
-            import tree_sitter_java as m
-            lang = _ts.Language(m.language())
-        elif language == "csharp":
-            import tree_sitter_c_sharp as m
-            lang = _ts.Language(m.language())
-        elif language == "kotlin":
-            import tree_sitter_kotlin as m
-            lang = _ts.Language(m.language())
-        elif language == "go":
-            import tree_sitter_go as m
-            lang = _ts.Language(m.language())
-        elif language == "c":
-            import tree_sitter_c as m
-            lang = _ts.Language(m.language())
-        elif language == "cpp":
-            import tree_sitter_cpp as m
-            lang = _ts.Language(m.language())
-        elif language == "dart":
-            import tree_sitter_dart as m
-            lang = _ts.Language(m.language())
-        elif language == "swift":
-            import tree_sitter_swift as m
-            lang = _ts.Language(m.language())
-        elif language == "rust":
-            import tree_sitter_rust as m
-            lang = _ts.Language(m.language())
-        else:
-            return None
-        return _ts.Parser(lang)
+        return _ts.Parser(_load_language(language))
     except Exception:
         return None
+
+
+# install_state() return values.
+STATE_OK = "ok"  # parser loads successfully
+STATE_MISSING = "missing"  # core or grammar not installed
+STATE_INCOMPATIBLE = "incompatible"  # grammar Language version vs core mismatch
+STATE_IMPORT_ERROR = "import-error"  # grammar installed but fails to load
+
+
+@lru_cache(maxsize=None)
+def install_state(language: str) -> str:
+    """Diagnose why ``have(language)`` may be False.
+
+    Unlike ``have()`` — which swallows every failure and returns False —
+    this distinguishes *missing* grammars from *installed but broken* ones
+    (Issue #123).  Returns one of the STATE_* constants:
+
+    - STATE_OK:           parser loads
+    - STATE_MISSING:      tree-sitter core or the grammar is not installed
+    - STATE_INCOMPATIBLE: grammar installed, but its Language version is not
+                          supported by the installed core.  This happens at
+                          ``Parser()`` creation, not ``Language()``: newer
+                          grammars ship Language version 15 while core 0.23.x
+                          only supports v13-14 (e.g. tree-sitter-python 0.25.x,
+                          tree-sitter-rust 0.24.x) — ``pip install`` alone
+                          will NOT fix this; pin core >= 0.24 in
+                          requirements.txt (verified: core 0.25.1 + latest
+                          grammars works on Python 3.11/3.12)
+    - STATE_IMPORT_ERROR: grammar installed but fails to load for another
+                          reason (module-level bug in the grammar package)
+    """
+    if language not in _LANG_MODULE_FN:
+        return STATE_MISSING
+    if not _HAVE_CORE:
+        return STATE_MISSING
+    try:
+        # Check at Parser() level, not Language() level: a Language object
+        # can be constructed from an unsupported version, but Parser() then
+        # raises "Incompatible Language version N".  have() is the source of
+        # truth for extractor registration, so install_state must agree.
+        _ts.Parser(_load_language(language))
+        return STATE_OK
+    except ImportError:
+        return STATE_MISSING
+    except ValueError as exc:
+        if "version" in str(exc).lower():
+            return STATE_INCOMPATIBLE
+        return STATE_IMPORT_ERROR
+    except Exception:
+        return STATE_IMPORT_ERROR
 
 
 def name_of(node, src: bytes) -> str:
