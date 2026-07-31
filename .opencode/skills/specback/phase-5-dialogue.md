@@ -3,6 +3,8 @@
 ### Purpose
 Through dialogue with the user, resolve uncertainty markers and the Question Bank, refining the spec.
 
+> **⚠️ Phase 5 must not be skipped entirely.** At minimum, present the Question Bank overview to the user and resolve at least one critical or important question. Skipping Phase 5 without any user dialogue leaves uncertainty markers unresolved and degrades spec credibility. If the agent determines that all questions are low-priority, record the rationale in `state.json.phase_5.skip_reason` and proceed, but always attempt Stage 1 first.
+
 ### 🆕 Multi-scope execution
 
 When `goal.multi_scope == true`, the following steps apply:

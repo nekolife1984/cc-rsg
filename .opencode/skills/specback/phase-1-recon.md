@@ -13,6 +13,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    - Existing documentation (`README.md`, `docs/`, `wiki`, etc.)
    - Build/deploy configuration (`Dockerfile`, `Makefile`, CI configs, etc.)
    - Language mix and estimated line counts
+   - 🆕 **Tree-sitter availability**: Check whether `tree-sitter` is installed (`python -c "import tree_sitter"`). Record as `tree_sitter_available: true/false` in recon-report.md. When unavailable, note that some language extractors will fall back to file-level granularity.
 
 2. **Present template candidates**
    - Consult `references/template-catalog.md` and propose candidates suitable for the target codebase.
