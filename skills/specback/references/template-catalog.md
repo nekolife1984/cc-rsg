@@ -4,6 +4,29 @@ Selection guide used in Phase 1 when presenting template candidates to the user.
 
 ---
 
+## Chapter ordering principles
+
+The template chapter order **is** the final document order. It is designed around the **reader's comprehension flow** — what a reader needs to know first in order to understand what comes later:
+
+| Position | Chapter group | What it answers | Typical chapters |
+|:--------:|---------------|-----------------|------------------|
+| 1 | Overview | What system is this? | Overview |
+| 2 | Capability view | What can it do? | Feature specifications |
+| 3 | Structural overview | How is it built, at a glance? | Architecture overview / Module architecture |
+| 4 | Detail chapters | How does each part work? | Screens, routes/endpoints, data model, job catalogue, API catalogue, configuration, ... |
+| 5 | Design rationale | Why is it shaped this way? | System design (ADRs, module dependencies, cross-cutting concerns) |
+| 6 | Boundaries | What can it not do? | Known constraints and unresolved items |
+
+Rules:
+
+1. **Structural overview goes early** — the Architecture / Module overview sits right after the capability view, so readers can orient themselves before reading details.
+2. **Design rationale goes late** — System design sits after the detail chapters, right before Known constraints. It deepens understanding of things the reader has already seen; placed early it would create forward references.
+3. **Presentation order ≠ generation order** — the template defines the presentation order; Phase 3 may generate chapters in any order (it dispatches them in parallel). Keeping generation order aligned with presentation order is the current convention, but it is not a requirement.
+4. **Judge additions and reorderings against this flow** — when adding or moving a chapter, ask "where does the reader's comprehension flow require this?" rather than "where was the last edit?".
+5. **Chapter count is template-specific** — there is no fixed chapter count; each template defines its own outline. Phase docs and scripts must never hardcode a count (see the "13-chapter" fix in `phase-2-wbs.md`).
+
+---
+
 ## Initial set of 4
 
 The skill ships with the following 4 templates by default. The user may also bring their own template (by specifying a path).
