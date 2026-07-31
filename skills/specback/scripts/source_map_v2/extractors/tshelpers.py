@@ -18,6 +18,34 @@ except ImportError:
 
 HTTP_METHODS = {"get", "post", "put", "patch", "delete", "head", "options", "websocket", "route"}
 
+# Languages whose extractor requires a tree-sitter grammar (guarded registration).
+# When the grammar is missing, the extractor module imports cleanly but does not
+# register, so the pipeline falls back to file-level units with a warning.
+TREE_SITTER_BACKED: frozenset[str] = frozenset({
+    "python", "typescript", "tsx", "javascript", "ruby", "php", "java",
+    "csharp", "kotlin", "go", "c", "cpp", "dart", "swift", "rust",
+})
+
+# pip package providing the grammar for each tree-sitter backed language.
+# (csharp differs: the package is ``tree-sitter-c-sharp``, not ``tree-sitter-csharp``.)
+PIP_PACKAGE: dict[str, str] = {
+    "python": "tree-sitter-python",
+    "typescript": "tree-sitter-typescript",
+    "tsx": "tree-sitter-typescript",
+    "javascript": "tree-sitter-typescript",
+    "ruby": "tree-sitter-ruby",
+    "php": "tree-sitter-php",
+    "java": "tree-sitter-java",
+    "csharp": "tree-sitter-c-sharp",
+    "kotlin": "tree-sitter-kotlin",
+    "go": "tree-sitter-go",
+    "c": "tree-sitter-c",
+    "cpp": "tree-sitter-cpp",
+    "dart": "tree-sitter-dart",
+    "swift": "tree-sitter-swift",
+    "rust": "tree-sitter-rust",
+}
+
 
 @lru_cache(maxsize=None)
 def _parser(language: str):

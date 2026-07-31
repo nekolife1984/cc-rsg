@@ -168,3 +168,48 @@ def test_registered_extractor_is_dispatched_with_framework(tmp_path):
             extractors._REGISTRY.pop("php", None)
         else:
             extractors._REGISTRY["php"] = saved
+
+
+def test_missing_grammar_warns_with_install_hint(tmp_path, monkeypatch):
+    """A tree-sitter backed language without its grammar must point to the fix.
+
+    Regression guard for #110: the old wording ("has no v2 extractor yet")
+    reads as "feature not implemented" when the real cause is a missing
+    optional dependency, which led users to file duplicate issues.
+    """
+    root = _make_project(tmp_path)
+    # Simulate the python grammar being unavailable (as if deps not installed).
+    monkeypatch.setattr(
+        extractors, "get_extractor",
+        lambda lang: None if lang == "python" else extractors._REGISTRY.get(lang),
+    )
+    payload = build_source_map(root).to_dict()
+    py_warns = [w for w in payload["warnings"] if "'python'" in w]
+    assert len(py_warns) == 1
+    assert "tree-sitter" in py_warns[0]
+    assert "pip install tree-sitter-python" in py_warns[0]
+    assert "no v2 extractor yet" not in py_warns[0]
+    # fallback still emits file-level units, so nothing silently vanishes
+    assert any(u["language"] == "python" for u in payload["units"])
+
+
+def test_unimplemented_language_keeps_legacy_warning(tmp_path, monkeypatch):
+    """Languages with no v2 extractor at all keep the "not implemented" wording.
+
+    sql/cobol are regex-based and always register; forcing get_extractor to
+    None simulates a hypothetical future language without any extractor.
+    """
+    root = tmp_path / "proj"
+    root.mkdir()
+    (root / "requirements.txt").write_text("", encoding="utf-8")  # root marker
+    (root / "query.sql").write_text("SELECT 1;\n", encoding="utf-8")
+    monkeypatch.setattr(
+        extractors, "get_extractor",
+        lambda lang: None if lang == "sql" else extractors._REGISTRY.get(lang),
+    )
+    payload = build_source_map(root).to_dict()
+    sql_warns = [w for w in payload["warnings"] if "'sql'" in w]
+    assert len(sql_warns) == 1
+    assert "no v2 extractor yet" in sql_warns[0]
+    assert "pip install" not in sql_warns[0]
+    assert any(u["language"] == "sql" for u in payload["units"])
