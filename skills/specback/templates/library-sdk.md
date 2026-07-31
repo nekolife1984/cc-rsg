@@ -95,11 +95,54 @@ For each feature listed above, describe the processing flow structured as below.
 
 
 
-### Chapter 3: Installation
+### Chapter 3: Module architecture (overview)
+
+<!-- meta: top-level structure of the library, for reader orientation. Overview-level only: WHAT the modules are and how they relate at a glance. Detailed internals go to the Internal structure chapter (contributor detail), design rationale to System design (WHY/HOW). -->
+
+#### 3.1 Module composition
+
+Top-level modules / packages and their responsibilities, extracted from the directory structure.
+
+| Module / package | Responsibility | Key files | Confidence |
+|------------------|----------------|-----------|-----------|
+| (module) | (responsibility) | [REF: ...] | 🟢/🟡/🔴 |
+| ... | ... | ... | ... |
+
+- Package entry point (`main` / `module` field of the manifest), if any
+- Distribution layout vs source layout, if they differ (`dist/`, `lib/`, `src/`, ...)
+
+#### 3.2 Module dependency overview
+
+Top-level dependency graph between modules, extracted from import analysis. Use the per-language `rg` patterns in `references/outline-tables.md` → System design extraction patterns.
+
+```mermaid
+graph TD
+  module-a --> module-b
+  module-b --> module-c
+```
+
+- Overview level only: group at package / top-level-directory granularity
+- Flag circular dependencies explicitly here; detailed dependency analysis → Chapter ? (System design)
+
+#### 3.3 Tech stack
+
+Language / runtime / major dependency packages, extracted from the package manifest.
+
+| Item | Value | Source | Confidence |
+|------|-------|--------|-----------|
+| Language / runtime | (value) | [REF: ...] | 🟢 |
+| Major dependencies | (value) | [REF: ...] | 🟢 |
+
+- Build tooling (bundler / compiler / transpiler) and distribution targets (npm / pip / composer / gem / NuGet)
+- → Detailed dependency policy → Chapter ? (System design)
+
+---
+
+### Chapter 4: Installation
 
 <!-- meta: steps to start using the library. -->
 
-#### 3.1 Per-package-manager commands
+#### 4.1 Per-package-manager commands
 ```bash
 # npm
 npm install <package-name>
@@ -120,22 +163,22 @@ gem install <package-name>
 dotnet add package <PackageName>
 ```
 
-#### 3.2 Runtime requirements
+#### 4.2 Runtime requirements
 - Supported language versions
 - Supported operating systems
 - Required surrounding tools
 
-#### 3.3 Optional dependencies
+#### 4.3 Optional dependencies
 - Anything extra needed at install time
 - Per-feature additional dependencies
 
 ---
 
-### Chapter 4: Public API catalogue
+### Chapter 5: Public API catalogue
 
 <!-- meta: inventory of all public APIs. The pillar of verification. -->
 
-#### 4.1 API catalogue
+#### 5.1 API catalogue
 | API name | Kind | Signature | Summary | Stability |
 |------|-----|----------|------|-------|
 | `connect()` | function | `connect(config: Config) → Client` | Create a client | stable |
@@ -143,11 +186,11 @@ dotnet add package <PackageName>
 | `parse()` | function | `parse(input: string) → AST` | Parse input | beta |
 | ... | ... | ... | ... | ... |
 
-#### 4.2 Module structure
+#### 5.2 Module structure
 - Module structure inside the package
 - Main exports
 
-#### 4.3 Stability levels
+#### 5.3 Stability levels
 - stable: backward compatibility is guaranteed
 - beta: may have breaking changes within a major version
 - experimental: may change in any version
@@ -155,11 +198,11 @@ dotnet add package <PackageName>
 
 ---
 
-### Chapter 5: Usage examples (quick start)
+### Chapter 6: Usage examples (quick start)
 
 <!-- meta: "read this and start using it" samples. -->
 
-#### 5.1 Minimal example
+#### 6.1 Minimal example
 ```javascript
 import { connect } from 'mylib';
 
@@ -168,7 +211,7 @@ const result = client.query('SELECT 1');
 console.log(result);
 ```
 
-#### 5.2 Examples per major use case
+#### 6.2 Examples per major use case
 - Use case 1: ...
   ```javascript
   // sample code
@@ -178,18 +221,18 @@ console.log(result);
   // sample code
   ```
 
-#### 5.3 Advanced usage
+#### 6.3 Advanced usage
 - Using custom options
 - Error handling
 - Asynchronous-processing patterns
 
 ---
 
-### Chapter 6: Configuration options
+### Chapter 7: Configuration options
 
 <!-- meta: exhaustive list of all options. -->
 
-#### 6.1 Global configuration
+#### 7.1 Global configuration
 | Option | Type | Default | Description |
 |----------|----|----------|------|
 | `host` | string | `localhost` | Target host |
@@ -197,68 +240,68 @@ console.log(result);
 | `retries` | number | `3` | Retry count |
 | ... | ... | ... | ... |
 
-#### 6.2 Per-feature options
+#### 7.2 Per-feature options
 - Detailed options per feature
 - Combinability
 
-#### 6.3 Configuration via environment variables
+#### 7.3 Configuration via environment variables
 - List of available environment variables
 - Precedence order (code > env vars > defaults)
 
 ---
 
-### Chapter 7: Compatibility
+### Chapter 8: Compatibility
 
 <!-- meta: supported runtimes and dependencies. -->
 
-#### 7.1 Supported language versions
+#### 8.1 Supported language versions
 | Language / runtime | Supported versions | Support status |
 |----------------|--------------|------------|
 | Node.js | 18 LTS, 20 LTS | active |
 | Node.js | 16 | maintenance only |
 | ... | ... | ... |
 
-#### 7.2 Dependencies
+#### 8.2 Dependencies
 | Library | Version | Purpose | Required / optional |
 |----------|----------|------|----------|
 | lodash | ^4.17.0 | utility | required |
 | ... | ... | ... | ... |
 
-#### 7.3 Peer dependencies
+#### 8.3 Peer dependencies
 - Peer-dependency libraries
 - Version ranges required of the consuming project
 
-#### 7.4 Compatibility matrix
+#### 8.4 Compatibility matrix
 - Verified status for major combinations
 - Known incompatible combinations
 
 ---
 
-### Chapter 8: Extension points / plugin system
+### Chapter 9: Extension points / plugin system
 
 <!-- meta: how consumers extend the library. -->
 
-#### 8.1 List of extension points
+#### 9.1 List of extension points
 - Hooks / callbacks
 - Middleware
 - Custom providers
 
-#### 8.2 Plugin API
+#### 9.2 Plugin API
 - Plugin-definition interface
 - Plugin lifecycle
 - Inter-plugin dependencies
 
-#### 8.3 Existing plugins
+#### 9.3 Existing plugins
 - Official plugins
 - Notable third-party plugins
 
 ---
 
-### Chapter 9: Migration guide
+### Chapter 10: Migration guide
 
 <!-- meta: migration steps from past versions. -->
 
-#### 9.1 Migration from v1.x to v2.x
+#### 10.1 Migration from v1.x to v2.x
 
 ##### Breaking changes
 - Removed APIs
@@ -278,19 +321,19 @@ client.connect({ url: 'localhost' });
 client.connect({ host: 'localhost' });
 ```
 
-#### 9.2 Migration from v0.x to v1.x
+#### 10.2 Migration from v0.x to v1.x
 - (Same shape as above)
 
 ---
 
-### Chapter 10: Internal structure (optional)
+### Chapter 11: Internal structure (optional)
 
 <!-- meta: internal architecture of the library. For contributors. -->
 
-#### 10.1 Directory structure
+#### 11.1 Directory structure
 - Main directories and their responsibilities
 
-#### 10.2 Major classes / modules
+#### 11.2 Major classes / modules
 
 | Class | Kind | Module | Responsibility | Depends on | Source |
 |:------|:----|:-------|:-------------|:----------|:-------|
@@ -299,18 +342,18 @@ client.connect({ host: 'localhost' });
 - Class diagram (Mermaid `classDiagram`) for key subsystems. Split per module if >15 classes (see SKILL.md Split rule).
 - Module dependency diagram (`graph TD`) for top-level module relationships.
 
-#### 10.3 Build and test
+#### 11.3 Build and test
 - Build commands
 - Test commands
 - Release process
 
 ---
 
-### Chapter 11: System design
+### Chapter 12: System design
 
 <!-- meta: architectural decisions, cross-cutting concerns, module dependencies, and design trade-offs derived from code. Complements Architecture overview (which describes WHAT) by explaining WHY and HOW cross-cutting concerns are handled. -->
 
-#### 11.1 Architecture Decision Records (ADR)
+#### 12.1 Architecture Decision Records (ADR)
 
 Code-derived record of design decisions. Confidence is typically low since rationale is rarely written in code; use Question Bank integration for SME confirmation.
 
@@ -326,7 +369,7 @@ Extraction strategy:
 
 [CONFIDENCE: LOW — ADR entries are almost always inferred unless explicitly documented]
 
-#### 11.2 Module / component dependency
+#### 12.2 Module / component dependency
 
 Import/require/include graph extracted from source code. Enumerates dependencies between layers or modules.
 
@@ -354,7 +397,7 @@ Label each edge with the dependency strength (direct / transitive / circular). F
 
 [🟢 VERIFIED] — import statements are mechanically extractable with near-zero false positives.
 
-#### 11.3 Cross-cutting design patterns
+#### 12.3 Cross-cutting design patterns
 
 Code-wide patterns that span multiple modules.
 
@@ -374,7 +417,7 @@ For each pattern found, note:
 
 [🟢 VERIFIED for most patterns] — language-level constructs (try/catch, import patterns) are mechanically detectable.
 
-#### 11.4 Security design
+#### 12.4 Security design
 
 Security-related mechanisms observed in code. Detailed auth flows go in the Authentication chapter; this section covers the remaining security posture.
 
@@ -391,7 +434,7 @@ Security-related mechanisms observed in code. Detailed auth flows go in the Auth
 
 [🟢 VERIFIED for most — security code is explicit and searchable]
 
-#### 11.5 Performance design
+#### 12.5 Performance design
 
 Performance-related patterns and potential bottlenecks detected in code. **Does not include benchmarks** (not extractable from code alone).
 
@@ -409,7 +452,7 @@ For each pattern, list which files/modules use it. Note modules that might need 
 
 [🟢 VERIFIED for most patterns — code-level keywords are mechanically searchable]
 
-#### 11.6 Integration design
+#### 12.6 Integration design
 
 External-system integration patterns. Detailed per-integration specs go in the External-system integration chapter; this section provides the overarching design.
 
@@ -425,7 +468,7 @@ External-system integration patterns. Detailed per-integration specs go in the E
 
 [🟢 VERIFIED — external call code is explicit]
 
-#### 11.7 Known trade-offs and constraints
+#### 12.7 Known trade-offs and constraints
 
 Technical trade-offs and constraints visible in code comments.
 
@@ -447,16 +490,16 @@ For each marker, include the surrounding context (next 2 lines) to explain the t
 ---
 
 
-### Chapter 12: Known constraints and unresolved items
+### Chapter 13: Known constraints and unresolved items
 
 <!-- meta: spec credibility safeguard. -->
 
-#### 12.1 Known constraints
+#### 13.1 Known constraints
 - Performance ceilings
 - Known bugs / workarounds
 - Per-platform differences
 
-#### 12.2 Unresolved items
+#### 13.2 Unresolved items
 - Place the `abandoned` entries from the Question Bank here
 
 ---
@@ -464,18 +507,18 @@ For each marker, include the surrounding context (next 2 lines) to explain the t
 ## Customisation guidance
 
 ### Library also ships a CLI tool
-- Add a "CLI command list" section to Chapter 3.
-- Add a "CLI usage example" section to Chapter 4.
+- Add a "CLI command list" section to Chapter 4.
+- Add a "CLI usage example" section to Chapter 5.
 
 ### TypeScript type definitions matter
-- Add a "TypeScript type definitions" section to Chapter 3.
+- Add a "TypeScript type definitions" section to Chapter 4.
 - Document generics and conditional types.
 
 ### Multi-package (monorepo)
-- Split Chapter 3 per package.
+- Split Chapter 4 per package.
 - Describe inter-package dependencies in a separate chapter.
 
 ### Brand-new library (no migration guide needed)
-- Omit Chapter 8, or use it to describe "future migration policy" only.
+- Omit Chapter 9, or use it to describe "future migration policy" only.
 
 Customisation is finalised in dialogue with the user after Phase 1 template selection.

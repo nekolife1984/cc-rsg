@@ -132,6 +132,7 @@ The skill ships with the following 4 templates by default. The user may also bri
 ### Chapter outline
 - Overview / library purpose
 - Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+- Module architecture (overview) ← top-level structure, placed early for orientation (see Chapter ordering principles)
 - Installation
 - Public API catalogue
 - Usage examples (quick start)

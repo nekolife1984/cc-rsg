@@ -182,6 +182,30 @@ For features whose boundaries or existence are uncertain, add a `spec_missing` c
 
 #### Output filename
 `.specback/drafts/02-feature-specifications.md`
+
+### 💡 Module architecture (overview) chapter (Chapter 3)
+
+When assigned to the Module architecture (overview) chapter, follow this additional procedure **after STEP A–F**. This chapter is deliberately **overview-level**: keep it short and skimmable, deferring detail to the Internal structure chapter (contributor internals) and System design (WHY/HOW rationale).
+
+#### STEP G: Read the Overview chapter
+Read `.specback/drafts/01-overview.md` (or the final version) to pick up the library purpose, main features, and distribution targets.
+
+#### STEP H: Apply extraction strategies
+Consult `references/outline-tables.md` → **Module architecture (overview) extraction patterns**. In order:
+
+1. **Directory structure** (🟢): `glob` the top-level `src/`, `lib/`, `dist/`, package directories; one row per module/package with its responsibility.
+2. **Import graph** (🟢): run the per-language `rg` import patterns (shared with System design); group at package / top-level-directory granularity only.
+3. **Manifest** (🟢): read the package manifest (`package.json` / `setup.py` / `pyproject.toml` / `composer.json` / `Cargo.toml` / `*.gemspec` ...) for language, runtime, and major dependencies.
+
+#### STEP I: Build the chapter
+Follow the template chapter definition: module composition table, a top-level dependency Mermaid `graph TD`, and a tech-stack table. Flag circular dependencies at overview level; point to System design for the detailed dependency analysis.
+
+#### STEP J: Populate questions
+Add `spec_missing` questions for modules whose responsibility is unclear from code alone. Minimum 1 question for this chapter.
+
+#### Output filename
+`.specback/drafts/03-module-architecture.md`
+
 ### 💡 System design chapter (Chapter N)
 
 When assigned to the System design chapter, follow this additional procedure **after STEP A–F**:
