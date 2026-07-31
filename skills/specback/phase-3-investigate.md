@@ -107,7 +107,7 @@ Incorporate the citations into the body. **Per-chapter mandatory requirements**:
 
 | Item | Minimum | Verification script |
 |------|---------|-------------|
-| Body lines | ≥ 200 | coverage-check.py |
+| Body lines | ≥ 200 | coverage-check.py (code-block lines weighted at 50%) |
 | `[REF:]` count | ≥ 10 | coverage-check.py |
 | fenced code block | ≥ 3 | coverage-check.py |
 | Mermaid diagrams | ≥ 1 | coverage-check.py |

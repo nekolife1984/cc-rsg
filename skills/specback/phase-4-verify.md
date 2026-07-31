@@ -55,6 +55,14 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    - `1` → at least one check failed; go to step 3 (loopback). Recording `all_quality_gates_passed: true` in `state.json` while exit is 1 is forbidden.
    - `2` → required artefacts (e.g. `inventory.json`) missing; surface to user.
 
+   **`--code-block-line-weight` (default: `0.5`):**
+   Controls how non-blank lines inside fenced code blocks contribute to the body-lines count.
+   - `0.5` (default): every two code-block lines count as one body line
+   - `1.0`: code-block lines count as full body lines
+   - `0.0`: code-block lines are excluded entirely (original behaviour)
+   
+   This prevents chapters with substantial code examples (API specs, internal structure, usage examples) from being penalised solely for having many code blocks. The weight is adjustable per project needs via the CLI flag.
+
    Checks performed (12 total):
    - inventory count (min: `max(50, files / 20)`)
    - macro-type INV ratio (max 20%)
