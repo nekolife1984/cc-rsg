@@ -32,7 +32,7 @@ def extract_units(root_path: Path) -> list[SourceUnit]:
         return file_level_fallback(root_path)  # 拡張子ベースの粗い抽出
 ```
 
-このフォールバック時でもパイプラインは中断せず、以降の Phase（WBS 生成、サブエージェント調査）は継続される。ただし、インベントリの粒度がファイル単位に粗くなるため、各チャプターの REF 引用精度が低下する [REF: README.md:72]。影響を最小化するには `--install-deps` フラグ付きでインストールするか、手動で `pip install -r requirements.txt` を実行する。
+このフォールバック時でもパイプラインは中断せず、以降の Phase（WBS 生成、サブエージェント調査）は継続される。ただし、インベントリの粒度がファイル単位に粗くなるため、各チャプターの REF 引用精度が低下する [REF: README.md:72]。影響を最小化するには `./install.sh --install-deps` でインストールするか、手動で `pip install -r requirements.txt` を実行する。
 
 ### 9.1.2 日本語テンプレート未整備
 
@@ -314,7 +314,8 @@ Dual-consumer（複数エージェント間での `.specback/` 共有）は以�
 
 | 制約 | 回避策 | 効果 |
 |------|--------|------|
-| tree-sitter 未インストール | `--install-deps` フラグまたは手動 `pip install` | 精密抽出が有効に |
+| tree-sitter 未インストール | `./install.sh --install-deps` または手動 `pip install -r requirements.txt` | 精密抽出が有効に |
+| tree-sitter grammar/core のバージョン不整合 | `pip install -r requirements.txt` で固定バージョン（core 0.25.1）を復元 | extractor が有効に |
 | トークン消費が大きい | `outline` モード + Phase 6.5 深掘り | コストを 80% 削減 |
 | CI が GitHub Actions 専用 | `.github/workflows/ci.yml` を他 CI 形式に手動移植 | 任意の CI で実行可能 |
 | 日本語テンプレート不足 | 出力言語を英語に設定し、日本語 README で補足 | 最小限の追加作業 |
@@ -412,7 +413,7 @@ specback を CI パイプラインに組み込む場合、以下の戦略で品�
 - **リリース時**: リリース前に `comprehensive` モードで specback を実行し、完全な仕様書を生成する。この際、Phase 5 の対話プロセスは開発チームが別途対応する。
 - **PR 時**: 軽量なドリフトチェック（Phase 7 のみ）を実行し、変更範囲に関連する仕様書の更新が必要かどうかを判定する。
 
-CI 上の specback 実行では `--install-deps` フラグを使用して tree-sitter を事前インストールし、精密抽出を有効にすることが推奨される。CI 環境では Phase 5 の対話プロセスをスキップするため、事前に Question Bank を解決しておくか、`abandoned` としてマークしておく必要がある。
+CI 上の specback 実行では `./install.sh --install-deps` を使用して tree-sitter を事前インストールし、精密抽出を有効にすることが推奨される。CI 環境では Phase 5 の対話プロセスをスキップするため、事前に Question Bank を解決しておくか、`abandoned` としてマークしておく必要がある。
 
 ### 9.8.4 セッション分割戦略
 

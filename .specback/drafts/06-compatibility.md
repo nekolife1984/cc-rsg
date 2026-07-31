@@ -300,7 +300,7 @@ pip install -r skills/specback/scripts/requirements.txt
 | source-map schema | 0.1.0 → 0.2.0: 後方互換性維持（新フィールド追加のみ、既存フィールドの削除・変更なし）[REF: model.py:3-10] |
 | ロールタクソノミー | 新ロール追加のみ：既存ロールの削除・変更は行われない [REF: taxonomy.py:37-60] |
 | Python | 3.8+（標準ライブラリのみの動作保証） |
-| tree-sitter パーサー | 各言語の最新安定版に対応；バージョン固定なし |
+| tree-sitter パーサー | core 0.25.1 固定（Language version 14/15 対応）；grammar は最新追従 + CI smoke テストでロード検証 |
 
 ### 6.5.1 source-map.json スキーマ後方互換性
 
@@ -344,13 +344,14 @@ specback のスクリプトスイートは Python バージョンに関して以
 
 ### 6.5.3 tree-sitter バージョン互換性
 
-tree-sitter 系依存関係は `requirements.txt` でバージョン固定なしで宣言されている [REF: requirements.txt:1-23]。これは以下の理由による：
+tree-sitter 系依存関係は `requirements.txt` で管理され、**コアライブラリは 0.25.1 に固定**している [REF: requirements.txt:10]。固定の理由は以下の通り：
 
-- tree-sitter Python バインディングはセマンティックバージョニングに従い、マイナー/パッチ内の後方互換性が保証されている
-- 各言語文法パッケージは対応する tree-sitter コアライブラリのバージョンと同期してリリースされる
-- 依存関係の更新は CI の `pip install` ステップで検証される [REF: ci.yml:41-45]
+- tree-sitter の grammar パッケージは **Language version**（ABI）を持ち、コアライブラリの対応バージョンと一致しない場合、`Parser()` 生成時に `Incompatible Language version` エラーが発生する
+- 新しい grammar（tree-sitter-python 0.25.x、tree-sitter-rust 0.24.x など）は Language version 15 を採用しており、core 0.23.x（v13-14 対応）では `Language()` は生成できても `Parser()` で失敗し、**extractor が静かに無効化**される（警告なしで file-level フォールバックに切り替わる）
+- core 0.25.1 は Language version 14/15 の両方に対応し、Python 3.11/3.12 の wheel が提供されている（Python 3.10 以上が必要）[REF: requirements.txt:10]
+- grammar パッケージは最新版に追従し、互換性は CI の smoke テスト（`source_map_v2/tests/test_ts_smoke.py`）で全言語のロードを検証している [REF: ci.yml:41-45]
 
-tree-sitter コアライブラリと言語文法パッケージの間には暗黙のバージョン依存関係が存在する。たとえば `tree-sitter-python` の特定バージョンは `tree-sitter>=0.20,<0.22` に依存する場合がある。`requirements.txt` はこの制約を明示せず、pip の依存関係解決に委ねている。競合が発生した場合、`pip install` が失敗し、CI の smoke test で検出される。
+ローカル環境で extractor が静かに無効化された場合、pipeline の警告文が「incompatible with the installed tree-sitter core（language version mismatch）」と表示するため、`pip install -r requirements.txt` で固定バージョンを復元する。
 
 extractor の自動ロード機構は `_autoload()` 関数で実装され、各言語モジュールのインポートを `try/except` でラップしている。これにより特定の tree-sitter 文法がインストールされていなくても、他の言語の抽出は正常に動作する [REF: extractors/__init__.py:71-85]。
 

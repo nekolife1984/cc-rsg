@@ -6,8 +6,22 @@
 # with a clear warning.
 #
 # Install:  pip install -r requirements.txt
+#
+# Version pins (verified compatible combination, Issue #123):
+#   tree-sitter==0.25.1            core — REQUIRED pin.  Newer grammars ship
+#                                  Language version 15; core 0.23.x (v13-14)
+#                                  rejects them with "Incompatible Language
+#                                  version 15" at Parser() creation, silently
+#                                  disabling the extractor.  0.25.1 supports
+#                                  both v14 and v15 grammars and ships
+#                                  cp311/cp312 wheels.  (Python >=3.10)
+#
+# The remaining grammars track latest releases; the CI smoke test
+# (source_map_v2/tests/test_ts_smoke.py) asserts every grammar loads and
+# catches future grammar/core drift.  Keep CORE_PIN in that test in sync
+# with the pin below.
 
-tree-sitter
+tree-sitter==0.25.1
 tree-sitter-python
 tree-sitter-typescript
 tree-sitter-ruby

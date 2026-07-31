@@ -83,7 +83,7 @@ export SPECBACK_LEVEL=project
 
 ### 2.1.4 オプション依存関係のインストール (`--install-deps`)
 
-`--install-deps` フラグを指定すると、インストール完了後に `pip install -r requirements.txt` を自動実行する [REF: install.sh:161-175]。これは `source_map_v2` の tree-sitter 各言語パーサー群をインストールするためのもので、以下のパッケージが含まれる [REF: requirements.txt:10-23]:
+`./install.sh` に `--install-deps` フラグを指定すると、インストール完了後に `pip install -r requirements.txt` を自動実行する [REF: install.sh:161-175]。これは `source_map_v2` の tree-sitter 各言語パーサー群をインストールするためのもので、以下のパッケージが含まれる [REF: requirements.txt:10-23]:
 
 ```text
 tree-sitter
@@ -102,7 +102,7 @@ tree-sitter-swift
 tree-sitter-rust
 ```
 
-`--install-deps` の指定がなくとも specback の全スクリプトは動作する（Python 標準ライブラリフォールバック）。この点は 2.2 節で詳述する。
+`./install.sh --install-deps` を指定しなくても specback の全スクリプトは動作する（Python 標準ライブラリフォールバック）。この点は 2.2 節で詳述する。
 
 ## 2.2 実行要件
 
