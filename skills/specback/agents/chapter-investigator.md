@@ -242,6 +242,7 @@ Add `architecture_decision` and `spec_missing` questions for 🔴 entries. Minim
 - **Writing files via shell `>` redirection or heredoc** (always use Write / Edit)
 - **Embedding absolute paths (`/home/...` etc.) in the deliverable** (always use workspace-relative paths)
 - **Citing files that are not in Sources Read**
+- **内部ファイルパスの露出**: 生成ドキュメント本文内で `.specback/` 配下のファイルパス（`.specback/drafts/`, `inventory.json`, `wbs.json`, `questions.json`, `source-map.json`, `trace.json`, `goal.json` など）を一切参照しないこと。テーブル列の説明はユーザー向け表現（例：「該当機能を実装するソースコードの単位を示す」）にし、内部データファイル名で説明しない。`inventory_ids` は内部管理用の識別子であり、出力テキストでその出自を説明してはならない。
 
 ---
 
