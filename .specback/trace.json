@@ -1,10 +1,10 @@
 {
   "schema_version": "0.2.0",
-  "generated_at": "2026-07-30T08:39:41.472671+00:00",
+  "generated_at": "2026-07-31T06:05:07.293120+00:00",
   "source_units_total": 686,
-  "source_units_covered": 223,
+  "source_units_covered": 253,
   "source_units_excluded": 0,
-  "source_units_uncovered": 463,
+  "source_units_uncovered": 433,
   "mece_passed": false,
   "by_source": {
     "SRC-0001": {
@@ -15,7 +15,16 @@
       ],
       "kind": "py_function",
       "name": "run_git_diff_name_status",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-009: ドリフト検出 (Phase 7)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.6 Integration design"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -27,7 +36,12 @@
       ],
       "kind": "py_function",
       "name": "parse_diff_text",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-009: ドリフト検出 (Phase 7)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -113,8 +127,8 @@
       "name": "analyze_impact",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -130,8 +144,8 @@
       "name": "_determine_impact",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -159,8 +173,8 @@
       "name": "generate_markdown",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -222,7 +236,16 @@
       ],
       "kind": "py_function",
       "name": "resolve_mode",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -260,8 +283,8 @@
       "name": "InventoryItem",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -277,8 +300,8 @@
       "name": "ChapterMetrics",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -306,8 +329,8 @@
       "name": "load_inventory",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.6 スクリプト間のデータフロー詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.2.6 スクリプト間のデータフロー詳細"
         }
       ],
       "excluded": false,
@@ -359,8 +382,8 @@
       "name": "load_trace",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.6 スクリプト間のデータフロー詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.2.6 スクリプト間のデータフロー詳細"
         }
       ],
       "excluded": false,
@@ -398,7 +421,12 @@
       ],
       "kind": "py_function",
       "name": "compute_chapter_metrics",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-005: 機械的カバレッジ検証 (Phase 4)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -410,7 +438,12 @@
       ],
       "kind": "py_function",
       "name": "evaluate_chapter_gates",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-005: 機械的カバレッジ検証 (Phase 4)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -422,7 +455,12 @@
       ],
       "kind": "py_function",
       "name": "detect_mentions",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-005: 機械的カバレッジ検証 (Phase 4)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -470,7 +508,12 @@
       ],
       "kind": "py_function",
       "name": "check_user_custom_deliverables",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -482,7 +525,12 @@
       ],
       "kind": "py_function",
       "name": "check_required_files",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -494,7 +542,12 @@
       ],
       "kind": "py_function",
       "name": "detect_depth_mode",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -508,8 +561,8 @@
       "name": "build_report",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -525,8 +578,8 @@
       "name": "render_text",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -542,8 +595,8 @@
       "name": "render_json",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -559,7 +612,7 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-inventory-from-sourcemap.py のパターン"
         }
       ],
@@ -598,7 +651,12 @@
       ],
       "kind": "py_function",
       "name": "_load_json",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "結果: コード上のマーカーはゼロ（[DEPRECATED] 文字列のみ検出）"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -696,8 +754,8 @@
       "name": "_ext_from_path",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -713,8 +771,8 @@
       "name": "_detect_symbols",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -742,8 +800,8 @@
       "name": "analyze_structural_changes",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -841,7 +899,12 @@
       ],
       "kind": "py_function",
       "name": "run_git_diff_name_status",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.4 Security design"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -963,8 +1026,8 @@
       "name": "parse_hunks",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -980,8 +1043,8 @@
       "name": "build_line_map",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -1069,8 +1132,12 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "MINOR"
         }
       ],
       "excluded": false,
@@ -1086,7 +1153,7 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-trace.py — REF の解決"
         }
       ],
@@ -1103,8 +1170,12 @@
       "name": "hash_line_range",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
         }
       ],
       "excluded": false,
@@ -1166,7 +1237,12 @@
       ],
       "kind": "py_function",
       "name": "main",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "結果: コード上のマーカーはゼロ（[DEPRECATED] 文字列のみ検出）"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -1180,8 +1256,8 @@
       "name": "load_source_map",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         }
       ],
       "excluded": false,
@@ -1197,8 +1273,8 @@
       "name": "load_exclusions",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         }
       ],
       "excluded": false,
@@ -1238,8 +1314,8 @@
       "name": "scan_drafts_for_refs",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.3 Stage 3: トレーシング"
+          "file": "11-internal-structure.md",
+          "section": "11.2.3 Stage 3: トレーシング"
         }
       ],
       "excluded": false,
@@ -1255,16 +1331,16 @@
       "name": "resolve_refs_to_units",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.3 Stage 3: トレーシング"
+          "file": "11-internal-structure.md",
+          "section": "11.2.3 Stage 3: トレーシング"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-trace.py — REF の解決"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.6 スクリプト間のデータフロー詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.2.6 スクリプト間のデータフロー詳細"
         }
       ],
       "excluded": false,
@@ -1280,7 +1356,7 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-trace.py — REF の解決"
         }
       ],
@@ -1309,12 +1385,20 @@
       "name": "build_inventory",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.1.1 v1 と v2 の関係"
+          "file": "11-internal-structure.md",
+          "section": "11.1.1 v1 と v2 の関係"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.2 Stage 2: インベントリ変換"
+          "file": "11-internal-structure.md",
+          "section": "11.2.2 Stage 2: インベントリ変換"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "依存設計の解釈"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "本章で観測された文書間の不整合"
         }
       ],
       "excluded": false,
@@ -1354,8 +1438,8 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.5 破損 JSON 検出"
+          "file": "11-internal-structure.md",
+          "section": "11.7.5 破損 JSON 検出"
         }
       ],
       "excluded": false,
@@ -1395,8 +1479,8 @@
       "name": "extract_ruby_block",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.1 Stage 1: ソースマップ抽出"
+          "file": "11-internal-structure.md",
+          "section": "11.2.1 Stage 1: ソースマップ抽出"
         }
       ],
       "excluded": false,
@@ -1412,8 +1496,8 @@
       "name": "extract_py_block",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.1 Stage 1: ソースマップ抽出"
+          "file": "11-internal-structure.md",
+          "section": "11.2.1 Stage 1: ソースマップ抽出"
         }
       ],
       "excluded": false,
@@ -1477,8 +1561,8 @@
       "name": "classify_file",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.1 Stage 1: ソースマップ抽出"
+          "file": "11-internal-structure.md",
+          "section": "11.2.1 Stage 1: ソースマップ抽出"
         }
       ],
       "excluded": false,
@@ -1626,8 +1710,8 @@
       "name": "get_public_symbols",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -1643,8 +1727,8 @@
       "name": "get_test_symbols",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -1660,8 +1744,8 @@
       "name": "_test_name_candidates",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -1677,8 +1761,8 @@
       "name": "check_coverage",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -1694,8 +1778,8 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -2119,8 +2203,8 @@
       "name": "test_help_includes_specback_dir",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -2136,8 +2220,8 @@
       "name": "test_help_includes_output_dir",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -2153,8 +2237,8 @@
       "name": "test_help_includes_apply",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -2170,8 +2254,8 @@
       "name": "test_help_includes_check",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -2187,8 +2271,8 @@
       "name": "test_args_with_output_dir",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -2430,7 +2514,16 @@
       ],
       "kind": "py_function",
       "name": "fingerprint",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.4 Security design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "セキュリティ設計の総括"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -2444,16 +2537,24 @@
       "name": "SourceUnit",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.1 source-map.json スキーマ後方互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.1 source-map.json スキーマ後方互換性"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "model.py の一部 — v2 のデータ構造"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.1 P1: 言語固有語彙の漏洩禁止"
+          "file": "11-internal-structure.md",
+          "section": "11.9.1 P1: 言語固有語彙の漏洩禁止"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
         }
       ],
       "excluded": false,
@@ -2469,8 +2570,8 @@
       "name": "SourceMap",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.1 source-map.json スキーマ後方互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.1 source-map.json スキーマ後方互換性"
         }
       ],
       "excluded": false,
@@ -2486,8 +2587,12 @@
       "name": "IdFactory",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.1 source-map.json スキーマ後方互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.1 source-map.json スキーマ後方互換性"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "決定性と性能の関係"
         }
       ],
       "excluded": false,
@@ -2501,7 +2606,12 @@
       ],
       "kind": "py_class",
       "name": "TaxonomyError",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -2515,16 +2625,20 @@
       "name": "register_kind",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.3 役割語彙体系 (Taxonomy)"
+          "file": "11-internal-structure.md",
+          "section": "11.3 役割語彙体系 (Taxonomy)"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.6 憲法による kind 登録の強制"
+          "file": "11-internal-structure.md",
+          "section": "11.9.6 憲法による kind 登録の強制"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
         }
       ],
       "excluded": false,
@@ -2598,7 +2712,24 @@
       ],
       "kind": "py_function",
       "name": "_matches_any",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "技術スタックの補足説明"
+        },
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        },
+        {
+          "file": "11-internal-structure.md",
+          "section": "8.10 アーキテクチャ総括"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -2612,8 +2743,20 @@
       "name": "_iter_files",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
+        },
+        {
+          "file": "11-internal-structure.md",
+          "section": "8.10 アーキテクチャ総括"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "決定性と性能の関係"
         }
       ],
       "excluded": false,
@@ -2629,8 +2772,12 @@
       "name": "_file_level_unit",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.2.1 依存関係ツリー"
+          "file": "08-compatibility.md",
+          "section": "8.2.1 依存関係ツリー"
+        },
+        {
+          "file": "11-internal-structure.md",
+          "section": "8.10 アーキテクチャ総括"
         }
       ],
       "excluded": false,
@@ -2646,36 +2793,60 @@
       "name": "build_source_map",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.2.1 依存関係ツリー"
+          "file": "08-compatibility.md",
+          "section": "8.2.1 依存関係ツリー"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.3 tree-sitter バージョン互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.3 tree-sitter バージョン互換性"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "source-map.py v1 — Python クラス抽出の例"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.3 警告の蓄積と表示"
+          "file": "11-internal-structure.md",
+          "section": "11.7.3 警告の蓄積と表示"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.2 P4: 静かなスキップ禁止"
+          "file": "11-internal-structure.md",
+          "section": "11.9.2 P4: 静かなスキップ禁止"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.4 Security design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "セキュリティ設計の総括"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.6 Integration design"
         }
       ],
       "excluded": false,
@@ -2691,15 +2862,19 @@
       "name": "language_for_path",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
         },
         {
-          "file": "09-known-constraints.md",
-          "section": "9.1.5 未登録拡張子はスキャン対象外"
+          "file": "12-system-design.md",
+          "section": "MINOR"
         },
         {
-          "file": "09-known-constraints.md",
+          "file": "13-known-constraints.md",
+          "section": "13.1.5 未登録拡張子はスキャン対象外"
+        },
+        {
+          "file": "13-known-constraints.md",
           "section": "detect.py における拡張子-言語マッピングの抜粋"
         }
       ],
@@ -2716,12 +2891,12 @@
       "name": "find_project_root",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.5 フレームワーク検出"
+          "file": "11-internal-structure.md",
+          "section": "11.5 フレームワーク検出"
         }
       ],
       "excluded": false,
@@ -2749,8 +2924,8 @@
       "name": "_hint",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         }
       ],
       "excluded": false,
@@ -2766,28 +2941,28 @@
       "name": "detect_frameworks",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "detect_frameworks のシグネチャと戻り値の例"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "source-map.py v1 — Python クラス抽出の例"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.5 フレームワーク検出"
+          "file": "11-internal-structure.md",
+          "section": "11.5 フレームワーク検出"
         },
         {
-          "file": "09-known-constraints.md",
-          "section": "9.1.4 フレームワーク検出はベストエフォート"
+          "file": "13-known-constraints.md",
+          "section": "13.1.4 フレームワーク検出はベストエフォート"
         }
       ],
       "excluded": false,
@@ -2803,8 +2978,8 @@
       "name": "framework_for_language",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         }
       ],
       "excluded": false,
@@ -2820,8 +2995,12 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.3 警告の蓄積と表示"
+          "file": "11-internal-structure.md",
+          "section": "11.7.3 警告の蓄積と表示"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
         }
       ],
       "excluded": false,
@@ -2837,8 +3016,8 @@
       "name": "_extract",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2854,8 +3033,8 @@
       "name": "test_interface_type_enum_get_real_names",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2871,8 +3050,8 @@
       "name": "test_class_has_real_block_range",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2888,8 +3067,8 @@
       "name": "test_non_exported_declarations_recovered",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2905,8 +3084,8 @@
       "name": "test_express_routes_typed_as_endpoints",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2922,8 +3101,8 @@
       "name": "RecipeIn",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2939,8 +3118,8 @@
       "name": "RecipeService",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2956,8 +3135,8 @@
       "name": "sync_helper",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2973,8 +3152,8 @@
       "name": "_extract",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -2990,8 +3169,8 @@
       "name": "test_async_endpoints_recovered_with_method_and_path",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3007,8 +3186,8 @@
       "name": "test_pydantic_schema_typed_as_schema",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3024,8 +3203,8 @@
       "name": "test_plain_class_and_function_kept",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3041,8 +3220,8 @@
       "name": "test_block_ranges_are_multiline",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3214,8 +3393,8 @@
       "name": "_ext",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3231,8 +3410,8 @@
       "name": "UserController",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3248,8 +3427,8 @@
       "name": "User",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3265,8 +3444,8 @@
       "name": "test_php_types_routes_models",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3282,8 +3461,8 @@
       "name": "UserController",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3299,8 +3478,8 @@
       "name": "test_java_spring_and_types",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3316,8 +3495,8 @@
       "name": "test_csharp_aspnet_and_types",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3489,8 +3668,8 @@
       "name": "test_every_role_maps_to_a_universal_table",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3506,8 +3685,8 @@
       "name": "test_register_kind_binds_role_and_tier",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3523,8 +3702,8 @@
       "name": "test_register_kind_rejects_unknown_role_and_tier",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3540,8 +3719,8 @@
       "name": "test_register_kind_refuses_conflicting_rebind",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3557,8 +3736,8 @@
       "name": "test_unit_to_dict_carries_table_and_endpoint",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3574,8 +3753,8 @@
       "name": "test_endpoint_metadata_only_on_endpoint_role",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3591,8 +3770,8 @@
       "name": "test_sourcemap_stats_and_schema_version",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3608,8 +3787,8 @@
       "name": "_make_project",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3625,8 +3804,8 @@
       "name": "test_layer1_framework_detection_with_evidence",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3642,8 +3821,8 @@
       "name": "test_unsupported_language_falls_back_with_loud_warning",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3659,8 +3838,8 @@
       "name": "test_supported_languages_are_not_warned",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3676,8 +3855,8 @@
       "name": "test_registered_extractor_is_dispatched_with_framework",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3693,8 +3872,8 @@
       "name": "DummyPhp",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3710,8 +3889,8 @@
       "name": "_ext",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3727,8 +3906,8 @@
       "name": "test_go_types_funcs_endpoints",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3744,8 +3923,8 @@
       "name": "test_sql_ddl_objects",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -3761,8 +3940,8 @@
       "name": "test_cobol_units",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -4246,16 +4425,24 @@
       "name": "Extractor",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "source-map.py v1 — Python クラス抽出の例"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4 v2 抽出器アーキテクチャ"
+          "file": "11-internal-structure.md",
+          "section": "11.4 v2 抽出器アーキテクチャ"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -4271,8 +4458,24 @@
       "name": "register",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
         }
       ],
       "excluded": false,
@@ -4288,8 +4491,24 @@
       "name": "get_extractor",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
         }
       ],
       "excluded": false,
@@ -4305,8 +4524,20 @@
       "name": "supported_languages",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         }
       ],
       "excluded": false,
@@ -4322,36 +4553,56 @@
       "name": "_autoload",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.2.1 依存関係ツリー"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.3 tree-sitter バージョン互換性"
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
+          "section": "8.2.1 依存関係ツリー"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.5.3 tree-sitter バージョン互換性"
+        },
+        {
+          "file": "08-compatibility.md",
           "section": "extractors/__init__.py から抜粋 — フォールセーフな自動ロード"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4 v2 抽出器アーキテクチャ"
+          "file": "11-internal-structure.md",
+          "section": "11.4 v2 抽出器アーキテクチャ"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.3 P6: 遅延登録と extractor の選択的ロード"
+          "file": "11-internal-structure.md",
+          "section": "11.9.3 P6: 遅延登録と extractor の選択的ロード"
         },
         {
-          "file": "09-known-constraints.md",
-          "section": "9.1.1 tree-sitter がオプション依存"
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "13-known-constraints.md",
+          "section": "13.1.1 tree-sitter がオプション依存"
         }
       ],
       "excluded": false,
@@ -4439,7 +4690,7 @@
       "name": "TypeScriptExtractor",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "python_ext.py — 抽出のエントリポイント"
         }
       ],
@@ -4492,12 +4743,12 @@
       "name": "_parser",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         }
       ],
       "excluded": false,
@@ -4513,8 +4764,12 @@
       "name": "name_of",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -4530,8 +4785,12 @@
       "name": "have",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -4547,8 +4806,20 @@
       "name": "parse",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -4564,8 +4835,20 @@
       "name": "text",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -4581,8 +4864,20 @@
       "name": "field",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -4598,8 +4893,20 @@
       "name": "line_range",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -4615,8 +4922,8 @@
       "name": "_string_value",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         }
       ],
       "excluded": false,
@@ -4632,8 +4939,8 @@
       "name": "_first_string_descendant",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         }
       ],
       "excluded": false,
@@ -4649,8 +4956,8 @@
       "name": "first_string_arg",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         }
       ],
       "excluded": false,
@@ -4678,7 +4985,7 @@
       "name": "_decorator_route",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "python_ext.py — 抽出のエントリポイント"
         }
       ],
@@ -4695,7 +5002,7 @@
       "name": "_endpoint_kind",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         }
       ],
@@ -4712,11 +5019,11 @@
       "name": "_decorator_kind",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "python_ext.py — 抽出のエントリポイント"
         }
       ],
@@ -4733,12 +5040,12 @@
       "name": "collect_pydantic_bases",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.1 言語別抽出の実装詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.4.1 言語別抽出の実装詳細"
         }
       ],
       "excluded": false,
@@ -4754,12 +5061,12 @@
       "name": "whose",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.1 言語別抽出の実装詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.4.1 言語別抽出の実装詳細"
         }
       ],
       "excluded": false,
@@ -4799,20 +5106,20 @@
       "name": "PythonExtractor",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
-          "section": "7.1.2 新しい言語/フレームワークの抽出器"
+          "file": "09-extension-points.md",
+          "section": "9.1.2 新しい言語/フレームワークの抽出器"
         },
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "07-extension-points.md",
-          "section": "7.3.2 14 言語の抽出器"
+          "file": "09-extension-points.md",
+          "section": "9.3.2 14 言語の抽出器"
         },
         {
-          "file": "07-extension-points.md",
-          "section": "7.5.1 Extract API の安定契約"
+          "file": "09-extension-points.md",
+          "section": "9.5.1 Extract API の安定契約"
         }
       ],
       "excluded": false,
@@ -4828,24 +5135,52 @@
       "name": "ci.yml",
       "covered_by_sections": [
         {
-          "file": "02-installation.md",
-          "section": "2.2.4 Python バージョン要件"
+          "file": "03-module-architecture.md",
+          "section": "各モジュールの補足"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.4 CI/CD 互換性"
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "03-module-architecture.md",
+          "section": "技術スタックの補足説明"
+        },
+        {
+          "file": "04-installation.md",
+          "section": "4.2.4 Python バージョン要件"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.4 CI/CD 互換性"
+        },
+        {
+          "file": "08-compatibility.md",
           "section": "ci.yml から抜粋"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.2 Python バージョン要件"
+          "file": "08-compatibility.md",
+          "section": "8.5.2 Python バージョン要件"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.3 tree-sitter バージョン互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.3 tree-sitter バージョン互換性"
+        },
+        {
+          "file": "10-migration-guide.md",
+          "section": "10.2.6 Git フック・CI・開発ガバナンスの導入"
+        },
+        {
+          "file": "11-internal-structure.md",
+          "section": "11.10.1 セキュリティと依存関係管理"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.4 Security design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "セキュリティ設計の総括"
         }
       ],
       "excluded": false,
@@ -4871,7 +5206,16 @@
       ],
       "kind": "py_function",
       "name": "run_git_diff_name_status",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-009: ドリフト検出 (Phase 7)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.6 Integration design"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -4883,7 +5227,12 @@
       ],
       "kind": "py_function",
       "name": "parse_diff_text",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-009: ドリフト検出 (Phase 7)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -4969,8 +5318,8 @@
       "name": "analyze_impact",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -4986,8 +5335,8 @@
       "name": "_determine_impact",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -5015,8 +5364,8 @@
       "name": "generate_markdown",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -5078,7 +5427,16 @@
       ],
       "kind": "py_function",
       "name": "resolve_mode",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5116,8 +5474,8 @@
       "name": "InventoryItem",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -5133,8 +5491,8 @@
       "name": "ChapterMetrics",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -5162,8 +5520,8 @@
       "name": "load_inventory",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.6 スクリプト間のデータフロー詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.2.6 スクリプト間のデータフロー詳細"
         }
       ],
       "excluded": false,
@@ -5215,8 +5573,8 @@
       "name": "load_trace",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.6 スクリプト間のデータフロー詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.2.6 スクリプト間のデータフロー詳細"
         }
       ],
       "excluded": false,
@@ -5254,7 +5612,12 @@
       ],
       "kind": "py_function",
       "name": "compute_chapter_metrics",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-005: 機械的カバレッジ検証 (Phase 4)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5266,7 +5629,12 @@
       ],
       "kind": "py_function",
       "name": "evaluate_chapter_gates",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-005: 機械的カバレッジ検証 (Phase 4)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5278,7 +5646,12 @@
       ],
       "kind": "py_function",
       "name": "detect_mentions",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "02-feature-specifications.md",
+          "section": "F-005: 機械的カバレッジ検証 (Phase 4)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5326,7 +5699,12 @@
       ],
       "kind": "py_function",
       "name": "check_user_custom_deliverables",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5338,7 +5716,12 @@
       ],
       "kind": "py_function",
       "name": "check_required_files",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5350,7 +5733,12 @@
       ],
       "kind": "py_function",
       "name": "detect_depth_mode",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5364,8 +5752,8 @@
       "name": "build_report",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -5381,8 +5769,8 @@
       "name": "render_text",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -5398,8 +5786,8 @@
       "name": "render_json",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.4 Stage 4: 検証 (coverage-check.py)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.4 Stage 4: 検証 (coverage-check.py)"
         }
       ],
       "excluded": false,
@@ -5415,7 +5803,7 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-inventory-from-sourcemap.py のパターン"
         }
       ],
@@ -5454,7 +5842,12 @@
       ],
       "kind": "py_function",
       "name": "_load_json",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "結果: コード上のマーカーはゼロ（[DEPRECATED] 文字列のみ検出）"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5552,8 +5945,8 @@
       "name": "_ext_from_path",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -5569,8 +5962,8 @@
       "name": "_detect_symbols",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -5598,8 +5991,8 @@
       "name": "analyze_structural_changes",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -5697,7 +6090,12 @@
       ],
       "kind": "py_function",
       "name": "run_git_diff_name_status",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.4 Security design"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -5819,8 +6217,8 @@
       "name": "parse_hunks",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -5836,8 +6234,8 @@
       "name": "build_line_map",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
         }
       ],
       "excluded": false,
@@ -5925,8 +6323,12 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "MINOR"
         }
       ],
       "excluded": false,
@@ -5942,7 +6344,7 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-trace.py — REF の解決"
         }
       ],
@@ -5959,8 +6361,12 @@
       "name": "hash_line_range",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.5 Stage 5: ドリフト検出 (Phase 7)"
+          "file": "11-internal-structure.md",
+          "section": "11.2.5 Stage 5: ドリフト検出 (Phase 7)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
         }
       ],
       "excluded": false,
@@ -6022,7 +6428,12 @@
       ],
       "kind": "py_function",
       "name": "main",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "結果: コード上のマーカーはゼロ（[DEPRECATED] 文字列のみ検出）"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -6036,8 +6447,8 @@
       "name": "load_source_map",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         }
       ],
       "excluded": false,
@@ -6053,8 +6464,8 @@
       "name": "load_exclusions",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         }
       ],
       "excluded": false,
@@ -6094,8 +6505,8 @@
       "name": "scan_drafts_for_refs",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.3 Stage 3: トレーシング"
+          "file": "11-internal-structure.md",
+          "section": "11.2.3 Stage 3: トレーシング"
         }
       ],
       "excluded": false,
@@ -6111,16 +6522,16 @@
       "name": "resolve_refs_to_units",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.3 Stage 3: トレーシング"
+          "file": "11-internal-structure.md",
+          "section": "11.2.3 Stage 3: トレーシング"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-trace.py — REF の解決"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.6 スクリプト間のデータフロー詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.2.6 スクリプト間のデータフロー詳細"
         }
       ],
       "excluded": false,
@@ -6136,7 +6547,7 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "build-trace.py — REF の解決"
         }
       ],
@@ -6165,12 +6576,20 @@
       "name": "build_inventory",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.1.1 v1 と v2 の関係"
+          "file": "11-internal-structure.md",
+          "section": "11.1.1 v1 と v2 の関係"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.2 Stage 2: インベントリ変換"
+          "file": "11-internal-structure.md",
+          "section": "11.2.2 Stage 2: インベントリ変換"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "依存設計の解釈"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "本章で観測された文書間の不整合"
         }
       ],
       "excluded": false,
@@ -6210,8 +6629,8 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.5 破損 JSON 検出"
+          "file": "11-internal-structure.md",
+          "section": "11.7.5 破損 JSON 検出"
         }
       ],
       "excluded": false,
@@ -6251,8 +6670,8 @@
       "name": "extract_ruby_block",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.1 Stage 1: ソースマップ抽出"
+          "file": "11-internal-structure.md",
+          "section": "11.2.1 Stage 1: ソースマップ抽出"
         }
       ],
       "excluded": false,
@@ -6268,8 +6687,8 @@
       "name": "extract_py_block",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.1 Stage 1: ソースマップ抽出"
+          "file": "11-internal-structure.md",
+          "section": "11.2.1 Stage 1: ソースマップ抽出"
         }
       ],
       "excluded": false,
@@ -6333,8 +6752,8 @@
       "name": "classify_file",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.2.1 Stage 1: ソースマップ抽出"
+          "file": "11-internal-structure.md",
+          "section": "11.2.1 Stage 1: ソースマップ抽出"
         }
       ],
       "excluded": false,
@@ -6482,8 +6901,8 @@
       "name": "get_public_symbols",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -6499,8 +6918,8 @@
       "name": "get_test_symbols",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -6516,8 +6935,8 @@
       "name": "_test_name_candidates",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -6533,8 +6952,8 @@
       "name": "check_coverage",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -6550,8 +6969,8 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.4 テストカバレッジチェック"
+          "file": "11-internal-structure.md",
+          "section": "11.6.4 テストカバレッジチェック"
         }
       ],
       "excluded": false,
@@ -6975,8 +7394,8 @@
       "name": "test_help_includes_specback_dir",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -6992,8 +7411,8 @@
       "name": "test_help_includes_output_dir",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -7009,8 +7428,8 @@
       "name": "test_help_includes_apply",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -7026,8 +7445,8 @@
       "name": "test_help_includes_check",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -7043,8 +7462,8 @@
       "name": "test_args_with_output_dir",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.5 test スクリプト一覧"
+          "file": "11-internal-structure.md",
+          "section": "11.6.5 test スクリプト一覧"
         }
       ],
       "excluded": false,
@@ -7286,7 +7705,16 @@
       ],
       "kind": "py_function",
       "name": "fingerprint",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.4 Security design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "セキュリティ設計の総括"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -7300,16 +7728,24 @@
       "name": "SourceUnit",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.1 source-map.json スキーマ後方互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.1 source-map.json スキーマ後方互換性"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "model.py の一部 — v2 のデータ構造"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.1 P1: 言語固有語彙の漏洩禁止"
+          "file": "11-internal-structure.md",
+          "section": "11.9.1 P1: 言語固有語彙の漏洩禁止"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
         }
       ],
       "excluded": false,
@@ -7325,8 +7761,8 @@
       "name": "SourceMap",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.1 source-map.json スキーマ後方互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.1 source-map.json スキーマ後方互換性"
         }
       ],
       "excluded": false,
@@ -7342,8 +7778,12 @@
       "name": "IdFactory",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.1 source-map.json スキーマ後方互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.1 source-map.json スキーマ後方互換性"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "決定性と性能の関係"
         }
       ],
       "excluded": false,
@@ -7357,7 +7797,12 @@
       ],
       "kind": "py_class",
       "name": "TaxonomyError",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -7371,16 +7816,20 @@
       "name": "register_kind",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.3 役割語彙体系 (Taxonomy)"
+          "file": "11-internal-structure.md",
+          "section": "11.3 役割語彙体系 (Taxonomy)"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.6 憲法による kind 登録の強制"
+          "file": "11-internal-structure.md",
+          "section": "11.9.6 憲法による kind 登録の強制"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
         }
       ],
       "excluded": false,
@@ -7454,7 +7903,24 @@
       ],
       "kind": "py_function",
       "name": "_matches_any",
-      "covered_by_sections": [],
+      "covered_by_sections": [
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "技術スタックの補足説明"
+        },
+        {
+          "file": "10-migration-guide.md",
+          "section": "破壊的変更 (Breaking changes)"
+        },
+        {
+          "file": "11-internal-structure.md",
+          "section": "8.10 アーキテクチャ総括"
+        }
+      ],
       "excluded": false,
       "excluded_reason": null
     },
@@ -7468,8 +7934,20 @@
       "name": "_iter_files",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
+        },
+        {
+          "file": "11-internal-structure.md",
+          "section": "8.10 アーキテクチャ総括"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "決定性と性能の関係"
         }
       ],
       "excluded": false,
@@ -7485,8 +7963,12 @@
       "name": "_file_level_unit",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.2.1 依存関係ツリー"
+          "file": "08-compatibility.md",
+          "section": "8.2.1 依存関係ツリー"
+        },
+        {
+          "file": "11-internal-structure.md",
+          "section": "8.10 アーキテクチャ総括"
         }
       ],
       "excluded": false,
@@ -7502,36 +7984,60 @@
       "name": "build_source_map",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.2.1 依存関係ツリー"
+          "file": "08-compatibility.md",
+          "section": "8.2.1 依存関係ツリー"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.3 tree-sitter バージョン互換性"
+          "file": "08-compatibility.md",
+          "section": "8.5.3 tree-sitter バージョン互換性"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "source-map.py v1 — Python クラス抽出の例"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.3 警告の蓄積と表示"
+          "file": "11-internal-structure.md",
+          "section": "11.7.3 警告の蓄積と表示"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.2 P4: 静かなスキップ禁止"
+          "file": "11-internal-structure.md",
+          "section": "11.9.2 P4: 静かなスキップ禁止"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.4 Security design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "セキュリティ設計の総括"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.6 Integration design"
         }
       ],
       "excluded": false,
@@ -7547,15 +8053,19 @@
       "name": "language_for_path",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
         },
         {
-          "file": "09-known-constraints.md",
-          "section": "9.1.5 未登録拡張子はスキャン対象外"
+          "file": "12-system-design.md",
+          "section": "MINOR"
         },
         {
-          "file": "09-known-constraints.md",
+          "file": "13-known-constraints.md",
+          "section": "13.1.5 未登録拡張子はスキャン対象外"
+        },
+        {
+          "file": "13-known-constraints.md",
           "section": "detect.py における拡張子-言語マッピングの抜粋"
         }
       ],
@@ -7572,12 +8082,12 @@
       "name": "find_project_root",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.5 フレームワーク検出"
+          "file": "11-internal-structure.md",
+          "section": "11.5 フレームワーク検出"
         }
       ],
       "excluded": false,
@@ -7605,8 +8115,8 @@
       "name": "_hint",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         }
       ],
       "excluded": false,
@@ -7622,28 +8132,28 @@
       "name": "detect_frameworks",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "detect_frameworks のシグネチャと戻り値の例"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
           "section": "6.6 非互換性と制限"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "source-map.py v1 — Python クラス抽出の例"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.5 フレームワーク検出"
+          "file": "11-internal-structure.md",
+          "section": "11.5 フレームワーク検出"
         },
         {
-          "file": "09-known-constraints.md",
-          "section": "9.1.4 フレームワーク検出はベストエフォート"
+          "file": "13-known-constraints.md",
+          "section": "13.1.4 フレームワーク検出はベストエフォート"
         }
       ],
       "excluded": false,
@@ -7659,8 +8169,8 @@
       "name": "framework_for_language",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.2 フレームワーク検出"
+          "file": "08-compatibility.md",
+          "section": "8.3.2 フレームワーク検出"
         }
       ],
       "excluded": false,
@@ -7676,8 +8186,12 @@
       "name": "main",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.3 警告の蓄積と表示"
+          "file": "11-internal-structure.md",
+          "section": "11.7.3 警告の蓄積と表示"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
         }
       ],
       "excluded": false,
@@ -7693,8 +8207,8 @@
       "name": "_extract",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7710,8 +8224,8 @@
       "name": "test_interface_type_enum_get_real_names",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7727,8 +8241,8 @@
       "name": "test_class_has_real_block_range",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7744,8 +8258,8 @@
       "name": "test_non_exported_declarations_recovered",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7761,8 +8275,8 @@
       "name": "test_express_routes_typed_as_endpoints",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7778,8 +8292,8 @@
       "name": "RecipeIn",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7795,8 +8309,8 @@
       "name": "RecipeService",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7812,8 +8326,8 @@
       "name": "sync_helper",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7829,8 +8343,8 @@
       "name": "_extract",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7846,8 +8360,8 @@
       "name": "test_async_endpoints_recovered_with_method_and_path",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7863,8 +8377,8 @@
       "name": "test_pydantic_schema_typed_as_schema",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7880,8 +8394,8 @@
       "name": "test_plain_class_and_function_kept",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -7897,8 +8411,8 @@
       "name": "test_block_ranges_are_multiline",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8070,8 +8584,8 @@
       "name": "_ext",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8087,8 +8601,8 @@
       "name": "UserController",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8104,8 +8618,8 @@
       "name": "User",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8121,8 +8635,8 @@
       "name": "test_php_types_routes_models",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8138,8 +8652,8 @@
       "name": "UserController",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8155,8 +8669,8 @@
       "name": "test_java_spring_and_types",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8172,8 +8686,8 @@
       "name": "test_csharp_aspnet_and_types",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8345,8 +8859,8 @@
       "name": "test_every_role_maps_to_a_universal_table",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8362,8 +8876,8 @@
       "name": "test_register_kind_binds_role_and_tier",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8379,8 +8893,8 @@
       "name": "test_register_kind_rejects_unknown_role_and_tier",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8396,8 +8910,8 @@
       "name": "test_register_kind_refuses_conflicting_rebind",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8413,8 +8927,8 @@
       "name": "test_unit_to_dict_carries_table_and_endpoint",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8430,8 +8944,8 @@
       "name": "test_endpoint_metadata_only_on_endpoint_role",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8447,8 +8961,8 @@
       "name": "test_sourcemap_stats_and_schema_version",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8464,8 +8978,8 @@
       "name": "_make_project",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8481,8 +8995,8 @@
       "name": "test_layer1_framework_detection_with_evidence",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8498,8 +9012,8 @@
       "name": "test_unsupported_language_falls_back_with_loud_warning",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8515,8 +9029,8 @@
       "name": "test_supported_languages_are_not_warned",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8532,8 +9046,8 @@
       "name": "test_registered_extractor_is_dispatched_with_framework",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8549,8 +9063,8 @@
       "name": "DummyPhp",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8566,8 +9080,8 @@
       "name": "_ext",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8583,8 +9097,8 @@
       "name": "test_go_types_funcs_endpoints",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8600,8 +9114,8 @@
       "name": "test_sql_ddl_objects",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -8617,8 +9131,8 @@
       "name": "test_cobol_units",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.6.3 テストファイル構成"
+          "file": "11-internal-structure.md",
+          "section": "11.6.3 テストファイル構成"
         }
       ],
       "excluded": false,
@@ -9102,16 +9616,24 @@
       "name": "Extractor",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "source-map.py v1 — Python クラス抽出の例"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4 v2 抽出器アーキテクチャ"
+          "file": "11-internal-structure.md",
+          "section": "11.4 v2 抽出器アーキテクチャ"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -9127,8 +9649,24 @@
       "name": "register",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
         }
       ],
       "excluded": false,
@@ -9144,8 +9682,24 @@
       "name": "get_extractor",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
         }
       ],
       "excluded": false,
@@ -9161,8 +9715,20 @@
       "name": "supported_languages",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
+        },
+        {
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
         }
       ],
       "excluded": false,
@@ -9178,36 +9744,56 @@
       "name": "_autoload",
       "covered_by_sections": [
         {
-          "file": "06-compatibility.md",
-          "section": "6.2.1 依存関係ツリー"
+          "file": "03-module-architecture.md",
+          "section": "循環依存の有無"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.3.1 拡張子ベース分類"
+          "file": "03-module-architecture.md",
+          "section": "3.3 技術スタック"
         },
         {
-          "file": "06-compatibility.md",
-          "section": "6.5.3 tree-sitter バージョン互換性"
+          "file": "03-module-architecture.md",
+          "section": "対応解析言語の内訳と拡張方式"
         },
         {
-          "file": "06-compatibility.md",
+          "file": "08-compatibility.md",
+          "section": "8.2.1 依存関係ツリー"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.3.1 拡張子ベース分類"
+        },
+        {
+          "file": "08-compatibility.md",
+          "section": "8.5.3 tree-sitter バージョン互換性"
+        },
+        {
+          "file": "08-compatibility.md",
           "section": "extractors/__init__.py から抜粋 — フォールセーフな自動ロード"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4 v2 抽出器アーキテクチャ"
+          "file": "11-internal-structure.md",
+          "section": "11.4 v2 抽出器アーキテクチャ"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.9.3 P6: 遅延登録と extractor の選択的ロード"
+          "file": "11-internal-structure.md",
+          "section": "11.9.3 P6: 遅延登録と extractor の選択的ロード"
         },
         {
-          "file": "09-known-constraints.md",
-          "section": "9.1.1 tree-sitter がオプション依存"
+          "file": "12-system-design.md",
+          "section": "12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "13-known-constraints.md",
+          "section": "13.1.1 tree-sitter がオプション依存"
         }
       ],
       "excluded": false,
@@ -9295,7 +9881,7 @@
       "name": "TypeScriptExtractor",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "python_ext.py — 抽出のエントリポイント"
         }
       ],
@@ -9348,12 +9934,12 @@
       "name": "_parser",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.7.2 オプショナル依存関係のフォールバック"
+          "file": "11-internal-structure.md",
+          "section": "11.7.2 オプショナル依存関係のフォールバック"
         }
       ],
       "excluded": false,
@@ -9369,8 +9955,12 @@
       "name": "name_of",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -9386,8 +9976,12 @@
       "name": "have",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -9403,8 +9997,20 @@
       "name": "parse",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -9420,8 +10026,20 @@
       "name": "text",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -9437,8 +10055,20 @@
       "name": "field",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -9454,8 +10084,20 @@
       "name": "line_range",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.1 Architecture Decision Records (ADR)"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.3 Cross-cutting design patterns"
+        },
+        {
+          "file": "12-system-design.md",
+          "section": "12.5 Performance design"
         }
       ],
       "excluded": false,
@@ -9471,8 +10113,8 @@
       "name": "_string_value",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         }
       ],
       "excluded": false,
@@ -9488,8 +10130,8 @@
       "name": "_first_string_descendant",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         }
       ],
       "excluded": false,
@@ -9505,8 +10147,8 @@
       "name": "first_string_arg",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.2 tree-sitter ヘルパー層"
+          "file": "11-internal-structure.md",
+          "section": "11.4.2 tree-sitter ヘルパー層"
         }
       ],
       "excluded": false,
@@ -9534,7 +10176,7 @@
       "name": "_decorator_route",
       "covered_by_sections": [
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "python_ext.py — 抽出のエントリポイント"
         }
       ],
@@ -9551,7 +10193,7 @@
       "name": "_endpoint_kind",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         }
       ],
@@ -9568,11 +10210,11 @@
       "name": "_decorator_kind",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "08-internal-structure.md",
+          "file": "11-internal-structure.md",
           "section": "python_ext.py — 抽出のエントリポイント"
         }
       ],
@@ -9589,12 +10231,12 @@
       "name": "collect_pydantic_bases",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.1 言語別抽出の実装詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.4.1 言語別抽出の実装詳細"
         }
       ],
       "excluded": false,
@@ -9610,12 +10252,12 @@
       "name": "whose",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "08-internal-structure.md",
-          "section": "8.4.1 言語別抽出の実装詳細"
+          "file": "11-internal-structure.md",
+          "section": "11.4.1 言語別抽出の実装詳細"
         }
       ],
       "excluded": false,
@@ -9655,20 +10297,20 @@
       "name": "PythonExtractor",
       "covered_by_sections": [
         {
-          "file": "07-extension-points.md",
-          "section": "7.1.2 新しい言語/フレームワークの抽出器"
+          "file": "09-extension-points.md",
+          "section": "9.1.2 新しい言語/フレームワークの抽出器"
         },
         {
-          "file": "07-extension-points.md",
+          "file": "09-extension-points.md",
           "section": "抽出器の実装パターン"
         },
         {
-          "file": "07-extension-points.md",
-          "section": "7.3.2 14 言語の抽出器"
+          "file": "09-extension-points.md",
+          "section": "9.3.2 14 言語の抽出器"
         },
         {
-          "file": "07-extension-points.md",
-          "section": "7.5.1 Extract API の安定契約"
+          "file": "09-extension-points.md",
+          "section": "9.5.1 Extract API の安定契約"
         }
       ],
       "excluded": false,
@@ -9676,7 +10318,19 @@
     }
   },
   "by_section": {
-    "08-internal-structure.md::8.2.5 Stage 5: ドリフト検出 (Phase 7)": [
+    "02-feature-specifications.md::F-009: ドリフト検出 (Phase 7)": [
+      "SRC-0001",
+      "SRC-0002",
+      "SRC-0345",
+      "SRC-0346"
+    ],
+    "12-system-design.md::12.6 Integration design": [
+      "SRC-0001",
+      "SRC-0199",
+      "SRC-0345",
+      "SRC-0543"
+    ],
+    "11-internal-structure.md::11.2.5 Stage 5: ドリフト検出 (Phase 7)": [
       "SRC-0009",
       "SRC-0010",
       "SRC-0012",
@@ -9698,7 +10352,47 @@
       "SRC-0426",
       "SRC-0428"
     ],
-    "08-internal-structure.md::8.2.4 Stage 4: 検証 (coverage-check.py)": [
+    "12-system-design.md::12.1 Architecture Decision Records (ADR)": [
+      "SRC-0017",
+      "SRC-0084",
+      "SRC-0190",
+      "SRC-0199",
+      "SRC-0327",
+      "SRC-0328",
+      "SRC-0329",
+      "SRC-0330",
+      "SRC-0361",
+      "SRC-0428",
+      "SRC-0534",
+      "SRC-0543",
+      "SRC-0671",
+      "SRC-0672",
+      "SRC-0673",
+      "SRC-0674"
+    ],
+    "12-system-design.md::12.5 Performance design": [
+      "SRC-0017",
+      "SRC-0197",
+      "SRC-0199",
+      "SRC-0309",
+      "SRC-0325",
+      "SRC-0326",
+      "SRC-0327",
+      "SRC-0328",
+      "SRC-0329",
+      "SRC-0330",
+      "SRC-0361",
+      "SRC-0541",
+      "SRC-0543",
+      "SRC-0653",
+      "SRC-0669",
+      "SRC-0670",
+      "SRC-0671",
+      "SRC-0672",
+      "SRC-0673",
+      "SRC-0674"
+    ],
+    "11-internal-structure.md::11.2.4 Stage 4: 検証 (coverage-check.py)": [
       "SRC-0020",
       "SRC-0021",
       "SRC-0039",
@@ -9710,7 +10404,7 @@
       "SRC-0384",
       "SRC-0385"
     ],
-    "08-internal-structure.md::8.2.6 スクリプト間のデータフロー詳細": [
+    "11-internal-structure.md::11.2.6 スクリプト間のデータフロー詳細": [
       "SRC-0023",
       "SRC-0027",
       "SRC-0095",
@@ -9718,11 +10412,50 @@
       "SRC-0371",
       "SRC-0439"
     ],
-    "08-internal-structure.md::build-inventory-from-sourcemap.py のパターン": [
+    "02-feature-specifications.md::F-005: 機械的カバレッジ検証 (Phase 4)": [
+      "SRC-0030",
+      "SRC-0031",
+      "SRC-0032",
+      "SRC-0374",
+      "SRC-0375",
+      "SRC-0376"
+    ],
+    "10-migration-guide.md::破壊的変更 (Breaking changes)": [
+      "SRC-0036",
+      "SRC-0037",
+      "SRC-0038",
+      "SRC-0196",
+      "SRC-0380",
+      "SRC-0381",
+      "SRC-0382",
+      "SRC-0540"
+    ],
+    "11-internal-structure.md::build-inventory-from-sourcemap.py のパターン": [
       "SRC-0042",
       "SRC-0386"
     ],
-    "08-internal-structure.md::build-trace.py — REF の解決": [
+    "12-system-design.md::結果: コード上のマーカーはゼロ（[DEPRECATED] 文字列のみ検出）": [
+      "SRC-0045",
+      "SRC-0089",
+      "SRC-0389",
+      "SRC-0433"
+    ],
+    "12-system-design.md::12.4 Security design": [
+      "SRC-0064",
+      "SRC-0185",
+      "SRC-0199",
+      "SRC-0343",
+      "SRC-0408",
+      "SRC-0529",
+      "SRC-0543"
+    ],
+    "12-system-design.md::MINOR": [
+      "SRC-0082",
+      "SRC-0200",
+      "SRC-0426",
+      "SRC-0544"
+    ],
+    "11-internal-structure.md::build-trace.py — REF の解決": [
       "SRC-0083",
       "SRC-0095",
       "SRC-0096",
@@ -9730,7 +10463,7 @@
       "SRC-0439",
       "SRC-0440"
     ],
-    "08-internal-structure.md::8.7.2 オプショナル依存関係のフォールバック": [
+    "11-internal-structure.md::11.7.2 オプショナル依存関係のフォールバック": [
       "SRC-0090",
       "SRC-0091",
       "SRC-0199",
@@ -9742,25 +10475,33 @@
       "SRC-0657",
       "SRC-0668"
     ],
-    "08-internal-structure.md::8.2.3 Stage 3: トレーシング": [
+    "11-internal-structure.md::11.2.3 Stage 3: トレーシング": [
       "SRC-0094",
       "SRC-0095",
       "SRC-0438",
       "SRC-0439"
     ],
-    "08-internal-structure.md::8.1.1 v1 と v2 の関係": [
+    "11-internal-structure.md::11.1.1 v1 と v2 の関係": [
       "SRC-0098",
       "SRC-0442"
     ],
-    "08-internal-structure.md::8.2.2 Stage 2: インベントリ変換": [
+    "11-internal-structure.md::11.2.2 Stage 2: インベントリ変換": [
       "SRC-0098",
       "SRC-0442"
     ],
-    "08-internal-structure.md::8.7.5 破損 JSON 検出": [
+    "12-system-design.md::依存設計の解釈": [
+      "SRC-0098",
+      "SRC-0442"
+    ],
+    "12-system-design.md::本章で観測された文書間の不整合": [
+      "SRC-0098",
+      "SRC-0442"
+    ],
+    "11-internal-structure.md::11.7.5 破損 JSON 検出": [
       "SRC-0101",
       "SRC-0445"
     ],
-    "08-internal-structure.md::8.2.1 Stage 1: ソースマップ抽出": [
+    "11-internal-structure.md::11.2.1 Stage 1: ソースマップ抽出": [
       "SRC-0104",
       "SRC-0105",
       "SRC-0110",
@@ -9768,7 +10509,7 @@
       "SRC-0449",
       "SRC-0454"
     ],
-    "08-internal-structure.md::8.6.4 テストカバレッジチェック": [
+    "11-internal-structure.md::11.6.4 テストカバレッジチェック": [
       "SRC-0122",
       "SRC-0123",
       "SRC-0124",
@@ -9780,7 +10521,7 @@
       "SRC-0469",
       "SRC-0470"
     ],
-    "08-internal-structure.md::8.6.5 test スクリプト一覧": [
+    "11-internal-structure.md::11.6.5 test スクリプト一覧": [
       "SRC-0161",
       "SRC-0162",
       "SRC-0163",
@@ -9792,7 +10533,14 @@
       "SRC-0508",
       "SRC-0509"
     ],
-    "06-compatibility.md::6.5.1 source-map.json スキーマ後方互換性": [
+    "12-system-design.md::セキュリティ設計の総括": [
+      "SRC-0185",
+      "SRC-0199",
+      "SRC-0343",
+      "SRC-0529",
+      "SRC-0543"
+    ],
+    "08-compatibility.md::8.5.1 source-map.json スキーマ後方互換性": [
       "SRC-0186",
       "SRC-0187",
       "SRC-0188",
@@ -9800,15 +10548,53 @@
       "SRC-0531",
       "SRC-0532"
     ],
-    "08-internal-structure.md::model.py の一部 — v2 のデータ構造": [
+    "11-internal-structure.md::model.py の一部 — v2 のデータ構造": [
       "SRC-0186",
       "SRC-0530"
     ],
-    "08-internal-structure.md::8.9.1 P1: 言語固有語彙の漏洩禁止": [
+    "11-internal-structure.md::11.9.1 P1: 言語固有語彙の漏洩禁止": [
       "SRC-0186",
       "SRC-0530"
     ],
-    "06-compatibility.md::6.3.1 拡張子ベース分類": [
+    "12-system-design.md::12.2-a: import グラフ（コード依存・source_map_v2 パッケージ内部）": [
+      "SRC-0186",
+      "SRC-0310",
+      "SRC-0311",
+      "SRC-0313",
+      "SRC-0530",
+      "SRC-0654",
+      "SRC-0655",
+      "SRC-0657"
+    ],
+    "12-system-design.md::12.3 Cross-cutting design patterns": [
+      "SRC-0186",
+      "SRC-0189",
+      "SRC-0199",
+      "SRC-0206",
+      "SRC-0309",
+      "SRC-0313",
+      "SRC-0327",
+      "SRC-0328",
+      "SRC-0329",
+      "SRC-0330",
+      "SRC-0530",
+      "SRC-0533",
+      "SRC-0543",
+      "SRC-0550",
+      "SRC-0653",
+      "SRC-0657",
+      "SRC-0671",
+      "SRC-0672",
+      "SRC-0673",
+      "SRC-0674"
+    ],
+    "12-system-design.md::決定性と性能の関係": [
+      "SRC-0188",
+      "SRC-0197",
+      "SRC-0532",
+      "SRC-0541"
+    ],
+    "08-compatibility.md::8.3.1 拡張子ベース分類": [
       "SRC-0190",
       "SRC-0199",
       "SRC-0309",
@@ -9824,15 +10610,40 @@
       "SRC-0656",
       "SRC-0657"
     ],
-    "08-internal-structure.md::8.3 役割語彙体系 (Taxonomy)": [
+    "11-internal-structure.md::11.3 役割語彙体系 (Taxonomy)": [
       "SRC-0190",
       "SRC-0534"
     ],
-    "08-internal-structure.md::8.9.6 憲法による kind 登録の強制": [
+    "11-internal-structure.md::11.9.6 憲法による kind 登録の強制": [
       "SRC-0190",
       "SRC-0534"
     ],
-    "06-compatibility.md::6.6 非互換性と制限": [
+    "03-module-architecture.md::対応解析言語の内訳と拡張方式": [
+      "SRC-0196",
+      "SRC-0310",
+      "SRC-0311",
+      "SRC-0312",
+      "SRC-0313",
+      "SRC-0540",
+      "SRC-0654",
+      "SRC-0655",
+      "SRC-0656",
+      "SRC-0657"
+    ],
+    "03-module-architecture.md::技術スタックの補足説明": [
+      "SRC-0196",
+      "SRC-0343",
+      "SRC-0540"
+    ],
+    "11-internal-structure.md::8.10 アーキテクチャ総括": [
+      "SRC-0196",
+      "SRC-0197",
+      "SRC-0198",
+      "SRC-0540",
+      "SRC-0541",
+      "SRC-0542"
+    ],
+    "08-compatibility.md::6.6 非互換性と制限": [
       "SRC-0197",
       "SRC-0199",
       "SRC-0200",
@@ -9842,7 +10653,7 @@
       "SRC-0544",
       "SRC-0548"
     ],
-    "06-compatibility.md::6.2.1 依存関係ツリー": [
+    "08-compatibility.md::8.2.1 依存関係ツリー": [
       "SRC-0198",
       "SRC-0199",
       "SRC-0313",
@@ -9850,14 +10661,14 @@
       "SRC-0543",
       "SRC-0657"
     ],
-    "06-compatibility.md::6.5.3 tree-sitter バージョン互換性": [
+    "08-compatibility.md::8.5.3 tree-sitter バージョン互換性": [
       "SRC-0199",
       "SRC-0313",
       "SRC-0343",
       "SRC-0543",
       "SRC-0657"
     ],
-    "08-internal-structure.md::source-map.py v1 — Python クラス抽出の例": [
+    "11-internal-structure.md::source-map.py v1 — Python クラス抽出の例": [
       "SRC-0199",
       "SRC-0204",
       "SRC-0309",
@@ -9865,25 +10676,25 @@
       "SRC-0548",
       "SRC-0653"
     ],
-    "08-internal-structure.md::8.7.3 警告の蓄積と表示": [
+    "11-internal-structure.md::11.7.3 警告の蓄積と表示": [
       "SRC-0199",
       "SRC-0206",
       "SRC-0543",
       "SRC-0550"
     ],
-    "08-internal-structure.md::8.9.2 P4: 静かなスキップ禁止": [
+    "11-internal-structure.md::11.9.2 P4: 静かなスキップ禁止": [
       "SRC-0199",
       "SRC-0543"
     ],
-    "09-known-constraints.md::9.1.5 未登録拡張子はスキャン対象外": [
+    "13-known-constraints.md::13.1.5 未登録拡張子はスキャン対象外": [
       "SRC-0200",
       "SRC-0544"
     ],
-    "09-known-constraints.md::detect.py における拡張子-言語マッピングの抜粋": [
+    "13-known-constraints.md::detect.py における拡張子-言語マッピングの抜粋": [
       "SRC-0200",
       "SRC-0544"
     ],
-    "06-compatibility.md::6.3.2 フレームワーク検出": [
+    "08-compatibility.md::8.3.2 フレームワーク検出": [
       "SRC-0201",
       "SRC-0203",
       "SRC-0204",
@@ -9893,21 +10704,21 @@
       "SRC-0548",
       "SRC-0549"
     ],
-    "08-internal-structure.md::8.5 フレームワーク検出": [
+    "11-internal-structure.md::11.5 フレームワーク検出": [
       "SRC-0201",
       "SRC-0204",
       "SRC-0545",
       "SRC-0548"
     ],
-    "06-compatibility.md::detect_frameworks のシグネチャと戻り値の例": [
+    "08-compatibility.md::detect_frameworks のシグネチャと戻り値の例": [
       "SRC-0204",
       "SRC-0548"
     ],
-    "09-known-constraints.md::9.1.4 フレームワーク検出はベストエフォート": [
+    "13-known-constraints.md::13.1.4 フレームワーク検出はベストエフォート": [
       "SRC-0204",
       "SRC-0548"
     ],
-    "08-internal-structure.md::8.6.3 テストファイル構成": [
+    "11-internal-structure.md::11.6.3 テストファイル構成": [
       "SRC-0207",
       "SRC-0208",
       "SRC-0209",
@@ -9983,25 +10794,46 @@
       "SRC-0612",
       "SRC-0613"
     ],
-    "08-internal-structure.md::8.4 v2 抽出器アーキテクチャ": [
+    "11-internal-structure.md::11.4 v2 抽出器アーキテクチャ": [
       "SRC-0309",
       "SRC-0313",
       "SRC-0653",
       "SRC-0657"
     ],
-    "06-compatibility.md::extractors/__init__.py から抜粋 — フォールセーフな自動ロード": [
+    "03-module-architecture.md::循環依存の有無": [
+      "SRC-0310",
+      "SRC-0311",
+      "SRC-0312",
+      "SRC-0313",
+      "SRC-0654",
+      "SRC-0655",
+      "SRC-0656",
+      "SRC-0657"
+    ],
+    "03-module-architecture.md::3.3 技術スタック": [
+      "SRC-0310",
+      "SRC-0311",
+      "SRC-0312",
+      "SRC-0313",
+      "SRC-0343",
+      "SRC-0654",
+      "SRC-0655",
+      "SRC-0656",
+      "SRC-0657"
+    ],
+    "08-compatibility.md::extractors/__init__.py から抜粋 — フォールセーフな自動ロード": [
       "SRC-0313",
       "SRC-0657"
     ],
-    "08-internal-structure.md::8.9.3 P6: 遅延登録と extractor の選択的ロード": [
+    "11-internal-structure.md::11.9.3 P6: 遅延登録と extractor の選択的ロード": [
       "SRC-0313",
       "SRC-0657"
     ],
-    "09-known-constraints.md::9.1.1 tree-sitter がオプション依存": [
+    "13-known-constraints.md::13.1.1 tree-sitter がオプション依存": [
       "SRC-0313",
       "SRC-0657"
     ],
-    "08-internal-structure.md::python_ext.py — 抽出のエントリポイント": [
+    "11-internal-structure.md::python_ext.py — 抽出のエントリポイント": [
       "SRC-0320",
       "SRC-0335",
       "SRC-0337",
@@ -10009,7 +10841,7 @@
       "SRC-0679",
       "SRC-0681"
     ],
-    "08-internal-structure.md::8.4.2 tree-sitter ヘルパー層": [
+    "11-internal-structure.md::11.4.2 tree-sitter ヘルパー層": [
       "SRC-0324",
       "SRC-0325",
       "SRC-0326",
@@ -10031,7 +10863,7 @@
       "SRC-0676",
       "SRC-0677"
     ],
-    "07-extension-points.md::抽出器の実装パターン": [
+    "09-extension-points.md::抽出器の実装パターン": [
       "SRC-0336",
       "SRC-0337",
       "SRC-0338",
@@ -10043,40 +10875,47 @@
       "SRC-0683",
       "SRC-0686"
     ],
-    "08-internal-structure.md::8.4.1 言語別抽出の実装詳細": [
+    "11-internal-structure.md::11.4.1 言語別抽出の実装詳細": [
       "SRC-0338",
       "SRC-0339",
       "SRC-0682",
       "SRC-0683"
     ],
-    "07-extension-points.md::7.1.2 新しい言語/フレームワークの抽出器": [
+    "09-extension-points.md::9.1.2 新しい言語/フレームワークの抽出器": [
       "SRC-0342",
       "SRC-0686"
     ],
-    "07-extension-points.md::7.3.2 14 言語の抽出器": [
+    "09-extension-points.md::9.3.2 14 言語の抽出器": [
       "SRC-0342",
       "SRC-0686"
     ],
-    "07-extension-points.md::7.5.1 Extract API の安定契約": [
+    "09-extension-points.md::9.5.1 Extract API の安定契約": [
       "SRC-0342",
       "SRC-0686"
     ],
-    "02-installation.md::2.2.4 Python バージョン要件": [
+    "03-module-architecture.md::各モジュールの補足": [
       "SRC-0343"
     ],
-    "06-compatibility.md::6.4 CI/CD 互換性": [
+    "04-installation.md::4.2.4 Python バージョン要件": [
       "SRC-0343"
     ],
-    "06-compatibility.md::ci.yml から抜粋": [
+    "08-compatibility.md::8.4 CI/CD 互換性": [
       "SRC-0343"
     ],
-    "06-compatibility.md::6.5.2 Python バージョン要件": [
+    "08-compatibility.md::ci.yml から抜粋": [
+      "SRC-0343"
+    ],
+    "08-compatibility.md::8.5.2 Python バージョン要件": [
+      "SRC-0343"
+    ],
+    "10-migration-guide.md::10.2.6 Git フック・CI・開発ガバナンスの導入": [
+      "SRC-0343"
+    ],
+    "11-internal-structure.md::11.10.1 セキュリティと依存関係管理": [
       "SRC-0343"
     ]
   },
   "uncovered_units": [
-    "SRC-0001",
-    "SRC-0002",
     "SRC-0003",
     "SRC-0004",
     "SRC-0005",
@@ -10088,7 +10927,6 @@
     "SRC-0014",
     "SRC-0015",
     "SRC-0016",
-    "SRC-0017",
     "SRC-0018",
     "SRC-0019",
     "SRC-0022",
@@ -10097,18 +10935,11 @@
     "SRC-0026",
     "SRC-0028",
     "SRC-0029",
-    "SRC-0030",
-    "SRC-0031",
-    "SRC-0032",
     "SRC-0033",
     "SRC-0034",
     "SRC-0035",
-    "SRC-0036",
-    "SRC-0037",
-    "SRC-0038",
     "SRC-0043",
     "SRC-0044",
-    "SRC-0045",
     "SRC-0046",
     "SRC-0047",
     "SRC-0048",
@@ -10124,7 +10955,6 @@
     "SRC-0061",
     "SRC-0062",
     "SRC-0063",
-    "SRC-0064",
     "SRC-0065",
     "SRC-0066",
     "SRC-0067",
@@ -10144,7 +10974,6 @@
     "SRC-0086",
     "SRC-0087",
     "SRC-0088",
-    "SRC-0089",
     "SRC-0092",
     "SRC-0093",
     "SRC-0097",
@@ -10220,14 +11049,11 @@
     "SRC-0182",
     "SRC-0183",
     "SRC-0184",
-    "SRC-0185",
-    "SRC-0189",
     "SRC-0191",
     "SRC-0192",
     "SRC-0193",
     "SRC-0194",
     "SRC-0195",
-    "SRC-0196",
     "SRC-0202",
     "SRC-0220",
     "SRC-0221",
@@ -10307,8 +11133,6 @@
     "SRC-0340",
     "SRC-0341",
     "SRC-0344",
-    "SRC-0345",
-    "SRC-0346",
     "SRC-0347",
     "SRC-0348",
     "SRC-0349",
@@ -10320,7 +11144,6 @@
     "SRC-0358",
     "SRC-0359",
     "SRC-0360",
-    "SRC-0361",
     "SRC-0362",
     "SRC-0363",
     "SRC-0366",
@@ -10329,18 +11152,11 @@
     "SRC-0370",
     "SRC-0372",
     "SRC-0373",
-    "SRC-0374",
-    "SRC-0375",
-    "SRC-0376",
     "SRC-0377",
     "SRC-0378",
     "SRC-0379",
-    "SRC-0380",
-    "SRC-0381",
-    "SRC-0382",
     "SRC-0387",
     "SRC-0388",
-    "SRC-0389",
     "SRC-0390",
     "SRC-0391",
     "SRC-0392",
@@ -10356,7 +11172,6 @@
     "SRC-0405",
     "SRC-0406",
     "SRC-0407",
-    "SRC-0408",
     "SRC-0409",
     "SRC-0410",
     "SRC-0411",
@@ -10376,7 +11191,6 @@
     "SRC-0430",
     "SRC-0431",
     "SRC-0432",
-    "SRC-0433",
     "SRC-0436",
     "SRC-0437",
     "SRC-0441",
@@ -10452,14 +11266,11 @@
     "SRC-0526",
     "SRC-0527",
     "SRC-0528",
-    "SRC-0529",
-    "SRC-0533",
     "SRC-0535",
     "SRC-0536",
     "SRC-0537",
     "SRC-0538",
     "SRC-0539",
-    "SRC-0540",
     "SRC-0546",
     "SRC-0564",
     "SRC-0565",

@@ -1,8 +1,8 @@
-# 8 内部構造
+# 第11章: 内部構造
 
 本章では specback のスクリプト郡のディレクトリ構造、主要モジュールの責務、データフロー、およびビルド/テスト体系を記述する。全体で約 4,000 行の Python コードから構成され、ソースマップ抽出 → インベントリ変換 → トレーシング → 検証 → ドリフト検出 という 5 段階のパイプラインを形成する。
 
-## 8.1 ディレクトリ構造
+## 11.1 ディレクトリ構造
 
 ```
 scripts/
@@ -33,7 +33,7 @@ scripts/
         └── tshelpers.py
 ```
 
-### 8.1.1 v1 と v2 の関係
+### 11.1.1 v1 と v2 の関係
 
 `source-map.py` (v1) は regex ベースのシンプルな抽出器で、schema 0.1.0 を出力する [REF: source-map.py:1-48]。一方 `source_map_v2/` パッケージ (v2) は tree-sitter ベースの役割型付き抽出器で、schema 0.2.0 を出力する [REF: model.py:1-10]。両者の出力は `build-inventory-from-sourcemap.py` が受け入れ可能で、schema バージョンの違いは透過的に処理される [REF: build-inventory-from-sourcemap.py:84-122]。
 
@@ -57,7 +57,7 @@ class SourceUnit:
 
 v1 との主な差は `role`, `tier`, `language`, `framework` フィールドの追加と、`SourceUnit.validate()` による憲法適合性チェックである [REF: model.py:29-72]。
 
-## 8.2 パイプラインアーキテクチャ
+## 11.2 パイプラインアーキテクチャ
 
 ```mermaid
 flowchart LR
@@ -114,7 +114,7 @@ flowchart LR
 
 各ステージは独立したスクリプトとして実装され、JSON ファイルを介して結合される。これは Unix 哲学の「1 つのことをうまくやる」原則に従い、各スクリプトが単一の変換責任を持つ。
 
-### 8.2.1 Stage 1: ソースマップ抽出
+### 11.2.1 Stage 1: ソースマップ抽出
 
 v1 (`source-map.py`) と v2 (`source_map_v2`) の 2 系統が存在する。
 
@@ -150,7 +150,7 @@ def extract_py_units(rel_path: str, source: str, id_factory):
 
 - **Layer 3** (`taxonomy.py` + `model.py`): 抽出結果を憲法 (taxonomy) にマッピングし、`SourceMap` オブジェクトを構築する。
 
-### 8.2.2 Stage 2: インベントリ変換
+### 11.2.2 Stage 2: インベントリ変換
 
 `build-inventory-from-sourcemap.py` は source-map.json の unit を 1:1 で inventory.json の item に変換する [REF: build-inventory-from-sourcemap.py:84-122]。キーとなるマッピングは `DEFAULT_ROLE_TO_TYPE` で定義される [REF: build-inventory-from-sourcemap.py:45-60]:
 
@@ -168,7 +168,7 @@ DEFAULT_ROLE_TO_TYPE = {
 
 各 inventory item は `related_source_ids` フィールドで元の source-map unit (SRC-NNNN) にリンクし、`covered_by` リストは Phase 3 のエージェント作業で埋められる [REF: build-inventory-from-sourcemap.py:98-106]。
 
-### 8.2.3 Stage 3: トレーシング
+### 11.2.3 Stage 3: トレーシング
 
 `build-trace.py` は spec ファイル中の `[REF: path:start-end]` マーカーを抽出し、source-map.json の unit と突き合わせる [REF: build-trace.py:122-182]。
 
@@ -189,7 +189,7 @@ def scan_drafts_for_refs(drafts_dir: Path) -> list[dict]:
 
 `build-traceability.py` はこの `trace.json` を人間可読な `traceability.md` に変換する。MECE チェック結果、章→ソースマッピング、ソース→章マッピングの 3 つのテーブルを含む [REF: build-traceability.py:56-186]。
 
-### 8.2.4 Stage 4: 検証 (coverage-check.py)
+### 11.2.4 Stage 4: 検証 (coverage-check.py)
 
 `coverage-check.py` は specback の Phase 4 検証を実行する単一のスクリプトで、以下の 12 のチェックを 1 パスで行う [REF: coverage-check.py:11-56]:
 
@@ -220,7 +220,7 @@ class InventoryItem:
     related_source_ids: list[str] = field(default_factory=list)
 ```
 
-### 8.2.5 Stage 5: ドリフト検出 (Phase 7)
+### 11.2.5 Stage 5: ドリフト検出 (Phase 7)
 
 Phase 7 は以下の 3 つのスクリプトで構成される:
 
@@ -232,7 +232,7 @@ Phase 7 は以下の 3 つのスクリプトで構成される:
 
 `snapshot-hashes.py` は Git がない環境向けに、source-map の各行範囲の SHA256 ハッシュを記録する [REF: snapshot-hashes.py:40-73]。`hash_line_range()` は UTF-8-SIG で読み取り、CRLF/LF を正規化してからハッシュする [REF: snapshot-hashes.py:40-73]。このハッシュは `detect-drift.py --mode hash` で使用される。
 
-### 8.2.6 スクリプト間のデータフロー詳細
+### 11.2.6 スクリプト間のデータフロー詳細
 
 パイプラインの各ステージは JSON ファイルを唯一の結合点として直列に接続される。以下は各ファイルの書き手と読み手の対応関係である:
 
@@ -250,7 +250,7 @@ Phase 7 は以下の 3 つのスクリプトで構成される:
 
 `build_trace.py` と `source-map` の間には暗黙の制約がある: `resolve_refs_to_units()` は source-map の `path` と REF のパスを完全一致およびサフィックス一致で突き合わせるため [REF: build-trace.py:149-182]、source-map のパスが spec の REF と一致する必要がある。
 
-## 8.3 役割語彙体系 (Taxonomy)
+## 11.3 役割語彙体系 (Taxonomy)
 
 `taxonomy.py` は specback の中核設計原則である「憲法」を実装する [REF: taxonomy.py:1-14]。全言語共通の 5 つのユニバーサルテーブルと 14 のロールを定義し、各言語の `kind` は必ず 1 つのロールに解決される（P1: 言語固有語彙の漏洩禁止）。
 
@@ -286,7 +286,7 @@ def register_kind(kind: str, role: str, tier: str = "middle") -> None:
     _KIND_REGISTRY[kind] = (role, tier)
 ```
 
-## 8.4 v2 抽出器アーキテクチャ
+## 11.4 v2 抽出器アーキテクチャ
 
 `source_map_v2/extractors/__init__.py` は `Extractor` 抽象基底クラスを定義する [REF: extractors/__init__.py:21-49]。各言語の抽出器はこれを継承し、`language` クラス変数と `extract()` メソッドを実装する。`register()` デコレータで `_REGISTRY` に登録され、`pipeline.py` の Layer 2 から呼び出される。
 
@@ -311,7 +311,7 @@ class Extractor(ABC):
 
 `_autoload()` が全言語モジュールを import 試行し、成功したものだけが利用可能になる [REF: extractors/__init__.py:71-85]。これは tree-sitter などのオプション依存関係がない環境でもパイプラインが動作する設計（フォールバックはファイルレベルの粗い unit + 警告）である。
 
-### 8.4.1 言語別抽出の実装詳細
+### 11.4.1 言語別抽出の実装詳細
 
 各言語抽出器は `Extractor` を継承し、`prescan()`（オプションの言語全体パス）と `extract()`（1 ファイルごとの抽出）を実装する。抽出の流れは `pipeline.build_source_map()` の 2 パス設計に従う:
 
@@ -342,7 +342,7 @@ def visit(node, module_level):
 
 各抽出器は import 時に `taxonomy.register_kind()` で自身の `kind` を登録する。例えば `python_ext.py` は `py_class`/`py_function`/`fastapi_endpoint`/`pydantic_schema` など 10 種類の kind を登録する [REF: python_ext.py:22-34]。`TypeScriptExtractor` は `ts_class`/`ts_interface`/`express_route`/`react_component` など 11 種類を登録する [REF: typescript_ext.py:21-34]。
 
-### 8.4.2 tree-sitter ヘルパー層
+### 11.4.2 tree-sitter ヘルパー層
 
 `tshelpers.py` は全言語抽出器に共通の tree-sitter 操作ユーティリティを提供する [REF: tshelpers.py:1-151]:
 
@@ -355,7 +355,7 @@ def visit(node, module_level):
 
 HTTP メソッドのリストは共通定数として定義され、全抽出器から参照される [REF: tshelpers.py:19]。
 
-## 8.5 フレームワーク検出
+## 11.5 フレームワーク検出
 
 `detect.py` の `detect_frameworks()` は以下のマニフェストを認識する [REF: detect.py:79-165]:
 
@@ -369,9 +369,9 @@ HTTP メソッドのリストは共通定数として定義され、全抽出器
 
 `find_project_root()` は対象パスから最大 8 階層上までマーカーファイルを探索する [REF: detect.py:50-65]。
 
-## 8.6 ビルドとテスト
+## 11.6 ビルドとテスト
 
-### 8.6.1 テスト実行
+### 11.6.1 テスト実行
 
 テストは pytest で実行され、GitHub Actions CI が全ての PR で自動実行する。
 
@@ -386,7 +386,7 @@ pytest scripts/source_map_v2/
 pytest scripts/source_map_v2/tests/
 ```
 
-### 8.6.2 CI パイプライン
+### 11.6.2 CI パイプライン
 
 `.github/workflows/ci.yml` は以下のステップから構成される:
 
@@ -396,7 +396,7 @@ pytest scripts/source_map_v2/tests/
 4. **gitleaks** — 秘密情報スキャン
 5. **全ステップ通過必須**（mypy アドバイザリは除外）
 
-### 8.6.3 テストファイル構成
+### 11.6.3 テストファイル構成
 
 各 v2 抽出器に対応するテストファイルが `source_map_v2/tests/` に配置される。言語別テストはインラインでテスト用ソースコードを保持し、抽出結果の `role`/`kind`/`name` を検証する。
 
@@ -417,11 +417,11 @@ pytest scripts/source_map_v2/tests/
 
 各言語テストは `pytest.mark.skipif` で tree-sitter 文法の有無を確認し、未インストール時はスキップする [REF: test_python_ext.py:10-13]。これにより CI 環境で tree-sitter がなくても pytest コレクション自体は成功する。
 
-### 8.6.4 テストカバレッジチェック
+### 11.6.4 テストカバレッジチェック
 
 `tests/check_test_coverage.py` は各スクリプトの公開シンボル（関数・クラス）に対応するテスト関数が存在するか AST 解析で検証する [REF: check_test_coverage.py:1-142]。"underscore 始まり" のプライベートシンボルと `main` エントリポイントは対象外とする [REF: check_test_coverage.py:21-30]。スクリプト名 `build-trace.py` に対してテストファイルは `tests/test_build_trace_output_dir.py` を自動推測する（ハイフンをアンダースコアに置換）[REF: check_test_coverage.py:134-136]。
 
-### 8.6.5 test スクリプト一覧
+### 11.6.5 test スクリプト一覧
 
 tests/ ディレクトリのテストはサブプロセス経由で各スクリプトの `--help` フラグをテストするスモークテストが中心である [REF: test_fix_refs.py:1-53]。各テストは以下のパターンに従う:
 
@@ -441,7 +441,7 @@ def test_help_includes_specback_dir():
 
 specback のスクリプト群は以下の一貫したエラーハンドリングパターンに従う:
 
-### 8.7.1 ファイル不在に対する防御
+### 11.7.1 ファイル不在に対する防御
 
 全スクリプトは入力ファイルの存在を事前チェックし、欠落時は `sys.exit(2)` で終了する。
 
@@ -464,7 +464,7 @@ def load_source_map(path: Path) -> dict[str, Any]:
 
 `coverage-check.py` は同様に `FileNotFoundError` を捕捉し exit 2 を返す [REF: coverage-check.py:920-922]。
 
-### 8.7.2 オプショナル依存関係のフォールバック
+### 11.7.2 オプショナル依存関係のフォールバック
 
 3 箇所でオプショナル依存関係が存在する:
 
@@ -472,7 +472,7 @@ def load_source_map(path: Path) -> dict[str, Any]:
 - **tree-sitter (`tshelpers.py`)**: 全 v2 抽出器の基盤。コアが未インストールなら全文法が利用不可になり、`_autoload()` が静かに失敗する。その結果、該当言語の抽出器は未登録となり、`pipeline.py` がファイルレベルのフォールバック unit を生成する [REF: extractors/__init__.py:71-85][REF: pipeline.py:86-94]。
 - **各 tree-sitter 文法パッケージ**: 個別の文法（例: `tree-sitter-python`）がない場合、`_parser()` 内の `try/except` で捕捉され、その言語だけが未サポートになる [REF: tshelpers.py:22-73]。
 
-### 8.7.3 警告の蓄積と表示
+### 11.7.3 警告の蓄積と表示
 
 v2 パイプラインは「静かなスキップ禁止 (P4)」を実装するため、`SourceMap.warnings` リストに全警告を蓄積し、`__main__.py` の CLI が stderr に出力する [REF: pipeline.py:89-94][REF: __main__.py:52-53]:
 
@@ -481,7 +481,7 @@ for w in payload["warnings"]:
     print(f"WARNING: {w}", file=sys.stderr)
 ```
 
-### 8.7.4 デコードエラーへの耐性
+### 11.7.4 デコードエラーへの耐性
 
 ファイル読み取り時、全スクリプトは UTF-8 デコードエラーに対して `errors="replace"` でフォールバックする:
 
@@ -492,7 +492,7 @@ source = path.read_text(encoding="utf-8", errors="replace")
 
 `source-map.py` v1 はさらに二段階フォールバックを行う: 最初に厳密な UTF-8 を試み、失敗時に `errors="replace"` で再試行する [REF: source-map.py:359-365]。
 
-### 8.7.5 破損 JSON 検出
+### 11.7.5 破損 JSON 検出
 
 `build-inventory-from-sourcemap.py` は JSON デコードエラー時に `--role-to-type` オプションの不正も含め、わかりやすいエラーメッセージを表示する [REF: build-inventory-from-sourcemap.py:177-179]。
 
@@ -511,23 +511,23 @@ source = path.read_text(encoding="utf-8", errors="replace")
 
 ## 8.9 主要な設計原則
 
-### 8.9.1 P1: 言語固有語彙の漏洩禁止
+### 11.9.1 P1: 言語固有語彙の漏洩禁止
 
 全ての `kind`（例: `fastapi_endpoint`）は `taxonomy.py` の憲法で定義された 1 つの `role` に解決される。`validate()` は `SourceMap` 構築時にこの制約を強制する [REF: model.py:43-52]。
 
-### 8.9.2 P4: 静かなスキップ禁止
+### 11.9.2 P4: 静かなスキップ禁止
 
 未対応言語のファイルは無視されず、ファイルレベルのフォールバック unit として記録され、警告が発行される。`SourceMap.warnings` リストに蓄積され、CLI に表示される [REF: pipeline.py:89-94]。
 
-### 8.9.3 P6: 遅延登録と extractor の選択的ロード
+### 11.9.3 P6: 遅延登録と extractor の選択的ロード
 
 抽出器の登録は `_autoload()` による遅延 import で行われ、各モジュールは自身の tree-sitter 依存関係が利用可能な場合のみ `register()` を呼び出す [REF: extractors/__init__.py:71-85]。これにより、全 14 言語の文法がインストールされていなくてもパイプラインが動作する。
 
-### 8.9.4 エクスプリシットな結合
+### 11.9.4 エクスプリシットな結合
 
 各ステージ間の結合は JSON ファイルを介した明示的なデータフローであり、スクリプト間の直接的な import や関数呼び出しは存在しない。これにより、各スクリプトを独立してテスト・デバッグできる。
 
-### 8.9.5 単一責務の原則
+### 11.9.5 単一責務の原則
 
 各スクリプトは 1 つの変換責任を持つ:
 - `build-inventory-from-sourcemap.py`: source-map unit → inventory item (1:1 変換のみ)
@@ -535,7 +535,7 @@ source = path.read_text(encoding="utf-8", errors="replace")
 - `coverage-check.py`: 検証のみ（アーティファクトの生成はしない）
 - `detect-drift.py`: 変更検出のみ（REF 修正はしない）
 
-### 8.9.6 憲法による kind 登録の強制
+### 11.9.6 憲法による kind 登録の強制
 
 `register_kind()` は同一 kind の conflicting rebind を拒否する [REF: taxonomy.py:91-95]。これにより、2 つの抽出器が同じ kind 名を異なる role に割り当てる競合を実行時に検出できる。
 
@@ -552,7 +552,7 @@ specback の内部構造は「決定論的データ抽出 + LLM 自然言語化�
 
 テスト戦略としては、source_map_v2 は各言語ごとに独立したテストファイルを持ち、構文解析の正しさを検証している。スクリプトレベルのテストは scripts/tests/ に集約され、coverage-check.py や change-spec.py などの主要機能をカバーする。CI パイプライン（GitHub Actions）は PR 作成時にこれらすべてのテストを自動実行し、gitleaks による秘密情報スキャンも併用する [REF: README.md:304-307]。スクリプト間の依存関係は最小限に保たれ、各スクリプトが独立して実行可能である。例えば source-map.py は単独でソースマップを生成でき、その出力を build-inventory-from-sourcemap.py が読み取る。このパイプ可能な設計により、ユーザーはパイプラインの任意の段階から作業を開始できる。
 
-### 8.10.1 セキュリティと依存関係管理
+### 11.10.1 セキュリティと依存関係管理
 
 specback のスクリプト群は外部ネットワーク通信を行わず、全てローカルファイルシステム上の処理に限定されている。これは意図的な設計判断であり、機密コードベースを扱うユースケースにおいて情報漏洩リスクを最小化する。全スクリプトが Python 標準ライブラリのみに依存する方針は、サプライチェーン攻撃の表面積を削減する効果も持つ [REF: README.md:72]。
 
@@ -560,15 +560,15 @@ source_map_v2 のオプション依存（tree-sitter）は pip 経由でイン�
 
 source_map_v2 の extractor 登録は `__init__.py` の `_KIND_REGISTRY` と `_autoload()` 機構により自動化されており、新言語 extractor をディレクトリに追加するだけで自動検出される。この設計により extractor の追加が容易になり、現在 14 言語に対応している。CI パイプラインでは pytest による全テストと gitleaks による秘密情報スキャンが実行され、品質を維持している [REF: .github/workflows/ci.yml:1-50]。
 
-### 8.10.2 スケーラビリティと適用範囲
+### 11.10.2 スケーラビリティと適用範囲
 
 specback の内部構造は小規模から大規模まで様々なコードベースに対応できるよう設計されている。source_map_v2 の並列抽出処理は言語ごとに独立して動作し、マルチコア環境では自然な並列化が可能である。インベントリ数の下限は max(50, files_scanned // 20) で計算され、1000ファイルのコードベースでも最低50ユニットの保証がある。covered_by フィルレートと MECE カバレッジ率はコードベース規模に応じて調整可能であり、大規模プロジェクトでは outline または interactive モードを選択することで 200 行制約を回避できる [REF: README.md:166-168]。
 
-### 8.10.3 トレーサビリティと品質保証
+### 11.10.3 トレーサビリティと品質保証
 
 specback の最大の特徴は全記述にソースコードの REF を付与する点にある。このトレーサビリティにより、仕様書の任意の記述がどのソースコードのどの行に基づくかを検証できる。trace.json は REF と source-map ユニットのマッチングを記録し、coverage-check.py は不足を検出する。この循環的検証機構が specback の品質保証の中核である [REF: README.md:21-24]。
 
-### 8.10.4 フェーズ間データフロー
+### 11.10.4 フェーズ間データフロー
 
 各フェーズは入出力が JSON ファイルで明確に定義されている。Phase 2 は source-map.json と inventory.json を生成し、Phase 3 は drafts/ に Markdown ファイルを書き、Phase 4 は trace.json と coverage-report を生成する。このフェーズ間の疎結合設計により、各フェーズの独立した実行・テスト・デバッグが可能である。また state.json の current_phase 進行管理と組み合わせることで、任意のフェーズからの再開や部分的な再実行も実現している [REF: state-management.md:5-21]。
 

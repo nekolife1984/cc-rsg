@@ -17,7 +17,7 @@
 | Q-004 | architecture_decision | nice-to-have | answered | Phase 7→Phase 5 自動再実行は v2.0.0 ロードマップに委ねる。v1.x はレポートのみと確定。 |
 | Q-005 | operational_requirement | nice-to-have | skipped | abandoned 判定の定量閾値は未定義。 |
 || Q-007 | architecture_decision | nice-to-have | answered | スキル内部（phase-*.md, templates/）の読み手は AI エージェントであるため、日本語化不要。README の日英 bilingual で十分。 |
-|| Q-010 | business_rule | nice-to-have | answered | Dual-consumer は非推奨。理由・代替ガイドラインは 09-known-constraints.md §9.4.5 に追記。 |
+|| Q-010 | business_rule | nice-to-have | answered | Dual-consumer は非推奨。理由・代替ガイドラインは 13-known-constraints.md §13.4.5 に追記。 |
 
 ## Phase 4 検証未達項目
 

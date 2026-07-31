@@ -307,9 +307,9 @@ specback のパイプラインは、単なるタスク分割ではなく「不�
 
 ---
 
-#### 11設計原則の詳細解説
+#### 12設計原則の詳細解説
 
-SKILL.md で定義される11の設計原則は、specback の全フェーズにわたって普遍的に適用される。以下、各原則の意図と実装上の含意を詳述する。 [REF: SKILL.md:27-37]
+SKILL.md で定義される12の設計原則は、specback の全フェーズにわたって普遍的に適用される。以下、各原則の意図と実装上の含意を詳述する。 [REF: SKILL.md:27-38]
 
 **原則1 (Goal-driven)**: Phase 0 で固定されたゴールは `.specback/goal.json` に永続化され、全フェーズがこのゴールを参照する。ゴール変更は Phase 0 の再実行が必要であり、後戻りを防ぐ設計となっている。
 
@@ -332,6 +332,8 @@ SKILL.md で定義される11の設計原則は、specback の全フェーズに
 **原則10 (Dual-consumer handling reduced to one in goal)**: 複数の読者層を1つの仕様書でカバーしようとすると記述の粒度や視点が矛盾する。specback は Phase 0 で単一の読者層に絞り込み、必要な場合は別セッションで再実行する。この「1仕様書＝1読者層」の原則により記述の一貫性が保たれる。 [REF: SKILL.md:36]
 
 **原則11 (Output language chosen in Phase 0)**: 出力言語は Phase 0 で確定し、自然言語部分のみが選択言語で生成される。機械可読要素（REF マーカー、Confidence ラベル、JSON キー、ファイルスラッグ、ID プレフィックス）は常に英語固定である。 [REF: SKILL.md:37]
+
+**原則12 (Reader-comprehension chapter order)**: テンプレートの章順はそのまま最終成果物の並びであり、読者の理解フローに従う — Overview（何をするシステムか）→ Feature specifications（何ができるか）→ Architecture overview（どう構成されているか、前半に配置）→ 詳細章 → System design（なぜそうなっているか、後半に配置）→ Known constraints（何ができないか）。章の追加・並び替えはこのフローに照らして判断する。生成順は提示順と独立でよく、Phase 3 は章を並列ディスパッチするため実際の生成順はテンプレート順と一致しないこともある。 [REF: SKILL.md:38]
 
 ---
 
