@@ -228,7 +228,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    Branch the WBS chapter structure on `.specback/goal.json`'s `depth_mode`:
 
    **(a) `comprehensive` (classic / audit use)**
-   - Distribute `assigned_inventory_ids` across the 13-chapter template outline.
+   - Distribute `assigned_inventory_ids` across the selected template's chapter outline (see `templates/<selected>.md`; the chapter count is template-specific and must never be hardcoded).
    - Phase 3 generates ≥ 200 lines / ≥ 10 REFs per chapter.
    - **For large repos this takes hours to days. Assumes an audit reader.**
 

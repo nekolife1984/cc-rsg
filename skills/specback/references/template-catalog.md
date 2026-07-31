@@ -23,7 +23,7 @@ Rules:
 2. **Design rationale goes late** — System design sits after the detail chapters, right before Known constraints. It deepens understanding of things the reader has already seen; placed early it would create forward references.
 3. **Presentation order ≠ generation order** — the template defines the presentation order; Phase 3 may generate chapters in any order (it dispatches them in parallel). Keeping generation order aligned with presentation order is the current convention, but it is not a requirement.
 4. **Judge additions and reorderings against this flow** — when adding or moving a chapter, ask "where does the reader's comprehension flow require this?" rather than "where was the last edit?".
-5. **Chapter count is template-specific** — there is no fixed chapter count; each template defines its own outline. Phase docs and scripts must never hardcode a count (see the "13-chapter" fix in `phase-2-wbs.md`).
+5. **Chapter count is template-specific** — there is no fixed chapter count; each template defines its own outline. Phase docs and scripts must never hardcode a count.
 
 ---
 
