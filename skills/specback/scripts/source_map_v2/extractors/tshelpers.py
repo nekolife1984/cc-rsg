@@ -64,6 +64,10 @@ def _parser(language: str):
         elif language == "tsx":
             import tree_sitter_typescript as m
             lang = _ts.Language(m.language_tsx())
+        elif language == "javascript":
+            # JS is parsed by the typescript grammar (see typescript_ext).
+            import tree_sitter_typescript as m
+            lang = _ts.Language(m.language_typescript())
         elif language == "php":
             import tree_sitter_php as m
             lang = _ts.Language(m.language_php())

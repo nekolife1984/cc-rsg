@@ -12,6 +12,7 @@ import pytest
 
 from source_map_v2 import SCHEMA_VERSION, build_source_map
 from source_map_v2 import extractors, taxonomy
+from source_map_v2.extractors import tshelpers
 from source_map_v2.model import IdFactory, SourceMap, SourceUnit
 
 
@@ -179,6 +180,11 @@ def test_missing_grammar_warns_with_install_hint(tmp_path, monkeypatch):
     """
     root = _make_project(tmp_path)
     # Simulate the python grammar being unavailable (as if deps not installed).
+    original_have = tshelpers.have
+    monkeypatch.setattr(
+        tshelpers, "have",
+        lambda lang: False if lang == "python" else original_have(lang),
+    )
     monkeypatch.setattr(
         extractors, "get_extractor",
         lambda lang: None if lang == "python" else extractors._REGISTRY.get(lang),
@@ -189,7 +195,29 @@ def test_missing_grammar_warns_with_install_hint(tmp_path, monkeypatch):
     assert "tree-sitter" in py_warns[0]
     assert "pip install tree-sitter-python" in py_warns[0]
     assert "no v2 extractor yet" not in py_warns[0]
+    assert "did not register" not in py_warns[0]
     # fallback still emits file-level units, so nothing silently vanishes
+    assert any(u["language"] == "python" for u in payload["units"])
+
+
+def test_extractor_import_failure_warns_not_grammar(tmp_path, monkeypatch):
+    """Grammar installed but extractor missing → warn about the module, not pip.
+
+    The install hint must NOT be shown when the grammar is present — the real
+    cause is a module-level failure in the extractor (e.g. _autoload's
+    `except Exception: pass` swallowing an import bug).
+    """
+    root = _make_project(tmp_path)
+    # python grammar IS available; simulate the extractor failing to register.
+    monkeypatch.setattr(
+        extractors, "get_extractor",
+        lambda lang: None if lang == "python" else extractors._REGISTRY.get(lang),
+    )
+    payload = build_source_map(root).to_dict()
+    py_warns = [w for w in payload["warnings"] if "'python'" in w]
+    assert len(py_warns) == 1
+    assert "did not register" in py_warns[0]
+    assert "pip install" not in py_warns[0]
     assert any(u["language"] == "python" for u in payload["units"])
 
 
