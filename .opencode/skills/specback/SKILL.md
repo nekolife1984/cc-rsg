@@ -35,6 +35,7 @@ This skill operates in the "code → spec" direction; it is the symmetric counte
 9. **Unanswerable questions marked `abandoned`**: Recorded in final spec under "unresolved items".
 10. **Dual-consumer handling reduced to one in goal**: Restart for multiple views instead of overloading a single spec.
 11. **Output language chosen in Phase 0**: English or Japanese. All natural-language output follows this choice.
+12. **Reader-comprehension chapter order**: The template chapter order IS the final document order. It follows the reader's comprehension flow — Overview (what the system is) → Feature specifications (what it can do) → Architecture overview (how it is structured, placed early) → detail chapters → System design (why it is shaped this way, placed late) → Known constraints (what it cannot do). When adding or reordering chapters, judge the change against this flow. Presentation order is independent of generation order (Phase 3 dispatches chapters in parallel anyway). See `references/template-catalog.md` → "Chapter ordering principles".
 
 ---
 
@@ -83,6 +84,6 @@ Use **shape** (not color) for visual emphasis.
 3. **Sub-agent delegation** → read `subagent-behavior.md` before Phase 3.
 4. **State management & resume** → read `state-management.md` when resuming. It contains a phase→file mapping table that tells you exactly which detail files to load based on `state.json.current_phase`.
 5. **On resume, after user confirms, load the phase file corresponding to `state.json.current_phase`** (see mapping in `state-management.md`). Without this, the phase instructions are not in the system prompt.
-6. **The 11 design principles above are universal across all phases.**
+6. **The 12 design principles above are universal across all phases.**
 7. **The Mermaid styling contract applies to every diagram in `.specback/drafts/` and `{output_dir}/`.**
 8. **Context-saving note**: This SKILL.md is intentionally lightweight. Phase detail files are loaded only when needed via the Read tool, reducing per-invocation context overhead — especially important for Claude Code which injects SKILL.md into the system prompt.
