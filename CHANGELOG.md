@@ -5,6 +5,17 @@ All notable changes to the specback project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [v1.2.0] - 2026-08-01
+
+### Added
+
+- `specback-search` スキルを追加。`build-search-index.py` CLI で生成済み JSON データ（source-map, trace, inventory, questions, drift）を名前・未カバー・章・ロール・確度・ドリフトの観点で検索可能に。Python 3.10+ stdlib only ([#152], [#153])
+- `install.sh` / `install.ps1` を更新。specback-search スキルも specback 本体と同時にインストールされるように ([#153])
+
+### Fixed
+
+- `skills/specback-search/SKILL.md` を日本語から英語に統一。プロジェクトの方針（スクリプト・CLIは英語）に準拠 ([#154])
+
 ## [Unreleased]
 
 ### Added
