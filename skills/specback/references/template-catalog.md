@@ -180,6 +180,15 @@ Based on the Phase 1 reconnaissance, the agent follows this procedure to recomme
 
 Real projects often do not fit into a single template. Handle them as follows.
 
+### Overview: composite detection
+
+When Phase 1 reconnaissance detects characteristics of multiple templates (e.g. both screens and endpoints, or a desktop app with an API backend), the agent must:
+
+1. Identify which template types are present (web-app, api-service, desktop-app, mobile-app, cli-tool, batch-system, library-sdk, infrastructure).
+2. Determine the relationship: primary/secondary, equal-scale composite, or separate services.
+3. Classify the composite architecture pattern (see below).
+4. Apply the recommended approach — unified spec, separate specs with cross-references, or extended monorepo handling.
+
 ### When there is a primary / secondary relationship
 - Pick the primary template and add a chapter from the secondary one.
 - Example: web app primary, batch secondary → add a "background jobs" chapter to the web-app spec.
@@ -191,6 +200,126 @@ Real projects often do not fit into a single template. Handle them as follows.
 ### Monorepo with multiple services
 - Recommend generating separate specs per service.
 - Merge into a single spec only if the user explicitly wants one spec for the whole monorepo.
+
+---
+
+### Pattern 1: Client-Server (e.g. Desktop App + API Service, Mobile App + API Backend)
+
+**Architecture:** Client side + Server side + Communication layer
+
+**Recommended approach:** Unified spec for tighter coupling; separate specs with cross-references for loosely coupled teams.
+
+#### Unified spec chapter ordering
+
+| # | Chapter | Source template | Notes |
+|---|---------|----------------|-------|
+| 1 | Overview | Common (merged from both) | System purpose, intended users, scope |
+| 2 | Feature specifications | Common (Client + Server features merged) | Feature catalogue covering both sides |
+| 3 | **System architecture** | **Composite common chapter** | Client-Server topology, tier data flow, deployment diagram |
+| 4 | **API contract** | **Composite common chapter** | Full API list, request/response schemas, auth methods, versioning |
+| 5 | Client: UI / Screen list | desktop-app or mobile-app | Screen list, transitions, navigation |
+| 6 | Client: Platform integration | desktop-app or mobile-app | OS integration, notifications, background tasks |
+| 7 | Server: Endpoint catalogue | api-service | Full endpoint list with methods and paths |
+| 8 | Server: Data model | api-service | ER diagram, entity definitions |
+| 9 | Server: Auth | api-service | Authentication flows, token management |
+| 10 | Client: State / Data persistence | desktop-app or mobile-app | Local storage, caching, sync strategy |
+| 11 | Design decisions | Both (merged) | Architectural decisions for both sides |
+| 12 | Known constraints | Common | Cross-cutting constraints |
+
+#### Separate specs with cross-references
+
+```markdown
+Client spec:
+  - "API contract details are in the Server spec Chapter 7 (Endpoint catalogue)"
+  - REF: server/specs/07-endpoint-catalogue.md
+
+Server spec:
+  - "Screen transitions are in the Client spec Chapter 5 (Screen list)"
+  - REF: client/specs/05-screen-list.md
+```
+
+#### Selection criteria
+- Evidence of two distinct deployable units (e.g. separate `package.json`, `Dockerfile`, deployment configs).
+- Client has UI code; Server has endpoint/routing code.
+- A communication protocol boundary (HTTP, WebSocket, gRPC) is identifiable.
+
+---
+
+### Pattern 2: 3-Tier (Presentation + Application + Data)
+
+**Architecture:** Presentation tier (UI) + Application tier (business logic / API) + Data tier (persistence / storage)
+
+**Recommended approach:** Single unified spec (tier-spanning consistency is more important than separation).
+
+#### Unified spec chapter ordering
+
+| # | Chapter | Content | Notes |
+|---|---------|---------|-------|
+| 1 | Overview | Overall purpose, 3-tier responsibilities | |
+| 2 | Feature specifications | Tier-spanning feature list | Features may span multiple tiers |
+| 3 | **System architecture** | **Composite common chapter** | 3-tier topology diagram, tier interfaces, deployment configuration |
+| 4 | Presentation tier: UI | Screen list, transitions (web-app / mobile-app / desktop-app) | |
+| 5 | Application tier: API / Logic | Endpoint catalogue, business rules (api-service) | |
+| 6 | **Data flow (cross-tier)** | **Composite common chapter** | Presentation → Application → Data flow, caching, sync/async |
+| 7 | Data tier: Data model | ER diagram, entity definitions, schema | |
+| 8 | Auth (cross-tier) | Consistent auth flow: token → session → DB | Covers auth across all tiers |
+| 9 | Operations / Deployment | Deployment per tier, CI/CD, scaling | |
+| 10 | Design decisions | Technology choices per tier, why 3 tiers | Including tier-separation rationale |
+| 11 | Known constraints | Constraints per tier | |
+
+#### Selection criteria
+- Three clearly separated layers (UI code, business logic code, data access code) in the codebase structure.
+- Each tier may correspond to a separate deployment unit or be logical layers within the same process.
+- Separation of concerns is a deliberate architectural choice (not accidental).
+
+---
+
+### Pattern 3: Monorepo with shared library
+
+Extends the base "Monorepo with multiple services" handling when services share a common library.
+
+**Architecture:** Multiple services + shared library(s)
+
+**Recommended approach:** Separate specs per service + one shared library spec. Cross-reference shared library spec from each service spec.
+
+#### Additional guidelines
+
+| Aspect | Action |
+|--------|--------|
+| Shared library spec | Generate a full Library / SDK spec for each shared library |
+| Service-to-library dependency | List in each service spec's dependency section: "depends on `shared-lib` vX.Y.Z" |
+| Version alignment | Document version pinning strategy (monorepo-sync, semver ranges, lockfile) |
+| API contract | If the library exposes a public API, add an "API catalogue" chapter (from library-sdk template) |
+| Cross-reference pattern | `REF: shared-lib/specs/04-api-catalogue.md` in service specs |
+
+#### Spec document layout
+
+```
+project/
+├── service-a/
+│   └── specs/service-a-spec.md   ← api-service or web-app spec
+├── service-b/
+│   └── specs/service-b-spec.md   ← api-service or web-app spec
+└── shared-lib/
+    └── specs/shared-lib-spec.md  ← library-sdk spec
+```
+
+#### Selection criteria
+- Multiple services sharing code under a common root (`packages/`, `lib/`, `common/` directories).
+- Package manifest dependencies between service and library.
+- Shared code is packaged as a distributable unit or internal module.
+
+---
+
+### Composite common chapters
+
+The following chapters appear across multiple composite patterns. They are defined as independent reference templates in `references/composite-chapters/` and reused by the agent when generating composite specs.
+
+| Chapter | Description | Reference file |
+|---------|-------------|----------------|
+| System architecture | Overall system topology, tier interfaces, deployment diagram, inter-component data flow | `references/composite-chapters/01-system-architecture.md` |
+| API contract | Client↔Server full API list, request/response schemas, auth methods, versioning strategy | `references/composite-chapters/02-api-contract.md` |
+| Data flow (cross-tier) | Tier-spanning data flow, caching strategy, sync vs. async communication, data consistency | `references/composite-chapters/03-data-flow.md` |
 
 ---
 
