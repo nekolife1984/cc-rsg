@@ -12,6 +12,9 @@
 ## クイックスタート
 
 ```bash
+# 0. テストに必要な依存をインストール（tree-sitter grammars は任意）
+pip install -r skills/specback/scripts/requirements.txt
+
 # 1. main からブランチを作成
 git checkout main
 git pull origin main
@@ -44,6 +47,8 @@ git push origin feat/your-feature
   - `pytest`（scripts/ および source_map_v2/）
   - `mypy`（アドバイザリ、警告表示）
   - Smoke import チェック（全スクリプトの import 検証）
+
+> **💡 テストスキップについて:** tree-sitter grammars 未インストール時は一部テストがスキップされます（`pytest -rs` で理由確認可）。CI では `requirements.txt` 経由で自動インストールされるため全件実行されます。
 - **ドキュメント同期** — EN + JA の両方を更新（ドキュメント変更時）
 
 ## 言語・フレームワークを追加する
