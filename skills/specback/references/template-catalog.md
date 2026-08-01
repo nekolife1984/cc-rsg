@@ -27,15 +27,16 @@ Rules:
 
 ---
 
-## Initial set of 5
+## Initial set of 6
 
-The skill ships with the following 5 templates by default. The user may also bring their own template (by specifying a path).
+The skill ships with the following 6 templates by default. The user may also bring their own template (by specifying a path).
 
 1. **Web application spec** (`templates/web-app.md`)
 2. **Batch-system spec** (`templates/batch-system.md`)
 3. **API service spec** (`templates/api-service.md`)
 4. **Library / SDK spec** (`templates/library-sdk.md`)
 5. **CLI tool spec** (`templates/cli-tool.md`)
+6. **Mobile app spec** (`templates/mobile-app.md`)
 
 ---
 
@@ -180,6 +181,37 @@ The skill ships with the following 5 templates by default. The user may also bri
 
 ---
 
+## 6. Mobile app spec
+
+### Target
+- iOS / Android / cross-platform mobile applications.
+- Swift/SwiftUI (iOS), Kotlin/Jetpack Compose (Android), Flutter (Dart), React Native (TypeScript/JavaScript).
+- Screen navigation, lifecycle management, platform API integration, and store deployment.
+
+### Chapter outline
+- Overview / app purpose and target platform
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+- Module architecture (Presentation / Domain / Data layers)
+- Screen list and transitions (navigation graph, deep links)
+- State management (global vs local state, persistence across lifecycle)
+- Data persistence and offline-first (local DB, cache strategy, conflict resolution)
+- Platform API integration (camera, GPS, biometrics, push, sensors)
+- Push notifications (APNs / FCM, payload structure, tap handling)
+- Networking and sync (API layer, cache interceptor, background sync, WebSocket)
+- Build and deployment (code signing, provisioning, store deployment, CI/CD)
+- Design decisions
+- Known constraints and unresolved items
+
+### Selection criteria
+- iOS project files: `.xcodeproj`, `.xcworkspace`, `Info.plist`, `@main`, `AppDelegate`.
+- Android project files: `build.gradle.kts`, `AndroidManifest.xml`, `MainActivity`.
+- Flutter: `pubspec.yaml` with `flutter:` section, `main.dart`.
+- React Native: `package.json` with `react-native` dependency, `index.js`/`App.tsx`.
+- Kotlin Multiplatform: `build.gradle.kts` with `kotlin { android() ios() }`.
+- No web framework as the primary interface (mobile is the main artifact).
+
+---
+
 ## Decision tree (template recommendation logic)
 
 Based on the Phase 1 reconnaissance, the agent follows this procedure to recommend a template:
@@ -195,6 +227,13 @@ Based on the Phase 1 reconnaissance, the agent follows this procedure to recomme
              YES → Is the primary interface terminal (no web server, no HTML rendering)?
                       YES → Recommend CLI tool spec
                       NO  → Continue (composite: CLI + web/API)
+             NO  → Continue
+
+1c. Does the project target mobile platforms?
+    YES → Are there iOS/Android/Flutter/React Native project files?
+             YES → Is the primary artifact a mobile app (no web server)?
+                      YES → Recommend Mobile app spec
+                      NO  → Recommend composite (mobile + API)
              NO  → Continue
 
 2. Do routing definitions exist?
@@ -296,7 +335,6 @@ After OSS release, the following templates may be added in response to user requ
 - Data warehouse / DWH spec
 - Machine-learning pipeline spec
 - Infrastructure spec (IaC, Terraform, Kubernetes)
-- Mobile app spec (iOS / Android / React Native / Flutter)
 - Blockchain / smart-contract spec
 - Game-design spec
 
