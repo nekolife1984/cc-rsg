@@ -118,7 +118,9 @@ def test_target_dir_fallback_standalone_path(tmp_path):
          "--min-lines-per-chapter", "0",
          "--min-code-blocks-per-chapter", "0",
          "--min-mermaid-per-chapter", "0",
-         "--min-sources-read-per-chapter", "0"],
+         "--min-sources-read-per-chapter", "0",
+         "--require-min-body-lines-for-reserved", "0",
+         "--no-forbid-mermaid-styling"],
         capture_output=True, text=True,
     )
     # Exit 0 = pass (fallback found the files at standalone path)
@@ -169,7 +171,9 @@ def test_target_dir_fallback_skipped_when_normal_path_exists(tmp_path):
          "--min-lines-per-chapter", "0",
          "--min-code-blocks-per-chapter", "0",
          "--min-mermaid-per-chapter", "0",
-         "--min-sources-read-per-chapter", "0"],
+         "--min-sources-read-per-chapter", "0",
+         "--require-min-body-lines-for-reserved", "0",
+         "--no-forbid-mermaid-styling"],
         capture_output=True, text=True,
     )
     assert result.returncode == 0, f"stdout={result.stdout}\nstderr={result.stderr}"

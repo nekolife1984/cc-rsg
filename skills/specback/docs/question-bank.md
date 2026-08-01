@@ -35,7 +35,7 @@ Each entry in `.specback/questions.json` has the following fields:
 5. **naming_history**: naming and historical context
 6. **operational_requirement**: operational requirements
 7. **security_compliance**: security / compliance
-8. **spec_missing**: feature or spec detail that could not be determined from code — needs SME confirmation (used by Feature specifications and System design chapters)
+8. **spec_missing**: feature or spec detail that could not be determined from code — needs SME confirmation (used by Feature specifications and Design decisions chapters)
 
 Users may add custom categories as needed (v1 expects manual JSON editing; UI is a future extension).
 

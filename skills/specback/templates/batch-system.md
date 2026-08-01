@@ -473,7 +473,7 @@ Log level definitions:
 
 ---
 
-### Chapter 15: System design
+### Chapter 15: Design decisions
 
 <!-- meta: architectural decisions, cross-cutting concerns, module dependencies, and design trade-offs derived from code. Complements Architecture overview (which describes WHAT) by explaining WHY and HOW cross-cutting concerns are handled. -->
 
