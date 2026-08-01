@@ -27,14 +27,15 @@ Rules:
 
 ---
 
-## Initial set of 4
+## Initial set of 5
 
-The skill ships with the following 4 templates by default. The user may also bring their own template (by specifying a path).
+The skill ships with the following 5 templates by default. The user may also bring their own template (by specifying a path).
 
 1. **Web application spec** (`templates/web-app.md`)
 2. **Batch-system spec** (`templates/batch-system.md`)
 3. **API service spec** (`templates/api-service.md`)
 4. **Library / SDK spec** (`templates/library-sdk.md`)
+5. **CLI tool spec** (`templates/cli-tool.md`)
 
 ---
 
@@ -151,6 +152,34 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ---
 
+## 5. CLI tool spec
+
+### Target
+- Terminal-based tools consumed via command line.
+- Python (Typer/Click/argparse), Node.js (commander/yargs), Go (cobra/urfave/cli), Rust (clap).
+- Tools installed via pip / npm / brew / cargo install, with subcommands, flags, and stdout/stderr output.
+
+### Chapter outline
+- Overview / tool purpose
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+- Module architecture (overview)
+- Installation
+- Command catalogue (subcommands, arguments, exit codes)
+- Usage examples (CRUD workflows, pipe integration, error recovery)
+- Configuration (file paths, environment variables)
+- Output format (stdout, stderr, JSON mode, exit code semantics)
+- Internal structure (optional)
+- System design
+- Known constraints and unresolved items
+
+### Selection criteria
+- CLI entry point in manifest: `[project.scripts]` / `console_scripts` (Python), `"bin"` (Node.js), `[[bin]]` (Rust), `package main` + `main()` (Go).
+- Argument-parsing library present: typer/click/argparse (Python), commander/yargs (Node.js), cobra/urfave/cli (Go), clap (Rust).
+- No web framework import (Flask / Django / Express / FastAPI / Spring).
+- No persistent server process (`app.run`, `server.listen`, `uvicorn.run`).
+
+---
+
 ## Decision tree (template recommendation logic)
 
 Based on the Phase 1 reconnaissance, the agent follows this procedure to recommend a template:
@@ -160,6 +189,13 @@ Based on the Phase 1 reconnaissance, the agent follows this procedure to recomme
    YES → Is there application-startup code?
             NO  → Recommend Library / SDK spec
             YES → Continue
+
+1b. Does the project define a CLI entry point?
+    YES → Is there argument-parsing code (typer/click/argparse/commander/cobra/clap)?
+             YES → Is the primary interface terminal (no web server, no HTML rendering)?
+                      YES → Recommend CLI tool spec
+                      NO  → Continue (composite: CLI + web/API)
+             NO  → Continue
 
 2. Do routing definitions exist?
    YES → Is there HTML rendering (views/templates)?
@@ -171,7 +207,7 @@ Based on the Phase 1 reconnaissance, the agent follows this procedure to recomme
 
 4. None of the above / composite type
    → Present multiple candidates and ask the user.
-   → Example: "Includes both web app and API; recommend a merged custom outline."
+   → Example: "Includes both web app and CLI tool; recommend a merged custom outline."
 ```
 
 ---
