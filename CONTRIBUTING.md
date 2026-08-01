@@ -13,7 +13,7 @@
 
 ```bash
 # 0. テストに必要な依存をインストール（tree-sitter grammars は任意）
-pip install -r skills/specback/scripts/requirements.txt
+pip install -r skills/specback/scripts/dev-requirements.txt
 
 # 1. main からブランチを作成
 git checkout main
