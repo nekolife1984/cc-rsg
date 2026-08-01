@@ -27,14 +27,15 @@ Rules:
 
 ---
 
-## Initial set of 4
+## Initial set of 5
 
-The skill ships with the following 4 templates by default. The user may also bring their own template (by specifying a path).
+The skill ships with the following 5 templates by default. The user may also bring their own template (by specifying a path).
 
 1. **Web application spec** (`templates/web-app.md`)
 2. **Batch-system spec** (`templates/batch-system.md`)
 3. **API service spec** (`templates/api-service.md`)
 4. **Library / SDK spec** (`templates/library-sdk.md`)
+5. **Infrastructure spec** (`templates/infrastructure.md`)
 
 ---
 
@@ -151,15 +152,50 @@ The skill ships with the following 4 templates by default. The user may also bri
 
 ---
 
+## 5. Infrastructure spec
+
+### Target
+- Infrastructure-as-Code (IaC) projects managing cloud resources.
+- Terraform, CloudFormation, CDK, Pulumi, Kubernetes manifests, Docker Compose.
+- CI/CD pipelines for infrastructure deployment.
+- Includes projects with IaC manifests and minimal application code.
+
+### Chapter outline
+- Overview / system purpose (cloud provider, account structure, high-level architecture)
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+- Resource inventory (compute, storage, network, security resources)
+- Network topology (VPC, subnets, routing, DNS, CDN, NAT, VPN, Direct Connect)
+- Deployment pipeline (CI/CD, deployment strategy, GitOps)
+- Configuration and environment (dev/staging/prod, parameter store, secrets, env vars)
+- Monitoring and observability (metrics, log aggregation, alerts, dashboards, SLA/SLO)
+- Disaster recovery and backup (RTO/RPO, backup strategy, failover, DR test procedure)
+- Cost and sizing (resource sizing, cost estimation, reserved instances, tag strategy)
+- System design (technology choices, trade-offs)
+- Known constraints and unresolved items (service limits, technical debt, compliance)
+
+### Selection criteria
+- Presence of IaC manifests: Terraform (`*.tf`), CloudFormation (`AWSTemplateFormatVersion`), CDK (`cdk.json`), Pulumi (`Pulumi.yaml`), Kubernetes (`apiVersion:`/`kind:`), Docker Compose (`docker-compose.yml`).
+- IaC files constitute > 50 % of the project's total files.
+- Minimal or no application-entry code (no main/web/server entry points).
+
+---
+
 ## Decision tree (template recommendation logic)
 
 Based on the Phase 1 reconnaissance, the agent follows this procedure to recommend a template:
 
 ```
-1. Does the package manifest define main/module/bin?
+|1. Does the package manifest define main/module/bin?
    YES → Is there application-startup code?
             NO  → Recommend Library / SDK spec
             YES → Continue
+
+1b. Is the project focused on IaC / infrastructure?
+    YES → Are there Terraform / CloudFormation / CDK / Pulumi / K8s manifests?
+             YES → Is there NO application code (no main/web/server entry points)?
+                      YES → Recommend Infrastructure spec
+                      NO  → Recommend composite (infrastructure primary + app secondary)
+             NO  → Continue
 
 2. Do routing definitions exist?
    YES → Is there HTML rendering (views/templates)?
@@ -171,7 +207,7 @@ Based on the Phase 1 reconnaissance, the agent follows this procedure to recomme
 
 4. None of the above / composite type
    → Present multiple candidates and ask the user.
-   → Example: "Includes both web app and API; recommend a merged custom outline."
+   → Example: "Includes both web app and infrastructure code; recommend a merged custom outline."
 ```
 
 ---
@@ -259,7 +295,6 @@ After OSS release, the following templates may be added in response to user requ
 
 - Data warehouse / DWH spec
 - Machine-learning pipeline spec
-- Infrastructure spec (IaC, Terraform, Kubernetes)
 - Mobile app spec (iOS / Android / React Native / Flutter)
 - Blockchain / smart-contract spec
 - Game-design spec
