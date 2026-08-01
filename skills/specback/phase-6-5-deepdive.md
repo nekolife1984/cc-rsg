@@ -37,7 +37,7 @@ Once the deep-dive target is fixed:
 2. Sub-agent prompt:
    - Target entity / candidate ID and overview
    - List of related real source files
-   - "Write 1 chapter at **comprehensive-mode-equivalent quality**" (≥ 200 lines, ≥ 10 REFs, ≥ 1 Mermaid, ≥ 5 Sources Read)
+   - "Write 1 deep-dive chapter" (≥ 10 REFs, ≥ 1 Mermaid, ≥ 5 Sources Read; body length guided by `goal.tone`)
    - Output path: `.specback/drafts/deep/D-NNN-{slug}.md` or `M-NNN-{slug}.md`
 3. Display the key findings returned by the sub-agent in the main thread.
 4. **Update traceability.md** (append the deep-dive chapter).

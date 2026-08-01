@@ -25,11 +25,10 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
 | depth_mode | Main behaviour | Chapter body shape |
 |---|---|---|
-| `comprehensive` | Apply STEP A-F below to every chapter | Long form: ≥ 200 lines + ≥ 10 REFs + ≥ 1 Mermaid + ≥ 5 Sources Read |
+| `comprehensive` | Apply STEP A-F below to every chapter | Full prose per section. tone:concise → compact; tone:thorough → detailed |
 | **`outline` / `interactive`** | **STEP A-F are replaced for Layer 1 / 2 chapters** (see "outline-mode chapter writing" below) | Table-first + relationship diagrams + deep-dive candidate list |
 
 In `outline` / `interactive` mode the following `comprehensive`-only STEPs do NOT apply:
-- "200 lines or more" body length enforcement
 - "10 REFs or more" citation enforcement
 - "5 Sources Read or more" required count
 
@@ -107,11 +106,12 @@ Incorporate the citations into the body. **Per-chapter mandatory requirements**:
 
 | Item | Minimum | Verification script |
 |------|---------|-------------|
-| Body lines | ≥ 200 | coverage-check.py (code-block lines weighted at 50%) |
 | `[REF:]` count | ≥ 10 | coverage-check.py |
 | fenced code block | ≥ 3 | coverage-check.py |
 | Mermaid diagrams | ≥ 1 | coverage-check.py |
 | Sources Read items | ≥ 5 | coverage-check.py |
+
+Body length is guided by `goal.tone`: `concise` → compact prose (facts + citations); `thorough` → include background, rationale, alternatives. No fixed line-count minimum.
 
 Chapters that fail these are rejected in Phase 4 and loop back to Phase 3 for correction.
 
@@ -165,11 +165,11 @@ Corresponding real sources (Read these with the Read tool):
 Draft output path: .specback/drafts/05-data-model.md
 
 Quality bar:
-- Body ≥ 200 lines
 - [REF: path:start-end] ≥ 10
 - fenced code blocks ≥ 3
 - Mermaid diagrams ≥ 1 (ER diagram)
 - ≥ 5 files under ## Sources Read
+- Body guided by tone: concise → compact; thorough → detailed
 
 When done, return the chapter's key points + a list of detail questions raised.
 The detail questions are material for the main agent to append into questions.json.
@@ -278,14 +278,14 @@ Selection criteria (see the end of references/outline-tables.md):
 #### OUT-D: Drop the body-length constraints
 
 In outline mode:
-- **The "200 lines / 10 REFs / 5 Sources Read" requirements do NOT apply.**
+- **The "10 REFs / 5 Sources Read" requirements do NOT apply.**
 - Instead the MECE criterion is "**every entity appears in some row of some table**" (Phase 4's `coverage-check.py` decides this automatically).
 - The chapter body consists of: table + 1–2 paragraphs of explanation + Mermaid diagrams (where applicable) + the deep-dive candidates list.
 
 ---
 
 ### Phase-specific cautions
-- **In `comprehensive` mode**: writing a chapter without reading the code is forbidden. You may cite only files listed in Sources Read. ≥ 200 lines / ≥ 10 REFs / ≥ 5 Sources Read must be satisfied.
+- **In `comprehensive` mode**: writing a chapter without reading the code is forbidden. You may cite only files listed in Sources Read. Body length follows `tone`: concise → compact; thorough → detailed. ≥ 10 REFs / ≥ 5 Sources Read must be satisfied.
 - **In `outline` / `interactive` mode**: "exhaustive entity listing" takes precedence. Apply Confidence labels honestly per cell — do NOT over-apply 🟢 (only for files actually viewed).
 - **Cross-chapter consistency** is checked in Phase 4.
 - **Do not hide uncertainty markers**; keep them explicit in the draft. They are the starting point for Phase 5 dialogue.
