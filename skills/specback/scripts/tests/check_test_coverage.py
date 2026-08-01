@@ -77,8 +77,8 @@ def _test_name_candidates(symbol: str) -> list[str]:
     """
     candidates = [f"test_{symbol}"]
     # For compound names like load_source_map, also check test_source_map
-    parts = []
-    current = []
+    parts: list[str] = []
+    current: list[str] = []
     for i, ch in enumerate(symbol):
         if ch.isupper() and current:
             parts.append("".join(current))

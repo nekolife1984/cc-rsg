@@ -62,7 +62,7 @@ def _validate_value(value, schema: dict, path: str, defs: dict) -> list[str]:
 
     # Type check (skip None when nullable)
     if type_list and value is not None:
-        type_map = {
+        type_map: dict[str, type | tuple[type, ...]] = {
             "string": str, "integer": int, "number": (int, float),
             "boolean": bool, "array": list, "object": dict,
         }

@@ -8,6 +8,7 @@ import json
 import subprocess
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -341,7 +342,7 @@ def test_empty_trace_and_inventory(tmp_path: Path):
     write_json(tmp_path, SAMPLE_SOURCE_MAP, "source-map.json")
 
     empty_trace = {"schema_version": "0.2.0", "by_section": {}}
-    empty_inv = {"units": []}
+    empty_inv: dict[str, Any] = {"units": []}
     write_json(tmp_path, empty_trace, "trace.json")
     write_json(tmp_path, empty_inv, "inventory.json")
     out = tmp_path / "kg.jsonld"

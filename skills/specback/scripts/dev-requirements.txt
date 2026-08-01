@@ -1,0 +1,9 @@
+# specback optional dev dependencies
+# Install:  pip install -r dev-requirements.txt
+#
+# Adds type-checking tools on top of the base requirements.
+
+-r requirements.txt
+
+# Type checking
+mypy

@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import subprocess
+from typing import Any
 import sys
 from pathlib import Path
 
@@ -21,7 +22,7 @@ def _minimal_specback(tmp_path: Path, chapter_content: str, chapter_name: str = 
     final_dir = specback_dir / "final"
     final_dir.mkdir()
 
-    inventory = {"units": []}
+    inventory: dict[str, Any] = {"units": []}
     (specback_dir / "inventory.json").write_text(json.dumps(inventory), encoding="utf-8")
     trace = {
         "source_units_total": 0, "source_units_covered": 0,

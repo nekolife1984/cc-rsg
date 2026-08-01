@@ -255,8 +255,8 @@ def main(argv: list[str] | None = None) -> int:
         if uniq_sections:
             covered_count += 1
             for s in uniq_sections:
-                key = f"{s['file']}::{s['section']}"
-                by_section.setdefault(key, []).append(u["id"])
+                section_key = f"{s['file']}::{s['section']}"
+                by_section.setdefault(section_key, []).append(u["id"])
         elif excluded:
             excluded_count += 1
         else:

@@ -58,12 +58,11 @@ jobs:
         run: |
           python -m pytest skills/specback/scripts/source_map_v2/tests/ -v --tb=short
 
-      - name: Type check — mypy (advisory)
+      - name: Type check — mypy
         run: |
           python -m mypy skills/specback/scripts/ \
             --ignore-missing-imports \
-            --follow-imports=skip 2>&1 \
-            || echo "  ⚠️  mypy reported warnings (non-blocking)"
+            --follow-imports=skip 2>&1
 
       - name: Smoke import — source_map_v2 module
         run: |

@@ -23,7 +23,9 @@ if str(SCRIPTS) not in sys.path:
 import importlib.util
 _cs_path = str(SCRIPTS / "change-spec.py")
 _spec = importlib.util.spec_from_file_location("change_spec", _cs_path)
+assert _spec is not None, f"Could not load spec from {_cs_path}"
 _cs = importlib.util.module_from_spec(_spec)
+assert _spec.loader is not None, f"Loader not found for {_cs_path}"
 _spec.loader.exec_module(_cs)
 
 # Re-export
