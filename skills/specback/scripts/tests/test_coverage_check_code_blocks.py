@@ -34,9 +34,9 @@ def _minimal_specback(tmp_path: Path, chapter_content: str, chapter_name: str = 
     )
 
     (final_dir / chapter_name).write_text(chapter_content, encoding="utf-8")
-    (final_dir / "00-metadata.md").write_text("# Metadata\n", encoding="utf-8")
-    (final_dir / "99-unresolved.md").write_text("# Unresolved\n", encoding="utf-8")
-    (final_dir / "traceability.md").write_text("# Traceability\n", encoding="utf-8")
+    (final_dir / "00-metadata.md").write_text("# Metadata\n\n- Created: 2026-01-01\n- Template: default\n- Author: specback\n- Status: complete\n", encoding="utf-8")
+    (final_dir / "99-unresolved.md").write_text("# Unresolved\n\n- No unresolved items.\n- All questions answered.\n- Feature gaps documented.\n- Known limitations listed.\n- Review scheduled.\n- Owner assigned.\n", encoding="utf-8")
+    (final_dir / "traceability.md").write_text("# Traceability\n\n- All items traced.\n- Cross-references complete.\n- No orphan items.\n- Source-map up to date.\n- Coverage verified.\n- Drift detection passed.\n", encoding="utf-8")
     return specback_dir
 
 

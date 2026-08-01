@@ -81,6 +81,24 @@ CODE_FENCE_RE = re.compile(r"^```([a-zA-Z0-9_-]+)?")
 MERMAID_FENCE_RE = re.compile(r"^```mermaid\b")
 SOURCES_READ_RE = re.compile(r"^##+\s*Sources\s*Read\b", re.IGNORECASE)
 SOURCES_READ_ITEM_RE = re.compile(r"^\s*[-*]\s+`?([^`\n]+?)`?(?:\s*\([^)]*\))?\s*$")
+MERMAID_FENCE_END_RE = re.compile(r"^```\s*$")
+
+# Mermaid styling directive patterns (Issue #158 — forbid-mermaid-styling)
+MERMAID_STYLE_RE = re.compile(
+    r"(?:"
+    r"style\s+\w+\s+fill:\s*#[0-9a-fA-F]+"
+    r"|classDef\s+\w+\s+fill:\s*#[0-9a-fA-F]+"
+    r"|stroke:\s*#[0-9a-fA-F]+"
+    r"|color:\s*#[0-9a-fA-F]+"
+    r")"
+)
+
+# Default placeholder patterns (Issue #158 — forbid-placeholder-pattern)
+DEFAULT_PLACEHOLDER_PATTERNS = [
+    r"Phase [0-9]+ で記入予定",
+    r"TODO",
+    r"FIXME",
+]
 
 # Keywords that make an INV count as "macro" (matched against the `type` field)
 MACRO_TYPE_KEYWORDS = ("group", "module", "domain", "category", "bundle", "section")
@@ -151,6 +169,12 @@ class CoverageReport:
     # user-custom deliverables (intent-vs-delivery audit, check 12)
     user_custom_expected: list[str] = field(default_factory=list)
     user_custom_failures: list[str] = field(default_factory=list)
+    # reserved-file body check (check 14, Issue #158)
+    reserved_file_body_failures: list[str] = field(default_factory=list)
+    # Mermaid styling check (check 15, Issue #158)
+    mermaid_style_violations: list[tuple[str, int, str]] = field(default_factory=list)
+    # Placeholder pattern check (check 16, Issue #158)
+    placeholder_violations: list[tuple[str, int, str, str]] = field(default_factory=list)
 
 
 # ----------------------------------------------------------------------------
@@ -515,6 +539,114 @@ def check_user_custom_deliverables(
     return failures
 
 
+def check_reserved_files_body(
+    target_dir: Path,
+    min_body_lines: int = 5,
+    code_block_line_weight: float = 0.5,
+) -> list[str]:
+    """Verify reserved files (00-metadata.md, 99-unresolved.md, traceability.md)
+    have at least ``min_body_lines`` effective body lines.
+
+    Catches the case where Phase 6 finishes but these files are still empty
+    (Issue #158 — require-min-body-lines-for-reserved).
+    """
+    failures: list[str] = []
+    if not target_dir.exists():
+        return [f"target directory {target_dir} does not exist (cannot verify reserved files)"]
+
+    for name in REQUIRED_FILES:
+        p = target_dir / name
+        if not p.exists():
+            failures.append(f"reserved file {name} is missing from {target_dir}")
+            continue
+        try:
+            content = p.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            content = p.read_text(encoding="utf-8", errors="replace")
+
+        in_code = False
+        body_lines = 0
+        code_block_lines = 0
+        for line in content.splitlines():
+            if CODE_FENCE_RE.match(line):
+                in_code = not in_code
+                continue
+            if in_code:
+                stripped = line.strip()
+                if stripped:
+                    code_block_lines += 1
+                continue
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if stripped.startswith("<!--") or stripped.startswith("-->"):
+                continue
+            body_lines += 1
+        effective_lines = body_lines + int(code_block_lines * code_block_line_weight)
+        if effective_lines < min_body_lines:
+            failures.append(
+                f"reserved file {name} has only {body_lines} effective body lines "
+                f"(code-block-adjusted: {effective_lines}) "
+                f"(need >= {min_body_lines})"
+            )
+    return failures
+
+
+def check_mermaid_styling(
+    chapters: dict[str, str],
+) -> list[tuple[str, int, str]]:
+    """Scan every mermaid code block across all chapters for styling directives
+    (style fill, classDef fill, stroke, color). Returns (filename, line_number, matched_line)
+    for each violation.
+
+    SKILL.md design principle prohibits ``style A fill:#...`` / ``classDef foo fill:#...`` /
+    ``stroke:#...`` / ``color:#...`` inside mermaid blocks (Issue #158 — forbid-mermaid-styling).
+    """
+    violations: list[tuple[str, int, str]] = []
+    for name, content in chapters.items():
+        lines = content.splitlines()
+        in_mermaid = False
+        for lineno, line in enumerate(lines, start=1):
+            if MERMAID_FENCE_RE.match(line):
+                in_mermaid = True
+                continue
+            if in_mermaid and MERMAID_FENCE_END_RE.match(line):
+                in_mermaid = False
+                continue
+            if in_mermaid:
+                if MERMAID_STYLE_RE.search(line):
+                    violations.append((name, lineno, line.strip()))
+    return violations
+
+
+def check_placeholder_patterns(
+    chapters: dict[str, str],
+    extra_patterns: list[str] | None = None,
+) -> list[tuple[str, int, str, str]]:
+    """Scan every chapter for placeholder text that should not survive in the
+    final deliverable.
+
+    Returns (filename, line_number, matched_text, pattern) for each match.
+    Built-in patterns: 'Phase [0-9]+ で記入予定', 'TODO', 'FIXME'.
+    Extra patterns can be added via ``extra_patterns`` (Issue #158 — forbid-placeholder-pattern).
+    """
+    patterns = list(DEFAULT_PLACEHOLDER_PATTERNS)
+    if extra_patterns:
+        patterns.extend(extra_patterns)
+
+    compiled = [re.compile(p) for p in patterns]
+    hits: list[tuple[str, int, str, str]] = []
+    for name, content in chapters.items():
+        lines = content.splitlines()
+        for lineno, line in enumerate(lines, start=1):
+            for cp, pat in zip(compiled, patterns):
+                match = cp.search(line)
+                if match:
+                    hits.append((name, lineno, match.group(), pat))
+                    break  # one violation per line is enough
+    return hits
+
+
 def check_required_files(target_dir: Path) -> list[str]:
     missing: list[str] = []
     if not target_dir.exists():
@@ -622,6 +754,10 @@ def build_report(
     min_sources_read_per_chapter: int,
     min_mece_coverage: float,
     code_block_line_weight: float = 0.5,
+    require_min_body_lines_for_reserved: int = 5,
+    forbid_mermaid_styling: bool = True,
+    forbid_placeholder_patterns: bool = True,
+    extra_placeholder_patterns: list[str] | None = None,
 ) -> CoverageReport:
     # Resolve the target directory:
     # 1. Try output_dir / target_dir_name (e.g. .specback/final or specs/final)
@@ -772,6 +908,36 @@ def build_report(
     for f in user_custom_failures:
         gate_failures.append(f"user_custom: {f}")
 
+    # Reserved-file body check (check 14, Issue #158)
+    reserved_file_body_failures = check_reserved_files_body(
+        target_dir,
+        min_body_lines=require_min_body_lines_for_reserved,
+        code_block_line_weight=code_block_line_weight,
+    )
+    for f in reserved_file_body_failures:
+        gate_failures.append(f"reserved_file: {f}")
+
+    # Mermaid styling check (check 15, Issue #158)
+    mermaid_style_violations: list[tuple[str, int, str]] = []
+    if forbid_mermaid_styling:
+        mermaid_style_violations = check_mermaid_styling(chapters)
+        for name, lineno, line in mermaid_style_violations:
+            gate_failures.append(
+                f"mermaid_style: {name}:{lineno} — {line} "
+                f"(style/classDef/stroke/color directives prohibited)"
+            )
+
+    # Placeholder pattern check (check 16, Issue #158)
+    placeholder_violations: list[tuple[str, int, str, str]] = []
+    if forbid_placeholder_patterns:
+        placeholder_violations = check_placeholder_patterns(
+            chapters, extra_patterns=extra_placeholder_patterns,
+        )
+        for name, lineno, matched, pattern in placeholder_violations:
+            gate_failures.append(
+                f"placeholder: {name}:{lineno} — matched {matched!r} (pattern: {pattern})"
+            )
+
     # Source-map ↔ inventory cross-reference consistency (check 13).
     # Every `related_source_ids[*]` in inventory must match an `id` in source-map.json.
     source_map_ids = load_source_map_ids(specback_dir)
@@ -843,6 +1009,9 @@ def build_report(
         confidence_assumed=assumed,
         user_custom_expected=user_custom,
         user_custom_failures=user_custom_failures,
+        reserved_file_body_failures=reserved_file_body_failures,
+        mermaid_style_violations=mermaid_style_violations,
+        placeholder_violations=placeholder_violations,
     )
 
 
@@ -913,6 +1082,24 @@ def render_text(report: CoverageReport) -> str:
         for name in report.user_custom_expected:
             flag = "✅" if not any(name in f for f in report.user_custom_failures) else "❌"
             lines.append(f"  {flag} {name}")
+    # Reserved file body check (Issue #158)
+    if report.reserved_file_body_failures:
+        lines.append("")
+        lines.append("[Reserved file body check]")
+        for f in report.reserved_file_body_failures:
+            lines.append(f"  ❌ {f}")
+    # Mermaid styling check (Issue #158)
+    if report.mermaid_style_violations:
+        lines.append("")
+        lines.append(f"[Mermaid styling check] {len(report.mermaid_style_violations)} violation(s)")
+        for name, lineno, line in report.mermaid_style_violations:
+            lines.append(f"  ❌ {name}:{lineno} — {line}")
+    # Placeholder pattern check (Issue #158)
+    if report.placeholder_violations:
+        lines.append("")
+        lines.append(f"[Placeholder pattern check] {len(report.placeholder_violations)} violation(s)")
+        for name, lineno, matched, pattern in report.placeholder_violations:
+            lines.append(f"  ❌ {name}:{lineno} — matched {matched!r} (pattern: {pattern})")
     lines.append("")
     lines.append("[Gate decision]")
     if not report.gate_failures and not report.missing_required:
@@ -965,6 +1152,15 @@ def render_json(report: CoverageReport) -> str:
         "mece_coverage_rate": report.mece_coverage_rate,
         "user_custom_expected": report.user_custom_expected,
         "user_custom_failures": report.user_custom_failures,
+        "reserved_file_body_failures": report.reserved_file_body_failures,
+        "mermaid_style_violations": [
+            {"file": f, "line": l, "line_text": t}
+            for f, l, t in report.mermaid_style_violations
+        ],
+        "placeholder_violations": [
+            {"file": f, "line": l, "matched": m, "pattern": p}
+            for f, l, m, p in report.placeholder_violations
+        ],
         "gate_failures": report.gate_failures,
     }, ensure_ascii=False, indent=2)
 
@@ -1013,6 +1209,18 @@ def main() -> int:
     p.add_argument("--fail-on-uncovered", action="store_true")
     p.add_argument("--strict", action="store_true")
 
+    # Issue #158 — new quality checks
+    p.add_argument("--require-min-body-lines-for-reserved", type=int, default=5,
+                   help="Minimum body lines for reserved files (00-metadata.md, "
+                        "99-unresolved.md, traceability.md). Default: 5.")
+    p.add_argument("--no-mermaid-style-check", action="store_true", default=False,
+                   help="Disable the Mermaid styling directive check (enabled by default). "
+                        "The check fails on style/classDef/stroke/color directives in mermaid blocks.")
+    p.add_argument("--forbid-placeholder-pattern", action="append", default=None,
+                   help="Extra placeholder patterns to detect (repeatable). "
+                        "Built-in defaults: 'Phase [0-9]+ で記入予定', 'TODO', 'FIXME'. "
+                        "This flag adds extra patterns; it does not replace built-ins.")
+
     args = p.parse_args()
     args.output_dir = args.output_dir or args.specback_dir
 
@@ -1037,6 +1245,10 @@ def main() -> int:
             min_sources_read_per_chapter=args.min_sources_read_per_chapter,
             min_mece_coverage=min_mece_coverage,
             code_block_line_weight=args.code_block_line_weight,
+            forbid_mermaid_styling=not args.no_mermaid_style_check,
+            forbid_placeholder_patterns=True,
+            extra_placeholder_patterns=args.forbid_placeholder_pattern,
+            require_min_body_lines_for_reserved=args.require_min_body_lines_for_reserved,
         )
     except FileNotFoundError as e:
         print(f"ERROR: {e}", file=sys.stderr)

@@ -95,9 +95,9 @@ def test_target_dir_fallback_standalone_path(tmp_path):
     # Place a chapter file and required files under the standalone path
     chapter = final_dir / "01-overview.md"
     chapter.write_text("# Overview\n\nContent here.\n", encoding="utf-8")
-    (final_dir / "00-metadata.md").write_text("# Metadata\n", encoding="utf-8")
-    (final_dir / "99-unresolved.md").write_text("# Unresolved\n", encoding="utf-8")
-    (final_dir / "traceability.md").write_text("# Traceability\n", encoding="utf-8")
+    (final_dir / "00-metadata.md").write_text("# Metadata\n\n- Created: 2026-01-01\n- Template: default\n- Author: specback\n- Status: complete\n", encoding="utf-8")
+    (final_dir / "99-unresolved.md").write_text("# Unresolved\n\n- No unresolved items.\n- All questions answered.\n- Feature gaps documented.\n- Known limitations listed.\n- Review scheduled.\n- Owner assigned.\n", encoding="utf-8")
+    (final_dir / "traceability.md").write_text("# Traceability\n\n- All items traced.\n- Cross-references complete.\n- No orphan items.\n- Source-map up to date.\n- Coverage verified.\n- Drift detection passed.\n", encoding="utf-8")
 
     # Now run with --output-dir pointing to a different (empty) directory
     # and --target-dir-for-required pointing to the actual location
@@ -151,9 +151,9 @@ def test_target_dir_fallback_skipped_when_normal_path_exists(tmp_path):
     # Place chapter and required files under the normal resolved path
     chapter = drafts_dir / "01-overview.md"
     chapter.write_text("# Overview\n\nContent here.\n", encoding="utf-8")
-    (drafts_dir / "00-metadata.md").write_text("# Metadata\n", encoding="utf-8")
-    (drafts_dir / "99-unresolved.md").write_text("# Unresolved\n", encoding="utf-8")
-    (drafts_dir / "traceability.md").write_text("# Traceability\n", encoding="utf-8")
+    (drafts_dir / "00-metadata.md").write_text("# Metadata\n\n- Created: 2026-01-01\n- Template: default\n- Author: specback\n- Status: complete\n", encoding="utf-8")
+    (drafts_dir / "99-unresolved.md").write_text("# Unresolved\n\n- No unresolved items.\n- All questions answered.\n- Feature gaps documented.\n- Known limitations listed.\n- Review scheduled.\n- Owner assigned.\n", encoding="utf-8")
+    (drafts_dir / "traceability.md").write_text("# Traceability\n\n- All items traced.\n- Cross-references complete.\n- No orphan items.\n- Source-map up to date.\n- Coverage verified.\n- Drift detection passed.\n", encoding="utf-8")
 
     result = subprocess.run(
         [sys.executable, str(SCRIPT),
