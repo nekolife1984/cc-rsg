@@ -16,6 +16,21 @@ from source_map_v2.extractors import tshelpers
 from source_map_v2.model import IdFactory, SourceMap, SourceUnit
 
 
+def _ts_available(language: str) -> bool:
+    """Check whether a tree-sitter grammar is installed for *language*."""
+    return tshelpers.have(language)
+
+
+ts_not_available = pytest.mark.skipif(
+    not _ts_available("kotlin"),
+    reason="tree-sitter-kotlin grammar not installed (pip install -r requirements.txt)",
+)
+ts_py_not_available = pytest.mark.skipif(
+    not _ts_available("python"),
+    reason="tree-sitter-python grammar not installed (pip install -r requirements.txt)",
+)
+
+
 # --------------------------------------------------------------------------
 # Constitution (taxonomy)
 # --------------------------------------------------------------------------
@@ -116,11 +131,14 @@ def test_layer1_framework_detection_with_evidence(tmp_path):
     assert all(h["evidence"] for h in payload["detected_frameworks"])
 
 
+@ts_not_available
 def test_unsupported_language_falls_back_with_loud_warning(tmp_path):
     """A recognised language with no extractor must warn, not vanish (P4).
 
     All extensions in ``LANG_BY_EXT`` now have extractors, so we use a
     file that has no entry at all — it should be excluded (no warning).
+
+    Requires tree-sitter-kotlin grammar (skip when unavailable).
     """
     root = _make_project(tmp_path)
     payload = build_source_map(root).to_dict()
@@ -131,8 +149,12 @@ def test_unsupported_language_falls_back_with_loud_warning(tmp_path):
     assert payload["stats"]["files_excluded"] >= 1            # README.txt excluded
 
 
+@ts_py_not_available
 def test_supported_languages_are_not_warned(tmp_path):
-    """python/typescript are autoloaded; they must be extracted, not warned."""
+    """python/typescript are autoloaded; they must be extracted, not warned.
+
+    Requires tree-sitter-python grammar (skip when unavailable).
+    """
     root = _make_project(tmp_path)
     payload = build_source_map(root).to_dict()
     assert not any("'python'" in w for w in payload["warnings"])
@@ -209,9 +231,14 @@ def test_extractor_import_failure_warns_not_grammar(tmp_path, monkeypatch):
     """
     root = _make_project(tmp_path)
     # python grammar IS available; simulate the extractor failing to register.
+    original_install_state = tshelpers.install_state  # save before monkeypatch
+    monkeypatch.setattr(
+        tshelpers, "install_state",
+        lambda lang: tshelpers.STATE_OK if lang == "python" else original_install_state(lang),  # noqa: E731
+    )
     monkeypatch.setattr(
         extractors, "get_extractor",
-        lambda lang: None if lang == "python" else extractors._REGISTRY.get(lang),
+        lambda lang: None if lang == "python" else extractors._REGISTRY.get(lang),  # noqa: E731
     )
     payload = build_source_map(root).to_dict()
     py_warns = [w for w in payload["warnings"] if "'python'" in w]
