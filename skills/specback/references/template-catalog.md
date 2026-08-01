@@ -27,9 +27,9 @@ Rules:
 
 ---
 
-## Initial set of 6
+## Initial set of 7
 
-The skill ships with the following 6 templates by default. The user may also bring their own template (by specifying a path).
+The skill ships with the following 7 templates by default. The user may also bring their own template (by specifying a path).
 
 1. **Web application spec** (`templates/web-app.md`)
 2. **Batch-system spec** (`templates/batch-system.md`)
@@ -37,6 +37,7 @@ The skill ships with the following 6 templates by default. The user may also bri
 4. **Library / SDK spec** (`templates/library-sdk.md`)
 5. **CLI tool spec** (`templates/cli-tool.md`)
 6. **Mobile app spec** (`templates/mobile-app.md`)
+7. **Desktop app spec** (`templates/desktop-app.md`)
 
 ---
 
@@ -212,6 +213,37 @@ The skill ships with the following 6 templates by default. The user may also bri
 
 ---
 
+## 7. Desktop app spec
+
+### Target
+- Desktop applications with windowed UI, running on Windows / macOS / Linux.
+- Electron, Tauri, Qt (C++/Python), WinForms, WPF, macOS SwiftUI.
+- Windows, menus, system tray, keyboard shortcuts, and native OS integration.
+
+### Chapter outline
+- Overview / app purpose and target platforms
+- Feature specifications ← added (see references/outline-tables.md Feature grouping patterns)
+- Module architecture (process model, layer composition)
+- Window management and menus (window catalogue, menu bar, context menus, dock/tray)
+- UI component catalogue (custom controls, theming system, dialog catalogue)
+- Platform integration (filesystem, native dialogs, clipboard, drag & drop, OS services)
+- State management and persistence (settings, session state, storage backends)
+- Auto-update and installer (installer format, code signing, update flow)
+- Networking (API communication, local server, LAN discovery, offline behaviour)
+- Keyboard shortcuts and accessibility (global shortcuts, screen reader, focus management)
+- Build and deployment (packaging, distribution channels, versioning)
+- Design decisions
+- Known constraints and unresolved items
+
+### Selection criteria
+- Electron: `package.json` with `electron` dependency, `electron-builder`/`electron-forge` config.
+- Tauri: `tauri.conf.json`, `Cargo.toml` with `tauri` dependency, `src-tauri/` directory.
+- Qt (C++): `.pro` file or `CMakeLists.txt` with `find_package(Qt*)`, `QApplication`.
+- Qt (Python): `PyQt`/`PySide` import, `.ui` files.
+- WinForms / WPF: `.csproj` with `UseWindowsForms`/`UseWPF`, `Form`/`Window` inheritance.
+- macOS SwiftUI: `@main struct App: App`, `WindowGroup`, `Info.plist`.
+- No web server as the primary interface (desktop is the main artifact).
+
 ## Decision tree (template recommendation logic)
 
 Based on the Phase 1 reconnaissance, the agent follows this procedure to recommend a template:
@@ -234,6 +266,13 @@ Based on the Phase 1 reconnaissance, the agent follows this procedure to recomme
              YES → Is the primary artifact a mobile app (no web server)?
                       YES → Recommend Mobile app spec
                       NO  → Recommend composite (mobile + API)
+             NO  → Continue
+
+1d. Does the project target desktop platforms?
+    YES → Are there Electron / Tauri / Qt / WinForms / WPF / SwiftUI project files?
+             YES → Is the primary artifact a desktop app (windowed UI, no web server)?
+                      YES → Recommend Desktop app spec
+                      NO  → Continue
              NO  → Continue
 
 2. Do routing definitions exist?
