@@ -98,3 +98,30 @@ if [ -f /tmp/.specback-hook-violation.tmp ]; then
 fi
 
 echo "  ✅ All checks passed."
+
+# ── Phase 3: EN/JA doc sync check ────────────────────────────
+echo "🔍 Checking EN/JA doc sync..."
+staged_en_docs=$( \
+    git diff --cached --name-only --diff-filter=AM -- "docs/en/*.md" \
+    || true \
+)
+if [ -n "$staged_en_docs" ]; then
+    echo "$staged_en_docs" | while IFS= read -r en_path; do
+        ja_path=$(echo "$en_path" | sed 's|^docs/en/|docs/ja/|')
+        if [ ! -f "$ja_path" ]; then
+            echo "  ⚠️  EN doc staged but JA counterpart missing:"
+            echo "     EN: $en_path"
+            echo "     JA: (not found — expected $ja_path)"
+            echo "     Tip: create or restore the JA version, or add it to staging"
+        elif ! git diff --cached --name-only | grep -q "^${ja_path}$"; then
+            echo "  ⚠️  EN doc staged but JA counterpart NOT staged:"
+            echo "     EN: $en_path"
+            echo "     JA: $ja_path"
+            echo "     Tip: git add $ja_path"
+        else
+            echo "  ✅ EN/JA synced: $en_path"
+        fi
+    done
+else
+    echo "  ✅ No EN doc changes detected."
+fi
