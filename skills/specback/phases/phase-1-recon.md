@@ -29,6 +29,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    - Infrastructure spec (`templates/infrastructure.md`)
    - Mobile app spec (`templates/mobile-app.md`)
    - Desktop app spec (`templates/desktop-app.md`)
+   - Event-driven / Streaming spec (`templates/event-driven.md`)
    - Use whichever the agent recommends from reconnaissance
 
 3. **Adjust the chosen template**
