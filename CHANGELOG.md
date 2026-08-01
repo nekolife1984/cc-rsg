@@ -9,6 +9,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- (nothing yet)
+
+## [v1.1.0] - 2026-08-01
+
+### Added
+
+- `depth_mode` 自動選択の閾値をファイル数→コード行数ベースに変更。小規模コードベースは自動で outline モードに ([#146])
+- `goal.json` に `tone` フィールドを追加（`concise` / `thorough`）。Phase 1 で depth_mode と同時に選択、Phase 3 以降の品質基準を tone で制御 ([#146])
+- `pyproject.toml` を追加。パッケージメタデータと mypy 設定を一元管理 ([#137])
+- mypy を CI ブロッキングチェックに昇格。全9件の型警告を修正し、`dev-requirements.txt` でローカルでも利用可能に ([#138])
+- pre-commit hook に EN/JA ドキュメント同期チェックを追加（WARNING表示、ブロックはしない）([#140])
+- `coverage-check.py` の `--min-lines-per-chapter` デフォルトを 0 に変更（tone-guided）。固定の200行品質基準を撤廃 ([#146])
+
+### Changed
+
+- フェーズファイル（`phase-*.md`）を `phases/` サブディレクトリに移動。補助ドキュメント（`question-bank.md` 他）を `docs/` に移動 ([#148])
+- depth_mode 選択の閾値を「ファイル数 ≤ 200 → comprehensive」から「コード行数 ≤ 500 → outline」に変更 ([#146])
+- 「1章200行以上」の固定品質基準を撤廃。代わりに tone ベースのガイダンスに置き換え ([#146])
+
+### Fixed
+
+- 3つのテストが tree-sitter grammar 未インストールのローカル環境で FAIL する問題を修正。grammar 不足時はスキップ、monkeypatch も修正 ([#135])
+- `.opencode/skills/specback/` の重複を削除（88ファイル削除）。`skills/` を単一ソースに統一 ([#136])
+- 生成ドキュメントに specback 内部ファイルパスが漏れる問題を修正 ([#134])
+- フォルダ整理後の未更新参照パスを修正（SKILL.md、state-management.md 内の12箇所）([#149])
+- `merge-pr.sh` の CI ステータス取得処理を修正（pending/fail を取得失敗と誤判定）([#124])
+- tree-sitter core バージョンを 0.25.1 に固定し、`--install-deps` のドキュメントを明確化 ([#125])
+- 警告文の正確性を改善（import バグと grammar 欠落の区別）([#120])
+- `coverage-check.py` のコードブロック行を body-lines ゲートにカウントするよう修正 ([#118])
+- `coverage-check.py` の `--output-dir` と `--target-dir-for-required` の fallback 解決を追加 ([#117])
+
+### Docs
+
+- `CONTRIBUTING.md` にテスト依存のインストール手順と `pytest -rs` によるスキップ理由確認方法を追記 ([#139])
+- テンプレートの章順設計原則（読者の理解順）を明文化 ([#129])
+- Phase 2 WBS のハードコードされた章数記述をテンプレート非依存の動的記述に修正 ([#126])
+- 自己文書化 `specs/` をテンプレートの章構成更新に追従させ再生成 ([#127])
+
+## [v1.0.0] - 2026-07-30
+
+### Added
+
 - Kotlin extractor for source_map_v2 ([#37])
 - C, C++, Dart, Swift extractors for source_map_v2 ([#42])
 - Rust extractor for source_map_v2 ([#52])
@@ -27,6 +69,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - GitHub Flow branching strategy docs (EN + JA)
 - Japanese-localized PR/Issue templates ([#2])
 - Python dependency management via requirements.txt with `--install-deps` installer option ([#55])
+- モノレポ構成でシステム単位にスコープを分割して仕様書生成に対応 ([#106])
+- システム設計書（システム設計・横断的設計・モジュール依存関係）の生成に対応 ([#103])
+- 機能仕様書（機能一覧と各機能の処理定義）の生成に対応 ([#90])
+- 複雑な処理を積極的にMermaid図で図示する Active-diagram ルールを追加 ([#95])
+- JSON Schema を同梱し validate-schema.py による機械検証を実装 ([#82])
+- coverage-check.py が goal.json の template フィールドを参照してデフォルト閾値を自動調整 ([#83])
 
 ### Changed
 
@@ -38,17 +86,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Removed Claude Code-specific wording from docs and skill
 - Removed Versioning/changelog and License sections from SKILL.md (moved to separate files)
 - Updated PR template references (CHANGELOG.md / daishir0) ([#51])
+- Library/SDK テンプレートに Module architecture (overview) 章を追加 ([#128])
 
 ### Fixed
 
 - Kotlin extractor annotation + Ktor path bugs ([#38])
 - Redundant separator (`---`) at end of README ([#11])
+- 内部ファイルパスが生成ドキュメントに漏れる問題 ([#134])
+- merge-pr.sh CI pending/fail 誤判定 ([#124])
+- tree-sitter core/grammar バージョン不整合 ([#125])
+- coverage-check.py コードブロック行カウント ([#118])
 
 ### Docs
 
 - New language/framework addition guide in CONTRIBUTING.md ([#34])
 - Commit conventions, PR review, and release process docs added to docs/ ([#33])
 - README: Branching strategy link and directory structure update
+- テンプレートの章順設計原則を明文化 ([#129])
+- Phase 2 WBS の章数ハードコードを修正 ([#126])
 
 ## [v0.7.0] - 2026-06-30
 
