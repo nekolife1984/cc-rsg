@@ -19,6 +19,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_SRC="$SCRIPT_DIR/skills/specback"
+SEARCH_SKILL_SRC="$SCRIPT_DIR/skills/specback-search"
 
 if [[ ! -d "$SKILL_SRC" ]]; then
   echo "Error: skills/specback/ not found alongside this script."
@@ -155,6 +156,14 @@ install_skill() {
   mkdir -p "$dest"
   cp -r "$SKILL_SRC"/* "$dest/"
   echo "  ✅ $dest/ ($label)"
+
+  # Install companion: specback-search
+  local search_dest="${dest%specback}specback-search"
+  if [[ -d "$SEARCH_SKILL_SRC" ]]; then
+    mkdir -p "$search_dest"
+    cp -r "$SEARCH_SKILL_SRC"/* "$search_dest/"
+    echo "  ✅ $search_dest/ ($label, specback-search)"
+  fi
 }
 
 # ── Optional dependency installer ──────────────────────────────────────
@@ -243,7 +252,7 @@ if [[ -n "$RESOLVED_AGENT" ]]; then
     echo "Dry-run complete. No changes were made."
   else
     $INSTALL_DEPS && install_deps
-    echo "Done. specback is now installed."
+    echo "Done. specback and specback-search are now installed."
   fi
   echo ""
   exit 0
