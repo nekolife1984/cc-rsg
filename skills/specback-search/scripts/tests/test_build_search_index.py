@@ -223,7 +223,7 @@ def test_search_no_match(specback_dir: Path):
         capture_output=True, text=True,
     )
     assert result.returncode == 0
-    assert "見つかりませんでした" in result.stdout
+    assert "no results found" in result.stdout
 
 
 # ---------------------------------------------------------------------------
@@ -312,7 +312,7 @@ def test_drift(specback_dir: Path):
         capture_output=True, text=True,
     )
     assert result.returncode == 0
-    assert "変更ファイル数" in result.stdout
+    assert "Changed files" in result.stdout
     assert "3" in result.stdout
 
 
@@ -330,7 +330,7 @@ def test_drift_missing(tmp_path: Path):
         capture_output=True, text=True,
     )
     assert result.returncode == 0
-    assert "detect-drift.py を実行" in result.stdout
+    assert "run detect-drift.py first" in result.stdout
 
 
 # ---------------------------------------------------------------------------
@@ -411,7 +411,7 @@ def test_missing_questions(tmp_path: Path):
         capture_output=True, text=True,
     )
     assert result.returncode == 0
-    assert "なし" in result.stdout
+    assert "none" in result.stdout
 
 
 # ---------------------------------------------------------------------------
@@ -426,4 +426,4 @@ def test_no_filters(specback_dir: Path):
         capture_output=True, text=True,
     )
     assert result.returncode == 0
-    assert "ヒント" in result.stdout
+    assert "Hint" in result.stdout

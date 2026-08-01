@@ -255,10 +255,10 @@ def format_text_results(results: list[SourceUnitResult], title: str) -> str:
     lines: list[str] = []
     if not results:
         lines.append(f"🔍 {title}")
-        lines.append("  （見つかりませんでした）")
+        lines.append("  (no results found)")
         return "\n".join(lines)
 
-    lines.append(f"🔍 {title} — {len(results)}件")
+    lines.append(f"🔍 {title} — {len(results)} result(s)")
     lines.append("")
 
     for r in results:
@@ -281,14 +281,14 @@ def format_text_results(results: list[SourceUnitResult], title: str) -> str:
 
 def format_questions_text(questions: list[dict[str, Any]], mode: str) -> str:
     """Format questions as human-readable text."""
-    label = "❓ 未解決質問" if mode == "open" else "❓ 全質問"
+    label = "❓ Open questions" if mode == "open" else "❓ All questions"
     lines: list[str] = []
     if not questions:
         lines.append(f"{label}")
-        lines.append("  （なし）")
+        lines.append("  (none)")
         return "\n".join(lines)
 
-    lines.append(f"{label} — {len(questions)}件")
+    lines.append(f"{label} — {len(questions)}")
     lines.append("")
     for q in questions:
         qid = q.get("id", "?")
@@ -306,16 +306,16 @@ def format_questions_text(questions: list[dict[str, Any]], mode: str) -> str:
 
 def format_drift_text(drift: dict[str, Any]) -> str:
     """Format drift report as human-readable text."""
-    lines: list[str] = ["🔄 ドリフトレポート"]
+    lines: list[str] = ["🔄 Drift Report"]
     summary = drift.get("summary", {})
     if not summary:
-        lines.append("  （データ不足）")
+        lines.append("  (insufficient data)")
         return "\n".join(lines)
-    lines.append(f"  変更ファイル数: {summary.get('changed_files', 0)}")
-    lines.append(f"  影響を受けるspec章セクション: {summary.get('affected_spec_sections', 0)}")
-    lines.append(f"  新たな未カバーsource: {summary.get('new_uncovered_sources', 0)}")
-    lines.append(f"  削除された参照: {summary.get('deleted_sources_with_refs', 0)}")
-    lines.append(f"  影響なし変更: {summary.get('no_impact_changes', 0)}")
+    lines.append(f"  Changed files: {summary.get('changed_files', 0)}")
+    lines.append(f"  Affected spec sections: {summary.get('affected_spec_sections', 0)}")
+    lines.append(f"  New uncovered sources: {summary.get('new_uncovered_sources', 0)}")
+    lines.append(f"  Deleted references: {summary.get('deleted_sources_with_refs', 0)}")
+    lines.append(f"  Unaffected changes: {summary.get('no_impact_changes', 0)}")
     return "\n".join(lines)
 
 
@@ -446,7 +446,7 @@ def main(argv: list[str] | None = None) -> int:
             ids = {r.src_id for r in results}
             uncovered = [u for u in uncovered if u.src_id in ids]
         results = uncovered
-        result_title = "未カバー"
+        result_title = "Uncovered"
 
     # 3. Chapter filter
     if args.chapter:
@@ -466,7 +466,7 @@ def main(argv: list[str] | None = None) -> int:
             role_results = [r for r in role_results if r.src_id in ids]
         results = role_results
         if not result_title:
-            result_title = f"ロール「{args.role}」"
+            result_title = f"Role: {args.role}"
 
     # 5. Confidence filter (Phase 2 — requires parsing spec chapter files)
     if args.confidence:
@@ -497,7 +497,7 @@ def main(argv: list[str] | None = None) -> int:
     if drift is not None:
         output_parts.append(format_drift_text(drift))
     elif args.drift:
-        output_parts.append("🔄 ドリフトレポート: （なし — detect-drift.py を実行してください）")
+        output_parts.append("🔄 Drift Report: (none — run detect-drift.py first)")
 
     if questions is not None:
         output_parts.append(format_questions_text(questions, args.questions or "open"))
@@ -508,8 +508,8 @@ def main(argv: list[str] | None = None) -> int:
     if output_parts:
         print("\n\n".join(output_parts))
     else:
-        print("🔍 検索条件に該当する結果がありませんでした。")
-        print("  ヒント: クエリ文字列、--uncovered、--chapter、--role、--questions、--drift のいずれかを指定してください。")
+        print("🔍 No results match the given criteria.")
+        print("  Hint: specify --query, --uncovered, --chapter, --role, --questions, or --drift.")
 
     return 0
 
