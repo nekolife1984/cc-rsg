@@ -71,34 +71,34 @@ Use **shape** (not color) for visual emphasis.
 
 | Phase | Name | Detail file | Main deliverables |
 |-------|------|------------|------------|
-| 0 | Setup & Goal | `phase-0-setup.md` | `.specback/goal.json` |
-| 1 | Recon & Template | `phase-1-recon.md` | `recon-report.md`, template |
-| 2 | Plan & WBS | `phase-2-wbs.md` | `inventory.json`, `wbs.json` |
-| 3 | Investigate | `phase-3-investigate.md` | `.specback/drafts/*.md` (intermediate) |
-| 4 | Verify | `phase-4-verify.md` | coverage report |
-| 5 | Refine via Dialogue | `phase-5-dialogue.md` | resolved `questions.json` |
-| 6 | Deliver | `phase-6-deliver.md` | `{output_dir}/` (final spec; default: `.specback/final/`) |
-| 6.5 | Interactive Deep-Dive | `phase-6-5-deepdive.md` | on-demand deep-dive chapters |
-| 7 | Drift Detection | `phase-7-drift.md` | `drift-report.md` |
-| 7b | REF Auto-Fix | `phase-7b-ref-autofix.md` | corrected REF lines |
-| 7c | ChangeSpec | `phase-7c-changespec.md` | `change-spec.md` |
+| 0 | Setup & Goal | `phases/phase-0-setup.md` | `.specback/goal.json` |
+| 1 | Recon & Template | `phases/phase-1-recon.md` | `recon-report.md`, template |
+| 2 | Plan & WBS | `phases/phase-2-wbs.md` | `inventory.json`, `wbs.json` |
+| 3 | Investigate | `phases/phase-3-investigate.md` | `.specback/drafts/*.md` (intermediate) |
+| 4 | Verify | `phases/phase-4-verify.md` | coverage report |
+| 5 | Refine via Dialogue | `phases/phase-5-dialogue.md` | resolved `questions.json` |
+| 6 | Deliver | `phases/phase-6-deliver.md` | `{output_dir}/` (final spec; default: `.specback/final/`) |
+| 6.5 | Interactive Deep-Dive | `phases/phase-6-5-deepdive.md` | on-demand deep-dive chapters |
+| 7 | Drift Detection | `phases/phase-7-drift.md` | `drift-report.md` |
+| 7b | REF Auto-Fix | `phases/phase-7b-ref-autofix.md` | corrected REF lines |
+| 7c | ChangeSpec | `phases/phase-7c-changespec.md` | `change-spec.md` |
 
 ## Common reference files
 
 | File | Contents |
 |------|----------|
-| `question-bank.md` | Question Bank data structure, categories, severity, status transitions |
-| `subagent-behavior.md` | Sub-agent prompt template, decision logic |
-| `state-management.md` | `state.json` schema, resume behaviour |
+| `docs/question-bank.md` | Question Bank data structure, categories, severity, status transitions |
+| `docs/subagent-behavior.md` | Sub-agent prompt template, decision logic |
+| `docs/state-management.md` | `state.json` schema, resume behaviour |
 
 ---
 
 ## Execution rules (MUST read)
 
-1. **Before starting any phase, Read the corresponding detail file first.** The phase overview table above maps each phase to its file.
-2. **Question Bank operations** → read `question-bank.md` before Phase 1 step 4.
-3. **Sub-agent delegation** → read `subagent-behavior.md` before Phase 3.
-4. **State management & resume** → read `state-management.md` when resuming. It contains a phase→file mapping table that tells you exactly which detail files to load based on `state.json.current_phase`.
+1. **Phase descriptions** are in the chart above — load the corresponding `phases/phase-{N}.md` file when entering a new phase.
+2. **Question Bank operations** → read `docs/question-bank.md` before Phase 1 step 4.
+3. **Sub-agent delegation** → read `docs/subagent-behavior.md` before Phase 3.
+4. **State management & resume** → read `docs/state-management.md` when resuming. It contains a phase→file mapping table that tells you exactly which detail files to load based on `state.json.current_phase`.
 5. **On resume, after user confirms, load the phase file corresponding to `state.json.current_phase`** (see mapping in `state-management.md`). Without this, the phase instructions are not in the system prompt.
 6. **The 12 design principles above are universal across all phases.**
 7. **The Mermaid styling contract applies to every diagram in `.specback/drafts/` and `{output_dir}/`.**

@@ -71,7 +71,7 @@ Per-phase resume message details are in the resume table below.
 After the user confirms the resume option, the agent MUST:
 
 1. **Read `state.json`** to identify `current_phase` (e.g. Phase 3).
-2. **Read the corresponding phase detail file** from SKILL.md's phase overview table (e.g. `phase-3-investigate.md`).
+2. **Read the corresponding phase detail file** from SKILL.md's phase overview table (e.g. `phases/phase-3-investigate.md`).
 3. **Read the appropriate common reference files** if the phase depends on them (Question Bank for Phase 1+/3+, Sub-agent for Phase 3+, State management always).
 4. Only then, **resume execution** according to the phase detail file's procedure.
 
