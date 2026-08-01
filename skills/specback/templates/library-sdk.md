@@ -97,7 +97,7 @@ For each feature listed above, describe the processing flow structured as below.
 
 ### Chapter 3: Module architecture (overview)
 
-<!-- meta: top-level structure of the library, for reader orientation. Overview-level only: WHAT the modules are and how they relate at a glance. Detailed internals go to the Internal structure chapter (contributor detail), design rationale to System design (WHY/HOW). -->
+<!-- meta: top-level structure of the library, for reader orientation. Overview-level only: WHAT the modules are and how they relate at a glance. Detailed internals go to the Internal structure chapter (contributor detail), design rationale to Design decisions (WHY/HOW). -->
 
 #### 3.1 Module composition
 
@@ -113,7 +113,7 @@ Top-level modules / packages and their responsibilities, extracted from the dire
 
 #### 3.2 Module dependency overview
 
-Top-level dependency graph between modules, extracted from import analysis. Use the per-language `rg` patterns in `references/outline-tables.md` → System design extraction patterns.
+Top-level dependency graph between modules, extracted from import analysis. Use the per-language `rg` patterns in `references/outline-tables.md` → Design decisions extraction patterns.
 
 ```mermaid
 graph TD
@@ -122,7 +122,7 @@ graph TD
 ```
 
 - Overview level only: group at package / top-level-directory granularity
-- Flag circular dependencies explicitly here; detailed dependency analysis → Chapter ? (System design)
+- Flag circular dependencies explicitly here; detailed dependency analysis → Chapter ? (Design decisions)
 
 #### 3.3 Tech stack
 
@@ -134,7 +134,7 @@ Language / runtime / major dependency packages, extracted from the package manif
 | Major dependencies | (value) | [REF: ...] | 🟢 |
 
 - Build tooling (bundler / compiler / transpiler) and distribution targets (npm / pip / composer / gem / NuGet)
-- → Detailed dependency policy → Chapter ? (System design)
+- → Detailed dependency policy → Chapter ? (Design decisions)
 
 ---
 
@@ -349,7 +349,7 @@ client.connect({ host: 'localhost' });
 
 ---
 
-### Chapter 12: System design
+### Chapter 12: Design decisions
 
 <!-- meta: architectural decisions, cross-cutting concerns, module dependencies, and design trade-offs derived from code. Complements Architecture overview (which describes WHAT) by explaining WHY and HOW cross-cutting concerns are handled. -->
 

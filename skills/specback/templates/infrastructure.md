@@ -304,7 +304,7 @@ graph TD
 
 ---
 
-### Chapter 10: System design
+### Chapter 10: Design decisions
 
 <!-- meta: architectural decisions, cross-cutting concerns, module dependencies, and design trade-offs derived from code. Complements Architecture overview (which describes WHAT) by explaining WHY and HOW cross-cutting concerns are handled. -->
 

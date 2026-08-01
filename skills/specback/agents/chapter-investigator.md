@@ -185,7 +185,7 @@ For features whose boundaries or existence are uncertain, add a `spec_missing` c
 
 ### 💡 Module architecture (overview) chapter (Chapter 3)
 
-When assigned to the Module architecture (overview) chapter, follow this additional procedure **after STEP A–F**. This chapter is deliberately **overview-level**: keep it short and skimmable, deferring detail to the Internal structure chapter (contributor internals) and System design (WHY/HOW rationale).
+When assigned to the Module architecture (overview) chapter, follow this additional procedure **after STEP A–F**. This chapter is deliberately **overview-level**: keep it short and skimmable, deferring detail to the Internal structure chapter (contributor internals) and Design decisions (WHY/HOW rationale).
 
 #### STEP G: Read the Overview chapter
 Read `.specback/drafts/01-overview.md` (or the final version) to pick up the library purpose, main features, and distribution targets.
@@ -194,11 +194,11 @@ Read `.specback/drafts/01-overview.md` (or the final version) to pick up the lib
 Consult `references/outline-tables.md` → **Module architecture (overview) extraction patterns**. In order:
 
 1. **Directory structure** (🟢): `glob` the top-level `src/`, `lib/`, `dist/`, package directories; one row per module/package with its responsibility.
-2. **Import graph** (🟢): run the per-language `rg` import patterns (shared with System design); group at package / top-level-directory granularity only.
+2. **Import graph** (🟢): run the per-language `rg` import patterns (shared with Design decisions); group at package / top-level-directory granularity only.
 3. **Manifest** (🟢): read the package manifest (`package.json` / `setup.py` / `pyproject.toml` / `composer.json` / `Cargo.toml` / `*.gemspec` ...) for language, runtime, and major dependencies.
 
 #### STEP I: Build the chapter
-Follow the template chapter definition: module composition table, a top-level dependency Mermaid `graph TD`, and a tech-stack table. Flag circular dependencies at overview level; point to System design for the detailed dependency analysis.
+Follow the template chapter definition: module composition table, a top-level dependency Mermaid `graph TD`, and a tech-stack table. Flag circular dependencies at overview level; point to Design decisions for the detailed dependency analysis.
 
 #### STEP J: Populate questions
 Add `spec_missing` questions for modules whose responsibility is unclear from code alone. Minimum 1 question for this chapter.
@@ -206,15 +206,15 @@ Add `spec_missing` questions for modules whose responsibility is unclear from co
 #### Output filename
 `.specback/drafts/03-module-architecture.md`
 
-### 💡 System design chapter (Chapter N)
+### 💡 Design decisions chapter (Chapter N)
 
-When assigned to the System design chapter, follow this additional procedure **after STEP A–F**:
+When assigned to the Design decisions chapter, follow this additional procedure **after STEP A–F**:
 
 #### STEP G: Read Overview and Architecture overview
 Read `.specback/drafts/01-overview.md` and the Architecture overview chapter to understand system type and tech stack.
 
 #### STEP H: Apply extraction strategies
-Consult `references/outline-tables.md` → **System design extraction patterns** section. Apply the 7-section extraction:
+Consult `references/outline-tables.md` → **Design decisions extraction patterns** section. Apply the 7-section extraction:
 
 1. **ADR**: Search for design-decision comments (`# Why:`, `// Decision:`, `/* Rationale: */`). Read README/CONTRIBUTING for explicit rationale.
 2. **Module dependency**: Run the per-language `rg` import patterns from outline-tables.md. Build a dependency graph.
