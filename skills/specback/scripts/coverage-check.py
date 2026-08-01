@@ -11,7 +11,7 @@ enumeration in a single pass.
 Checks performed:
 
 1.  `[REF: path:start-end]` count per chapter (`--min-refs-per-chapter`)
-2.  Body-line count per chapter (`--min-lines-per-chapter`)
+2.  Body-line count per chapter (`--min-lines-per-chapter`, default 0 — tone-guided)
 3.  Fenced-code-block count per chapter (`--min-code-blocks-per-chapter`)
 4.  Mermaid-diagram count per chapter (`--min-mermaid-per-chapter`)
 5.  Number of files under the `## Sources Read` section of each chapter (`--min-sources-read-per-chapter`)
@@ -38,7 +38,6 @@ Usage:
       --specback-dir .specback \\
       --target-dir-for-required final \\
       --min-refs-per-chapter 10 \\
-      --min-lines-per-chapter 200 \\
       --min-code-blocks-per-chapter 3 \\
       --min-mermaid-per-chapter 1 \\
       --min-sources-read-per-chapter 5 \\
@@ -988,7 +987,8 @@ def main() -> int:
 
     # Per-chapter thresholds
     p.add_argument("--min-refs-per-chapter", type=int, default=10)
-    p.add_argument("--min-lines-per-chapter", type=int, default=200)
+    p.add_argument("--min-lines-per-chapter", type=int, default=0,
+                   help="Minimum body lines per chapter (default: 0 — tone-guided; set explicitly to enforce a floor)")
     p.add_argument("--min-code-blocks-per-chapter", type=int, default=3)
     p.add_argument("--min-mermaid-per-chapter", type=int, default=1)
     p.add_argument("--min-sources-read-per-chapter", type=int, default=5)

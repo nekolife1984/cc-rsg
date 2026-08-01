@@ -88,17 +88,27 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      - When existing docs disagree with the code, which is authoritative?
    - See "Question Bank operation" below for the structure used at registration.
 
-6. **🆕 depth-mode decision (scale-based)**
-   - Record the **total file count** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` in `.specback/state.json`.
-   - **If file count > 200**, ask the user with `AskUserQuestion` to choose a **depth mode**:
-     - `comprehensive`: classic behaviour. All chapters detailed, full MECE, full REFs. **Recommended only when exhaustive coverage is required (audit, regulatory).** Estimated 2–4 hours for most projects (Phase 3 parallel investigation scales with concurrency).
-     - `outline` (**recommended default**): each level's entities are **listed exhaustively in tables** + Mermaid diagrams + a "deep-dive candidates" list at the end of each table. Details are produced on-demand in dialogue after Phase 6. **Best for typical use.**
+6. **🆕 depth-mode & tone decision (scale-based)**
+   - Record the **total file count** and **estimated code lines** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` and `total_lines` in `.specback/state.json`.
+   - **If total_lines > 500**, ask the user with `AskUserQuestion` to choose a **depth mode**:
+     - `comprehensive`: full chapter set (all chapters from the template). **Recommended only when exhaustive coverage is required (audit, regulatory).** Estimated 2–4 hours for most projects (Phase 3 parallel investigation scales with concurrency).
+     - `outline` (**recommended default**): minimal chapters — tables + Mermaid diagrams + deep-dive candidate list. Details produced on-demand in dialogue after Phase 6. **Best for typical use.**
      - `interactive`: same flow as outline, plus continued deep-dive acceptance after Phase 6 completes. **Use when a team will continue referencing the spec.**
-   - **If file count ≤ 200**, default to `comprehensive` automatically (no question). The user may still override.
-   - Persist the result to `.specback/goal.json` as `depth_mode: "comprehensive" | "outline" | "interactive"`. Phases 2 / 3 / 4 / 6 branch on this value.
+   - **If total_lines ≤ 500**, default to `outline` automatically (no question for depth_mode). The user may still override.
+   - Then, ask the user to choose a **writing tone** (regardless of depth_mode):
+     - `concise` (**default**): compact. Facts, REFs, and essential explanations only. No padding prose.
+     - `thorough`: more detailed explanations. Include background, rationale, and alternatives where relevant.
+   - Persist both to `.specback/goal.json` as:
+     - `depth_mode: "comprehensive" | "outline" | "interactive"`
+     - `tone: "concise" | "thorough"`
+   - Phases 2 / 3 / 4 / 6 branch on these values.
    - Question wording example:
-     > The target codebase is large (N files / X lines). Choose a depth mode for the spec.
-     > (Overview-only → deep-dive items of interest later, in practice, is recommended.)
+     > The target codebase has ~{total_lines} lines across ~{total_files} files. Choose a depth mode for the spec.
+     > (Outline → deep-dive items of interest later, in practice, is recommended.)
+     >
+     > Writing tone:
+     > → concise (compact, facts + REFs only) [default]
+     > → thorough (detailed explanations)
 
 7. **Phase 1 complete**
    - Update `state.json` and proceed to Phase 2.

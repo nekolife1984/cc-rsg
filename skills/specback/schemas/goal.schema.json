@@ -62,6 +62,11 @@
       "description": "Depth モード",
       "enum": ["comprehensive", "outline", "interactive"]
     },
+    "tone": {
+      "type": "string",
+      "description": "Writing tone — concise (compact, facts+REFs only) or thorough (detailed explanations)",
+      "enum": ["concise", "thorough"]
+    },
     "template": {
       "type": "string",
       "description": "Phase 1 で選択されたテンプレート名。coverage-check.py のデフォルト閾値の調整に使用される。",

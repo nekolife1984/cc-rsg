@@ -42,6 +42,7 @@ Produce a draft of the assigned chapter and report completion to the main agent.
   ({reader_description})
 - What the reader does after reading: {reader_action}
 - Desired granularity: {granularity}
+- Writing tone: {tone} (concise → compact, facts+REFs only; thorough → detailed explanations)
 - Emphasised perspectives: {perspectives}
 - Existing documentation: {existing_docs}
 
@@ -151,8 +152,7 @@ blocked_sections: [{section_name}, ...]
   For files under 100 lines, a full Read is fine.
 - Use WebFetch / WebSearch only to consult the official docs of an external library.
   Do NOT use them for internal code exploration.
-- Suggested chapter body length: medium → 200-500 lines; detailed → 500-1500 lines.
-  Exceeding this significantly means the WBS split needs to be revisited — report to the main agent.
+- Body length follows `goal.tone`: concise → compact (facts + REFs, no padding); thorough → detail with background and rationale.
 - **Use exactly the `{output_file_name}` handed down by the main agent.**
   Free-form naming is forbidden (no `chapter2_architecture.md`-style names).
   Save location is fixed at `drafts/{output_file_name}`.
@@ -181,6 +181,7 @@ prompt_variables = {
     "reader_description": "Engineer who inherited the codebase",
     "reader_action": "Code change",
     "granularity": "medium",
+    "tone": "concise",
     "perspectives": ["functional_correctness", "operational"],
     "existing_docs": "none",
     "chapter_id": "ch-04-routes",
