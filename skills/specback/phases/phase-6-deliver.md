@@ -82,6 +82,8 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
        --specback-dir .specback \
        --output-dir {output_dir} \
        --target-dir-for-required final \
+       --require-min-body-lines-for-reserved 5 \
+       --forbid-mermaid-styling \
        --output-format text
      ```
      This resolves to `{output_dir}/final/` (e.g. `.specback/final/final`).
@@ -107,6 +109,9 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
      Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path. This allows passing an absolute or relative path directly without path arithmetic.
    - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` (default: `.specback/final/{name}`) AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
    - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `{output_dir}/`.
+   - **Verify reserved file body content** (`--require-min-body-lines-for-reserved`): the three reserved files must each have at least 5 non-blank body lines. Empty `00-metadata.md` / `99-unresolved.md` / `traceability.md` are delivery failures — they indicate Phase 3/4 output was never filled.
+   - **Verify that no Mermaid colour/style directives remain** (`--forbid-mermaid-styling`): `style A fill:#...`, `classDef ... fill:#...`, `stroke:#...`, `color:#...` are forbidden in final output. These override the host theme and break dark mode.
+   - **Verify that no placeholder text remains** (`--forbid-placeholder-pattern`): `Phase [0-9]+ で記入予定`, `TODO`, `FIXME` must not appear outside code fences in the delivered spec.
    - **Verify state.json invariants**:
      - `current_phase` must equal `6` (and only `6`) when Phase 6 completes. Earlier values such as `2` while `phase_6.status: "complete"` are inconsistent and indicate the agent advanced phases out of order — fail Phase 6 in that case.
      - For every `i` from 0 to 6, if `phase_i.status == "complete"`, then `phase_j.status` for `j < i` MUST also be `"complete"`. No skipping allowed.

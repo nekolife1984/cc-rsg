@@ -28,6 +28,16 @@ Checks performed:
     quality gates) because their quality bar is the user's intent expressed
     in `free_text_notes`, not the source-code-spec-chapter gates. Only
     existence + body presence is enforced.
+13. **Reserved file body lines** (`--require-min-body-lines-for-reserved`):
+    `00-metadata.md`, `99-unresolved.md`, and `traceability.md` must have
+    at least N body lines (default: 5). Prevents these files from being
+    delivered empty.
+14. **Mermaid styling prohibition** (`--forbid-mermaid-styling`):
+    Scans Mermaid code blocks for `style A fill:#...`, `classDef ... fill:#...`,
+    `stroke:#...`, `color:#...`. Default ON. Violations are reported per file.
+15. **Placeholder detection** (`--forbid-placeholder-pattern`):
+    Scans for remaining placeholder text: `Phase [0-9]+ で記入予定`, `TODO`,
+    `FIXME`. Additional patterns can be specified via CLI.
 
 `--fail-on-uncovered` `--strict` `--output-format` remain for backward
 compatibility. Every quality check returns exit 1 on failure. All thresholds
@@ -605,6 +615,122 @@ def _resolve_mece_coverage(specback_dir: Path, cli_value: float | None) -> float
     return _DEFAULT_MECE_COVERAGE
 
 
+# ----------------------------------------------------------------------------
+# New checks for #158: reserved body lines, Mermaid styling, placeholders
+# ----------------------------------------------------------------------------
+
+RESERVED_FILES = {"00-metadata.md", "99-unresolved.md", "traceability.md"}
+
+MERMAID_STYLE_RE = re.compile(
+    r"(?:style\s+\w+\s+fill:|classDef\s+\w+\s+fill:|stroke:|color:)"
+)
+
+DEFAULT_PLACEHOLDER_PATTERNS = [
+    re.compile(r"Phase\s+[0-9]+\s+で記入予定"),
+    re.compile(r"\bTODO\b"),
+    re.compile(r"\bFIXME\b"),
+]
+
+
+def check_reserved_body_lines(
+    chapters: dict[str, str],
+    min_lines: int,
+) -> list[str]:
+    """Check that reserved files (00-metadata.md, 99-unresolved.md, traceability.md)
+    have at least ``min_lines`` non-blank body lines. Returns failure messages."""
+    failures: list[str] = []
+    if min_lines <= 0:
+        return failures
+    for name, content in chapters.items():
+        if name not in RESERVED_FILES:
+            continue
+        # Count non-blank lines outside code fences (same logic as compute_chapter_metrics)
+        in_code = False
+        body_lines = 0
+        for line in content.splitlines():
+            stripped = line.strip()
+            if CODE_FENCE_RE.match(line):
+                in_code = not in_code
+                continue
+            if in_code:
+                continue
+            if not stripped:
+                continue
+            body_lines += 1
+        if body_lines < min_lines:
+            failures.append(
+                f"reserved file {name} has only {body_lines} body lines "
+                f"(minimum: {min_lines})"
+            )
+    return failures
+
+
+def check_mermaid_styling(chapters: dict[str, str]) -> list[str]:
+    """Check that Mermaid code blocks contain no style/classDef fill/stroke/color directives.
+
+    Returns a list of failure messages with file name and offending line count.
+    The check is skipped when no files are provided (empty dict).
+    """
+    failures: list[str] = []
+    for name, content in chapters.items():
+        in_mermaid = False
+        offending_lines: list[str] = []
+        for line in content.splitlines():
+            stripped = line.strip()
+            if MERMAID_FENCE_RE.match(stripped):
+                in_mermaid = True
+                continue
+            if CODE_FENCE_RE.match(stripped) and in_mermaid:
+                in_mermaid = False
+                continue
+            if in_mermaid and MERMAID_STYLE_RE.search(stripped):
+                offending_lines.append(stripped[:80])
+        if offending_lines:
+            detail = "; ".join(offending_lines[:5])
+            if len(offending_lines) > 5:
+                detail += f" ... (+{len(offending_lines) - 5} more)"
+            failures.append(
+                f"Mermaid styling forbidden in {name}: "
+                f"{len(offending_lines)} line(s) with style/color directives — "
+                f"use structure-only Mermaid ({detail})"
+            )
+    return failures
+
+
+def check_placeholder_patterns(
+    chapters: dict[str, str],
+    extra_patterns: list[str] | None = None,
+) -> list[str]:
+    """Check that chapter files contain no placeholder text.
+
+    Built-in patterns: ``Phase [0-9]+ で記入予定``, ``TODO``, ``FIXME``.
+    ``extra_patterns`` adds custom regex patterns.
+
+    Returns a list of failure messages.
+    """
+    patterns = list(DEFAULT_PLACEHOLDER_PATTERNS)
+    if extra_patterns:
+        for p in extra_patterns:
+            try:
+                patterns.append(re.compile(p))
+            except re.error:
+                patterns.append(re.compile(re.escape(p)))
+    failures: list[str] = []
+    for name, content in chapters.items():
+        for i, line in enumerate(content.splitlines(), start=1):
+            stripped = line.strip()
+            # Skip code fences (placeholders are expected inside code blocks as examples)
+            if CODE_FENCE_RE.match(stripped):
+                continue
+            for pat in patterns:
+                if pat.search(stripped):
+                    failures.append(
+                        f"placeholder in {name}:{i} matches {pat.pattern!r}: {stripped[:80]}"
+                    )
+                    break  # one violation per line is enough
+    return failures
+
+
 def build_report(
     specback_dir: Path,
     *,
@@ -622,6 +748,10 @@ def build_report(
     min_sources_read_per_chapter: int,
     min_mece_coverage: float,
     code_block_line_weight: float = 0.5,
+    # New checks for #158
+    require_min_body_lines_for_reserved: int = 5,
+    forbid_mermaid_styling: bool = True,
+    forbid_placeholder_pattern: list[str] | None = None,
 ) -> CoverageReport:
     # Resolve the target directory:
     # 1. Try output_dir / target_dir_name (e.g. .specback/final or specs/final)
@@ -759,6 +889,17 @@ def build_report(
         gate_failures.append(
             "trace.json missing. Run build-trace.py to enable the MECE check."
         )
+
+    # #158: reserved file body-line check
+    for f in check_reserved_body_lines(chapters, require_min_body_lines_for_reserved):
+        gate_failures.append(f)
+    # #158: Mermaid styling check
+    if forbid_mermaid_styling:
+        for f in check_mermaid_styling(chapters):
+            gate_failures.append(f)
+    # #158: placeholder pattern check
+    for f in check_placeholder_patterns(chapters, forbid_placeholder_pattern):
+        gate_failures.append(f)
 
     # Reflect per-chapter metric failures into the overall gate failures.
     # (user_custom chapters were excluded from evaluate_chapter_gates above; their
@@ -997,6 +1138,16 @@ def main() -> int:
                         '(default: 0.5 — every two code lines count as one body line). '
                         'Set to 0.0 to exclude code-block lines entirely, '
                         'or 1.0 to count them as full body lines.')
+    p.add_argument("--require-min-body-lines-for-reserved", type=int, default=5,
+                   help="Minimum body lines for reserved files (00-metadata.md, 99-unresolved.md, traceability.md). "
+                        "Default: 5. Set to 0 to disable.")
+    p.add_argument("--forbid-mermaid-styling", default=True, action=argparse.BooleanOptionalAction,
+                   help="Check that Mermaid blocks contain no style/classDef fill/stroke/color directives. "
+                        "Default: ON.")
+    p.add_argument("--forbid-placeholder-pattern", nargs="*", default=None,
+                   help="Additional placeholder patterns to forbid (in addition to defaults: "
+                        "'Phase [0-9]+ で記入予定', 'TODO', 'FIXME'). "
+                        "Each pattern is a regex. Default: only the built-in patterns.")
 
     # inventory / questions / MECE
     p.add_argument("--min-inventory", default="auto",
@@ -1037,6 +1188,10 @@ def main() -> int:
             min_sources_read_per_chapter=args.min_sources_read_per_chapter,
             min_mece_coverage=min_mece_coverage,
             code_block_line_weight=args.code_block_line_weight,
+            # New checks for #158
+            require_min_body_lines_for_reserved=args.require_min_body_lines_for_reserved,
+            forbid_mermaid_styling=args.forbid_mermaid_styling,
+            forbid_placeholder_pattern=args.forbid_placeholder_pattern,
         )
     except FileNotFoundError as e:
         print(f"ERROR: {e}", file=sys.stderr)

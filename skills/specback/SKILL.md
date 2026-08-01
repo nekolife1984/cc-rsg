@@ -35,7 +35,7 @@ This skill operates in the "code → spec" direction; it is the symmetric counte
 9. **Unanswerable questions marked `abandoned`**: Recorded in final spec under "unresolved items".
 10. **Dual-consumer handling reduced to one in goal**: Restart for multiple views instead of overloading a single spec.
 11. **Output language chosen in Phase 0**: English or Japanese. All natural-language output follows this choice.
-12. **Reader-comprehension chapter order**: The template chapter order IS the final document order. It follows the reader's comprehension flow — Overview (what the system is) → Feature specifications (what it can do) → Architecture overview (how it is structured, placed early) → detail chapters → System design (why it is shaped this way, placed late) → Known constraints (what it cannot do). When adding or reordering chapters, judge the change against this flow. Presentation order is independent of generation order (Phase 3 dispatches chapters in parallel anyway). See `references/template-catalog.md` → "Chapter ordering principles".
+12. **Reader-comprehension chapter order**: The template chapter order IS the final document order. It follows the reader's comprehension flow — Overview (what the system is) → Feature specifications (what it can do) → Architecture overview (how it is structured, placed early) → detail chapters → Design decisions (why it is shaped this way, placed late) → Known constraints (what it cannot do). When adding or reordering chapters, judge the change against this flow. Presentation order is independent of generation order (Phase 3 dispatches chapters in parallel anyway). See `references/template-catalog.md` → "Chapter ordering principles".
 
 ---
 
