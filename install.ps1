@@ -34,6 +34,7 @@ param(
 
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SkillSrc = Join-Path $ScriptDir "skills\specback"
+$SearchSkillSrc = Join-Path $ScriptDir "skills\specback-search"
 
 if (-not (Test-Path $SkillSrc)) {
   Write-Host "Error: skills/specback/ not found alongside this script."
@@ -97,6 +98,14 @@ function Install-Skill($dest, $label) {
   New-Item -ItemType Directory -Force -Path $dest | Out-Null
   Copy-Item -Recurse -Force "$SkillSrc\*" $dest
   Write-Host "  ✅ $dest ($label)"
+
+  # Install companion: specback-search
+  $searchDest = $dest -replace 'specback$', 'specback-search'
+  if (Test-Path $SearchSkillSrc) {
+    New-Item -ItemType Directory -Force -Path $searchDest | Out-Null
+    Copy-Item -Recurse -Force "$SearchSkillSrc\*" $searchDest
+    Write-Host "  ✅ $searchDest ($label, specback-search)"
+  }
 }
 
 # ── Optional dependency installer ──────────────────────────────────────────
@@ -283,6 +292,6 @@ if ($DryRun) {
   Write-Host "Dry-run complete. No changes were made."
 } else {
   if ($InstallDeps) { Install-Deps }
-  Write-Host "Done. specback is now installed."
+  Write-Host "Done. specback and specback-search are now installed."
 }
 Write-Host ""
