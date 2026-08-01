@@ -27,19 +27,19 @@ Rules:
 
 ---
 
-## Initial set of 8
+## Initial set of 9
 
-The skill ships with the following 8 templates by default. The user may also bring their own template (by specifying a path).
+The skill ships with the following 9 templates by default. The user may also bring their own template (by specifying a path).
 
 1. **Web application spec** (`templates/web-app.md`)
-2. **Desktop application spec** (`templates/desktop-app.md`)
-3. **Batch-system spec** (`templates/batch-system.md`)
-4. **API service spec** (`templates/api-service.md`)
-5. **Library / SDK spec** (`templates/library-sdk.md`)
-6. **CLI tool spec** (`templates/cli-tool.md`)
-7. **Infrastructure spec** (`templates/infrastructure.md`)
-8. **Mobile app spec** (`templates/mobile-app.md`)
-
+2. **Batch-system spec** (`templates/batch-system.md`)
+3. **API service spec** (`templates/api-service.md`)
+4. **Library / SDK spec** (`templates/library-sdk.md`)
+5. **CLI tool spec** (`templates/cli-tool.md`)
+6. **Infrastructure spec** (`templates/infrastructure.md`)
+7. **Mobile app spec** (`templates/mobile-app.md`)
+8. **Desktop app spec** (`templates/desktop-app.md`)
+9. **Event-driven / Streaming spec** (`templates/event-driven.md`)
 ---
 
 ## 1. Web application spec
@@ -280,6 +280,43 @@ The skill ships with the following 8 templates by default. The user may also bri
 
 ---
 
+## 9. Event-driven / Streaming spec
+
+### Target
+- Asynchronous messaging systems using a message broker or event bus.
+- Kafka, Pulsar, AWS EventBridge, SQS, SNS, RabbitMQ, Google Pub/Sub, Azure Event Hubs.
+- Event sourcing, CQRS, stream processing, pub/sub architectures.
+- Both real-time streaming and queued message processing.
+
+### Chapter outline
+- Overview (system purpose, event-driven rationale, topology overview)
+- Feature specifications
+- Module architecture (producer/consumer layout, module composition)
+- Event catalogue (all event types, schemas, versioning, compatibility policy)
+- Producers (producer mapping, trigger conditions, payload structure, partitioning key strategy)
+- Consumers (consumer mapping, consumer groups, processing logic, offset management, idempotency)
+- Serialization and schema (Avro/Protobuf/JSON, schema registry, compatibility policies, schema evolution)
+- Delivery guarantees (at-least-once / exactly-once / at-most-once, DLQ, retry policy, idempotent producer)
+- Partitioning and scaling (partition key design, partition count, rebalancing strategy, throughput)
+- Error handling and recovery (circuit breaker, replay procedures, backpressure, poison pill messages)
+- Monitoring and observability (lag monitoring, throughput metrics, consumer lag, offset management, alerting)
+- Design decisions
+- Known constraints and unresolved items
+
+### Selection criteria
+- Configuration for Kafka (`kafka-clients`, `spring-kafka`, `confluent_kafka`, Docker Compose with `cp-kafka`).
+- Configuration for Pulsar (`pulsar-client`, `pulsar://` URL).
+- AWS EventBridge resources (`aws-cdk-lib/aws-events`, `EventBus`, `PutEvents`).
+- AWS SQS/SNS resources (`aws-cdk-lib/aws-sqs`, `aws-cdk-lib/aws-sns`, `boto3` SQS client).
+- RabbitMQ configuration (`amqp`, `pika`, `spring-amqp`, Docker Compose with `rabbitmq`).
+- Google Pub/Sub client library (`google-cloud-pubsub`).
+- Azure Event Hubs client library (`azure-eventhub`).
+- Presence of producer/consumer/publisher/subscriber directories or class names.
+- Event/Message class inheritance trees.
+- Primary architecture is event-driven (async pub/sub), not sync request-response.
+
+---
+
 ## Decision tree (template recommendation logic)
 
 Based on the Phase 1 reconnaissance, the agent follows this procedure to recommend a template:
@@ -316,6 +353,13 @@ Based on the Phase 1 reconnaissance, the agent follows this procedure to recomme
              YES → Is the primary artifact a desktop app (windowed UI, not web server)?
                       YES → Recommend Desktop app spec
                       NO  → Continue
+             NO  → Continue
+
+1f. Does the project use a message broker / event bus?
+    YES → Are there Kafka / Pulsar / EventBridge / SQS / SNS / RabbitMQ / Pub/Sub configurations?
+             YES → Is the primary architecture event-driven (async pub/sub, not sync request-response)?
+                      YES → Recommend Event-driven / Streaming spec
+                      NO  → Continue (likely composite with api-service)
              NO  → Continue
 
 2. Do routing definitions exist?
