@@ -25,10 +25,10 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    - Batch processing system spec (`templates/batch-system.md`)
    - API service spec (`templates/api-service.md`)
    - Library/SDK spec (`templates/library-sdk.md`)
-   - Use whichever Claude recommends from reconnaissance
+   - Use whichever the agent recommends from reconnaissance
 
 3. **Adjust the chosen template**
-   - If the user accepts Claude's recommendation, display the chapter outline and ask "Are there chapters to add, remove, or rename?".
+   - If the user accepts the recommended template, display the chapter outline and ask "Are there chapters to add, remove, or rename?".
    - Reflect any additions/removals.
 
 4. **🆕 Monorepo detection and scope setup**
@@ -116,6 +116,6 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
 ### Phase-specific cautions
 - Reconnaissance follows the principle "shallow but wide". Detailed logic understanding is deferred to Phase 3.
 - Without noise exclusion (`node_modules`, `vendor`, `.git`, etc.) the output explodes.
-- If the user brings their own template, you may point out "Claude's recommendation differs", but the decision is the user's.
+- If the user brings their own template, you may point out the recommended template differs, but the decision is the user's.
 
 ---

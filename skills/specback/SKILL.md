@@ -25,7 +25,7 @@ This skill operates in the "code → spec" direction; it is the symmetric counte
 ## Design principles
 
 1. **Goal-driven**: Phase 0 fixes the goal through a choice-based dialogue persisted to `.specback/goal.json`. All subsequent phases reference this goal.
-2. **Hybrid template decision**: Supports user's own template, Claude-recommended template, or user-adjusted recommendation.
+2. **Hybrid template decision**: Supports user's own template, agent-recommended template, or user-adjusted recommendation.
 3. **Reference-based inventory unit selection**: `references/inventory-units.md` lists typical units per language/framework.
 4. **Inventory-based gap prevention**: Enumerate every extractable unit from the code and mechanically verify coverage.
 5. **Question Bank populated at 3 moments**: end of reconnaissance, during sub-agent investigation, and at verification.
