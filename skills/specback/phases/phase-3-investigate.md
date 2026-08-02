@@ -44,10 +44,12 @@ To make "writing a chapter without opening the code" structurally impossible, pe
 
 For every INV in that chapter's `wbs.json.chapters[*].assigned_inventory_ids`, **use the Read tool on the corresponding real source files**.
 
-List the viewed file paths and line ranges at the **top of the chapter under a `## Sources Read` section**:
+List the viewed file paths and line ranges at the **end of the chapter under a `## Sources Read` section** (after the chapter body):
 
 ```markdown
 # Chapter 5: Data Model
+
+... (chapter body with `[REF:]` citations)
 
 ## Sources Read
 - `app/models/issue.rb` (lines 1-440)
@@ -55,9 +57,6 @@ List the viewed file paths and line ranges at the **top of the chapter under a `
 - `app/models/user.rb` (lines 1-120)
 - `db/migrate/0042_create_orders.rb` (lines 1-50)
 - `app/models/concerns/soft_delete.rb` (lines 1-95)
-
-## 5.1 Overview
-...
 ```
 
 **Minimum 5 files** under Sources Read. `coverage-check.py` enforces this count. Writing `[REF:]` citations for files that are not listed is forbidden.

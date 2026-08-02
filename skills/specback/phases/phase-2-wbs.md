@@ -54,7 +54,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    1. The `<!-- meta: ... -->` comment line described above.
    2. One blank line.
    3. The chapter title `#` heading, rendered in `goal.json.output_language`.
-   4. (Optional, for `standard` chapters only) a single placeholder line `## Sources Read\n\n(to be filled in Phase 3)` — the literal `## Sources Read` heading is preserved verbatim in English even when output language is Japanese, because `coverage-check.py` matches on the English string.
+   4. (Optional, for `standard` chapters only) a placeholder line `(to be filled in Phase 3)` followed by `## Sources Read` at the end — the literal `## Sources Read` heading is preserved verbatim in English even when output language is Japanese, because `coverage-check.py` matches on the English string.
 
    Total body length per skeleton MUST be **≤ 5 non-blank lines** outside of code fences. This cap is the structural enforcement of "Phase 2 ≠ Phase 3".
 
@@ -77,9 +77,9 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
    # Chapter 2: Entities
 
-   ## Sources Read
-
    (to be filled in Phase 3)
+
+   ## Sources Read
    ```
 
    JA equivalent (when `output_language == "ja"`):
@@ -89,9 +89,9 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
    # 第2章: エンティティ
 
-   ## Sources Read
-
    (Phase 3 で記入予定)
+
+   ## Sources Read
    ```
 
    Note that the meta comment and the `## Sources Read` heading stay English in BOTH variants (they are structural markers `coverage-check.py` and the chapter pipeline match on). Only the chapter title (`# Chapter 2: Entities` / `# 第2章: エンティティ`) and the placeholder phrase switch by `output_language`.

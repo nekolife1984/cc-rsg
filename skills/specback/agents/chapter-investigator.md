@@ -37,7 +37,7 @@ You investigate deeply in an isolated context and produce a draft that satisfies
 | `[REF: path:Lstart-Lend]` citations | **≥ 10**, with precise line ranges |
 | fenced code blocks | **≥ 3** |
 | Mermaid diagrams (` ```mermaid `) | **≥ 1** |
-| `## Sources Read` section at the top of the chapter | **≥ 5** viewed source files listed |
+| `## Sources Read` section at the end of the chapter | **≥ 5** viewed source files listed |
 
 Falling below these triggers a reject by `scripts/coverage-check.py` and a Phase 4 loopback in which the main agent re-invokes you.
 
@@ -49,9 +49,12 @@ Falling below these triggers a reject by `scripts/coverage-check.py` and a Phase
 
 For every assigned `inventory_id`, **read the corresponding real source file with the Read tool**. Writing a `[REF: ...]` citation for a file that you did not read is forbidden.
 
-List the read files at the top of the chapter:
+List the read files at the **end of the chapter** (after the chapter body):
 
 ```markdown
+## Chapter Title
+...(main body with `[REF:]` citations)
+
 ## Sources Read
 - `app/models/issue.rb` (lines 1-440)
 - `app/models/project.rb` (lines 1-690)
