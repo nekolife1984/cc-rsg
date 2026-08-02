@@ -3,6 +3,35 @@ template_name: batch-system
 template_version: 0.1.0
 last_updated: 2026-05-01
 description: Batch-system spec template. For scheduled jobs, data pipelines, COBOL batch jobs, and similar.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-architecture-overview
+    - 04-job-catalogue
+    - 05-triggers-schedule
+    - 06-data-flow
+    - 07-monitoring-alerts
+    - 08-error-handling-retry
+    - 09-recovery-procedures
+    - 10-operations-calendar
+    - 11-design-decisions
+    - 12-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-architecture-overview
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-error-handling-retry
+    - 07-recovery-procedures
+    - 08-job-catalogue
+    - 09-triggers-schedule
+    - 10-data-flow
+    - 11-monitoring-alerts
+    - 12-operations-calendar
 ---
 
 # Batch-system spec template

@@ -3,6 +3,35 @@ template_name: mobile-app
 template_version: 0.1.0
 last_updated: 2026-08-01
 description: Mobile app spec template. For native and cross-platform mobile applications targetting iOS, Android, or both.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-screens-transitions
+    - 05-push-notifications
+    - 06-networking-sync
+    - 07-platform-api-integration
+    - 08-state-management
+    - 09-data-persistence-offline
+    - 10-build-deployment
+    - 11-design-decisions
+    - 12-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-data-persistence-offline
+    - 07-platform-api-integration
+    - 08-push-notifications
+    - 09-build-deployment
+    - 10-state-management
+    - 11-screens-transitions
+    - 12-networking-sync
 ---
 
 # Mobile app spec template

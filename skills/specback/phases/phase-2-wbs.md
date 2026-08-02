@@ -35,6 +35,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
      - **User-custom chapter** (`kind: "user_custom"`): every file name listed in `goal.json.user_custom_deliverables` (e.g. `manual.md`, `quickstart.md`). The relaxed regex `^[a-z][a-z0-9_-]*\.md$` applies; the user-provided file name is preserved verbatim.
      - **Chapter title in body**: handled independently of the file name. Rendered in `goal.json.output_language` (EN example: `# Chapter 1: Overview` / JA example: `# 第1章: 概要`).
      - **Chapter numbers are assigned by the main agent in Phase 2** and fixed in `wbs.json.chapters[].file_name`. Sub-agents never decide naming; they save under the file name handed down by the main agent.
+   - **Reader-adaptive chapter ordering**: each template defines a `reader_order` frontmatter mapping `primary_reader` types to ordered chapter slug lists (see `references/template-catalog.md` → Reader-adaptive ordering). When assigning chapter numbers in Phase 2, read the template frontmatter, look up `reader_order[goal.json.primary_reader]`, and derive file names from that order. If the reader type is not listed (or `reader_order` is `null`), fall back to the template's default chapter outline order.
    - **Reserved numbers / file names** (must always be generated):
      - `00-metadata.md` (metadata chapter)
      - `99-unresolved.md` (unresolved-items chapter)
@@ -54,7 +55,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    1. The `<!-- meta: ... -->` comment line described above.
    2. One blank line.
    3. The chapter title `#` heading, rendered in `goal.json.output_language`.
-   4. (Optional, for `standard` chapters only) a single placeholder line `## Sources Read\n\n(to be filled in Phase 3)` — the literal `## Sources Read` heading is preserved verbatim in English even when output language is Japanese, because `coverage-check.py` matches on the English string.
+   4. (Optional, for `standard` chapters only) a placeholder line `(to be filled in Phase 3)` followed by `## Sources Read` at the end — the literal `## Sources Read` heading is preserved verbatim in English even when output language is Japanese, because `coverage-check.py` matches on the English string.
 
    Total body length per skeleton MUST be **≤ 5 non-blank lines** outside of code fences. This cap is the structural enforcement of "Phase 2 ≠ Phase 3".
 
@@ -77,9 +78,9 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
    # Chapter 2: Entities
 
-   ## Sources Read
-
    (to be filled in Phase 3)
+
+   ## Sources Read
    ```
 
    JA equivalent (when `output_language == "ja"`):
@@ -89,9 +90,9 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
    # 第2章: エンティティ
 
-   ## Sources Read
-
    (Phase 3 で記入予定)
+
+   ## Sources Read
    ```
 
    Note that the meta comment and the `## Sources Read` heading stay English in BOTH variants (they are structural markers `coverage-check.py` and the chapter pipeline match on). Only the chapter title (`# Chapter 2: Entities` / `# 第2章: エンティティ`) and the placeholder phrase switch by `output_language`.

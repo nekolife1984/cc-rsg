@@ -3,6 +3,37 @@ template_name: library-sdk
 template_version: 0.1.0
 last_updated: 2026-05-01
 description: Library / SDK spec template. For reusable code packages distributed via npm/pip/composer/gem/NuGet, etc.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-installation
+    - 05-usage-examples
+    - 06-public-api-catalogue
+    - 07-configuration-options
+    - 08-compatibility
+    - 09-extension-points
+    - 10-migration-guide
+    - 11-internal-structure
+    - 12-design-decisions
+    - 13-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-compatibility
+    - 07-installation
+    - 08-public-api-catalogue
+    - 09-usage-examples
+    - 10-configuration-options
+    - 11-extension-points
+    - 12-migration-guide
+    - 13-internal-structure
 ---
 
 # Library / SDK spec template

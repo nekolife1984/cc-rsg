@@ -3,6 +3,33 @@ template_name: infrastructure
 template_version: 0.1.0
 last_updated: 2026-07-30
 description: Infrastructure spec template. For cloud resources, networking, IaC, and deployment topology.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-resource-inventory
+    - 04-network-topology
+    - 05-deployment-pipeline
+    - 06-cost-sizing
+    - 07-configuration-environment
+    - 08-monitoring-observability
+    - 09-disaster-recovery-backup
+    - 10-design-decisions
+    - 11-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-resource-inventory
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-disaster-recovery-backup
+    - 07-network-topology
+    - 08-configuration-environment
+    - 09-monitoring-observability
+    - 10-deployment-pipeline
+    - 11-cost-sizing
 ---
 
 # Infrastructure spec template
