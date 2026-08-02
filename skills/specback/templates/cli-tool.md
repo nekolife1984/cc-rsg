@@ -256,9 +256,34 @@ tool-name init --template minimal ./my-project
 
 ---
 
+#### 6.4 Arguments and options (combined) — for small CLIs
+
+<!-- meta: consolidated argument/option reference for tools with few global flags.
+     For small CLIs (≤3 global flags), use this section INSTEAD of Chapter 7.
+     Merge all global flags, precedence rules, and stdin handling here.
+     For large CLIs with many global flags, keep Chapter 7 separate. -->
+
+**Global flags**
+
+| Flag | Type | Description | Default | Env var |
+|:-----|:----|:-----------|:-------|:--------|
+| `--config` / `-c` | string | Path to config file | `~/.tool/config.yaml` | `TOOL_CONFIG` |
+
+**Flag precedence**
+- Command-line flags > environment variables > config file > defaults
+
+**File arguments and stdin**
+- Whether the tool reads from files, stdin, or both
+- Supported file formats
+- Stdin detection behaviour (pipelines vs interactive TTY)
+
+---
+
 ### Chapter 7: Arguments and options reference
 
-<!-- meta: exhaustive inventory of global flags and their semantics. -->
+<!-- meta: exhaustive inventory of global flags and their semantics.
+     SKIP this chapter for small CLIs (≤3 global flags). Instead, embed
+     global flags and precedence rules in Chapter 6, section 6.4. -->
 
 #### 7.1 Global flags
 
