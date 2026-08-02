@@ -3,6 +3,33 @@ template_name: cli-tool
 template_version: 0.1.0
 last_updated: 2026-08-01
 description: CLI tool spec template. For command-line programs distributed as standalone binaries or via package managers.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-installation
+    - 05-usage-examples
+    - 06-command-catalogue
+    - 07-configuration
+    - 08-output-format
+    - 09-internal-structure
+    - 10-design-decisions
+    - 11-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-installation
+    - 07-command-catalogue
+    - 08-configuration
+    - 09-output-format
+    - 10-usage-examples
+    - 11-internal-structure
 ---
 
 # CLI tool spec template

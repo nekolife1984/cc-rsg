@@ -6,7 +6,7 @@ Selection guide used in Phase 1 when presenting template candidates to the user.
 
 ## Chapter ordering principles
 
-The template chapter order **is** the final document order. It is designed around the **reader's comprehension flow** — what a reader needs to know first in order to understand what comes later:
+The template chapter order **is** the final document order. It is designed around the **reader's comprehension flow** — what a reader needs to know first in order to understand what later:
 
 | Position | Chapter group | What it answers | Typical chapters |
 |:--------:|---------------|-----------------|------------------|
@@ -24,6 +24,7 @@ Rules:
 3. **Presentation order ≠ generation order** — the template defines the presentation order; Phase 3 may generate chapters in any order (it dispatches them in parallel). Keeping generation order aligned with presentation order is the current convention, but it is not a requirement.
 4. **Judge additions and reorderings against this flow** — when adding or moving a chapter, ask "where does the reader's comprehension flow require this?" rather than "where was the last edit?".
 5. **Chapter count is template-specific** — there is no fixed chapter count; each template defines its own outline. Phase docs and scripts must never hardcode a count.
+6. **Reader-adaptive ordering** — each template defines a `reader_order` frontmatter mapping `primary_reader` types to an ordered chapter slug list. The default `maintenance_developer` order matches the template's native outline. `delivery_customer` moves installation/usage examples forward; `regulator` moves constraints/design decisions early. Phase 2 selects the matching order from `goal.json.primary_reader`.
 
 ---
 

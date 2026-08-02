@@ -3,6 +3,37 @@ template_name: event-driven
 template_version: 0.1.0
 last_updated: 2026-08-01
 description: Event-driven / Streaming spec template. For asynchronous messaging systems using Kafka, Pulsar, EventBridge, SQS, RabbitMQ, Google Pub/Sub, Azure Event Hubs, and similar brokers.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-event-catalogue
+    - 05-producers
+    - 06-consumers
+    - 07-monitoring-observability
+    - 08-delivery-guarantees
+    - 09-serialization-schema
+    - 10-partitioning-scaling
+    - 11-error-handling-recovery
+    - 12-design-decisions
+    - 13-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-delivery-guarantees
+    - 07-error-handling-recovery
+    - 08-monitoring-observability
+    - 09-event-catalogue
+    - 10-producers
+    - 11-consumers
+    - 12-serialization-schema
+    - 13-partitioning-scaling
 ---
 
 # Event-driven / Streaming spec template

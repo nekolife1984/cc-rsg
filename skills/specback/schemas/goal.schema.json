@@ -70,7 +70,12 @@
     "template": {
       "type": "string",
       "description": "Phase 1 で選択されたテンプレート名。coverage-check.py のデフォルト閾値の調整に使用される。",
-      "enum": ["web-app", "batch-system", "api-service", "library-sdk"]
+      "enum": ["web-app", "batch-system", "api-service", "library-sdk", "cli-tool", "infrastructure", "mobile-app", "desktop-app", "event-driven"]
+    },
+    "reader_order_applied": {
+      "type": "boolean",
+      "description": "Phase 2 で reader_order による章順序の最適化が適用されたかどうか。reader_order が null または未定義の場合は false。",
+      "default": false
     }
   },
   "required": [

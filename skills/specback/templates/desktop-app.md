@@ -3,6 +3,37 @@ template_name: desktop-app
 template_version: 0.1.0
 last_updated: 2026-08-01
 description: Desktop application spec template. For native and cross-platform GUI applications that run on Windows, macOS, or Linux.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-window-management-menus
+    - 05-platform-integration
+    - 06-auto-update-installer
+    - 07-build-deployment
+    - 08-ui-component-catalogue
+    - 09-state-management-persistence
+    - 10-networking
+    - 11-keyboard-shortcuts-accessibility
+    - 12-design-decisions
+    - 13-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-module-architecture
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-auto-update-installer
+    - 07-build-deployment
+    - 08-platform-integration
+    - 09-window-management-menus
+    - 10-ui-component-catalogue
+    - 11-state-management-persistence
+    - 12-networking
+    - 13-keyboard-shortcuts-accessibility
 ---
 
 # Desktop application spec template

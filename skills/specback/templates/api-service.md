@@ -3,6 +3,37 @@ template_name: api-service
 template_version: 0.1.0
 last_updated: 2026-05-01
 description: API service spec template. For microservices and public APIs that expose REST/GraphQL/gRPC.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-architecture-overview
+    - 04-endpoint-catalogue
+    - 05-authentication
+    - 06-rate-limiting
+    - 07-sla-performance
+    - 08-request-response
+    - 09-error-codes
+    - 10-versioning
+    - 11-operations-settings
+    - 12-design-decisions
+    - 13-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-architecture-overview
+    - 04-known-constraints
+    - 05-design-decisions
+    - 06-authentication
+    - 07-sla-performance
+    - 08-rate-limiting
+    - 09-endpoint-catalogue
+    - 10-request-response
+    - 11-error-codes
+    - 12-versioning
+    - 13-operations-settings
 ---
 
 # API service spec template

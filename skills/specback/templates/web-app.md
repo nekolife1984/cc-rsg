@@ -3,6 +3,35 @@ template_name: web-app
 template_version: 0.1.0
 last_updated: 2026-05-01
 description: Web application spec template. For interactive systems that render HTML.
+reader_order:
+  maintenance_developer: null
+  sme: null
+  delivery_customer:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-architecture-overview
+    - 04-screens-transitions
+    - 05-routes-endpoints
+    - 06-authentication-authorisation
+    - 07-external-interfaces
+    - 08-operations-settings
+    - 09-class-module-design
+    - 10-data-model
+    - 11-design-decisions
+    - 12-known-constraints
+  regulator:
+    - 01-overview
+    - 02-feature-specifications
+    - 03-architecture-overview
+    - 04-authentication-authorisation
+    - 05-known-constraints
+    - 06-design-decisions
+    - 07-external-interfaces
+    - 08-operations-settings
+    - 09-class-module-design
+    - 10-routes-endpoints
+    - 11-data-model
+    - 12-screens-transitions
 ---
 
 # Web application spec template

@@ -35,6 +35,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
      - **User-custom chapter** (`kind: "user_custom"`): every file name listed in `goal.json.user_custom_deliverables` (e.g. `manual.md`, `quickstart.md`). The relaxed regex `^[a-z][a-z0-9_-]*\.md$` applies; the user-provided file name is preserved verbatim.
      - **Chapter title in body**: handled independently of the file name. Rendered in `goal.json.output_language` (EN example: `# Chapter 1: Overview` / JA example: `# 第1章: 概要`).
      - **Chapter numbers are assigned by the main agent in Phase 2** and fixed in `wbs.json.chapters[].file_name`. Sub-agents never decide naming; they save under the file name handed down by the main agent.
+   - **Reader-adaptive chapter ordering**: each template defines a `reader_order` frontmatter mapping `primary_reader` types to ordered chapter slug lists (see `references/template-catalog.md` → Reader-adaptive ordering). When assigning chapter numbers in Phase 2, read the template frontmatter, look up `reader_order[goal.json.primary_reader]`, and derive file names from that order. If the reader type is not listed (or `reader_order` is `null`), fall back to the template's default chapter outline order.
    - **Reserved numbers / file names** (must always be generated):
      - `00-metadata.md` (metadata chapter)
      - `99-unresolved.md` (unresolved-items chapter)
