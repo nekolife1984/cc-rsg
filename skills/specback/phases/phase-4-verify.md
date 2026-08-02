@@ -93,8 +93,81 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    - Save `coverage-check.py --output-format json` output to `.specback/coverage-report.json`.
    - Save a human-readable version to `.specback/coverage-report.md`.
 
-7. **Phase 4 complete**
-   - Once every chapter passes (or hits the 3-attempt qualitative limit), update `state.json` and proceed to Phase 5.
+7. **Doubt-pass: adversarial review subphase (opt-in)**
+   This subphase runs after coverage-check passes. It questions every major claim in the generated draft specs by re-reading the source code in a "fresh context" (as if the code were seen for the first time) and checking whether the interpretation is correct.
+
+   **7a. Determine doubt targets**
+   Apply the doubt-trigger ruleset to select which claims to review:
+
+   | Trigger | Scope | Condition |
+   |---------|-------|-----------|
+   | 🔴 **ASSUMED** | Every chapter containing 🔴 ASSUMED markers | Always selected (default: auto-include) |
+   | 🟡 **INFERRED chain ≥ 3** | Any claim inferred from ≥3 sequential code readings without verification | `doubt_inferred_chain_length >= 3` (configurable via `goal.json.doubt.inferred_chain_min`) |
+   | 🟢 **VERIFIED with comment conflict** | Code comments and spec interpretation diverge | Detected via `[REF:]` line re-read — if the comment contradicts the claim in the spec |
+   | **Cross-chapter axiom** | A statement shared across multiple chapters that has no single `[REF:]` backing | Any statement with zero `[REF:]` citations that appears in ≥2 chapters |
+
+   Read `docs/doubt-pass.md` for the full trigger definitions, threshold tuning, and examples.
+
+   **7b. Execute doubt-protocol per target**
+   For each selected claim, run the 5-step protocol. Claims from 🔴 ASSUMED chapters and cross-chapter axioms take priority; INFERRED chains next; VERIFIED conflicts last.
+
+   ```
+   CLAIM → EXTRACT → DOUBT → RECONCILE → STOP
+   ```
+
+   - **CLAIM**: Isolate one specific claim from the draft (e.g. "`IssuesController#create` returns a 201 status on success"). Record the claim verbatim with its source chapter and `[REF:]`.
+   - **EXTRACT**: Identify the exact code file(s) and line(s) that support the claim. Only use the `[REF:]` citations already in the draft — do not add new citations while extracting.
+   - **DOUBT**: Re-read the extracted code in a **fresh context** (do not reuse any prior reading notes, cached observations, or earlier interpretations from Phase 3). Evaluate:
+     - Does the code actually say what the claim asserts?
+     - Is there an edge case, error path, or alternative flow the claim misses?
+     - Does a nearby code section (the 5 lines before/after the cited range) contradict the claim?
+     - Is the claim's confidence label (🟢/🟡/🔴) appropriate given the re-read evidence?
+   - **RECONCILE**: For each discrepancy found in DOUBT:
+     - If the claim is **wrong** → add a corrective note to the draft chapter and push the chapter back to Phase 3 (loopback, counting toward the 3-attempt limit).
+     - If the claim is **imprecise** → adjust the wording and tighten the `[REF:]` range.
+     - If the claim is **correct but under-confident** → upgrade the marker (🔴→🟡 or 🟡→🟢).
+   - **STOP**: Assign a **confidence score** (1.0 = certain, 0.0 = contradictory material found) to the claim. Record it in `.specback/doubt-report.json`.
+
+   **7c. Doubt-report output**
+   After processing all selected targets, generate `.specback/doubt-report.json`:
+
+   ```json
+   {
+     "doubt-pass": true,
+     "claims_reviewed": 5,
+     "claims_passed": 3,
+     "claims_needing_correction": 2,
+     "confidence_avg": 0.72,
+     "doubt_resolution_rate": 0.6,
+     "failures": [
+       {
+         "chapter": "02-feature-specifications.md",
+         "claim": "IssuesController#create returns 201 on success",
+         "confidence": 0.3,
+         "discrepancy": "Code raises 422 on validation failure; the claim only describes the happy path",
+         "recommendation": "Split into success (201) and failure (422) sub-entries"
+       }
+     ]
+   }
+   ```
+
+   **7d. Question bank integration**
+   - Every discrepancy found during DOUBT that cannot be resolved by re-reading alone is pushed into `questions.json` with `category: "architecture_decision"` (or `"spec_missing"` if a gap is found) and `severity: "critical"`.
+   - If the same claim fails doubt in consecutive sessions (verified by `doubt-report.json` history), escalate the question to `severity: "critical"` and add `[NEEDS SME]` in the chapter regardless of Phase 5 timing.
+
+   **7e. Opt-out**
+   - Set `goal.json.doubt.enabled: false` to skip the entire doubt-pass subphase.
+   - Set `goal.json.doubt.scope: ["assumed_only"]` to run doubt-pass only on 🔴 ASSUMED markers (skip INFERRED chains and VERIFIED conflicts).
+   - Set `goal.json.doubt.max_claims` to limit the number of claims reviewed per run (default: 10).
+
+   **7f. Relationship with Phase 5**
+   - Doubt-pass catches what code re-reading alone can resolve. Questions that genuinely require SME judgement (e.g. business rationale, design intent from a past team member) are NOT resolved here — they flow to Phase 5 as normal.
+   - Do NOT use doubt-pass as a substitute for Phase 5 dialogue. Its purpose is to reduce the burden on Phase 5 by self-resolving code-interpretation questions.
+
+   See `docs/doubt-pass.md` for the full protocol reference, configuration schema, and troubleshooting.
+
+8. **Phase 4 complete**
+   - Once every chapter passes (or hits the 3-attempt qualitative limit) AND the doubt-pass subphase (if enabled) has completed, update `state.json` and proceed to Phase 5.
 
 ### Phase-specific cautions
 - **Do not proceed to Phase 5 until coverage-check.py PASSes** (up to 3 loop iterations). Setting `phase_4.all_quality_gates_passed: true` is only allowed when the most recent `coverage-check.py` invocation returned exit code 0.
@@ -103,5 +176,8 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 - **`coverage_rate` < 100% with `all_quality_gates_passed: true` is a contradiction** and is never permitted. If full coverage is impossible within 3 iterations, leave `all_quality_gates_passed: false`, record the unfinished chapters, and surface to the user instead of advancing.
 - **Feature specifications chapter (Ch2) note**: This chapter often has a higher 🔴 ASSUMED ratio than other chapters because code is organised by layer, not by feature. The Phase 3 investigation compensates by using multiple grouping strategies (see `references/outline-tables.md`). The 🔴 ratio warning in `coverage-check.py` is **informational only** for Ch2; it does not block the Phase 4 gate. The body-length and REF-count requirements still apply in `comprehensive` mode.
 - **Design decisions chapter note**: This chapter uses import analysis and pattern detection. The ADR section may have many 🔴 entries (design rationale is rarely in code). The 🔴 ratio warning in `coverage-check.py` is **informational only** for this chapter. Body-length and REF-count requirements still apply in `comprehensive` mode.
+- **Doubt-pass does not replace coverage-check**: The doubt-pass subphase is an additional quality gate, not a substitute. `coverage-check.py` must still pass (exit code 0) before doubt-pass runs. A chapter that fails doubt (claims needing correction) is looped back to Phase 3, consuming one of the 3-attempt limit — a doubt-related loopback counts toward the iteration cap for that chapter.
+- **Fresh context is critical**: The DOUBT step MUST re-read the code from scratch without referencing Phase 3 investigation notes. Reusing cached observations defeats the purpose of adversarial review and constitutes a quality breach.
+- **Doubt-report.json is not a replacement for state.json**: The doubt report is informational. `state.json.phase_4.all_quality_gates_passed` still reflects `coverage-check.py` exit code 0; doubt-pass completion is recorded separately in `doubt-report.json.doubt-pass: true`.
 
 ---
