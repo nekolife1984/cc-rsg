@@ -90,6 +90,7 @@ Use **shape** (not color) for visual emphasis.
 | `docs/question-bank.md` | Question Bank data structure, categories, severity, status transitions |
 | `docs/subagent-behavior.md` | Sub-agent prompt template, decision logic |
 | `docs/state-management.md` | `state.json` schema, resume behaviour |
+| `docs/doubt-pass.md` | Doubt-pass adversarial review protocol, trigger rules, confidence scoring, troubleshooting |
 
 ---
 
