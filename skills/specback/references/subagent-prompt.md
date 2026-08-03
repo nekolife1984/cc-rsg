@@ -93,9 +93,9 @@ Example:
    - <!-- CONFIDENCE: HIGH -->   reliably derivable from the code
    - <!-- CONFIDENCE: MED -->    multiple interpretations are possible; written with the most likely one
    - <!-- CONFIDENCE: LOW -->    high inference; needs confirmation
-   - [ASK SME]            requires confirmation from a subject-matter expert
-   - [ASSUMED: {content}; basis: {evidence}]   surface the inference and its basis
-   - [BLOCKED: see Q-XXX] left blank because of a critical question; see the Question Bank
+   - <!-- ASK SME -->            requires confirmation from a subject-matter expert
+   - <!-- ASSUMED: {content}; basis: {evidence} -->   surface the inference and its basis
+   - <!-- BLOCKED: see Q-XXX --> left blank because of a critical question; see the Question Bank
 6. Append a "detail questions raised in this chapter" list at the end of the chapter.
    - Each question follows this format:
      - Q: {question body}
@@ -143,10 +143,10 @@ blocked_sections: [{section_name}, ...]
 ================================
 [7. Constraints]
 ================================
-- Never conflate inference with fact. Inference must always carry the [ASSUMED] marker.
+- Never conflate inference with fact. Inference must always carry the <!-- ASSUMED --> marker.
 - Do not write detail beyond the goal granularity (verbosity hurts).
 - Do not mention inventory items outside your assignment (do not encroach on other sub-agents).
-- If you hit a critical question, leave the section as [BLOCKED] and report completion.
+- If you hit a critical question, leave the section as <!-- BLOCKED --> and report completion.
   Better to ship the sections you can finish than to stall on perfection.
 - Before fully Read-ing a file, narrow it down with Grep first.
   For files under 100 lines, a full Read is fine.
@@ -213,7 +213,7 @@ def investigate_chapter(prompt):
         except UncertaintyDetected as q:
             questions.append(q)
             if q.severity == "critical":
-                content = f"[BLOCKED: see {q.id}]"
+                content = f"<!-- BLOCKED: see {q.id} -->"
             else:
                 content = generate_with_assumption(section, q)
                 # Marked with <!-- CONFIDENCE: LOW; ASSUMED: ... -->
@@ -227,12 +227,12 @@ def investigate_chapter(prompt):
 ## Failure patterns the sub-agent must avoid
 
 ### Pattern 1: stalling while trying to write the chapter "perfectly"
-- When you hit a critical question, leave it as [BLOCKED] and finish the sections you can.
+- When you hit a critical question, leave it as <!-- BLOCKED --> and finish the sections you can.
 - "Stall on everything and write nothing" is the worst pattern.
 
 ### Pattern 2: writing inference as fact
 - Mixing "probably" / "seems to" into the prose makes it impossible for later readers to tell fact from inference.
-- Always use <!-- CONFIDENCE: LOW --> or [ASSUMED] markers.
+- Always use <!-- CONFIDENCE: LOW --> or <!-- ASSUMED --> markers.
 
 ### Pattern 3: omitting traceability citations
 - Writing the body without citations leaves later verification with "no basis".

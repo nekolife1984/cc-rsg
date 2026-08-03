@@ -120,8 +120,8 @@ Around each `<!-- REF: ... -->`, add prose explaining "what is happening". Writi
 
 Surface uncertainty in each statement:
 - `<!-- CONFIDENCE: HIGH | MED | LOW -->`
-- `[ASK SME]` (needs confirmation from a subject-matter expert)
-- `[ASSUMED: ...]` (basis for the inference)
+- `<!-- ASK SME -->` (needs confirmation from a subject-matter expert)
+- `<!-- ASSUMED: ... -->` (basis for the inference)
 
 #### STEP E: Add detail questions to the Question Bank
 
@@ -134,7 +134,7 @@ Examples:
 
 #### STEP F: Handle critical questions
 
-If a critical question is hit, leave the corresponding section as `[BLOCKED: see Q-042]` (empty). Loop back from Phase 5 (after dialogue) to Phase 3 to fill it in.
+If a critical question is hit, leave the corresponding section as `<!-- BLOCKED: see Q-042 -->` (empty). Loop back from Phase 5 (after dialogue) to Phase 3 to fill it in.
 
 #### STEP G: Per-chapter sub-agent delegation (use when the `task` tool is available; recommended)
 

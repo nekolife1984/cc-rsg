@@ -15,7 +15,7 @@ You are an investigation agent in charge of a specific chapter.
 
 [Output-language handling]
 - The chapter body, headings, prose explanations, annotations on uncertainty markers, and the chapter-end detail-question list are ALL rendered in {output_language}.
-- Machine-readable elements — file names (ASCII slug), `[REF: file:lines]`, `<!-- CONFIDENCE: HIGH|MED|LOW -->`, `[ASK SME]`, `[ASSUMED: ...]`, `[BLOCKED: see Q-XXX]`, IDs (`Q-XXX` / `INV-XXX`) — stay English regardless of {output_language}.
+- Machine-readable elements — file names (ASCII slug), `[REF: file:lines]`, `<!-- CONFIDENCE: HIGH|MED|LOW -->`, `<!-- ASK SME -->`, `<!-- ASSUMED: ... -->`, `<!-- BLOCKED: see Q-XXX -->`, IDs (`Q-XXX` / `INV-XXX`) — stay English regardless of {output_language}.
 - Even when the reference assets (`templates/*.md`, `references/*.md`) are written in Japanese, when {output_language} == "en" you must dynamically translate the chapter heading examples and body samples into semantically equivalent English before writing the chapter body.
 
 [Assigned chapter]
@@ -29,15 +29,15 @@ You are an investigation agent in charge of a specific chapter.
 3. For every statement, attach a `[REF: file:lines]` citation with precise line ranges.
 4. Do not hide uncertainty; use the following markers:
    - <!-- CONFIDENCE: HIGH | MED | LOW -->
-   - [ASK SME]
-   - [ASSUMED: <inference>; basis: <evidence>]
-   - [BLOCKED: section left empty because of a critical question]
+   - <!-- ASK SME -->
+   - <!-- ASSUMED: <inference>; basis: <evidence> -->
+   - <!-- BLOCKED: section left empty because of a critical question -->
 5. At the end of the chapter, append a "detail questions raised in this chapter" list.
 
 [Constraints]
 - Never conflate inference with fact.
 - Do not write detail beyond the goal granularity.
-- When a critical question is hit, leave the section as [BLOCKED] and report completion.
+- When a critical question is hit, leave the section as <!-- BLOCKED --> and report completion.
 
 [Output format]
 {See references/subagent-prompt.md for details}
@@ -49,7 +49,7 @@ When a question is encountered, the sub-agent follows this pseudocode:
 
 ```
 if question.severity == "critical":
-    leave the section as [BLOCKED: see Q-XXX]
+    leave the section as <!-- BLOCKED: see Q-XXX -->
     register the question in the Question Bank
     finish the rest of the chapter as much as possible
     report completion
