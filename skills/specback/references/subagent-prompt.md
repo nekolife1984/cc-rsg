@@ -181,7 +181,7 @@ prompt_variables = {
     "reader_description": "Engineer who inherited the codebase",
     "reader_action": "Code change",
     "granularity": "medium",
-    "tone": "concise",
+    "tone": "thorough",
     "perspectives": ["functional_correctness", "operational"],
     "existing_docs": "none",
     "chapter_id": "ch-04-routes",

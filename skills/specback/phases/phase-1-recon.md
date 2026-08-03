@@ -238,8 +238,8 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      - `interactive`: same flow as outline, plus continued deep-dive acceptance after Phase 6 completes. **Use when a team will continue referencing the spec.**
    - **If total_lines ≤ 500**, default to `outline` automatically (no question for depth_mode). The user may still override.
    - Then, ask the user to choose a **writing tone** (regardless of depth_mode):
-     - `concise` (**default**): compact. Facts, REFs, and essential explanations only. No padding prose.
-     - `thorough`: more detailed explanations. Include background, rationale, and alternatives where relevant.
+     - `concise`: compact. Facts, REFs, and essential explanations only. No padding prose.
+     - `thorough` (**default**): more detailed explanations. Include background, rationale, and alternatives where relevant.
    - Persist both to `.specback/goal.json` as:
      - `depth_mode: "comprehensive" | "outline" | "interactive"`
      - `tone: "concise" | "thorough"`
@@ -249,8 +249,8 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      > (Outline → deep-dive items of interest later, in practice, is recommended.)
      >
      > Writing tone:
-     > → concise (compact, facts + REFs only) [default]
-     > → thorough (detailed explanations)
+     > → concise (compact, facts + REFs only)
+     > → thorough (detailed explanations) [default]
 
 7. **Phase 1 complete**
    - Update `state.json` and proceed to Phase 2.
