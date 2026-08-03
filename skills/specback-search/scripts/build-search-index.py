@@ -37,8 +37,8 @@ from typing import Any
 
 SCHEMA_VERSION = "0.1.0"
 
-# Confidence markers found in spec chapter [REF: ...] annotations
-CONFIDENCE_RE = re.compile(r'\[REF:\s*\S+\s*:\s*\d+(?:-\d+)?\]\s*([🟢🟡🔴])')
+# Confidence markers found in spec chapter <!-- REF: ... --> annotations
+CONFIDENCE_RE = re.compile(r'<!-- REF:\s*\S+\s*:\s*\d+(?:-\d+)?\s*-->\s*([🟢🟡🔴])')
 
 
 # ---------------------------------------------------------------------------

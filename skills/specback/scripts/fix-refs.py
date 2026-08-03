@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-fix-refs.py — Phase 7b: auto-correct [REF: path:line] markers after code changes.
+fix-refs.py — Phase 7b: auto-correct <!-- REF: path:line --> markers after code changes.
 
 Reads ``git diff --unified`` (or piped diff), computes per-file line-number
-mappings, then scans spec Markdown files and updates stale [REF: ...] markers.
+mappings, then scans spec Markdown files and updates stale <!-- REF: ... --> markers.
 
 Usage
 -----
@@ -51,7 +51,7 @@ from typing import Any
 # ---------------------------------------------------------------------------
 
 SCHEMA_VERSION = "0.1.0"
-REF_RE = re.compile(r"\[REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\]")
+REF_RE = re.compile(r"<!-- REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\s*-->")
 HUNK_RE = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
 
 
@@ -223,7 +223,7 @@ def get_git_diff(
 def find_refs_in_file(
     file_path: Path,
 ) -> list[dict[str, Any]]:
-    """Find all [REF: path:line] markers in a spec file.
+    """Find all <!-- REF: path:line --> markers in a spec file.
 
     Returns list of dicts with keys:
     - line_no: 0-indexed line number in the file
@@ -287,8 +287,8 @@ def resolve_base(args_base: str | None, specback_path: Path) -> str:
 def format_ref(ref: dict[str, Any]) -> str:
     """Format a REF marker as a string."""
     if ref["ref_start"] == ref["ref_end"]:
-        return f"[REF: {ref['ref_path']}:{ref['ref_start']}]"
-    return f"[REF: {ref['ref_path']}:{ref['ref_start']}-{ref['ref_end']}]"
+        return f"<!-- REF: {ref['ref_path']}:{ref['ref_start']} -->"
+    return f"<!-- REF: {ref['ref_path']}:{ref['ref_start']}-{ref['ref_end']} -->"
 
 
 # ---------------------------------------------------------------------------
@@ -298,7 +298,7 @@ def format_ref(ref: dict[str, Any]) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(
-        description="specback Phase 7b: auto-correct [REF: ...] line numbers",
+        description="specback Phase 7b: auto-correct <!-- REF: ... --> line numbers",
     )
     p.add_argument("--specback-dir", default=".specback",
                     help="Path to .specback/ state directory")
@@ -463,7 +463,7 @@ def main(argv: list[str] | None = None) -> int:
             )
             lines.append(
                 f"- `{c['spec_file']}`: "
-                f"`[REF: {c['ref_path']}:{old}]` → `[REF: {c['ref_path']}:{new}]`"
+                f"`<!-- REF: {c['ref_path']}:{old} -->` → `<!-- REF: {c['ref_path']}:{new} -->`"
                 f"  (line {c['line_no'] + 1})"
             )
         lines.append("")
@@ -482,7 +482,7 @@ def main(argv: list[str] | None = None) -> int:
             )
             lines.append(
                 f"- `{o['spec_file']}`: "
-                f"`[REF: {o['ref_path']}:{old}]` (line {o['line_no'] + 1})"
+                f"`<!-- REF: {o['ref_path']}:{old} -->` (line {o['line_no'] + 1})"
             )
         lines.append("")
 

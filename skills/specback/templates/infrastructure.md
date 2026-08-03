@@ -1,7 +1,7 @@
 ---
 template_name: infrastructure
-template_version: 0.1.0
-last_updated: 2026-07-30
+template_version: 0.2.0
+last_updated: 2026-08-03
 description: Infrastructure spec template. For cloud resources, networking, IaC, and deployment topology.
 reader_order:
   maintenance_developer: null
@@ -30,6 +30,107 @@ reader_order:
     - 09-monitoring-observability
     - 10-deployment-pipeline
     - 11-cost-sizing
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-resource-inventory
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-network-topology
+      title: Network topology
+      slug: 04-network-topology
+      detection:
+        files: ["**/*.tf", "**/*.tfvars", "cdk.json", "Pulumi.yaml", "**/k8s/**"]
+        patterns:
+          - rgs: ["VPC|vpc_?|subnet|CIDR|cidr_block|InternetGateway|NatGateway|Route53"]
+          - deps: ["aws-cdk-lib/aws-ec2", "@pulumi/awsx"]
+        note_missing: "VPC/ネットワーク設定が見つかりませんでした"
+    - id: ch-deployment-pipeline
+      title: Deployment pipeline
+      slug: 05-deployment-pipeline
+      detection:
+        files: [".github/workflows/**", "Jenkinsfile", ".gitlab-ci.yml", "argocd*", "**/ci/**", "Dockerfile", "docker-compose*"]
+        patterns:
+          - rgs: ["deploy|pipeline|CI|CD|build|release|ArgoCD|CodePipeline|GitOps"]
+        note_missing: "CI/CDパイプライン設定が見つかりませんでした"
+        optional: true
+    - id: ch-config-environment
+      title: Configuration and environment
+      slug: 06-configuration-environment
+      detection:
+        files: ["**/*.tfvars", "**/config*", "**/environments/**", "**/env/**", "secrets*", "parameters*"]
+        patterns:
+          - rgs: ["environment|env|staging|production|dev|parameter.?store|secrets.?manager"]
+        note_missing: "環境設定やパラメータ管理が見つかりませんでした"
+    - id: ch-monitoring
+      title: Monitoring and observability
+      slug: 07-monitoring-observability
+      detection:
+        files: ["**/monitoring/**", "**/alerts/**", "**/grafana*", "**/prometheus*", "**/datadog*", "**/cloudwatch*"]
+        patterns:
+          - rgs: ["metric|alert|monitor|dashboard|logging|observability"]
+          - deps: ["aws-cdk-lib/aws-cloudwatch", "@pulumi/datadog"]
+        note_missing: "監視/アラート設定が見つかりませんでした"
+        optional: true
+    - id: ch-dr-backup
+      title: Disaster recovery and backup
+      slug: 08-disaster-recovery-backup
+      detection:
+        files: ["**/backup*", "**/dr*", "**/recovery*", "**/snapshot*", "**/replication*"]
+        patterns:
+          - rgs: ["backup|snapshot|replication?|failover|RTO|RPO|disaster.?recovery|multi.?AZ|multi.?region"]
+        note_missing: "DR/バックアップ設定が見つかりませんでした"
+        optional: true
+    - id: ch-cost-sizing
+      title: Cost and sizing
+      slug: 09-cost-sizing
+      detection:
+        files: ["**/cost*", "**/budget*", "**/sizing*"]
+        patterns:
+          - rgs: ["cost|budget|reserved.?instance|savings.?plan|auto.?scaling|scaling.?policy"]
+        note_missing: "コスト見積もりやサイジング情報が見つかりませんでした"
+        optional: true
+  extra_chapters:
+    - id: ch-security-compliance
+      title: Security and compliance
+      slug: 10-security-compliance
+      detection:
+        patterns:
+          - rgs: ["IAM|IAM Role|security.?group|KMS|encryption|WAF|Shield|GuardDuty|SecurityHub|PCI|SOC|ISO"]
+          - deps: ["aws-cdk-lib/aws-kms", "aws-cdk-lib/aws-wafv2", "@pulumi/aws/iam"]
+        note_detected: "セキュリティ/コンプライアンス設定を検出しました → 自動追加"
+      insert_after: ch-network-topology
+    - id: ch-serverless-events
+      title: Serverless and event-driven resources
+      slug: 11-serverless-resources
+      detection:
+        files: ["**/lambda*", "**/sqs*", "**/sns*", "**/eventbridge*"]
+        patterns:
+          - rgs: ["Lambda|Function|SQS|SNS|EventBridge|EventBus"]
+        note_detected: "サーバーレス/イベント駆動リソースを検出しました → 自動追加"
+      insert_after: ch-resource-inventory
+  granularity:
+    merge:
+      - key: monitoring_dr_compact
+        when: { alert_files_max: 3, backup_files_max: 1 }
+        chapters: [ch-monitoring, ch-dr-backup]
+        into_title: "Monitoring, backup and DR"
+        note: "監視・バックアップ設定が小規模なため統合します"
+      - key: cost_compact
+        when: { cost_files_max: 2 }
+        chapters: [ch-cost-sizing]
+        into: "absorb_by: ch-config-environment"
+        note: "コスト情報が少ないためConfiguration & environmentに内包します"
+    split:
+      - key: resource_inv_large
+        when: { resources_min: 50 }
+        chapter: ch-resource-inventory
+        into:
+          - { id: ch-resource-compute, title: "Resource inventory (compute & networking)" }
+          - { id: ch-resource-data, title: "Resource inventory (data stores & security)" }
+        note: "リソース数が多いためCompute/Dataに分割します"
 ---
 
 # Infrastructure spec template

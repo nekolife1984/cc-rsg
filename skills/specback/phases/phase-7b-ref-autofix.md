@@ -2,7 +2,7 @@
 
 ### Purpose
 
-Auto-correct `[REF: path:line]` markers in spec files that have become stale due to source code changes. Run `scripts/fix-refs.py` to parse `git diff -U0` hunk headers and update line numbers.
+Auto-correct `<!-- REF: path:line -->` markers in spec files that have become stale due to source code changes. Run `scripts/fix-refs.py` to parse `git diff -U0` hunk headers and update line numbers.
 
 ### 🆕 Multi-scope execution
 

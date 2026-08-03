@@ -236,7 +236,7 @@ def investigate_chapter(prompt):
 
 ### Pattern 3: omitting traceability citations
 - Writing the body without citations leaves later verification with "no basis".
-- Put at least one `[REF:]` in every paragraph.
+- Put at least one `<!-- REF: ... -->` in every paragraph.
 
 ### Pattern 4: stepping outside your assignment
 - Going deep into another chapter's inventory items causes overlap or contradictions between chapters.

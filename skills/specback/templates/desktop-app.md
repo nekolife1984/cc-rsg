@@ -1,7 +1,7 @@
 ---
 template_name: desktop-app
-template_version: 0.1.0
-last_updated: 2026-08-01
+template_version: 0.2.0
+last_updated: 2026-08-03
 description: Desktop application spec template. For native and cross-platform GUI applications that run on Windows, macOS, or Linux.
 reader_order:
   maintenance_developer: null
@@ -34,6 +34,118 @@ reader_order:
     - 11-state-management-persistence
     - 12-networking
     - 13-keyboard-shortcuts-accessibility
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-module-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-window-management
+      title: Window management and menus
+      slug: 04-window-management-menus
+      detection:
+        files: ["**/main.ts", "**/main.js", "**/main.py", "**/*.cs", "**/*.xaml", "**/*.storyboard", "**/tauri.conf.json", "**/Cargo.toml"]
+        patterns:
+          - rgs: ["BrowserWindow|Window|Menu|MenuItem|Tray|systemTray|dock|newWindow|createWindow"]
+          - deps: ["electron", "tauri", "Qt", "WPF", "WinForms"]
+        note_missing: "ウィンドウ管理やメニュー定義が見つかりませんでした"
+    - id: ch-platform-integration
+      title: Platform integration
+      slug: 05-platform-integration
+      detection:
+        files: ["**/Info.plist", "**/*.desktop", "**/registrations*", "**/protocols*"]
+        patterns:
+          - rgs: ["NSOpenPanel|NSSavePanel|dialog\\.showOpen|dialog\\.showSave|clipboard|drag.?drop|file.?assoc|URL.?scheme|single.?instance|auto.?start|CFBundleURLTypes"]
+          - deps: ["electron", "tauri-plugin-*"]
+        note_missing: "プラットフォーム統合（ファイルアクセス/クリップボード/DnD/URLスキーム）が見つかりませんでした"
+        optional: true
+    - id: ch-auto-update
+      title: Auto-update and installer
+      slug: 06-auto-update-installer
+      detection:
+        files: ["**/electron-builder*", "**/electron-forge*", "**/tauri.conf.json", "**/*.wxs", "**/*.wxi", "**/*.nsi", "**/create-dmg*"]
+        patterns:
+          - rgs: ["autoUpdater|auto.?update|sparkle|squirrel|electron-updater|installer|pkgbuild|productbuild"]
+          - deps: ["electron-updater", "electron-builder", "tauri-updater", "sparkle", "squirrel"]
+        note_missing: "自動更新やインストーラ設定が見つかりませんでした"
+        optional: true
+    - id: ch-ui-catalogue
+      title: UI component catalogue
+      slug: 07-ui-component-catalogue
+      detection:
+        dirs: ["src/components", "src/ui", "lib/components", "renderer/components"]
+        patterns:
+          - rgs: ["Component|Widget|Control|Button|ListView|TreeView|TableView|@Component|QWidget|QMainWindow"]
+        note_missing: "UIコンポーネント定義が見つかりませんでした"
+        optional: true
+    - id: ch-state-persistence
+      title: State management and persistence
+      slug: 08-state-management-persistence
+      detection:
+        files: ["**/store*", "**/persist*", "**/settings*", "**/preferences*", "**/*.plist", "**/config*"]
+        patterns:
+          - rgs: ["electron-store|NSUserDefaults|RegistryKey|localStorage|IndexedDB|sqlite|better-sqlite3|lowdb|conf\\.register"]
+        note_missing: "状態管理や永続化（設定/キャッシュ/セッション）が見つかりませんでした"
+        optional: true
+    - id: ch-networking
+      title: Networking
+      slug: 09-networking
+      detection:
+        patterns:
+          - rgs: ["axios|fetch|HttpClient|net\\.request|WebSocket|net\\.connect|express|http\\.createServer|server\\.listen"]
+          - deps: ["axios", "got", "node-fetch", "net", "ws"]
+        note_missing: "ネットワーク通信関連のコードが見つかりませんでした"
+        optional: true
+    - id: ch-keyboard-accessibility
+      title: Keyboard shortcuts and accessibility
+      slug: 10-keyboard-shortcuts-accessibility
+      detection:
+        patterns:
+          - rgs: ["globalShortcut|accelerator|keyboard.?shortcut|hotkey|keyBinding|KeyBinding|shortcut|accessibility|VoiceOver|Narrator|a11y|aria"]
+          - deps: ["electron", "mousetrap", "keytar"]
+        note_missing: "キーボードショートカットやアクセシビリティ設定が見つかりませんでした"
+        optional: true
+  extra_chapters:
+    - id: ch-build-deploy
+      title: Build and deployment
+      slug: 11-build-deployment
+      detection:
+        files: [".github/workflows/**", "**/fastlane/**", "**/*.xcconfig", "**/build.gradle*", "**/package.json"]
+        patterns:
+          - rgs: ["electron-builder|electron-packager|tauri build|cargo tauri|codesign|notariz|hardened.?runtime"]
+        note_detected: "ビルド/デプロイ設定を検出しました → 自動追加"
+      insert_after: ch-networking
+    - id: ch-ipc
+      title: IPC and process model detail
+      slug: 12-ipc-process-model
+      detection:
+        patterns:
+          - rgs: ["ipcMain|ipcRenderer|contextBridge|preload|process\\.send|process\\.on|child_process|Worker|spawn|fork"]
+          - deps: ["electron"]
+        note_detected: "IPC通信やプロセス管理コードを検出しました → 自動追加"
+      insert_after: ch-window-management
+  granularity:
+    merge:
+      - key: platform_ui_compact
+        when: { platform_files_max: 3, ui_dirs_max: 2 }
+        chapters: [ch-platform-integration, ch-ui-catalogue]
+        into_title: "Platform integration and UI components"
+        note: "プラットフォーム連携とUIが小規模なため統合します"
+      - key: state_net_compact
+        when: { state_files_max: 3, net_patterns_max: 5 }
+        chapters: [ch-state-persistence, ch-networking]
+        into_title: "State management and networking"
+        note: "永続化とネットワークが小規模なため統合します"
+    split:
+      - key: windows_large
+        when: { windows_min: 10 }
+        chapter: ch-window-management
+        into:
+          - { id: ch-windows-main, title: "Window management (main windows)" }
+          - { id: ch-windows-dialog, title: "Window management (dialogs & popups)" }
+        note: "ウィンドウ数が多いためMain/Dialogに分割します"
 ---
 
 # Desktop application spec template

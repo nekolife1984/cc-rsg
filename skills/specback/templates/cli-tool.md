@@ -1,7 +1,7 @@
 ---
 template_name: cli-tool
-template_version: 0.1.0
-last_updated: 2026-08-01
+template_version: 0.2.0
+last_updated: 2026-08-03
 description: CLI tool spec template. For command-line programs distributed as standalone binaries or via package managers.
 reader_order:
   maintenance_developer: null
@@ -30,6 +30,101 @@ reader_order:
     - 09-output-format
     - 10-usage-examples
     - 11-internal-structure
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-module-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-module-architecture
+      title: Architecture overview
+      slug: 03-architecture-overview
+      detection:
+        dirs: ["cmd/", "internal/", "src/"]
+        patterns:
+          - deps: ["cobra", "clap", "click", "typer", "commander", "argparse", "urfave/cli"]
+        note_missing: "CLI framework (cobra/clap/click/typer) の使用が見つかりませんでした"
+    - id: ch-installation
+      title: Installation
+      slug: 04-installation
+      detection:
+        files: ["setup.py", "pyproject.toml", "Cargo.toml", "package.json", "install.sh", "brew*", "snapcraft.yaml"]
+        patterns:
+          - rgs: ["console_scripts", "\"bin\"", "brew install", "pip install", "npm install -g", "cargo install", "go install"]
+        note_missing: "パッケージマニフェストやインストール手順が見つかりませんでした"
+        optional: true
+    - id: ch-command-catalogue
+      title: Command-line reference
+      slug: 06-command-catalogue
+      detection:
+        dirs: ["cmd/", "commands/", "cli/"]
+        patterns:
+          - rgs: ["AddCommand|subcommand|register|command|newCommand", "def main|func main|fn main"]
+          - deps: ["cobra", "clap", "click", "typer", "commander", "argparse"]
+        note_missing: "コマンド定義ディレクトリやCLIフレームワークが見つかりませんでした"
+    - id: ch-configuration
+      title: Configuration
+      slug: 08-configuration
+      detection:
+        files: ["config*", "settings*", "**/*.yaml", "**/*.toml", "**/*.conf", ".env*"]
+        patterns:
+          - rgs: ["config|setting|option|conf\\.|viper|envoy"]
+        note_missing: "設定ファイルやconfig関連コードが見つかりませんでした"
+        optional: true
+    - id: ch-output-format
+      title: Output formats
+      slug: 09-output-formats
+      detection:
+        patterns:
+          - rgs: ["--output|--format|--json|--yaml|render|pretty.?print|tablewriter|json\\.Marshal"]
+        note_missing: "構造化出力やフォーマット指定のコードが見つかりませんでした"
+        optional: true
+    - id: ch-internal-structure
+      title: Internal structure (optional)
+      slug: 10-internal-structure
+      detection:
+        dirs: ["internal/", "src/internal", "lib/internal"]
+        note_missing: "内部構造（internal/）ディレクトリが見つかりませんでした"
+        optional: true
+  extra_chapters:
+    - id: ch-exit-codes
+      title: Exit codes and error handling
+      slug: 11-exit-codes
+      detection:
+        patterns:
+          - rgs: ["os\\.Exit|process\\.exit|exit\\(|exit_code|ExitCode"]
+      note_detected: "明示的なexit code処理を検出しました → 自動追加"
+      insert_after: ch-command-catalogue
+    - id: ch-plugin
+      title: Extension points / plugin system
+      slug: 12-plugin-system
+      detection:
+        patterns:
+          - rgs: ["plugin|extension|hook|middleware"]
+        note_detected: "プラグイン/拡張機能コードを検出しました → 自動追加"
+      insert_after: ch-configuration
+  granularity:
+    merge:
+      - key: install_cmd_compact
+        when: { commands_max: 5, install_files_max: 1 }
+        chapters: [ch-installation, ch-command-catalogue]
+        into_title: "Installation and command reference"
+        note: "コマンド数が少ないためInstallationとCommand referenceを統合します"
+      - key: config_output_compact
+        when: { config_files_max: 3, format_patterns_max: 2 }
+        chapters: [ch-configuration, ch-output-format]
+        into_title: "Configuration and output formats"
+        note: "設定・出力フォーマットがシンプルなため統合します"
+    split:
+      - key: commands_large
+        when: { commands_min: 30 }
+        chapter: ch-command-catalogue
+        into:
+          - { id: ch-cmd-user, title: "Command catalogue (user-facing)" }
+          - { id: ch-cmd-admin, title: "Command catalogue (admin/advanced)" }
+        note: "コマンド数が多いためUser/Adminに分割します"
 ---
 
 # CLI tool spec template
