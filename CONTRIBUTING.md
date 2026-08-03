@@ -206,7 +206,7 @@ mypy scripts/source_map_v2/ --ignore-missing-imports --follow-imports=skip
 
 - `## Sources Read` セクションを含める
 - `[REF: path:line]` マーカーでトレーサビリティを確保する
-- `[CONFIDENCE: ...]` ラベルで推測と確定を区別する
+- `<!-- CONFIDENCE: ... -->` ラベルで推測と確定を区別する
 - Mermaid ダイアグラムを含める（該当する場合）
 
 ## 検証チェックリストを拡充する

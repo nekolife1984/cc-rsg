@@ -119,7 +119,7 @@ Around each `<!-- REF: ... -->`, add prose explaining "what is happening". Writi
 #### STEP D: Uncertainty markers
 
 Surface uncertainty in each statement:
-- `[CONFIDENCE: HIGH | MED | LOW]`
+- `<!-- CONFIDENCE: HIGH | MED | LOW -->`
 - `[ASK SME]` (needs confirmation from a subject-matter expert)
 - `[ASSUMED: ...]` (basis for the inference)
 
