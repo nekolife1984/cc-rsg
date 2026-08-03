@@ -69,7 +69,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    1. The `<!-- meta: ... -->` comment line described above.
    2. One blank line.
    3. The chapter title `#` heading, rendered in `goal.json.output_language`.
-   4. (Optional, for `standard` chapters only) a placeholder line `(to be filled in Phase 3)` followed by `## Sources Read` at the end — the literal `## Sources Read` heading is preserved verbatim in English even when output language is Japanese, because `coverage-check.py` matches on the English string.
+   4. (Optional, for `standard` chapters only) a placeholder line `(to be filled in Phase 3)` at the end — Phase 3 will populate the body and add `## Sources Read` with actual file references.
 
    Total body length per skeleton MUST be **≤ 5 non-blank lines** outside of code fences. This cap is the structural enforcement of "Phase 2 ≠ Phase 3".
 
@@ -93,8 +93,6 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    # Chapter 2: Entities
 
    (to be filled in Phase 3)
-
-   ## Sources Read
    ```
 
    JA equivalent (when `output_language == "ja"`):
@@ -105,11 +103,9 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    # 第2章: エンティティ
 
    (Phase 3 で記入予定)
-
-   ## Sources Read
    ```
 
-   Note that the meta comment and the `## Sources Read` heading stay English in BOTH variants (they are structural markers `coverage-check.py` and the chapter pipeline match on). Only the chapter title (`# Chapter 2: Entities` / `# 第2章: エンティティ`) and the placeholder phrase switch by `output_language`.
+   Note that the meta comment stays English in BOTH variants (it is a structural marker the chapter pipeline matches on). Only the chapter title (`# Chapter 2: Entities` / `# 第2章: エンティティ`) and the placeholder phrase switch by `output_language`. The `## Sources Read` section is omitted here because Phase 2 has not read any source code yet — Phase 3 adds it with actual file references after reading the codebase.
 
    That is the entire file. No table. No entity names. No `belongs_to` notes. No diagrams. Phase 3 fills the rest after reading the real source.
 
