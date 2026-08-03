@@ -34,6 +34,109 @@ reader_order:
     - 11-extension-points
     - 12-migration-guide
     - 13-internal-structure
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-module-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-installation
+      title: Installation
+      slug: 04-installation
+      detection:
+        files: ["README*", "INSTALL*", "setup.py", "setup.cfg", "pyproject.toml", "package.json"]
+        patterns:
+          - rgs: ["pip install|npm install|gem install|cargo install|brew install"]
+        note_missing: "Installation instructions not found"
+        optional: true
+    - id: ch-usage-examples
+      title: Usage examples (quick start)
+      slug: 05-usage-examples
+      detection:
+        files: ["README*", "EXAMPLES*", "example*", "docs/example*", "tests/**"]
+        patterns:
+          - rgs: ["examples?", "quick.?start", "usage", "how.?to"]
+        note_missing: "Usage examples not found"
+        optional: true
+    - id: ch-api-catalogue
+      title: Public API catalogue
+      slug: 06-public-api-catalogue
+      detection:
+        files: ["__init__.py", "index.ts", "index.js", "lib/**", "src/**"]
+        patterns:
+          - rgs: ["^export |^module\\.|^def |^public |^pub fn"]
+        note_missing: "Public API definitions not found"
+    - id: ch-config-options
+      title: Configuration options
+      slug: 07-configuration-options
+      detection:
+        files: ["config*", "settings*", "**/*.conf", ".env*"]
+        patterns:
+          - rgs: ["config|setting|option|parameter|default"]
+        note_missing: "Configuration options not found"
+        optional: true
+    - id: ch-compatibility
+      title: Compatibility
+      slug: 08-compatibility
+      detection:
+        files: ["setup.py", "setup.cfg", "pyproject.toml", "package.json", "*.gemspec", "Cargo.toml"]
+        patterns:
+          - rgs: ["python_requires|engines?|node.*require|platform|requires"]
+        note_missing: "Compatibility information not found"
+        optional: true
+    - id: ch-extension-points
+      title: Extension points / plugin system
+      slug: 09-extension-points
+      detection:
+        patterns:
+          - rgs: ["plugin|extension|hook|middleware|spi|provider|interface|abstract.?class"]
+        note_missing: "Extension points or plugin system not found"
+        optional: true
+    - id: ch-migration-guide
+      title: Migration guide
+      slug: 10-migration-guide
+      detection:
+        files: ["CHANGELOG*", "MIGRATION*", "UPGRADE*", "changelog*"]
+        patterns:
+          - rgs: ["deprecat|breaking.?change|migrate|upgrade"]
+        note_missing: "Migration guide or changelog not found"
+        optional: true
+    - id: ch-internal-structure
+      title: Internal structure (optional)
+      slug: 11-internal-structure
+      detection:
+        dirs: ["src/lib", "src/internal", "internal", "lib/internal"]
+        patterns:
+          - rgs: ["internal|private|_private|__internal"]
+        note_missing: "Internal structure documentation is limited"
+        optional: true
+  extra_chapters:
+    - id: ch-performance
+      title: Performance characteristics
+      slug: 14-performance
+      detection:
+        patterns:
+          - rgs: ["benchmark|performance|latency|throughput|O\\(|complexity"]
+          - files: ["benchmarks/**", "benches/**"]
+        note_detected: "Benchmarks or performance tests detected → auto-added"
+      insert_after: ch-compatibility
+  granularity:
+    merge:
+      - key: install_usage_quick
+        when: { api_functions_max: 15, usage_examples_max: 3 }
+        chapters: [ch-installation, ch-usage-examples]
+        into_title: "Installation and quick start"
+        note: "Small API surface → merging Installation and Usage"
+    split:
+      - key: api_large
+        when: { api_functions_min: 80 }
+        chapter: ch-api-catalogue
+        into:
+          - { id: ch-api-core, title: "Public API catalogue (core)" }
+          - { id: ch-api-utils, title: "Public API catalogue (utilities)" }
+        note: "Large API surface → split into core/utilities"
 ---
 
 # Library / SDK spec template

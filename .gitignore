@@ -44,3 +44,6 @@ Thumbs.db
 
 # local working dir (not part of the published skill)
 **/_local/
+
+# Graphify 自動生成コードグラフ（コードから再生成可能）
+graphify-out/

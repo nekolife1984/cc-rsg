@@ -34,6 +34,99 @@ reader_order:
     - 11-error-codes
     - 12-versioning
     - 13-operations-settings
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-endpoint-catalogue
+      title: Endpoint catalogue
+      slug: 04-endpoint-catalogue
+      detection:
+        dirs: ["routes", "endpoints", "api"]
+        files: ["openapi*", "swagger*", "**/*.graphql", "**/*.gql"]
+        note_missing: "API endpoint definitions not found"
+    - id: ch-auth
+      title: Authentication
+      slug: 05-authentication
+      detection:
+        patterns:
+          - rgs: ["auth", "jwt", "oauth", "token", "ApiKey", "Bearer"]
+          - deps: ["devise", "passport", "spring-security", "flask-login", "jwt-auth"]
+        note_missing: "Authentication code or library not found"
+    - id: ch-rate-limiting
+      title: Rate limiting / quotas
+      slug: 06-rate-limiting
+      detection:
+        patterns:
+          - rgs: ["rate.?limit", "throttle", "quotas?", "429"]
+          - deps: ["rack-attack", "django-ratelimit", "flask-limiter", "resilience4j"]
+        note_missing: "Rate limiting configuration not found"
+        optional: true
+    - id: ch-sla
+      title: SLA / performance requirements
+      slug: 07-sla-performance
+      detection:
+        patterns:
+          - rgs: ["sla", "p99", "p95", "latency", "throughput", "uptime"]
+        note_missing: "SLA or performance requirements not found"
+        optional: true
+    - id: ch-request-response
+      title: Request / response specifications
+      slug: 08-request-response
+      detection:
+        files: ["openapi*", "swagger*", "**/*.graphql", "schemas/**"]
+        note_missing: "Request/response schema definitions not found"
+    - id: ch-error-codes
+      title: Error codes / error responses
+      slug: 09-error-codes
+      detection:
+        patterns:
+          - rgs: ["error.*code", "ErrorCode", "error_code", "ApiError"]
+        note_missing: "Error code definitions not found"
+        optional: true
+    - id: ch-versioning
+      title: Versioning
+      slug: 10-versioning
+      detection:
+        patterns:
+          - rgs: ["v1/|v2/|v3/", "api.?version", "versioning"]
+        note_missing: "API versioning evidence not found"
+        optional: true
+    - id: ch-operations
+      title: Operations settings
+      slug: 11-operations-settings
+      detection:
+        files: ["Dockerfile", "docker-compose*", "deploy/**", ".github/workflows/**", "Jenkinsfile", "k8s/**"]
+        note_missing: "Dockerfile or CI/CD config not found"
+  extra_chapters:
+    - id: ch-webhooks
+      title: Webhook integration
+      slug: 14-webhooks
+      detection:
+        patterns:
+          - rgs: ["webhook", "callback.?url", "callbackUrl"]
+          - deps: ["svix", "standard-webhooks"]
+        note_detected: "Webhook code detected → auto-added"
+      insert_after: ch-error-codes
+  granularity:
+    merge:
+      - key: ops_merge
+        when: { operations_files_max: 2 }
+        chapters: [ch-sla, ch-operations]
+        into_title: "Operations and SLA"
+        note: "Operations config minimal → merging SLA and Operations"
+    split:
+      - key: endpoints_large
+        when: { endpoints_min: 60 }
+        chapter: ch-endpoint-catalogue
+        into:
+          - { id: ch-endpoints-public, title: "Endpoint catalogue (public API)" }
+          - { id: ch-endpoints-internal, title: "Endpoint catalogue (internal API)" }
+        note: "Many endpoints → split into public/internal"
 ---
 
 # API service spec template

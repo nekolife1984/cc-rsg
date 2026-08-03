@@ -1,7 +1,7 @@
----
+|---
 template_name: web-app
-template_version: 0.1.0
-last_updated: 2026-05-01
+template_version: 0.1.1
+last_updated: 2026-08-03
 description: Web application spec template. For interactive systems that render HTML.
 reader_order:
   maintenance_developer: null
@@ -32,6 +32,113 @@ reader_order:
     - 10-routes-endpoints
     - 11-data-model
     - 12-screens-transitions
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-screens
+      title: Screens and screen transitions
+      slug: 05-screens-transitions
+      detection:
+        dirs: ["views", "templates", "pages", "app/views"]
+        note_missing: "画面テンプレート（views/templates/pages）が見つかりませんでした"
+    - id: ch-routes
+      title: Routes / endpoints
+      slug: 06-routes-endpoints
+      detection:
+        files: ["routes/**", "config/routes*", "urls.py", "app/**/urls.py", "router/**", "routes.rb"]
+        note_missing: "ルーティング定義ファイルが見つかりませんでした"
+    - id: ch-data-model
+      title: Data model
+      slug: 10-data-model
+      detection:
+        dirs: ["migrations", "db/migrate", "database/migrations", "prisma", "schema", "models", "app/models", "Entities"]
+        note_missing: "データモデル定義（migration/model/schema）が見つかりませんでした"
+        optional: true
+    - id: ch-auth
+      title: Authentication and authorisation
+      slug: 08-authentication-authorisation
+      detection:
+        patterns:
+          - rgs: ["session", "auth", "login", "logout", "password_reset"]
+          - deps: ["devise", "passport", "authlogic", "omniauth", "spring-security", "flask-login", "django.contrib.auth"]
+          - files: ["**/middleware/**auth*", "**/Auth/**", "**/auth/**"]
+        note_missing: "認証フレームワーク・認証関連コードが見つかりませんでした"
+    - id: ch-external-interfaces
+      title: External interfaces
+      slug: 09-external-interfaces
+      detection:
+        patterns:
+          - rgs: ["requests\\.(get|post|put|delete)", "axios\\.(get|post|put|delete)", "HttpClient", "RestTemplate", "WebClient\\."]
+          - deps: ["guzzlehttp", "httparty", "faraday", "okhttp", "retrofit", "unirest"]
+          - files: ["config/**/external*", "config/**/integration*"]
+        note_missing: "HTTPクライアントライブラリの使用や外部連携設定が見つかりませんでした"
+    - id: ch-operations
+      title: Operations settings
+      slug: 11-operations-settings
+      detection:
+        files: ["Dockerfile", "docker-compose*", "deploy/**", "ci/**", ".github/workflows/**", "Jenkinsfile", "k8s/**", "helm/**"]
+        note_missing: "DockerfileやCI/CD設定が見つかりませんでした"
+  extra_chapters:
+    - id: ch-background-jobs
+      title: Background jobs
+      slug: 13-background-jobs
+      detection:
+        dirs: ["app/jobs", "app/workers", "jobs", "workers"]
+        deps: ["sidekiq", "resque", "delayed_job", "active_job", "good_job", "celery", "dramatiq", "huey", "rq", "apscheduler"]
+      insert_after: ch-external-interfaces
+      note_detected: "バックグラウンドジョブフレームワークを検出しました → 自動追加"
+    - id: ch-caching
+      title: Caching strategy
+      slug: 14-caching
+      detection:
+        deps: ["redis", "memcache", "dalli", "redis-store"]
+        files: ["config/**/cache*"]
+      insert_after: ch-data-model
+      note_detected: "キャッシュ関連の設定やライブラリを検出しました → 追加候補"
+  granularity:
+    merge:
+      - key: screens_routes
+        when: { screens_max: 3, routes_max: 10 }
+        chapters: [ch-screens, ch-routes]
+        into_title: "Web interface (screens & routes)"
+        note: "画面数が少ないためScreensとRoutesを統合します"
+      - key: auth_into_ops
+        when: { auth_files_max: 3 }
+        chapters: [ch-auth]
+        into: "absorb_by: ch-operations"
+        note: "認証ロジックが単純なためOperationsに内包します"
+      - key: extif_into_ops
+        when: { external_ifs_max: 1 }
+        chapters: [ch-external-interfaces]
+        into: "absorb_by: ch-operations"
+        note: "外部連携が少ないためOperationsに内包します"
+    split:
+      - key: data_model_large
+        when: { entities_min: 20 }
+        chapter: ch-data-model
+        into:
+          - { id: ch-data-model-core, title: "Data model (core entities)" }
+          - { id: ch-data-model-analytics, title: "Data model (analytics/reporting)" }
+        note: "Entity数が多いため2章に分割します"
+      - key: endpoints_large
+        when: { endpoints_min: 50 }
+        chapter: ch-routes
+        into:
+          - { id: ch-routes-public, title: "Routes / endpoints (public API)" }
+          - { id: ch-routes-internal, title: "Routes / endpoints (internal API)" }
+        note: "エンドポイント数が多いためPublic/Internalに分割します"
+      - key: external_ifs_large
+        when: { external_ifs_min: 5 }
+        chapter: ch-external-interfaces
+        into:
+          - { id: ch-extif-api, title: "External interfaces (REST API integrations)" }
+          - { id: ch-extif-queue, title: "External interfaces (DB / message queues)" }
+        note: "外部連携が多いため2章に分割します"
 ---
 
 # Web application spec template
