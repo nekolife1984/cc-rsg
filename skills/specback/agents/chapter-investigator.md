@@ -115,8 +115,8 @@ Include **at least one Mermaid diagram** appropriate to the chapter:
 
 Surface uncertainty in each statement:
 - `<!-- CONFIDENCE: HIGH | MED | LOW -->`
-- `[ASK SME]` (needs SME confirmation)
-- `[ASSUMED: ...]` (basis for the inference)
+- `<!-- ASK SME -->` (needs SME confirmation)
+- `<!-- ASSUMED: ... -->` (basis for the inference)
 
 ### STEP F: Detail-question extraction
 

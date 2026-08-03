@@ -433,13 +433,13 @@ def check_question_integrity(
                     f"{qid}: related_inventory_ids entry {inv_id} not found in inventory.json"
                 )
 
-    blocked_pattern = re.compile(r"\[BLOCKED:\s*see\s+(Q-[A-Za-z0-9_-]+)\]")
+    blocked_pattern = re.compile(r"<!--\s*BLOCKED:\s*see\s+(Q-[A-Za-z0-9_-]+)\s*-->")
     blocked_referenced: list[str] = []
     for content in drafts.values():
         for match in blocked_pattern.finditer(content):
             ref_id = match.group(1)
             if ref_id not in question_ids:
-                issues.append(f"draft contains [BLOCKED: see {ref_id}] but the question is missing from questions.json")
+                issues.append(f"draft contains <!-- BLOCKED: see {ref_id} --> but the question is missing from questions.json")
             else:
                 blocked_referenced.append(ref_id)
 

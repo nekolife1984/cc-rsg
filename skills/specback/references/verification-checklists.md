@@ -73,9 +73,9 @@ Regardless of template, confirm the following on every spec.
 - [ ] Cited line ranges are valid (do not exceed the file's line count).
 
 ### Uncertainty markers
-- [ ] When `[BLOCKED]` markers appear, the corresponding Question ID exists in `questions.json`.
+- [ ] When `<!-- BLOCKED -->` markers appear, the corresponding Question ID exists in `questions.json`.
 - [ ] `<!-- CONFIDENCE: LOW -->` markers do not appear in more than half of any chapter (if they do, consider re-running the sub-agent).
-- [ ] Remaining `[ASK SME]` markers are recorded as items to be handled in Phase 5 dialogue.
+- [ ] Remaining `<!-- ASK SME -->` markers are recorded as items to be handled in Phase 5 dialogue.
 
 ### Cross-chapter consistency
 - [ ] When the same inventory item is mentioned in multiple chapters, the descriptions do not contradict each other.

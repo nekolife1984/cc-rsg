@@ -112,8 +112,8 @@ For **screen detail sections** (Section 3.3 of web-app template), always use the
 
 Surface uncertainty in each statement:
 - `<!-- CONFIDENCE: HIGH | MED | LOW -->`
-- `[ASK SME]` (needs SME confirmation)
-- `[ASSUMED: ...]` (basis for the inference)
+- `<!-- ASK SME -->` (needs SME confirmation)
+- `<!-- ASSUMED: ... -->` (basis for the inference)
 
 ### STEP F: Detail-question extraction → **save to the trailing comment**
 

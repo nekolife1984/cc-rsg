@@ -668,7 +668,7 @@ Code-derived record of design decisions. Confidence is typically low since ratio
 Extraction strategy:
 - Search for design-related comments (`// Why:`, `# Reason:`, `/* Decision: */`)
 - Read README / CONTRIBUTING / design docs for explicit rationale
-- When no explicit rationale exists, mark 🔴 ASSUMED and add `[ASK SME]`
+- When no explicit rationale exists, mark 🔴 ASSUMED and add `<!-- ASK SME -->`
 
 `<!-- CONFIDENCE: LOW — ADR entries are almost always inferred unless explicitly documented -->`
 

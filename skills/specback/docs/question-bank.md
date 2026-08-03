@@ -41,7 +41,7 @@ Users may add custom categories as needed (v1 expects manual JSON editing; UI is
 
 ### Severity levels
 
-- **critical**: cannot write the chapter without resolving this. The sub-agent leaves the section blank (`[BLOCKED]`).
+- **critical**: cannot write the chapter without resolving this. The sub-agent leaves the section blank (`<!-- BLOCKED -->`).
 - **important**: can be written with inference but confidence is low. Leave a `<!-- CONFIDENCE: LOW -->` marker.
 - **nice-to-have**: a question about fine detail. Write with inference and lightly confirm in Phase 5.
 

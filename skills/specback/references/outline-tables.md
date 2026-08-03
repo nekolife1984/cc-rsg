@@ -22,11 +22,11 @@ These 5 tables exist as **abstractions in every language and framework** and for
 |--------|---------|-------------------|---------------------|
 | 🟢 **VERIFIED** | Confirmed the real code by reading it with the Read tool | The file appears in the read history | May still trigger if comment/claim conflict detected |
 | 🟡 **INFERRED** | **Mechanically extracted** via ripgrep / imports / naming convention | The `rg` hit line can be cited as `[REF: path:Lstart-Lend]` | Triggers if chain length ≥ 3 (configurable via `goal.json.doubt.inferred_chain_min`) |
-| 🔴 **ASSUMED** | Inferred from framework "typical behaviour" (code unread) | Needs SME confirmation; pair with `[ASK SME]` marker | **Always triggers** — highest priority in doubt-pass |
+| 🔴 **ASSUMED** | Inferred from framework "typical behaviour" (code unread) | Needs SME confirmation; pair with `<!-- ASK SME -->` marker | **Always triggers** — highest priority in doubt-pass |
 
 **🟢 and 🟡 are source-derived (trustworthy). 🔴 is from the agent's knowledge base only (needs confirmation).**
 
-**Doubt-pass effect:** After doubt-pass runs, 🔴 markers may be upgraded to 🟡 or 🟢 (if the code re-read confirms the assumption), or downgraded to `[BLOCKED: see Q-NNN]` (if re-read contradicts the assumption). The final confidence score from doubt-pass is recorded in `doubt-report.json`. See `docs/doubt-pass.md`.
+**Doubt-pass effect:** After doubt-pass runs, 🔴 markers may be upgraded to 🟡 or 🟢 (if the code re-read confirms the assumption), or downgraded to `<!-- BLOCKED: see Q-NNN -->` (if re-read contradicts the assumption). The final confidence score from doubt-pass is recorded in `doubt-report.json`. See `docs/doubt-pass.md`.
 
 ### MECE-verification criteria (outline mode)
 
@@ -452,7 +452,7 @@ When a feature cannot be determined from code:
      "status": "open"
    }
    ```
-2. Mark the feature row as 🔴 ASSUMED and add `[ASK SME]`.
+2. Mark the feature row as 🔴 ASSUMED and add `<!-- ASK SME -->`.
 3. In Phase 5 dialogue, present these to the SME for confirmation.
 
 ### Chapter-investigator procedure for Feature specifications

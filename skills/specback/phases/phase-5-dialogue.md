@@ -85,7 +85,7 @@ Reflect the answer into the corresponding entry in `questions.json`:
 ### Applying answers
 
 - Reflect each answer into the corresponding chapter draft (remove or update uncertainty markers).
-- Fill in `[BLOCKED: see Q-NNN]` sections.
+- Fill in `<!-- BLOCKED: see Q-NNN -->` sections.
 - **Answers that define a new deliverable structure are actions, not notes.** If a dialogue answer fixes the contents/sections of a `kind: "user_custom"` chapter that is still empty (or fixes a new file the user introduced in Phase 5), the agent MUST:
   1. Update the corresponding `wbs.json.chapters[]` entry — set or refine `chapter_title`, `assigned_inventory_ids`, and append the answer text to `source_intent`.
   2. Push the chapter back to Phase 3 (re-open with `status: "pending"`) and run a `chapter-investigator` pass (or the in-line equivalent) to actually write the file.
