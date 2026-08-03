@@ -86,7 +86,7 @@ NAMING_EXEMPT = {"traceability.md", "README.md"}
 REQUIRED_FILES = ("00-metadata.md", "99-unresolved.md", "traceability.md")
 
 # Regexes used in chapter bodies
-REF_RE = re.compile(r"\[REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\]")
+REF_RE = re.compile(r"<!-- REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\s*-->")
 CODE_FENCE_RE = re.compile(r"^```([a-zA-Z0-9_-]+)?")
 MERMAID_FENCE_RE = re.compile(r"^```mermaid\b")
 SOURCES_READ_RE = re.compile(r"^##+\s*Sources\s*Read\b", re.IGNORECASE)

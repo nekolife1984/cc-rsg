@@ -2,7 +2,7 @@
 """
 specback build-trace.py
 
-Extracts every `[REF: path:start-end]` written in drafts/*.md (or
+Extracts every `<!-- REF: path:start-end -->` written in drafts/*.md (or
 final/*.md), matches them against the source units in
 `.specback/source-map.json`, and produces `.specback/trace.json`.
 
@@ -61,7 +61,7 @@ except ImportError:
     HAS_YAML = False
 
 
-REF_RE = re.compile(r"\[REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\]")
+REF_RE = re.compile(r"<!-- REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\s*-->")
 SECTION_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
 
 
@@ -120,7 +120,7 @@ def parse_section_at(lines: list[str], line_no_0idx: int) -> str:
 
 
 def scan_drafts_for_refs(drafts_dir: Path) -> list[dict]:
-    """Extract every [REF: ...] from drafts/*.md (or final/*.md)."""
+    """Extract every <!-- REF: ... --> from drafts/*.md (or final/*.md)."""
     out: list[dict] = []
     if not drafts_dir.is_dir():
         return out
@@ -193,7 +193,7 @@ def main(argv: list[str] | None = None) -> int:
         "--target-dir-for-required",
         default="final",
         choices=["drafts", "final"],
-        help="Which directory to scan for [REF:] markers (drafts or final)",
+        help="Which directory to scan for <!-- REF: ... --> markers (drafts or final)",
     )
     parser.add_argument(
         "--output-dir",

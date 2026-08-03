@@ -29,7 +29,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    ```bash
    python "$(cat .specback/.skill-path)/scripts/build-trace.py" --specback-dir .specback --output-dir {output_dir} --target-dir-for-required drafts
    ```
-   This resolves every `[REF: path:line]` in `drafts/*.md` to a SRC unit and produces the MECE aggregation.
+   This resolves every `<!-- REF: path:line -->` in `drafts/*.md` to a SRC unit and produces the MECE aggregation.
 
 2. **Run coverage-check.py (mandatory; exit code is binding)**
    ```bash
@@ -67,7 +67,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    - inventory count (min: `max(50, files / 20)`)
    - macro-type INV ratio (max 20%)
    - covered_by fill rate (90%)
-   - per-chapter body lines (≥ 200), [REF:] count (≥ 10), code blocks (≥ 3), Mermaid (≥ 1), Sources Read items (≥ 5) — **applied only to standard chapters that are NOT excluded by Phase 1 detection (excluded chapters are skipped entirely by Phase 2 and must not appear in the draft directory); user_custom chapters are exempt**
+   - per-chapter body lines (>= 200), <!-- REF: ... --> count (>= 10), code blocks (>= 3), Mermaid (>= 1), Sources Read items (>= 5) — **applied only to standard chapters that are NOT excluded by Phase 1 detection (excluded chapters are skipped entirely by Phase 2 and must not appear in the draft directory); user_custom chapters are exempt**
    - questions count (≥ 10), open ratio (≤ 20%)
    - MECE coverage (≥ 70%)
    - **Check 12 — User-custom deliverables**: every filename in `goal.json.user_custom_deliverables` must exist in the target directory (`.specback/drafts/` in Phase 4, `{output_dir}/` (default: `.specback/final/`) in Phase 6) AND have a non-empty body (≥ 10 non-blank lines outside code fences).

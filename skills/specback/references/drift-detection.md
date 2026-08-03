@@ -146,7 +146,7 @@ This uses the same matching heuristic as `build-trace.py`'s `resolve_refs_to_uni
 
 ## Phase 7b — Incremental Update (`scripts/fix-refs.py`)
 
-`scripts/fix-refs.py` extends Phase 7 by auto-correcting [REF:] markers.
+`scripts/fix-refs.py` extends Phase 7 by auto-correcting `<!-- REF: ... -->` markers.
 
 ### Mechanism
 

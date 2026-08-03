@@ -25,7 +25,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
 | depth_mode | Main behaviour | Chapter body shape |
 |---|---|---|
-| `comprehensive` | Apply STEP A-F below to every chapter | Full prose per section. tone:concise → compact; tone:thorough → detailed |
+| `comprehensive` | Apply STEP A-F below to every chapter | Full prose per section. tone:concise -> compact; tone:thorough -> detailed |
 | **`outline` / `interactive`** | **STEP A-F are replaced for Layer 1 / 2 chapters** (see "outline-mode chapter writing" below) | Table-first + relationship diagrams + deep-dive candidate list |
 
 In `outline` / `interactive` mode the following `comprehensive`-only STEPs do NOT apply:
@@ -49,7 +49,7 @@ List the viewed file paths and line ranges at the **end of the chapter under a `
 ```markdown
 # Chapter 5: Data Model
 
-... (chapter body with `[REF:]` citations)
+... (chapter body with `<!-- REF: ... -->` citations)
 
 ## Sources Read
 - `app/models/issue.rb` (lines 1-440)
@@ -59,7 +59,7 @@ List the viewed file paths and line ranges at the **end of the chapter under a `
 - `app/models/concerns/soft_delete.rb` (lines 1-95)
 ```
 
-**Minimum 5 files** under Sources Read. `coverage-check.py` enforces this count. Writing `[REF:]` citations for files that are not listed is forbidden.
+**Minimum 5 files** under Sources Read. `coverage-check.py` enforces this count. Writing `<!-- REF: ... -->` citations for files that are not listed is forbidden.
 
 > Examples shown use Rails conventions. For catalogues covering PHP /
 > Python (FastAPI / Django) / Java (Spring) / JavaScript & TypeScript
@@ -72,26 +72,26 @@ List the viewed file paths and line ranges at the **end of the chapter under a `
 Extract at least **10 concrete citations** from the viewed code, all in **exactly one format**:
 
 ```
-[REF: <workspace-relative path>:<start>]
-[REF: <workspace-relative path>:<start>-<end>]
+<!-- REF: <workspace-relative path>:<start> -->
+<!-- REF: <workspace-relative path>:<start>-<end> -->
 ```
 
 Examples:
 
 ```
-[REF: app/models/issue.rb:42-56]
-[REF: app/models/issue.rb:120-145]
-[REF: config/routes.rb:7]
+<!-- REF: app/models/issue.rb:42-56 -->
+<!-- REF: app/models/issue.rb:120-145 -->
+<!-- REF: config/routes.rb:7 -->
 ```
 
-**Strict format requirements** (the UI's REF chip click-to-source feature parses these — variant formats render as plain non-clickable text, breaking reviewer flow):
+**Strict format requirements** (the UI's REF chip click-to-source feature parses these variant formats render as plain non-clickable text, breaking reviewer flow):
 
-- Use **`[REF: path:line]` or `[REF: path:start-end]` only**. The square brackets, the `REF:` prefix, and the colon between path and line numbers are all mandatory.
+- Use **`<!-- REF: path:line -->` or `<!-- REF: path:start-end -->` only**. The HTML comment markers, the `REF:` prefix, and the colon between path and line numbers are all mandatory.
 - The path is workspace-relative (`app/...` for an env with `archiveRoot = "myapp-main"`). Absolute paths are forbidden.
 - Line numbers are integers. Use a single line (`:42`) when a single line is being cited; use a range (`:42-56`) when an extent matters. Do NOT use `L42`, `line 42`, ` lines 42-56`, parentheses, or any other decoration.
 - Forbidden alternative forms include but are not limited to:
   - ❌ `Gemfile (lines 1-138)` — parenthesised line annotation
-  - ❌ `<!-- Gemfile lines 1-138 -->` — HTML comment marker
+  - ❌ `[REF: Gemfile:1-138]` — **deprecated** legacy format (will be parsed but should not be written in new specs)
   - ❌ `// app.js lines 1-5` — JS-style comment marker
   - ❌ `[REF: Gemfile L1-L138]` — leading `L`
   - ❌ `[REF: Gemfile, lines 1-138]` — comma + word "lines"
@@ -105,16 +105,16 @@ Incorporate the citations into the body. **Per-chapter mandatory requirements**:
 
 | Item | Minimum | Verification script |
 |------|---------|-------------|
-| `[REF:]` count | ≥ 10 | coverage-check.py |
-| fenced code block | ≥ 3 | coverage-check.py |
-| Mermaid diagrams | ≥ 1 | coverage-check.py |
-| Sources Read items | ≥ 5 | coverage-check.py |
+| `<!-- REF: ... -->` count | >= 10 | coverage-check.py |
+| fenced code block | >= 3 | coverage-check.py |
+| Mermaid diagrams | >= 1 | coverage-check.py |
+| Sources Read items | >= 5 | coverage-check.py |
 
-Body length is guided by `goal.tone`: `concise` → compact prose (facts + citations); `thorough` → include background, rationale, alternatives. No fixed line-count minimum.
+Body length is guided by `goal.tone`: `concise` -> compact prose (facts + citations); `thorough` -> include background, rationale, alternatives. No fixed line-count minimum.
 
 Chapters that fail these are rejected in Phase 4 and loop back to Phase 3 for correction.
 
-Around each `[REF: ...]`, add prose explaining "what is happening". Writing only what Rails/Laravel-style frameworks "typically do" is forbidden — write what the **actual code** does after reading it.
+Around each `<!-- REF: ... -->`, add prose explaining "what is happening". Writing only what Rails/Laravel-style frameworks "typically do" is forbidden — write what the **actual code** does after reading it.
 
 #### STEP D: Uncertainty markers
 
@@ -125,7 +125,7 @@ Surface uncertainty in each statement:
 
 #### STEP E: Add detail questions to the Question Bank
 
-Questions that surface while writing a chapter are added to `questions.json` (at least 1 per chapter). The final `questions.json` must contain **≥ 10 items** (`coverage-check.py` enforces this).
+Questions that surface while writing a chapter are added to `questions.json` (at least 1 per chapter). The final `questions.json` must contain **>= 10 items** (`coverage-check.py` enforces this).
 
 Examples:
 - Is this method retrying three times because of a technical constraint or a business requirement?
@@ -145,7 +145,7 @@ In environments where the `task` tool is available, **delegate each chapter to a
 ```
 task(
   description="ch05 data-model investigation",
-  prompt=\"\"\"
+  prompt="""
 You are the chapter-investigator handling Chapter 5: Data Model.
 
 Target inventory_ids:
@@ -164,20 +164,20 @@ Corresponding real sources (Read these with the Read tool):
 Draft output path: .specback/drafts/05-data-model.md
 
 Quality bar:
-- [REF: path:start-end] ≥ 10
-- fenced code blocks ≥ 3
-- Mermaid diagrams ≥ 1 (ER diagram)
-- ≥ 5 files under ## Sources Read
-- Body guided by tone: concise → compact; thorough → detailed
+- <!-- REF: path:start-end --> >= 10
+- fenced code blocks >= 3
+- Mermaid diagrams >= 1 (ER diagram)
+- >= 5 files under ## Sources Read
+- Body guided by tone: concise -> compact; thorough -> detailed
 
 When done, return the chapter's key points + a list of detail questions raised.
 The detail questions are material for the main agent to append into questions.json.
 
 NOTE: If goal.output_language == "ja", render the chapter body, headings,
 prose, and detail-question text in Japanese. Keep code blocks, file paths,
-JSON keys, [REF: ...] markers, and the literal heading "## Sources Read"
+JSON keys, <!-- REF: ... --> markers, and the literal heading "## Sources Read"
 in English.
-\"\"\",
+""",
   subagent_type="chapter-investigator"
 )
 ```
@@ -185,14 +185,14 @@ in English.
 **Important constraints**:
 
 - **MANDATORY: Emit ALL chapter `task()` calls in a SINGLE assistant turn (parallel dispatch).**
-  This is the most important rule of Phase 3. Read carefully — getting it wrong makes Phase 3 take **N× longer** than it needs to.
+  This is the most important rule of Phase 3. Read carefully — getting it wrong makes Phase 3 take **Nx longer** than it needs to.
 
   **WRONG (sequential — DO NOT DO THIS):**
   ```
-  Assistant turn 1: task("ch-02 ...")             ← issue ONE task
-                    ← wait for the Observation
-  Assistant turn 2: task("ch-03 ...")             ← then issue the next
-                    ← wait
+  Assistant turn 1: task("ch-02 ...")             <- issue ONE task
+                    <- wait for the Observation
+  Assistant turn 2: task("ch-03 ...")             <- then issue the next
+                    <- wait
   Assistant turn 3: task("ch-06 ...")
                     ...
   ```
@@ -206,19 +206,19 @@ in English.
                     task("ch-08 ...")
                     task("ch-11 ...")
                     ... (one task() per chapter, ALL emitted back-to-back)
-                    ← yield, do NOT plan / think / write anything else
+                    <- yield, do NOT plan / think / write anything else
   Single Observation turn: receives all N results at once
   ```
   In one assistant turn, emit one `task()` tool call per chapter, back-to-back, with NO intervening text, NO `thought`-style narration, NO partial writes — just the task calls. Then yield control. The runtime fans them out concurrently and returns all Observations together when they complete.
 
-  With a sub-agent concurrency of 5 and 8 chapters: ~2 batches of ~4 minutes each → ~8 minutes total instead of 32. **Wall time scales by `1 / concurrency`**.
+  With a sub-agent concurrency of 5 and 8 chapters: ~2 batches of ~4 minutes each -> ~8 minutes total instead of 32. **Wall time scales by `1 / concurrency`**.
 
   **Self-check before emitting `task()`:**
   Have you written the prompts for **every** chapter that needs investigation in this Phase 3 round? If not, finish drafting them first, THEN emit them all together. Never emit one and "see how it goes" — that is the sequential anti-pattern.
 
   **Runtime concurrency mechanics.** The runtime's `Task` tool dispatches sub-agents in parallel up to its own pool. Other runtimes integrating the same skill should configure their own sub-agent pool similarly so the batch actually runs in parallel rather than being serialised at the executor level.
 
-- **Prompt cache is NOT shared**: each sub-agent has an isolated LLM context, so token usage is 5–10× the main agent.
+- **Prompt cache is NOT shared**: each sub-agent has an isolated LLM context, so token usage is 5-10x the main agent.
 - **The sub-agent writes the chapter draft directly via the Write tool** (saved as a file, NOT returned in the task result text). The main agent reads the return value and appends detail questions into `questions.json`.
 - **One `task()` per chapter**. Bundling all chapters into a single `task` call defeats the purpose (the isolated context per chapter disappears).
 
@@ -244,7 +244,7 @@ Each Layer 1 chapter **exhaustively lists the "overview table" for that language
    - 🟢: the file of that entity was confirmed by reading it with the Read tool
    - 🟡: only the `grep` hit was confirmed; body unread
    - 🔴: inference based on framework-typical behaviour
-5. The summary column is 1 line (≤ 80 characters). **Do not write detailed logic** — leave that to Layer 3 deep-dives.
+5. The summary column is 1 line (<= 80 characters). **Do not write detailed logic** — leave that to Layer 3 deep-dives.
 
 **At the end of each chapter you MUST place a "deep-dive candidates" section** (see OUT-C).
 
@@ -252,7 +252,7 @@ Each Layer 1 chapter **exhaustively lists the "overview table" for that language
 
 - ER diagram (auto-derived from Entities + Data tables)
 - Module dependency diagram
-- Representative sequence (1–3 of the most typical request flows)
+- Representative sequence (1-3 of the most typical request flows)
 - State-transition diagram (when key entities have `status` columns, etc.)
 
 Each diagram has a **one-line caption** and a "how to read this" hint. If a diagram cell is `[INFERRED]`, say so explicitly.
@@ -279,19 +279,19 @@ Selection criteria (see the end of references/outline-tables.md):
 In outline mode:
 - **The "10 REFs / 5 Sources Read" requirements do NOT apply.**
 - Instead the MECE criterion is "**every entity appears in some row of some table**" (Phase 4's `coverage-check.py` decides this automatically).
-- The chapter body consists of: table + 1–2 paragraphs of explanation + Mermaid diagrams (where applicable) + the deep-dive candidates list.
+- The chapter body consists of: table + 1-2 paragraphs of explanation + Mermaid diagrams (where applicable) + the deep-dive candidates list.
 
 ---
 
 ### Phase-specific cautions
-- **In `comprehensive` mode**: writing a chapter without reading the code is forbidden. You may cite only files listed in Sources Read. Body length follows `tone`: concise → compact; thorough → detailed. ≥ 10 REFs / ≥ 5 Sources Read must be satisfied.
+- **In `comprehensive` mode**: writing a chapter without reading the code is forbidden. You may cite only files listed in Sources Read. Body length follows `tone`: concise -> compact; thorough -> detailed. >= 10 REFs / >= 5 Sources Read must be satisfied.
 - **In `outline` / `interactive` mode**: "exhaustive entity listing" takes precedence. Apply Confidence labels honestly per cell — do NOT over-apply 🟢 (only for files actually viewed).
 - **Cross-chapter consistency** is checked in Phase 4.
 - **Do not hide uncertainty markers**; keep them explicit in the draft. They are the starting point for Phase 5 dialogue.
 - **Phase 3 progression gate (mandatory)**: do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` (standard, reserved, AND user_custom) has a non-empty body in `.specback/drafts/` (at least 10 non-blank lines outside of code fences). The agent MUST verify this before updating `state.json` to mark Phase 3 complete; declaring "complete" while chapters are still stubs is a contract violation and triggers an immediate Phase 4 fail.
-- **Feature specifications chapter (Ch2)**: This chapter has a different code-reading strategy than other chapters. See `references/outline-tables.md` → **Feature grouping patterns** for the feature extraction strategy. Unlike other chapters, feature-level info may have a higher 🔴 ASSUMED ratio — this is expected and acceptable. The Phase 4 gate for confidence ratio does not apply to this chapter (i.e. the 60% 🔴 ratio warning in `coverage-check.py` is informational only for Ch2).
-- **Module architecture (overview) chapter (Ch3 in library-sdk, Ch3 in web-app/api-service/batch-system as Architecture overview)**: overview-level only — module composition (directory structure), top-level dependency graph (import analysis), and tech stack (manifest). Keep it short and skimmable; defer detailed module internals to the Internal structure chapter and deep rationale to Design decisions (see `references/outline-tables.md` → **Module architecture (overview) extraction patterns**). Confidence is typically 🟢 because directories, manifests, and import statements are mechanically extractable.
-|- **Design decisions chapter (last detailed chapter)**: This chapter uses import analysis and cross-cutting pattern detection rather than per-file deep reading. See `references/outline-tables.md` → **Design decisions extraction patterns** for the extraction strategy. The ADR section may have many 🔴 ASSUMED entries (design rationale is rarely explicit in code) — this is expected and acceptable.
-|- **内部ファイル非表示ルール**: 生成ドキュメント本文内で `.specback/inventory.json`、`.specback/wbs.json` などの specback 内部ファイルパスを参照しないこと。テーブル列の説明はユーザー向け表現（例: 「該当機能を実装するソースコードの単位を示す」）にし、内部ファイル名で説明しない。Agent が内部で参照するファイルと、読者に表示する内容は別物である。
+- **Feature specifications chapter (Ch2)**: This chapter has a different code-reading strategy than other chapters. See `references/outline-tables.md` -> **Feature grouping patterns** for the feature extraction strategy. Unlike other chapters, feature-level info may have a higher 🔴 ASSUMED ratio — this is expected and acceptable. The Phase 4 gate for confidence ratio does not apply to this chapter (i.e. the 60% 🔴 ratio warning in `coverage-check.py` is informational only for Ch2).
+- **Module architecture (overview) chapter (Ch3 in library-sdk, Ch3 in web-app/api-service/batch-system as Architecture overview)**: overview-level only — module composition (directory structure), top-level dependency graph (import analysis), and tech stack (manifest). Keep it short and skimmable; defer detailed module internals to the Internal structure chapter and deep rationale to Design decisions (see `references/outline-tables.md` -> **Module architecture (overview) extraction patterns**). Confidence is typically 🟢 because directories, manifests, and import statements are mechanically extractable.
+- **Design decisions chapter (last detailed chapter)**: This chapter uses import analysis and cross-cutting pattern detection rather than per-file deep reading. See `references/outline-tables.md` -> **Design decisions extraction patterns** for the extraction strategy. The ADR section may have many 🔴 ASSUMED entries (design rationale is rarely explicit in code) — this is expected and acceptable.
+- **内部ファイル非表示ルール**: 生成ドキュメント本文内で `.specback/inventory.json`、`.specback/wbs.json` などの specback 内部ファイルパスを参照しないこと。テーブル列の説明はユーザー向け表現（例: 「該当機能を実装するソースコードの単位を示す」）にし、内部ファイル名で説明しない。Agent が内部で参照するファイルと、読者に表示する内容は別物である。
 
 ---

@@ -53,7 +53,7 @@ List the read files at the **end of the chapter** (after the chapter body):
 
 ```markdown
 ## Chapter Title
-...(main body with `[REF:]` citations)
+...(main body with `<!-- REF: ... -->` citations)
 
 ## Sources Read
 - `app/models/issue.rb` (lines 1-440)

@@ -187,7 +187,7 @@ def test_code_block_lines_does_not_affect_other_metrics(tmp_path):
     """
     content = """# Chapter
 
-Some text. [REF: file:1-5]
+Some text. <!-- REF: file:1-5 -->
 
 ```python
 import os

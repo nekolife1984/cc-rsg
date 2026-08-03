@@ -12,10 +12,9 @@ CLAIM → EXTRACT → DOUBT → RECONCILE → STOP
 
 | Step | Description |
 |------|-------------|
-| **CLAIM** | Isolate one specific claim from the draft (e.g. "`IssuesController#create` returns a 201 status on success"). Record the claim verbatim with source chapter and `[REF:]` anchor. |
-| **EXTRACT** | Identify exact code file(s) and line(s) supporting the claim. Only use `[REF:]` citations already in the draft. |
-| **DOUBT** | Re-read extracted code in a **fresh context** — no prior reading notes, cached observations, or Phase 3 interpretations. Evaluate: does the code say what the claim asserts? Are edge cases missed? Do 5 lines before/after contradict the claim? Is the confidence label (🟢/🟡/🔴) appropriate? |
-| **RECONCILE** | Wrong → loop to Phase 3 with corrective note. Imprecise → adjust wording + tighten `[REF:]` range. Under-confident → upgrade marker (🔴→🟡 or 🟡→🟢). |
+| **CLAIM** | Isolate one specific claim from the draft (e.g. "`IssuesController#create` returns a 201 status on success"). Record the claim verbatim with source chapter and `<!-- REF: ... -->` anchor. |
+| **EXTRACT** | Identify exact code file(s) and line(s) supporting the claim. Only use `<!-- REF: ... -->` citations already in the draft. |
+| **RECONCILE** | Wrong -> loop to Phase 3 with corrective note. Imprecise -> adjust wording + tighten `<!-- REF: ... -->` range. Under-confident -> upgrade marker (🔴->🟡 or 🟡->🟢). |
 | **STOP** | Assign confidence score (1.0 = certain, 0.0 = contradictory). Record in `.specback/doubt-report.json`. |
 
 ## Doubt-trigger ruleset
@@ -26,8 +25,8 @@ CLAIM → EXTRACT → DOUBT → RECONCILE → STOP
 |---------|-----------|----------|---------|
 | 🔴 **ASSUMED** | `rg "🔴"` in chapter content | Highest (auto) | Always included |
 | 🟡 **INFERRED chain ≥ 3** | Count sequential INFERRED claims in a chapter with no VERIFIED between them | High | On |
-| 🟢 **VERIFIED with comment conflict** | Compare `[REF:]` source line contents with claim text — if source comment says `// Fallback only` but claim says "primary path" | Medium | On |
-| **Cross-chapter axiom** | Same statement text (fuzzy match) in ≥2 chapters with zero `[REF:]` citations | Highest (auto) | Always included |
+| 🟢 **VERIFIED with comment conflict** | Compare `<!-- REF: ... -->` source line contents with claim text — if source comment says "// Fallback only" but claim says "primary path" | Medium | On |
+| **Cross-chapter axiom** | Same statement text (fuzzy match) in >=2 chapters with zero `<!-- REF: ... -->` citations | Highest (auto) | Always included |
 
 ### Threshold tuning
 
@@ -61,7 +60,7 @@ The DOUBT step **MUST** re-read the code from scratch. The following are **forbi
 Acceptable fresh-context reads:
 
 ```bash
-# Read the exact code lines the [REF:] cites
+# Read the exact code lines the <!-- REF: ... --> cites
 read_file path/to/file.py --line 45-58
 
 # Read surrounding context for edge case detection

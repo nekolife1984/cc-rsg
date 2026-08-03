@@ -63,7 +63,7 @@ List the read files at the **end of the chapter** (after the chapter body):
 
 ```markdown
 ## Chapter Title
-...(main body with `[REF:]` citations)
+...(main body with `<!-- REF: ... -->` citations)
 
 ## Sources Read
 - `app/models/issue.rb` (lines 1-440)
@@ -105,7 +105,7 @@ Default direction is **`TD`** (top-to-bottom) for graph/flowchart diagrams. Use 
 
 **Active-diagram rule**: Beyond the mandatory ≥1 Mermaid, any complex subject in this chapter — processing flows, structure/relationships, behavior, or data models — MUST be accompanied by an appropriate Mermaid diagram. When in doubt, add a diagram.
 
-For **screen detail sections** (Section 3.3 of web-app template), always use the structured-table format (Input fields table + Actions table + Display conditions table) as defined in the template. Map each field row to a real view/template source reference with `[REF:]`.
+For **screen detail sections** (Section 3.3 of web-app template), always use the structured-table format (Input fields table + Actions table + Display conditions table) as defined in the template. Map each field row to a real view/template source reference with `<!-- REF: ... -->`.
 - Etc.
 
 ### STEP E: Uncertainty markers
