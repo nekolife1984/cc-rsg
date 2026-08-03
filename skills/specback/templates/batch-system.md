@@ -32,6 +32,104 @@ reader_order:
     - 10-data-flow
     - 11-monitoring-alerts
     - 12-operations-calendar
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-job-catalogue
+      title: Job catalogue
+      slug: 04-job-catalogue
+      detection:
+        dirs: ["jobs", "app/jobs", "workers", "app/workers", "tasks", "etl"]
+        files: ["cron*", "Cron*", "schedule*", "dag*", "Dag*"]
+        note_missing: "Job definitions or worker directories not found"
+    - id: ch-triggers
+      title: Triggers and schedule
+      slug: 05-triggers-schedule
+      detection:
+        files: ["cron*", "Crontab*", "schedule*", "dag*", "airflow*"]
+        patterns:
+          - rgs: ["cron\\(|schedule|every\\s+\\d+|@daily|@hourly|@weekly"]
+        note_missing: "Schedule/trigger configuration not found"
+    - id: ch-data-flow
+      title: Data flow
+      slug: 06-data-flow
+      detection:
+        dirs: ["etl", "pipelines", "dataflow", "streams"]
+        patterns:
+          - rgs: ["extract|transform|load|etl|pipeline|data.?flow"]
+        note_missing: "Data flow definitions not found"
+        optional: true
+    - id: ch-monitoring
+      title: Monitoring / alerts
+      slug: 07-monitoring-alerts
+      detection:
+        files: ["datadog*", "grafana*", "prometheus*", "alert*", "monitor*"]
+        patterns:
+          - rgs: ["logger|logging|metric|alert|monitor|dashboard|datadog|prometheus"]
+        note_missing: "Monitoring/alerting config not found"
+        optional: true
+    - id: ch-error-handling
+      title: Error handling and retry policy
+      slug: 08-error-handling-retry
+      detection:
+        patterns:
+          - rgs: ["retry", "backoff", "dead.letter", "dlq", "error.?handling", "exception.?policy"]
+        note_missing: "Error handling or retry policy not found"
+        optional: true
+    - id: ch-recovery
+      title: Recovery procedures
+      slug: 09-recovery-procedures
+      detection:
+        patterns:
+          - rgs: ["recovery", "restart.?policy", "resume", "reprocess"]
+        note_missing: "Recovery procedures not found"
+        optional: true
+    - id: ch-operations-calendar
+      title: Operations calendar and dependencies
+      slug: 10-operations-calendar
+      detection:
+        files: ["calendar*", "schedule*", "dependency*", "dag*"]
+        patterns:
+          - rgs: ["depends.?on", "parent.?task", "chain", "sequence.?flow"]
+        note_missing: "Operations calendar or job dependency graph not found"
+        optional: true
+  extra_chapters:
+    - id: ch-notifications
+      title: Notification and alerting
+      slug: 13-notifications
+      detection:
+        patterns:
+          - rgs: ["notify|slack|email.*alert|pagerduty|send.*notification"]
+          - deps: ["slack-ruby-client", "slack-sdk", "sendgrid", "mailgun", "twilio"]
+        note_detected: "Notification/alerting feature detected → auto-added"
+      insert_after: ch-monitoring
+  granularity:
+    merge:
+      - key: error_recovery
+        when: { err_handling_files_max: 3, recovery_files_max: 1 }
+        chapters: [ch-error-handling, ch-recovery]
+        into_title: "Error handling and recovery"
+        note: "Error handling minimal → merging Error Handling and Recovery"
+    split:
+      - key: jobs_large
+        when: { jobs_min: 20 }
+        chapter: ch-job-catalogue
+        into:
+          - { id: ch-jobs-online, title: "Job catalogue (online / real-time)" }
+          - { id: ch-jobs-batch, title: "Job catalogue (batch / scheduled)" }
+        note: "Many jobs → split into online/batch"
+      - key: monitoring_detailed
+        when: { monitoring_files_min: 8 }
+        chapter: ch-monitoring
+        into:
+          - { id: ch-monitoring-metrics, title: "Monitoring (metrics and dashboards)" }
+          - { id: ch-monitoring-alerts, title: "Monitoring (alerts and notifications)" }
+        note: "Extensive monitoring config → split into metrics/alerts"
 ---
 
 # Batch-system spec template

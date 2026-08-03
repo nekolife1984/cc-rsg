@@ -32,11 +32,148 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    - Event-driven / Streaming spec (`templates/event-driven.md`)
    - Use whichever the agent recommends from reconnaissance
 
-3. **Adjust the chosen template**
-   - If the user accepts the recommended template, display the chapter outline and ask "Are there chapters to add, remove, or rename?".
-   - Reflect any additions/removals.
+3. **Run code analysis for chapter customisation (🆕 detection-driven)**  
+   After the template is selected, analyse the codebase to customise the chapter list before presenting it to the user.
 
-4. **🆕 Monorepo detection and scope setup**
+   #### 3a. Read detection rules from the selected template
+
+   Read the `detection_rules` section from the selected template's frontmatter (e.g. `templates/web-app.md`). It defines:
+   - `always_include` — chapters always present regardless of code content
+   - `chapters[]` — standard chapters with detection rules
+   - `extra_chapters[]` — chapters to auto-add when detected
+   - `granularity` — merge/split rules based on code volume
+
+   Load the reference format from `references/template-catalog.md` → "Detection rules" section.
+
+   #### 3b. Run detection checks
+
+   For each standard chapter with detection rules, execute the checks in order:
+
+   ```
+   for each chapter in detection_rules.chapters:
+       if chapter.id in always_include:
+           status = "included" (skip detection)
+           continue
+
+       detected = false
+
+       # Check directories
+       if chapter.detection.dirs:
+           for dir in dirs:
+               if glob("{dir}/**") has matches:
+                   detected = true; break
+
+       # Check files
+       if not detected and chapter.detection.files:
+           for pattern in files:
+               if glob(pattern) has matches:
+                   detected = true; break
+
+       # Check patterns (rgs / deps / files)
+       if not detected and chapter.detection.patterns:
+           for pattern_group in patterns:
+               if pattern_group.rgs:
+                   for pattern in rgs:
+                       if rg(pattern) has match:
+                           detected = true; break
+               if pattern_group.deps:
+                   for dep in deps:
+                       if dep found in package manifests:
+                           detected = true; break
+               if pattern_group.files:
+                   for pattern in files:
+                       if glob(pattern) has matches:
+                           detected = true; break
+
+       status = "included" if detected else "excluded"
+       if not detected and chapter.detection.optional:
+           status = "included" with optional flag
+   ```
+
+   Then check `extra_chapters` — any whose detection rules match get `status = "auto_added"` at the specified `insert_after` position.
+
+   Then check `granularity` merge/split rules using the counts collected during detection:
+
+   ```
+   # Merge check (small project)
+   for each merge_rule in granularity.merge:
+       if conditions met (e.g. screens ≤ screens_max):
+           mark chapters as "merged" → new combined chapter
+
+   # Split check (large project)
+   for each split_rule in granularity.split:
+       if conditions met (e.g. entities ≥ entities_min):
+           mark chapter as "split" → N sub-chapters
+   ```
+
+   **Reuse** the file-tree and line-count data already collected in recon-report.md rather than re-running glob/rg from scratch — the detection is a secondary scan on top of the primary reconnaissance.
+
+   #### 3c. Persist the detection result
+
+   Write the result to `goal.json.customized_chapters`:
+
+   ```json
+   {
+     "customized_chapters": [
+       {"id": "ch-overview", "title": "Overview", "status": "included", "note": null, "confidence": "always"},
+       {"id": "ch-auth", "title": "Authentication and authorisation", "status": "excluded", "note": "認証フレームワーク・認証関連コードが見つかりませんでした", "confidence": "high"},
+       {"id": "ch-background-jobs", "title": "Background jobs", "status": "auto_added", "note": "Sidekiq設定検出", "confidence": "high"}
+     ],
+     "chapter_actions_applied": {
+       "excluded": ["ch-auth"],
+       "auto_added": ["ch-background-jobs"],
+       "merged": [],
+       "split": []
+     }
+   }
+   ```
+
+   #### 3d. Present the customised chapter list to the user
+
+   Show the result with icons and notes:
+
+   ```
+   📋 コード分析による章構成の自動カスタマイズ結果:
+
+     ✅ 第1章: 概要（常時含める）
+     ✅ 第2章: 機能仕様（常時含める）
+     ✅ 第3章: アーキテクチャ概要（常時含める）
+     ✅ 第4章: クラス/モジュール設計（常時含める）
+     ✅ 第5章: 画面一覧・遷移（app/views/ 検出）
+     ✅ 第6章: ルーティング（config/routes.rb 検出）
+     ❌ 第7章: データモデル（migration/models 未検出 → 除外）
+     ❌ 第8章: 認証・認可（認証FW未検出 → 除外）
+     ✅ 第9章: 外部インターフェース（HTTPクライアント使用検出）
+     ✅ 第10章: 運用設定（Dockerfile 検出）
+     ✅ 第11章: 設計判断（常時含める）
+     ✅ 第12章: 既知の制約（常時含める）
+     ➕ 第13章: バックグラウンドジョブ（Sidekiq検出 → 自動追加）
+
+     除外された章: データモデル, 認証・認可
+     自動追加された章: バックグラウンドジョブ
+
+   （以下、merge/splitがトリガーされた場合の表示例）
+
+     小規模 project:
+       🔗 第4章: Webインターフェース（画面3 + ルート8 → Screens+Routes統合）
+       🔗 第5章: 運用設定（認証login/logoutのみ → Operations内包）
+
+     大規模 project:
+       🔀 第7章: データモデル（Entity数45）
+           └ 第7-a: Core entities（30エンティティ）
+           └ 第7-b: Analytics/Reporting（15エンティティ）
+
+   Use AskUserQuestion with choices:
+     - "I confirm — proceed with this structure" → keep customized_chapters
+     - "Let me adjust (add/remove/rename chapters)" → proceed to manual adjustment
+     - "Restore all excluded chapters" → revert to full template outline
+
+4. **Adjust the chosen template (if needed)**  
+   Only reached if the user chose "Let me adjust" in the previous step, OR the user is applying further manual customisations on top of the automated result.
+   - Display the chapter outline and ask "Are there chapters to add, remove, or rename?".
+   - Reflect any additions/removals in `goal.json.customized_chapters`.
+
+5. **🆕 Monorepo detection and scope setup**
 
    After the template is finalised, check whether the target codebase is a monorepo containing multiple independent systems.
 
@@ -85,7 +222,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
 
    When `multi_scope == false` (default), proceed with the original `.specback/` flow unchanged.
 
-5. **Register high-level questions**
+6. **Register high-level questions**
    - Add the fundamental questions surfaced during reconnaissance (questions that block big-picture understanding) into `questions.json`.
    - Examples:
      - What business problem is this system trying to solve?
@@ -93,7 +230,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
      - When existing docs disagree with the code, which is authoritative?
    - See "Question Bank operation" below for the structure used at registration.
 
-6. **🆕 depth-mode & tone decision (scale-based)**
+7. **🆕 depth-mode & tone decision (scale-based)**
    - Record the **total file count** and **estimated code lines** observed during reconnaissance at the top of `recon-report.md`. Persist as `total_files` and `total_lines` in `.specback/state.json`.
    - **If total_lines > 500**, ask the user with `AskUserQuestion` to choose a **depth mode**:
      - `comprehensive`: full chapter set (all chapters from the template). **Recommended only when exhaustive coverage is required (audit, regulatory).** Estimated 2–4 hours for most projects (Phase 3 parallel investigation scales with concurrency).

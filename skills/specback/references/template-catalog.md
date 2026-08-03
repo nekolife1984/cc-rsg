@@ -568,6 +568,114 @@ Agent: "Got it. Finalising with:
 
 ---
 
+## Detection rules (chapter-level code analysis)
+
+Phase 1 でテンプレート選択後、コードベースを分析して章構成を自動カスタマイズするためのルール定義。各テンプレートの frontmatter `detection_rules` に定義され、Phase 1 エージェントがこれを読み取って検出を実行する。
+
+### Detection types
+
+| Type | Method | Example |
+|:-----|:-------|:--------|
+| `dirs` | `glob <dir>/**` でディレクトリ存在確認 | `views/`, `templates/` |
+| `files` | `glob <pattern>` でファイル存在確認 | `routes/**`, `Dockerfile` |
+| `patterns.rgs` | `rg <pattern>` でコード内キーワード検索 | `session`, `HttpClient` |
+| `patterns.deps` | 依存関係ファイル（package.json, Gemfile等）の該当パッケージ確認 | `devise`, `celery` |
+| `patterns.files` | `glob <pattern>` で特定ファイル検索 | `**/middleware/**auth*` |
+
+### Decision outcomes
+
+| Outcome | Icon | Action |
+|:--------|:----:|:-------|
+| Detected (code found) | ✅ | Include the chapter as-is |
+| Not detected, non-optional | ❌ | Exclude; user may restore |
+| Not detected, optional | ⚠️ | Include but mark as optional |
+| Extra chapter detected | ➕ | Auto-add after the `insert_after` anchor |
+| Merge triggered | 🔗 | Merge N chapters into one |
+| Split triggered | 🔀 | Split one chapter into N |
+
+### Rule format reference
+
+```yaml
+detection_rules:
+  always_include:                              # 常に含める章（概要、設計判断など）
+    - ch-overview
+
+  chapters:                                    # 標準テンプレートの章ごとの検出ルール
+    - id: ch-auth
+      title: Authentication and authorisation
+      slug: 08-authentication-authorisation     # reader_orderの参照slug
+      detection:
+        dirs: [...]                            # ディレクトリ存在確認
+        files: [...]                           # ファイル存在確認
+        patterns:                              # 複合パターン（いずれかマッチで ✅）
+          - rgs: ["pattern1", "pattern2"]       # grep検索
+          - deps: ["gem", "package"]            # 依存パッケージ
+          - files: ["glob/**pattern"]           # ファイルglob検索
+        note_missing: "..."                    # 未検出時の表示メッセージ
+        optional: true                         # true: 未検出でも optional として含める
+
+  extra_chapters:                              # 自動追加候補
+    - id: ch-background-jobs
+      title: Background jobs
+      slug: 13-background-jobs
+      detection:
+        dirs: [...]
+        deps: ["sidekiq", "celery"]
+      insert_after: ch-external-interfaces     # 挿入位置
+      note_detected: "..."
+
+  granularity:                                 # 統合・分割ルール
+    merge:                                     # コードが少ない場合の統合
+      - key: screens_routes
+        when: { screens_max: 3, routes_max: 10 }
+        chapters: [ch-screens, ch-routes]
+        into_title: "Web interface (screens & routes)"
+        note: "..."
+    split:                                     # コードが多い場合の分割
+      - key: data_model_large
+        when: { entities_min: 20 }
+        chapter: ch-data-model
+        into:
+          - { id: ch-data-model-core, title: "Data model (core entities)" }
+          - { id: ch-data-model-analytics, title: "Data model (analytics/reporting)" }
+        note: "..."
+```
+
+### Per-template detection rules
+
+各テンプレートの `detection_rules` は該当テンプレートファイルの frontmatter に定義されている。
+
+| Template | File | Chapters with detection |
+|:---------|:-----|:-----------------------|
+| web-app | `templates/web-app.md` | All 12 standard chapters + 2 extra chapters + merge/split rules |
+| api-service | `templates/api-service.md` | All 12 standard chapters + 1 extra chapter + merge/split rules |
+| batch-system | `templates/batch-system.md` | All 12 standard chapters + 1 extra chapter + merge/split rules |
+| library-sdk | `templates/library-sdk.md` | All 11 standard chapters + 1 extra chapter + merge/split rules |
+| cli-tool | `templates/cli-tool.md` | (pending) |
+| infrastructure | `templates/infrastructure.md` | (pending) |
+| mobile-app | `templates/mobile-app.md` | (pending) |
+| desktop-app | `templates/desktop-app.md` | (pending) |
+| event-driven | `templates/event-driven.md` | (pending) |
+
+### Output format (goal.json.customized_chapters)
+
+```json
+{
+  "customized_chapters": [
+    {"id": "ch-overview", "title": "Overview", "status": "included", "note": null, "confidence": "always"},
+    {"id": "ch-auth", "title": "Authentication and authorisation", "status": "excluded", "note": "認証フレームワーク・認証関連コードが見つかりませんでした", "confidence": "high"},
+    {"id": "ch-background-jobs", "title": "Background jobs", "status": "auto_added", "note": "Sidekiq設定検出", "confidence": "high"},
+    {"id": "ch-data-model", "title": "Data model", "status": "included", "note": "optional: データモデル定義未確認", "confidence": "low"}
+  ],
+  "chapter_actions_applied": {
+    "excluded": ["ch-auth"],
+    "auto_added": ["ch-background-jobs"],
+    "merged": [],
+    "split": []
+  }
+}
+```
+
 ## Template version management
 
 Each template file starts with version information.

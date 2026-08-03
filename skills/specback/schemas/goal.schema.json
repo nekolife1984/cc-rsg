@@ -76,6 +76,42 @@
       "type": "boolean",
       "description": "Phase 2 で reader_order による章順序の最適化が適用されたかどうか。reader_order が null または未定義の場合は false。",
       "default": false
+    },
+    "customized_chapters": {
+      "type": "array",
+      "description": "Phase 1 のコード分析による章構成カスタマイズ結果。検出ルールに基づき、各章の status を記録する。",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "description": "章のID（例: ch-auth, ch-screens）"},
+          "title": {"type": "string", "description": "章のタイトル"},
+          "status": {
+            "type": "string",
+            "description": "カスタマイズ結果",
+            "enum": ["included", "excluded", "auto_added", "merged", "split"]
+          },
+          "note": {"type": ["string", "null"], "description": "検出結果の説明メッセージ"},
+          "confidence": {
+            "type": "string",
+            "description": "検出の確信度",
+            "enum": ["always", "high", "medium", "low"]
+          }
+        },
+        "required": ["id", "title", "status"],
+        "additionalProperties": false
+      }
+    },
+    "chapter_actions_applied": {
+      "type": "object",
+      "description": "適用されたアクションの集計",
+      "properties": {
+        "excluded": {"type": "array", "items": {"type": "string"}},
+        "auto_added": {"type": "array", "items": {"type": "string"}},
+        "merged": {"type": "array", "items": {"type": "string"}},
+        "split": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["excluded", "auto_added", "merged", "split"],
+      "additionalProperties": false
     }
   },
   "required": [
