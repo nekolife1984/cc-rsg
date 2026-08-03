@@ -74,7 +74,7 @@ Regardless of template, confirm the following on every spec.
 
 ### Uncertainty markers
 - [ ] When `[BLOCKED]` markers appear, the corresponding Question ID exists in `questions.json`.
-- [ ] `[CONFIDENCE: LOW]` markers do not appear in more than half of any chapter (if they do, consider re-running the sub-agent).
+- [ ] `<!-- CONFIDENCE: LOW -->` markers do not appear in more than half of any chapter (if they do, consider re-running the sub-agent).
 - [ ] Remaining `[ASK SME]` markers are recorded as items to be handled in Phase 5 dialogue.
 
 ### Cross-chapter consistency
@@ -135,7 +135,7 @@ At the end of Phase 4, report to the user in the following format.
 [Cross-cutting quality]
 - Traceability citations: 43 chapters; average 8.2 / chapter ✓
 - [BLOCKED] markers: 3 (corresponding Question IDs: Q-014, Q-027, Q-038)
-- [CONFIDENCE: LOW] markers: 12
+- <!-- CONFIDENCE: LOW --> markers: 12
 - Cross-chapter consistency: 2 contradictions detected
   - "Retry count" is described as 3 in Chapter 3 and 5 in Chapter 5 → filed as Q-098
   - ...

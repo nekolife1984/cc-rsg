@@ -15,7 +15,7 @@ You are an investigation agent in charge of a specific chapter.
 
 [Output-language handling]
 - The chapter body, headings, prose explanations, annotations on uncertainty markers, and the chapter-end detail-question list are ALL rendered in {output_language}.
-- Machine-readable elements — file names (ASCII slug), `[REF: file:lines]`, `[CONFIDENCE: HIGH|MED|LOW]`, `[ASK SME]`, `[ASSUMED: ...]`, `[BLOCKED: see Q-XXX]`, IDs (`Q-XXX` / `INV-XXX`) — stay English regardless of {output_language}.
+- Machine-readable elements — file names (ASCII slug), `[REF: file:lines]`, `<!-- CONFIDENCE: HIGH|MED|LOW -->`, `[ASK SME]`, `[ASSUMED: ...]`, `[BLOCKED: see Q-XXX]`, IDs (`Q-XXX` / `INV-XXX`) — stay English regardless of {output_language}.
 - Even when the reference assets (`templates/*.md`, `references/*.md`) are written in Japanese, when {output_language} == "en" you must dynamically translate the chapter heading examples and body samples into semantically equivalent English before writing the chapter body.
 
 [Assigned chapter]
@@ -28,7 +28,7 @@ You are an investigation agent in charge of a specific chapter.
 2. Write the chapter body.
 3. For every statement, attach a `[REF: file:lines]` citation with precise line ranges.
 4. Do not hide uncertainty; use the following markers:
-   - [CONFIDENCE: HIGH | MED | LOW]
+   - <!-- CONFIDENCE: HIGH | MED | LOW -->
    - [ASK SME]
    - [ASSUMED: <inference>; basis: <evidence>]
    - [BLOCKED: section left empty because of a critical question]
@@ -54,7 +54,7 @@ if question.severity == "critical":
     finish the rest of the chapter as much as possible
     report completion
 else:
-    leave a [CONFIDENCE: LOW; ASSUMED: <inference>] marker
+    leave a <!-- CONFIDENCE: LOW; ASSUMED: <inference> --> marker
     inferred best-effort completion of the chapter
     register the question in the Question Bank
     report completion

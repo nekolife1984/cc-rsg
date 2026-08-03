@@ -700,7 +700,7 @@ Extraction strategy:
 - Read README / CONTRIBUTING / design docs for explicit rationale
 - When no explicit rationale exists, mark 🔴 ASSUMED and add `[ASK SME]`
 
-[CONFIDENCE: LOW — ADR entries are almost always inferred unless explicitly documented]
+`<!-- CONFIDENCE: LOW — ADR entries are almost always inferred unless explicitly documented -->`
 
 Typical mobile ADR topics:
 

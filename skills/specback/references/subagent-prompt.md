@@ -90,9 +90,9 @@ Example:
 4. For every statement, attach a `[REF: file:lines]` citation with precise line ranges.
    - Example: "Users are physically deleted 30 days after withdrawal [REF: src/jobs/UserDeactivationJob.php:34-42]"
 5. Do not hide uncertainty; use these markers:
-   - [CONFIDENCE: HIGH]   reliably derivable from the code
-   - [CONFIDENCE: MED]    multiple interpretations are possible; written with the most likely one
-   - [CONFIDENCE: LOW]    high inference; needs confirmation
+   - <!-- CONFIDENCE: HIGH -->   reliably derivable from the code
+   - <!-- CONFIDENCE: MED -->    multiple interpretations are possible; written with the most likely one
+   - <!-- CONFIDENCE: LOW -->    high inference; needs confirmation
    - [ASK SME]            requires confirmation from a subject-matter expert
    - [ASSUMED: {content}; basis: {evidence}]   surface the inference and its basis
    - [BLOCKED: see Q-XXX] left blank because of a critical question; see the Question Bank
@@ -216,7 +216,7 @@ def investigate_chapter(prompt):
                 content = f"[BLOCKED: see {q.id}]"
             else:
                 content = generate_with_assumption(section, q)
-                # Marked with [CONFIDENCE: LOW; ASSUMED: ...]
+                # Marked with <!-- CONFIDENCE: LOW; ASSUMED: ... -->
 
     # 3. Append the question list at the end of the chapter
     return chapter_draft + format_questions(questions)
@@ -232,7 +232,7 @@ def investigate_chapter(prompt):
 
 ### Pattern 2: writing inference as fact
 - Mixing "probably" / "seems to" into the prose makes it impossible for later readers to tell fact from inference.
-- Always use [CONFIDENCE: LOW] or [ASSUMED] markers.
+- Always use <!-- CONFIDENCE: LOW --> or [ASSUMED] markers.
 
 ### Pattern 3: omitting traceability citations
 - Writing the body without citations leaves later verification with "no basis".

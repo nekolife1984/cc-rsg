@@ -34,7 +34,7 @@ You investigate deeply in an isolated context and produce a draft that satisfies
 > **Language handling**: render the chapter body, headings, prose, and
 > detail-question text in `goal.output_language` (`"en"` by default,
 > `"ja"` only when explicitly chosen in Phase 0). Code blocks, file
-> paths, JSON keys, `[REF: ...]` markers, `[CONFIDENCE: ...]` labels,
+> paths, JSON keys, `[REF: ...]` markers, `<!-- CONFIDENCE: ... -->` labels,
 > and the literal heading `## Sources Read` stay English regardless.
 
 ---
@@ -111,7 +111,7 @@ For **screen detail sections** (Section 3.3 of web-app template), always use the
 ### STEP E: Uncertainty markers
 
 Surface uncertainty in each statement:
-- `[CONFIDENCE: HIGH | MED | LOW]`
+- `<!-- CONFIDENCE: HIGH | MED | LOW -->`
 - `[ASK SME]` (needs SME confirmation)
 - `[ASSUMED: ...]` (basis for the inference)
 
