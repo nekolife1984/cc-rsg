@@ -651,11 +651,11 @@ detection_rules:
 | api-service | `templates/api-service.md` | All 12 standard chapters + 1 extra chapter + merge/split rules |
 | batch-system | `templates/batch-system.md` | All 12 standard chapters + 1 extra chapter + merge/split rules |
 | library-sdk | `templates/library-sdk.md` | All 11 standard chapters + 1 extra chapter + merge/split rules |
-| cli-tool | `templates/cli-tool.md` | (pending) |
-| infrastructure | `templates/infrastructure.md` | (pending) |
-| mobile-app | `templates/mobile-app.md` | (pending) |
-| desktop-app | `templates/desktop-app.md` | (pending) |
-| event-driven | `templates/event-driven.md` | (pending) |
+| cli-tool | `templates/cli-tool.md` | 11 standard chapters + 6 detection chapters + 2 extra chapters + merge/split rules |
+| infrastructure | `templates/infrastructure.md` | 11 standard chapters + 6 detection chapters + 2 extra chapters + merge/split rules |
+| mobile-app | `templates/mobile-app.md` | 12 standard chapters + 7 detection chapters + 2 extra chapters + merge/split rules |
+| desktop-app | `templates/desktop-app.md` | 13 standard chapters + 8 detection chapters + 2 extra chapters + merge/split rules |
+| event-driven | `templates/event-driven.md` | 13 standard chapters + 9 detection chapters + 2 extra chapters + merge/split rules |
 
 ### Output format (goal.json.customized_chapters)
 

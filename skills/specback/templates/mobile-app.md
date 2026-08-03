@@ -1,7 +1,7 @@
 ---
 template_name: mobile-app
-template_version: 0.1.0
-last_updated: 2026-08-01
+template_version: 0.2.0
+last_updated: 2026-08-03
 description: Mobile app spec template. For native and cross-platform mobile applications targetting iOS, Android, or both.
 reader_order:
   maintenance_developer: null
@@ -32,6 +32,105 @@ reader_order:
     - 10-state-management
     - 11-screens-transitions
     - 12-networking-sync
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-module-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-screens
+      title: Screen list and transitions
+      slug: 04-screens-transitions
+      detection:
+        dirs: ["app/src/main/java/**/ui/**", "app/src/main/java/**/view/**", "app/src/main/java/**/screens/**", "lib/pages", "lib/screens"]
+        files: ["**/*.storyboard", "**/*.xib", "**/*.swift", "**/*.kt", "**/*.dart", "ios/**", "android/app/src/**"]
+        note_missing: "画面定義やUIコードが見つかりませんでした"
+    - id: ch-state-management
+      title: State management
+      slug: 05-state-management
+      detection:
+        patterns:
+          - rgs: ["ViewModel|StateFlow|LiveData|Riverpod|Provider|Bloc|Cubit|Redux|Store|@State|@ObservableObject|@Published"]
+        note_missing: "状態管理パターン（ViewModel/StateFlow/Riverpod/Bloc）が見つかりませんでした"
+        optional: true
+    - id: ch-data-persistence
+      title: Data persistence and offline-first
+      slug: 06-data-persistence-offline
+      detection:
+        dirs: ["app/src/main/java/**/db/**", "app/src/main/java/**/database/**", "lib/db", "lib/models", "models"]
+        patterns:
+          - rgs: ["Room|CoreData|SQLDelight|Realm|Hive|SharedPreferences|UserDefaults|sqflite"]
+          - deps: ["room", "coredata", "sqldelight", "realm", "floor", "drift", "hive", "sqflite"]
+        note_missing: "ローカルDBや永続化設定が見つかりませんでした"
+        optional: true
+    - id: ch-platform-api
+      title: Platform API integration
+      slug: 07-platform-api-integration
+      detection:
+        files: ["**/Info.plist", "**/AndroidManifest.xml", "**/permissions*"]
+        patterns:
+          - rgs: ["NSCamera|NSLocation|NSPhoto|CAMERA|ACCESS_FINE_LOCATION|BiometricPrompt|CoreLocation|AVCapture"]
+        note_missing: "プラットフォームAPI（カメラ/位置情報/生体認証）の設定が見つかりませんでした"
+        optional: true
+    - id: ch-push-notifications
+      title: Push notifications
+      slug: 08-push-notifications
+      detection:
+        files: ["**/GoogleService-Info.plist", "**/google-services.json", "firebase*"]
+        patterns:
+          - rgs: ["FCM|APNs|push.?notification|FirebaseMessaging|UNUserNotificationCenter|NotificationService"]
+          - deps: ["firebase-messaging", "react-native-push-notification", "flutter_local_notifications"]
+        note_missing: "プッシュ通知設定が見つかりませんでした"
+        optional: true
+    - id: ch-networking
+      title: Networking and sync
+      slug: 09-networking-sync
+      detection:
+        patterns:
+          - rgs: ["Retrofit|OkHttp|URLSession|Alamofire|Ktor|Apollo|GraphQL|axios|fetch|WebSocket"]
+          - deps: ["retrofit", "okhttp", "alamofire", "ktor-client", "apollo-", "graphql"]
+        note_missing: "ネットワーキング層（Retrofit/URLSession/Ktor）が見つかりませんでした"
+  extra_chapters:
+    - id: ch-build-deploy
+      title: Build and deployment
+      slug: 10-build-deployment
+      detection:
+        files: ["**/fastlane/**", "**/Gymfile", "**/Appfile", "**/Matchfile", ".github/workflows/**", "**/gradle/wrapper/**", "**/*.xcconfig"]
+        patterns:
+          - rgs: ["fastlane|TestFlight|App Store|Google Play|code.?sign|provisioning.?profile"]
+        note_detected: "ビルド/デプロイ設定を検出しました → 自動追加"
+      insert_after: ch-networking
+    - id: ch-deep-links
+      title: Deep links and universal links
+      slug: 11-deep-links
+      detection:
+        files: ["apple-app-site-association", "assetlinks.json", "**/deep-links/**", "**/nav_graph*"]
+        patterns:
+          - rgs: ["deep.?link|universal.?link|app.?link|intent.?filter|nav_graph|NavGraph"]
+        note_detected: "ディープリンク設定を検出しました → 自動追加"
+      insert_after: ch-screens
+  granularity:
+    merge:
+      - key: state_data_compact
+        when: { db_files_max: 3, state_patterns_max: 5 }
+        chapters: [ch-state-management, ch-data-persistence]
+        into_title: "State management and data persistence"
+        note: "状態管理と永続化が小規模なため統合します"
+      - key: platform_notif_compact
+        when: { platform_files_max: 5, notif_files_max: 2 }
+        chapters: [ch-platform-api, ch-push-notifications]
+        into_title: "Platform API and push notifications"
+        note: "プラットフォームAPIとプッシュ通知設定が少ないため統合します"
+    split:
+      - key: screens_large
+        when: { screens_min: 25 }
+        chapter: ch-screens
+        into:
+          - { id: ch-screens-auth, title: "Screen list (auth & onboarding)" }
+          - { id: ch-screens-main, title: "Screen list (main screens)" }
+        note: "画面数が多いためAuth/OnboardingとMainに分割します"
 ---
 
 # Mobile app spec template

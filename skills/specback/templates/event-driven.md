@@ -1,7 +1,7 @@
 ---
 template_name: event-driven
-template_version: 0.1.0
-last_updated: 2026-08-01
+template_version: 0.2.0
+last_updated: 2026-08-03
 description: Event-driven / Streaming spec template. For asynchronous messaging systems using Kafka, Pulsar, EventBridge, SQS, RabbitMQ, Google Pub/Sub, Azure Event Hubs, and similar brokers.
 reader_order:
   maintenance_developer: null
@@ -34,6 +34,126 @@ reader_order:
     - 11-consumers
     - 12-serialization-schema
     - 13-partitioning-scaling
+detection_rules:
+  always_include:
+    - ch-overview
+    - ch-feature-specs
+    - ch-module-architecture
+    - ch-design-decisions
+    - ch-known-constraints
+  chapters:
+    - id: ch-event-catalogue
+      title: Event catalogue
+      slug: 04-event-catalogue
+      detection:
+        dirs: ["events", "messages", "schemas", "avro", "protobuf"]
+        files: ["**/*.avsc", "**/*.proto", "**/*.event", "**/events/**"]
+        patterns:
+          - rgs: ["class.*Event|interface.*Event|record.*Event|type.*Event|message|Avro|Protobuf|Schema"]
+          - deps: ["avro", "protobuf", "json-schema", "confluent-kafka", "pulsar-client"]
+        note_missing: "イベント/メッセージ型定義やスキーマファイルが見つかりませんでした"
+    - id: ch-producers
+      title: Producers
+      slug: 05-producers
+      detection:
+        dirs: ["producers", "publishers", "emitters"]
+        patterns:
+          - rgs: ["producer|publisher|emitter|KafkaProducer|ProducerRecord|send\\(|publish\\(|emit\\("]
+          - deps: ["kafka-clients", "confluent-kafka", "boto3", "pika", "amqp", "pulsar-client"]
+        note_missing: "Producer/Publisherクラスが見つかりませんでした"
+    - id: ch-consumers
+      title: Consumers
+      slug: 06-consumers
+      detection:
+        dirs: ["consumers", "subscribers", "handlers", "listeners", "processors"]
+        patterns:
+          - rgs: ["consumer|subscriber|listener|handler|KafkaConsumer|ConsumerRecord|onMessage|processMessage|@KafkaListener|@StreamListener"]
+          - deps: ["kafka-clients", "confluent-kafka", "boto3", "pika", "amqp", "pulsar-client"]
+        note_missing: "Consumer/Subscriberクラスが見つかりませんでした"
+    - id: ch-serialization
+      title: Serialization and schema
+      slug: 07-serialization-schema
+      detection:
+        files: ["**/schema-registry*", "**/*.avsc", "**/*.proto", "**/glue*"]
+        patterns:
+          - rgs: ["SchemaRegistry|AvroSerializer|ProtobufSerializer|JsonSerializer|Deserializer|Serde"]
+          - deps: ["avro", "protobuf", "confluent-schema-registry", "aws-glue-schema-registry"]
+        note_missing: "シリアライゼーション/スキーマレジストリ設定が見つかりませんでした"
+        optional: true
+    - id: ch-delivery-guarantees
+      title: Delivery guarantees
+      slug: 08-delivery-guarantees
+      detection:
+        patterns:
+          - rgs: ["acks=|enable\\.idempotence|exactly_once|at.?least.?once|at.?most.?once|delivery.?semantic|transactional\\.id|isolation\\.level|DLQ|dead.?letter|retry.?policy"]
+          - deps: ["kafka-clients", "spring-kafka", "rabbitmq"]
+        note_missing: "配信保証設定（acks/idempotence/DLQ）が見つかりませんでした"
+        optional: true
+    - id: ch-partitioning
+      title: Partitioning and scaling
+      slug: 09-partitioning-scaling
+      detection:
+        patterns:
+          - rgs: ["partition|Partitioner|partition\\.key|num\\.partitions|replication\\.factor|min\\.insync|replica|rebalance|consumer\\.group"]
+          - deps: ["kafka-clients", "pulsar-client"]
+        note_missing: "パーティション設定やスケーリング戦略が見つかりませんでした"
+        optional: true
+    - id: ch-error-recovery
+      title: Error handling and recovery
+      slug: 10-error-handling-recovery
+      detection:
+        patterns:
+          - rgs: ["retry|backoff|circuit.?breaker|replay|poison.?pill|dead.?letter|error.?handler|ErrorHandler|SeekToCurrent|recoverer"]
+        note_missing: "エラーハンドリングやリカバリ手順が見つかりませんでした"
+        optional: true
+    - id: ch-monitoring
+      title: Monitoring and observability
+      slug: 11-monitoring-observability
+      detection:
+        files: ["**/monitoring/**", "**/metrics/**", "**/grafana*", "**/prometheus*", "**/datadog*", "**/cloudwatch*"]
+        patterns:
+          - rgs: ["consumer.?lag|lag|throughput|offset.?monitor|kafka.?ui|burrow|kowl|JMX|Prometheus"]
+        note_missing: "モニタリング/可観測性設定（consumer lag/offset監視）が見つかりませんでした"
+        optional: true
+  extra_chapters:
+    - id: ch-stream-processing
+      title: Stream processing topology
+      slug: 12-stream-processing
+      detection:
+        patterns:
+          - rgs: ["KStream|KTable|GlobalKTable|aggregate|reduce|join|windowed|state.?store|ksql|KafkaStreams|Topology"]
+          - deps: ["kafka-streams", "ksqldb", "apache-flink", "spark-streaming"]
+        note_detected: "Stream processing（Kafka Streams/Flink）コードを検出しました → 自動追加"
+      insert_after: ch-consumers
+    - id: ch-event-sourcing
+      title: Event sourcing / CQRS
+      slug: 13-event-sourcing
+      detection:
+        patterns:
+          - rgs: ["event.?sourc|EventStore|CQRS|command.?handler|projection|aggregate|axoniq|AxonFramework"]
+          - deps: ["axon-framework", "eventstore", "eventsourcing"]
+        note_detected: "Event Sourcing/CQRSパターンを検出しました → 自動追加"
+      insert_after: ch-event-catalogue
+  granularity:
+    merge:
+      - key: producer_consumer_compact
+        when: { producers_max: 3, consumers_max: 3, events_max: 5 }
+        chapters: [ch-producers, ch-consumers]
+        into_title: "Producers and consumers"
+        note: "Producer/Consumer数が少ないため統合します"
+      - key: delivery_partition_compact
+        when: { delivery_patterns_max: 3, partition_patterns_max: 3 }
+        chapters: [ch-delivery-guarantees, ch-partitioning]
+        into_title: "Delivery guarantees and partitioning"
+        note: "配信保証とパーティション設定が簡素なため統合します"
+    split:
+      - key: events_large
+        when: { events_min: 30 }
+        chapter: ch-event-catalogue
+        into:
+          - { id: ch-events-domain, title: "Event catalogue (domain events)" }
+          - { id: ch-events-analytics, title: "Event catalogue (analytics/infra)" }
+        note: "イベント数が多いためDomain/Analyticsに分割します"
 ---
 
 # Event-driven / Streaming spec template
