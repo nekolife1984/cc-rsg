@@ -72,6 +72,31 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    - MECE coverage (≥ 70%)
    - **Check 12 — User-custom deliverables**: every filename in `goal.json.user_custom_deliverables` must exist in the target directory (`.specback/drafts/` in Phase 4, `{output_dir}/` (default: `.specback/final/`) in Phase 6) AND have a non-empty body (≥ 10 non-blank lines outside code fences).
 
+2.5. **Check Markdown quality (markdownlint-cli2) — optional gate**
+
+   Runs markdownlint-cli2 against all generated draft specs to catch structural issues (heading consistency, list formatting, code block style, trailing whitespace, etc.).
+
+   This step runs **after** coverage-check.py passes (exit 0) and is a **non-blocking advisory** gate — violations are reported but do NOT trigger a loopback to Phase 3. The agent may optionally fix fixable issues with `--fix` if the user requests it.
+
+   ```bash
+   bash "$(cat .specback/.skill-path)/scripts/verify-markdownlint.sh" \
+     --specback-dir .specback
+   ```
+
+   | Exit | Meaning | Action |
+   |:----:|:--------|:-------|
+   | `0` | All markdown checks passed | Proceed |
+   | `1` | Violations found | Report to user; continue (non-blocking) |
+   | `2` | Config file missing or error | Report error; continue (no gate) |
+
+   **Configuration**: see `references/markdownlint-config.yaml` for the rule set. Key design:
+   - `MD013` (line-length): disabled — spec prose is long-form narrative
+   - `MD026` (trailing punctuation in headings): disabled — Japanese specs use 。and ．in titles
+   - `MD033` (inline HTML): disabled — `<!-- REF: ... -->` and `<!-- meta: ... -->` are structural
+   - All other structural rules (heading order, list consistency, code block style) are enforced.
+
+   **Skipping**: the step is automatically skipped if the target directory (`.specback/drafts/`) does not exist (e.g. Phase 4 called without Phase 3 having run).
+
 3. **Failure → loop back to Phase 3**
    - When exit code is 1, read the "gate decision" section of the output and:
      1. Identify the failed chapter (e.g. `chapter 05-data-model.md: [REF:] count is 7 < required 10`)

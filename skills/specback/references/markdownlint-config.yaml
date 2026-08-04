@@ -1,0 +1,105 @@
+# markdownlint-cli2 configuration for specback-generated spec files
+# Applied to .specback/drafts/*.md and .specback/final/*.md in Phase 4 (Verify)
+#
+# Run: npx --yes markdownlint-cli2 --config <this-file> ".specback/drafts/*.md"
+
+# Enable all rules by default, then selectively disable
+default: true
+
+# ── Disabled rules ──────────────────────────────────────────
+
+# MD013 — Line length
+# Spec prose (narrative, table rows, code example descriptions) regularly
+# exceeds 80 characters. Strict enforcement would require artificial wrapping.
+MD013: false
+
+# MD026 — Trailing punctuation in headings
+# Japanese spec headings use 、 and 。 naturally (e.g. "# 第3章: 画面一覧、"). English
+# punctuation (period, colon) is also legitimate in section titles.
+MD026: false
+
+# MD033 — Inline HTML
+# specback uses `<!-- REF: path:line -->` and `<!-- meta: ... -->` for
+# traceability and metadata. These are essential structural elements.
+MD033: false
+
+# ── Relaxed rules ──────────────────────────────────────────
+
+# MD024 — Multiple headings with the same content
+# Template chapters may have identically named subsections across different
+# chapters (e.g. "#### 2.1 Overview", "#### 3.1 Overview"). Allow duplicates
+# as long as they are not siblings under the same parent heading.
+MD024:
+  siblings_only: true
+
+# MD031 — Fenced code blocks should be surrounded by blank lines
+# Mermaid diagram blocks are code fences without a language tag. Allow code
+# blocks to appear without a language when they are Mermaid content.
+# Note: non-Mermaid code blocks should still have a language tag (addressed by MD046).
+
+# MD046 — Code block style
+# Allow both fenced and indented code blocks. Spec prose may use indented
+# blocks for inline examples, while code examples use fenced blocks.
+MD046: false
+
+# MD034 — Bare URLs
+# Allow bare URLs in spec source references (they may appear inside `[REF:]`
+# comments or as raw links in tables). If strict URL formatting is desired,
+# use angle brackets: <https://example.com>.
+MD034: false
+
+# ── Enabled rules (sanity checks) ──────────────────────────
+
+# MD001 — heading-increment
+# Heading levels must increment by one. Skip from H2→H4 is an error.
+# This catches structural mistakes in chapter outlines.
+
+# MD004 — Unordered list style
+# Enforce consistent dash-style unordered lists (`-` not `*` or `+`).
+
+# MD007 — Unordered list indentation
+# Enforce 2-space indent for nested lists.
+
+# MD009 — No trailing spaces
+# Trailing whitespace is invisible damage.
+
+# MD012 — No multiple consecutive blank lines
+# Keeps spec files clean and compact.
+
+# MD022 — Blanks around headings
+# Headings must be surrounded by blank lines so parsers don't
+# misread body text as part of the heading.
+
+# MD025 — Single title
+# Only one top-level heading (#) per file. Multiple H1s in a spec
+# chapter would be a structural defect.
+
+# MD028 — No blank lines inside blockquote
+# Blank lines inside blockquotes are ambiguous in Markdown.
+
+# MD029 — Ordered list item prefix
+# Ordered lists should use consistent numbering (1. or 1. 1. ...).
+
+# MD032 — Blanks around lists
+# Lists must be surrounded by blank lines for correct parsing.
+
+# MD035 — Horizontal rule style
+# Prefer `---` for horizontal rules.
+
+# MD036 — Emphasis used instead of a heading
+# Catch bold/italic used as section titles (should be proper headings).
+
+# MD041 — First line in file is a top-level heading
+# Every spec chapter must start with `# 第N章: ...`.
+
+# MD045 — No alt text
+# Images in specs must have alt text for accessibility.
+
+# MD047 — Single trailing newline
+# Files must end with exactly one newline.
+
+# MD049 — Emphasis style
+# Use asterisks for emphasis, not underscores.
+
+# MD050 — Strong style
+# Use asterisks for strong emphasis, not underscores.
