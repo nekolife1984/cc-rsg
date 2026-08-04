@@ -128,7 +128,95 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
    }
    ```
 
-   #### 3d. Present the customised chapter list to the user
+   #### 3d. 🆕 Template fit critical review (recon-driven)
+
+   After detection_rules have produced `customized_chapters`, but before presenting to the user,
+   critically evaluate whether the **selected template itself** remains the best fit.
+
+   **Purpose**: The detection_rules only toggle individual chapters on/off. They cannot detect
+   that the *entire template* is wrong for this codebase, or that structural changes beyond
+   chapter-level toggles are needed. This step fills that gap.
+
+   **Procedure**:
+
+   1. **Read the recon report** — re-read `recon-report.md` alongside `customized_chapters`.
+
+   2. **Evaluate template fit** against these dimensions:
+
+      | Dimension | Question | Evidence source |
+      |:----------|:---------|:---------------|
+      | **Category match** | Do the recon findings still match the template's selection criteria? | recon-report.md package/language/detection findings vs template-catalog.md criteria |
+      | **Structural anomalies** | Are there codebase patterns the template doesn't model? (e.g. DDD Bounded Contexts, event sourcing, CQRS, plugin architecture, multi-tenancy) | Directory structure, package patterns, naming conventions from recon |
+      | **Chapter order tension** | Does the recon evidence suggest a different reading order? (e.g. auth is the central concern → move auth forward) | Detect which areas have the most code / complexity / business logic |
+      | **Always-include drift** | Are any `always_include` chapters likely irrelevant for this codebase? (edge case: an infra spec with no deploy pipeline) | recon evidence vs always_include list |
+      | **Template mismatch** | Would a different template or composite pattern serve better? (e.g. detected as web-app but API dominates) | Ratio of UI code vs API code, entry-point patterns |
+
+   3. **Classification of result**:
+
+      | Classification | Meaning | Action |
+      |:--------------|:--------|:-------|
+      | 🟢 **Confirmed** | Template and detection results are a good fit | Proceed to step 3e (presentation) |
+      | 🟡 **Adjusted** | Template is OK but recon suggests structural changes beyond toggles | Modify `customized_chapters` (reorder, rename, regroup) and document reasoning in `goal.json.customized_chapters[].review_note` |
+      | 🔴 **Switch template** | Recon evidence contradicts the template category | Go back to Step 2 with a new recommendation + explanation |
+      | ⚪ **No template** | Codebase doesn't fit any template (unique architecture) | Build a custom chapter structure from recon evidence (see 3d-2) |
+
+   4. **For 🟡 Adjusted — structural modifications beyond detection_rules**
+
+      Beyond the toggles already handled by detection_rules, the following structural
+      changes may be applied based on recon evidence:
+
+      | Recon finding | Possible structural change |
+      |:-------------|:-------------------------|
+      | DDD project structure (domain/application/infrastructure) | Split relevant chapters per Bounded Context |
+      | Auth is the most complex subsystem | Move auth chapter earlier (closer to Overview) |
+      | Heavy test/BDD directory (`features/`, `spec/`) | Add "Testing strategy" chapter or merge into Operations |
+      | API surface dominates (OpenAPI, GraphQL schema) | Elevate endpoint chapter, merge UI chapters |
+      | Plugin/extension architecture detected | Add "Extension points" chapter after Architecture |
+      | Monorepo with shared lib (but single-scope) | Add "Internal library dependencies" section to Architecture |
+
+      Record every structural change with a rationale note:
+      ```json
+      {
+        "id": "ch-auth",
+        "title": "Authentication and authorisation",
+        "status": "included",
+        "note": null,
+        "confidence": "high",
+        "review_note": "Auth is the most complex subsystem (~30% of code) → moved to position 4 (after Architecture)"
+      }
+      ```
+
+   5. **For ⚪ No template — build custom chapter structure from recon**
+
+      When no template fits, construct a chapter structure directly from recon evidence.
+      The following rules must be followed:
+
+      - **Always include**: Overview, Feature specifications, Architecture overview, Design decisions, Known constraints (same as `always_include`)
+      - **Reader comprehension flow**: Overview → Features → Structure → Details → Rationale → Boundaries
+      - **Chapter naming**: Use specback naming conventions (noun phrase, title case, 2-5 words)
+      - **Evidence-derived chapters**: Each chapter must be traceable to a recon finding (directory, package, pattern). No speculative chapters.
+      - **Granularity**: 6-15 chapters. Fewer for small codebases (≤200 files), more for large ones.
+      - **Validate**: Does every major recon finding (framework, architecture pattern, key directories) map to at least one chapter?
+
+      Set `goal.template_used: "custom"` and populate `customized_chapters` with the
+      custom structure. Include `"review_note": "Custom structure built from recon — no applicable template"` on each chapter.
+
+   6. **Log the review result**
+
+      Add to `recon-report.md` under a new `## Template fit review` section:
+
+      ```markdown
+      ## Template fit review
+
+      - **Template assessed**: web-app v0.1.1
+      - **Classification**: 🟡 Adjusted
+      - **Rationale**: Auth subsystem dominates (~30% of code, complex role hierarchy).
+        Moved auth chapter from position 8 to 4 for reader comprehension.
+      - **Custom changes**:
+        - ch-auth: reorder (8→4), review_note: "Auth is the most complex subsystem"
+      ```
+
+   #### 3e. Present the customised chapter list to the user
 
    Show the result with icons and notes:
 
@@ -162,6 +250,8 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
        🔀 第7章: データモデル（Entity数45）
            └ 第7-a: Core entities（30エンティティ）
            └ 第7-b: Analytics/Reporting（15エンティティ）
+
+   ```
 
    Use AskUserQuestion with choices:
      - "I confirm — proceed with this structure" → keep customized_chapters
