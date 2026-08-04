@@ -181,11 +181,14 @@ git diff -U0 main...HEAD | python "$(cat .specback/.skill-path)/scripts/fix-refs
 - **Check mode**: ideal for CI gates — fails if orphans remain after correction
 - **Conservative mapping**: only lines explicitly present within hunk ranges are modified. Lines outside ranges are not changed even if the range length appears to have shifted
 
-## Future Extensions (Phase 7c — ChangeSpec and beyond)
+## Implemented Extensions
+
+- **Phase 7d — Config Refresh** (`skills/specback/phases/phase-7d-config-refresh.md`): after drift detection, regenerates `source-map.json`, `trace.json`, and updates `state.json.generated_at_commit` so subsequent drift sessions don't re-flag the same changes.
+
+## Future Extensions
 
 - **Spec section re-investigation**: run chapter investigation subagents only for affected sections
 - **Pre-commit hook integration**: gate commits on drift status
-- **ChangeSpec generation**: detailed change description documents via `scripts/change-spec.py`
 
 ## Related
 
@@ -196,3 +199,4 @@ git diff -U0 main...HEAD | python "$(cat .specback/.skill-path)/scripts/fix-refs
 - `scripts/snapshot-hashes.py` — hash snapshot for non-Git projects (hash mode)
 - `scripts/fix-refs.py` — Phase 7b: REF auto-correction
 - `scripts/change-spec.py` — Phase 7c: ChangeSpec mechanical extraction
+- `skills/specback/phases/phase-7d-config-refresh.md` — Phase 7d: Config Refresh procedure
