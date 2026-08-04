@@ -662,10 +662,10 @@ detection_rules:
 ```json
 {
   "customized_chapters": [
-    {"id": "ch-overview", "title": "Overview", "status": "included", "note": null, "confidence": "always"},
-    {"id": "ch-auth", "title": "Authentication and authorisation", "status": "excluded", "note": "認証フレームワーク・認証関連コードが見つかりませんでした", "confidence": "high"},
-    {"id": "ch-background-jobs", "title": "Background jobs", "status": "auto_added", "note": "Sidekiq設定検出", "confidence": "high"},
-    {"id": "ch-data-model", "title": "Data model", "status": "included", "note": "optional: データモデル定義未確認", "confidence": "low"}
+    {"id": "ch-overview", "title": "Overview", "status": "included", "note": null, "confidence": "always", "review_note": null},
+    {"id": "ch-auth", "title": "Authentication and authorisation", "status": "excluded", "note": "認証フレームワーク・認証関連コードが見つかりませんでした", "confidence": "high", "review_note": null},
+    {"id": "ch-background-jobs", "title": "Background jobs", "status": "auto_added", "note": "Sidekiq設定検出", "confidence": "high", "review_note": null},
+    {"id": "ch-data-model", "title": "Data model", "status": "included", "note": "optional: データモデル定義未確認", "confidence": "low", "review_note": null}
   ],
   "chapter_actions_applied": {
     "excluded": ["ch-auth"],
@@ -675,6 +675,19 @@ detection_rules:
   }
 }
 ```
+
+#### review_note field (🆕)
+
+Added in Phase 1 Step 3d (Template fit critical review). Records structural changes
+beyond detection_rules toggles:
+
+| Value | Meaning |
+|:------|:--------|
+| `null` | No structural change. Detection_rules result stands. |
+| `"... → moved to position N"` | Chapter was reordered based on recon evidence. |
+| `"... → merged into ..."` | Chapters merged beyond detection_rules merge rules. |
+| `"... → split: ..."` | Chapters split beyond detection_rules split rules. |
+| `"Custom structure — no applicable template"` | Built from scratch (⚪ No template mode). |
 
 ## Template version management
 

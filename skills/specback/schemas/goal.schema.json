@@ -69,8 +69,8 @@
     },
     "template": {
       "type": "string",
-      "description": "Phase 1 で選択されたテンプレート名。coverage-check.py のデフォルト閾値の調整に使用される。",
-      "enum": ["web-app", "batch-system", "api-service", "library-sdk", "cli-tool", "infrastructure", "mobile-app", "desktop-app", "event-driven"]
+      "description": "Phase 1 で選択されたテンプレート名。coverage-check.py のデフォルト閾値の調整に使用される。「custom」は該当テンプレートなし（Phase 1 Step 3d ⚪ No template）の場合。",
+      "enum": ["web-app", "batch-system", "api-service", "library-sdk", "cli-tool", "infrastructure", "mobile-app", "desktop-app", "event-driven", "custom"]
     },
     "reader_order_applied": {
       "type": "boolean",
@@ -95,6 +95,10 @@
             "type": "string",
             "description": "検出の確信度",
             "enum": ["always", "high", "medium", "low"]
+          },
+          "review_note": {
+            "type": ["string", "null"],
+            "description": "Phase 1 Step 3d（Template fit critical review）での構造変更理由。null=変更なし、文字列=変更内容と理由。例: \"Auth is the most complex subsystem → moved to position 4\""
           }
         },
         "required": ["id", "title", "status"],
