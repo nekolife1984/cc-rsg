@@ -82,6 +82,7 @@ Use **shape** (not color) for visual emphasis.
 | 7 | Drift Detection | `phases/phase-7-drift.md` | `drift-report.md` |
 | 7b | REF Auto-Fix | `phases/phase-7b-ref-autofix.md` | corrected REF lines |
 | 7c | ChangeSpec | `phases/phase-7c-changespec.md` | `change-spec.md` |
+| 7d | Config Refresh | `phases/phase-7d-config-refresh.md` | updated `source-map.json`, `trace.json`, `state.json` |
 
 ## Common reference files
 
