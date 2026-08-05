@@ -59,5 +59,5 @@ In outline mode:
 
 ### Phase-specific cautions
 - "Exhaustive entity listing" takes precedence. Apply Confidence labels honestly per cell — do NOT over-apply 🟢 (only for files actually viewed).
-- Do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` has a non-empty body in `.specback/drafts/` (at least 10 non-blank lines outside of code fences). Verify before updating `state.json`.
-- 内部ファイル非表示ルール: 生成ドキュメント本文内で `.specback/inventory.json`、`.specback/wbs.json` などの内部ファイルパスを参照しないこと。
+- Do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` has a non-empty body in `{output_dir}/.specback/drafts/` (at least 10 non-blank lines outside of code fences). Verify before updating `state.json`.
+- 内部ファイル非表示ルール: 生成ドキュメント本文内で `{output_dir}/.specback/inventory.json`、`{output_dir}/.specback/wbs.json` などの内部ファイルパスを参照しないこと。

@@ -36,7 +36,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `{
    python "$(cat {output_dir}/.specback/.skill-path)/scripts/coverage-check.py" \
      --specback-dir {output_dir}/.specback \
      --output-dir {output_dir} \
-     --target-dir-for-required .specback/drafts \
+     --target-dir-for-required {output_dir}/.specback/drafts \
      --output-format text
    ```
    This invocation is **non-optional**. The script's exit code is the gate:
@@ -45,10 +45,10 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `{
 
    | `--target-dir-for-required` | `--output-dir` | Resolved path | Notes |
    |----------------------------|----------------|---------------|-------|
-   | `.specback/drafts` | `{output_dir}` | `{output_dir}/.specback/drafts/` ✅ | Drafts always live here in Phase 4 |
-   | `drafts` | `{output_dir}` | `{output_dir}/drafts/` ❌ → **fallback**: tries `drafts/` → fails ❌ | Wrong dir; drafts are under `.specback/drafts/` |
+   | `{output_dir}/.specback/drafts` | `{output_dir}` | `{output_dir}/.specback/drafts/` ✅ | Drafts always live here in Phase 4 |
+   | `drafts` | `{output_dir}` | `{output_dir}/drafts/` ❌ → **fallback**: tries `drafts/` → fails ❌ | Wrong dir; drafts are under `{output_dir}/.specback/drafts/` |
 
-   Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path (absolute or relative). This allows passing `.specback/drafts` directly without path arithmetic.
+   Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path (absolute or relative). This allows passing `{output_dir}/.specback/drafts` directly without path arithmetic.
    - `0` → all checks pass; Phase 4 may proceed.
    - `1` → at least one check failed; go to step 3 (loopback). Recording `all_quality_gates_passed: true` in `state.json` while exit is 1 is forbidden.
    - `2` → required artefacts (e.g. `inventory.json`) missing; surface to user.

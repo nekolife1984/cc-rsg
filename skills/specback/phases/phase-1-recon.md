@@ -8,13 +8,13 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
 When `goal.multi_scope == true`, the following steps apply:
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
 2. **Set scope-specific paths**: `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"`, `TARGET_ROOT = scope.root`.
-3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
+3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat {output_dir}/.specback/.skill-path) {SPECBACK_DIR}/.skill-path`
 4. **Run the procedure below** using `{SPECBACK_DIR}` and `{TARGET_ROOT}`.
 5. **On completion**: Increment `goal.current_scope`. If `current_scope >= scopes.length`, reset to `0`.
 6. **Resume support**: Save `state.json` with `current_scope` after each scope.
 7. **At START**: If `goal.current_scope > 0` and `multi_scope == true`, skip completed scopes.
 
-When `goal.multi_scope == false` (default), run once with `.specback/` as before.
+When `goal.multi_scope == false` (default), run once with `{output_dir}/.specback/` as before.
 
 ### Procedure
 
@@ -318,12 +318,12 @@ When `goal.multi_scope == false` (default), run once with `.specback/` as before
    - Each scope may have a **different template** (detected independently in Phase 2).
 
    **State isolation**: When `multi_scope == true`:
-   - Each scope uses its own state directory: `.specback-{name}/` (e.g. `.specback-auth/`)
-   - `.skill-path` is shared (symlink or copy): `ln -sf $(cat .specback/.skill-path) .specback-auth/.skill-path`
-   - The project root `.specback/` stores only the shared `goal.json` and `state.json` (which tracks `current_scope` across phases).
-   - Script invocations use `--specback-dir {output_dir}/.specback-{name}`.
+   - Each scope uses its own state directory: `{output_dir}/{scope.name}/.specback/` (e.g. `docs/auth/.specback/`)
+   - `.skill-path` is shared (symlink or copy): `ln -sf $(cat {output_dir}/.specback/.skill-path) {output_dir}/auth/.specback/.skill-path`
+   - The `{output_dir}/.specback/` stores only the shared `goal.json` and `state.json` (which tracks `current_scope` across phases).
+   - Script invocations use `--specback-dir {output_dir}/{scope.name}/.specback`.
 
-   When `multi_scope == false` (default), proceed with the original `.specback/` flow unchanged.
+   When `multi_scope == false` (default), proceed with the original `{output_dir}/.specback/` flow unchanged.
 
 6. **Register high-level questions**
    - Add the fundamental questions surfaced during reconnaissance (questions that block big-picture understanding) into `questions.json`.

@@ -162,22 +162,22 @@ This uses the same matching heuristic as `build-trace.py`'s `resolve_refs_to_uni
 
 ```bash
 # Dry-run (default)
-python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback
+python "$(cat {output_dir}/.specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback
 
 # Apply corrections
-python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback --apply
+python "$(cat {output_dir}/.specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback --apply
 
 # CI check: exit 1 if any orphaned REFs remain
-python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback --check
+python "$(cat {output_dir}/.specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback --check
 
 # Pipe diff from CI
-git diff -U0 main...HEAD | python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --diff - --check
+git diff -U0 main...HEAD | python "$(cat {output_dir}/.specback/.skill-path)/scripts/fix-refs.py" --diff - --check
 ```
 
 ### Safety
 
 - **Default is dry-run**: files are not modified until `--apply` is passed
-- **Backups**: original files saved to `.specback/backups/<file>.bak` before modification
+- **Backups**: original files saved to `{output_dir}/.specback/backups/<file>.bak` before modification
 - **Check mode**: ideal for CI gates — fails if orphans remain after correction
 - **Conservative mapping**: only lines explicitly present within hunk ranges are modified. Lines outside ranges are not changed even if the range length appears to have shifted
 

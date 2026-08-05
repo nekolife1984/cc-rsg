@@ -126,7 +126,7 @@ Corresponding real sources (Read these with the Read tool):
 - app/models/role.rb
 - db/schema.rb (relevant portions)
 
-Draft output path: .specback/drafts/05-data-model.md
+Draft output path: {output_dir}/.specback/drafts/05-data-model.md
 
 Quality bar:
 - <!-- REF: path:start-end --> >= 10
@@ -195,8 +195,8 @@ in English.
 - >= 10 REFs / >= 5 Sources Read must be satisfied.
 - Cross-chapter consistency is checked in Phase 4.
 - Do not hide uncertainty markers; keep them explicit in the draft.
-- Do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` has a non-empty body in `.specback/drafts/` (at least 10 non-blank lines outside of code fences). Verify before updating `state.json`.
+- Do NOT declare Phase 3 complete unless **every** chapter in `wbs.json.chapters[]` has a non-empty body in `{output_dir}/.specback/drafts/` (at least 10 non-blank lines outside of code fences). Verify before updating `state.json`.
 - Feature specifications chapter (Ch2): higher 🔴 ASSUMED ratio is expected and acceptable. The Phase 4 gate for confidence ratio does not apply to Ch2.
 - Module architecture (overview) chapter: overview-level only. Keep short and skimmable.
 - Design decisions chapter: uses import analysis, not per-file deep reading. Many 🔴 ASSUMED entries are expected.
-- 内部ファイル非表示ルール: 生成ドキュメント本文内で `.specback/inventory.json`、`.specback/wbs.json` などの内部ファイルパスを参照しないこと。
+- 内部ファイル非表示ルール: 生成ドキュメント本文内で `{output_dir}/.specback/inventory.json`、`{output_dir}/.specback/wbs.json` などの内部ファイルパスを参照しないこと。

@@ -59,7 +59,7 @@ What would you like to do?
 以下のいずれを実施しますか?
 (A) 続きから再開(Phase 3 残タスクを完了させる)
 (B) Phase を巻き戻す(指定する Phase から再開)
-(C) 全リセット(.specback/ を削除して Phase 0 から開始)
+(C) 全リセット(`{output_dir}/.specback/` を削除して Phase 0 から開始)
 (D) 状況を詳細表示してから判断する
 ```
 

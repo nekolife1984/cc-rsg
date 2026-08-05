@@ -18,7 +18,7 @@ When `goal.multi_scope == true`, the following steps apply:
 6. **Resume support**: After each scope completes, save `state.json` with `current_scope` so the session can resume from the correct scope.
 7. **At the START of this phase**: If `goal.current_scope > 0` and `goal.multi_scope == true`, this is a resume — skip already-completed scopes and start from `goal.current_scope`.
 
-When `goal.multi_scope == false` (default), run the phase procedure once with `.specback/` and the project root as before.
+When `goal.multi_scope == false` (default), run the phase procedure once with `{output_dir}/.specback/` and the project root as before.
 
 ---
 
@@ -81,12 +81,12 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
      python "$(cat {output_dir}/.specback/.skill-path)/scripts/coverage-check.py" \
        --specback-dir {output_dir}/.specback \
        --output-dir {output_dir} \
-       --target-dir-for-required . \
+       --target-dir-for-required {output_dir} \
        --require-min-body-lines-for-reserved 5 \
        --forbid-mermaid-styling \
        --output-format text
      ```
-     This resolves to `{output_dir}/.` with fallback to `{output_dir}/`. Since spec files are directly under `{output_dir}/`, no extra subdirectory is needed.
+     This resolves to `{output_dir}/{output_dir}` with fallback to `{output_dir}`. Since spec files are directly under `{output_dir}/`, no extra subdirectory is needed.
 
      The script's fallback logic handles this automatically (see table below).
 
@@ -94,9 +94,9 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 
      | `--target-dir-for-required` | `--output-dir` | Resolved path | Notes |
      |----------------------------|----------------|---------------|-------|
-     | `.` | `{output_dir}` | `{output_dir}/.` ❌ → **fallback**: `{output_dir}/` ✅ | Spec files directly under output dir |
+     | `{output_dir}` | `{output_dir}` | `{output_dir}/{output_dir}` ❌ → **fallback**: `{output_dir}` ✅ | Spec files directly under output dir |
 
-     Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path. This allows passing `.` directly without path arithmetic.
+     Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path.
    - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
    - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `{output_dir}/`.
    - **Verify reserved file body content** (`--require-min-body-lines-for-reserved`): the three reserved files must each have at least 5 non-blank body lines. Empty `00-metadata.md` / `99-unresolved.md` / `traceability.md` are delivery failures — they indicate Phase 3/4 output was never filled.
@@ -124,6 +124,6 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 - Omitting the traceability table (`traceability.md`) makes every statement's origin untraceable.
 - The presence of the three required files (`00-metadata.md` / `99-unresolved.md` / `traceability.md`) AND every file in `goal.json.user_custom_deliverables` is verified by `scripts/coverage-check.py`; missing files raise errors.
 |- **Pushing a user-promised deliverable into "future improvements" of `99-unresolved.md` is a contract breach**, not a graceful degradation. The user did not ask for a recommendation that the file be made; they asked for the file. If the file cannot be made, ask the user, do not invent a workaround.
-|- **内部ファイル非表示ルール**: 最終出力ドキュメント内で `.specback/inventory.json`、`.specback/wbs.json` などの specback 内部ファイルパスを参照しないこと（Phase 3 から持ち越された記述も含む）。出力前に全チャプターをスキャンし、内部ファイルパスが含まれていればユーザー向け表現に書き換える。
+||- **内部ファイル非表示ルール**: 最終出力ドキュメント内で `{output_dir}/.specback/inventory.json`、`{output_dir}/.specback/wbs.json` などの specback 内部ファイルパスを参照しないこと（Phase 3 から持ち越された記述も含む）。出力前に全チャプターをスキャンし、内部ファイルパスが含まれていればユーザー向け表現に書き換える。
 
 ---
