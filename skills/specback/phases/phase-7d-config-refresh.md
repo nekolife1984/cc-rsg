@@ -100,13 +100,10 @@ python skills/specback/scripts/build-trace.py --specback-dir .specback
 
 ---
 
-## References
-
-- `scripts/source-map.py` / `source_map_v2/` — source map generation
-- `scripts/build-trace.py` — trace generation
-- `scripts/snapshot-hashes.py` — hash snapshot for non-Git projects
 ### Phase-specific cautions
 - Running Phase 7d without Phase 7b (REF Auto-Fix) means stale REFs remain in the regenerated `trace.json`. Run 7b first for best results.
 - Regenerating `source-map.json` overwrites the previous version. The old version is not backed up automatically.
 - Config Refresh resets the drift baseline. After Phase 7d, the next drift detection will start from a clean slate — inform the user.
 - Multi-scope: each scope's infrastructure files are refreshed independently.
+
+## References

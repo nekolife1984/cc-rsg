@@ -10,7 +10,7 @@ When `goal.multi_scope == true`, run the procedure below for the current scope (
 
 When `goal.multi_scope == false` (default), run once with `.specback/` as before.
 
-### Behaviour
+### Procedure
 
 After the Phase 6 completion report, the agent emits the following message and **waits for input**:
 
