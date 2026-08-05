@@ -1,7 +1,7 @@
 ## Phase 6: Deliver
 
 ### Purpose
-Output the final spec as Markdown under `{output_dir}/` (default: `.specback/final/`; custom: per choice, e.g. `docs/specs/`). Drafts always stay at `.specback/drafts/` regardless.
+Output the final spec as Markdown under `{output_dir}/` (default: `specs/`; custom: per choice, e.g. `docs/specs/`). Drafts always stay at `{output_dir}/.specback/drafts/` regardless.
 
 ### 🆕 Multi-scope execution
 
@@ -9,12 +9,12 @@ When `goal.multi_scope == true`, the following steps apply:
 
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
 2. **Set scope-specific paths**:
-   - `SPECBACK_DIR = ".specback-{scope.name}"` (e.g. `.specback-auth`)
+   - `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` (e.g. `docs/auth/.specback`)
    - `TARGET_ROOT = scope.root` (e.g. `services/auth`)
-   - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `.specback/final/auth`)
-3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
+   - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `docs/auth`)
+3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat {output_dir}/.specback/.skill-path) {SPECBACK_DIR}/.skill-path`
 4. **Run the phase procedure below** using `{SPECBACK_DIR}` as the specback directory (for scripts: `--specback-dir {SPECBACK_DIR}`) and `{TARGET_ROOT}` as the target codebase root (for source-map: `--target {TARGET_ROOT}`).
-5. **On completion**: Increment `goal.current_scope` in `.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).
+5. **On completion**: Increment `goal.current_scope` in `{output_dir}/.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).
 6. **Resume support**: After each scope completes, save `state.json` with `current_scope` so the session can resume from the correct scope.
 7. **At the START of this phase**: If `goal.current_scope > 0` and `goal.multi_scope == true`, this is a resume — skip already-completed scopes and start from `goal.current_scope`.
 
@@ -28,7 +28,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d)-[a-z0-9-]+\.md$`; reserved files: `00-metadata.md` / `99-unresolved.md` / `traceability.md`). Phase 6 does not create new names; it fills in the skeleton files generated in Phase 2.
 
 1. **Merge chapter drafts**
-   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `.specback/drafts/` to `{output_dir}/` in the template-defined order (which may be reader-adaptive — Phase 2 selects the order based on `goal.json.primary_reader`). User-custom chapters typically appear at the end unless the user's intent suggests otherwise.
+   - Copy every chapter in `wbs.json.chapters[]` — standard, reserved, AND user_custom — from `{output_dir}/.specback/drafts/` to `{output_dir}/` in the template-defined order (which may be reader-adaptive — Phase 2 selects the order based on `goal.json.primary_reader`). User-custom chapters typically appear at the end unless the user's intent suggests otherwise.
    - Do NOT change the file names (use the names finalised in Phase 2).
    - Do NOT silently skip a chapter just because its draft body is short — that is a Phase 3 / Phase 4 failure and must be surfaced, not papered over.
    - Strip the meta comment at the top of each chapter file.
@@ -69,7 +69,7 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
    Note: standard / reserved file names are ASCII slug-fixed (language-independent); user-custom file names match the verbatim entries in `goal.json.user_custom_deliverables`. Chapter titles in the body follow `goal.json.output_language` (EN example: `# Chapter 1: Overview` / JA example: `# 第1章: 概要`).
 
 5.5. **Knowledge Graph export (recommended)**
-   - Run `build-knowledge-graph.py` to export `.specback/knowledge-graph.jsonld` from the source map, trace, and inventory data.
+   - Run `build-knowledge-graph.py` to export `{output_dir}/.specback/knowledge-graph.jsonld` from the source map, trace, and inventory data.
    - The JSON-LD Knowledge Graph is machine-readable and can be imported into GraphDB, Neo4j, GBrain, Obsidian, or any SPARQL/Cypher-compatible tool for ad-hoc querying.
    - Use `--skip-kg` to disable this step (useful when the additional output is not needed).
 
@@ -78,36 +78,26 @@ File names follow the ASCII slug convention finalised in Phase 2 (`^(0\d|[1-9]\d
 
      **Recommended invocation:**
      ```bash
-     python "$(cat .specback/.skill-path)/scripts/coverage-check.py" \
-       --specback-dir .specback \
+     python "$(cat {output_dir}/.specback/.skill-path)/scripts/coverage-check.py" \
+       --specback-dir {output_dir}/.specback \
        --output-dir {output_dir} \
-       --target-dir-for-required final \
+       --target-dir-for-required . \
        --require-min-body-lines-for-reserved 5 \
        --forbid-mermaid-styling \
        --output-format text
      ```
-     This resolves to `{output_dir}/final/` (e.g. `.specback/final/final`).
+     This resolves to `{output_dir}/.` with fallback to `{output_dir}/`. Since spec files are directly under `{output_dir}/`, no extra subdirectory is needed.
 
-     **Alternative (when final files are directly under `{output_dir}`):**
-     ```bash
-     python "$(cat .specback/.skill-path)/scripts/coverage-check.py" \
-       --specback-dir .specback \
-       --output-dir {output_dir} \
-       --target-dir-for-required {output_dir} \
-       --output-format text
-     ```
-     The script's fallback logic handles both styles automatically (see table below).
+     The script's fallback logic handles this automatically (see table below).
 
      **`--output-dir` vs `--target-dir-for-required` resolution in Phase 6:**
 
      | `--target-dir-for-required` | `--output-dir` | Resolved path | Notes |
      |----------------------------|----------------|---------------|-------|
-     | `final` | `{output_dir}` (e.g. `.specback/final`) | `{output_dir}/final/` ✅ | Standard pattern when files are under `{output_dir}/final/` |
-     | `{output_dir}` (e.g. `.specback/final`) | `.specback` (default) | `.specback/.specback/final/` ❌ → **fallback**: `.specback/final/` ✅ | When `--output-dir` is the default; fallback saves explicit re-routing |
-     | `drafts` | any | `{output_dir}/drafts/` ❌ → fallback tries `drafts/` → fails ❌ | Correct: Phase 6 should never scan drafts |
+     | `.` | `{output_dir}` | `{output_dir}/.` ❌ → **fallback**: `{output_dir}/` ✅ | Spec files directly under output dir |
 
-     Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path. This allows passing an absolute or relative path directly without path arithmetic.
-   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` (default: `.specback/final/{name}`) AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
+     Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path. This allows passing `.` directly without path arithmetic.
+   - Verify that every filename listed in `goal.json.user_custom_deliverables` exists at `{output_dir}/{name}` AND has a non-empty body (≥ 10 non-blank lines outside code fences). Demoting any of these to `99-unresolved.md` or recording them as "for next time" in `state.json` is forbidden.
    - Verify that the three reserved files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) all exist under `{output_dir}/`.
    - **Verify reserved file body content** (`--require-min-body-lines-for-reserved`): the three reserved files must each have at least 5 non-blank body lines. Empty `00-metadata.md` / `99-unresolved.md` / `traceability.md` are delivery failures — they indicate Phase 3/4 output was never filled.
    - **Verify that no Mermaid colour/style directives remain** (`--forbid-mermaid-styling`): `style A fill:#...`, `classDef ... fill:#...`, `stroke:#...`, `color:#...` are forbidden in final output. These override the host theme and break dark mode.

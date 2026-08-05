@@ -11,7 +11,7 @@ When `goal.multi_scope == true`, the following steps apply:
 
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
 2. **Set scope-specific paths**:
-   - `SPECBACK_DIR = ".specback-{scope.name}"` (e.g. `.specback-auth`)
+   - `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` (e.g. `.specback-auth`)
 3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
 4. **Run the phase procedure below** using `{SPECBACK_DIR}` as the specback directory.
 5. **On completion**: Increment `goal.current_scope` in `.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).

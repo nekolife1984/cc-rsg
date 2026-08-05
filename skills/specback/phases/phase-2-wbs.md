@@ -9,7 +9,7 @@ When `goal.multi_scope == true`, the following steps apply:
 
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
 2. **Set scope-specific paths**:
-   - `SPECBACK_DIR = ".specback-{scope.name}"` (e.g. `.specback-auth`)
+   - `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` (e.g. `.specback-auth`)
    - `TARGET_ROOT = scope.root` (e.g. `services/auth`)
    - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `.specback/final/auth`)
 3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`

@@ -7,14 +7,14 @@ Right after the skill starts, fix the scope and the goal. Every later decision d
 
 When `goal.multi_scope == true`, the following steps apply:
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
-2. **Set scope-specific paths**: `SPECBACK_DIR = ".specback-{scope.name}"`, `TARGET_ROOT = scope.root`.
-3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
+2. **Set scope-specific paths**: `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"`, `TARGET_ROOT = scope.root`.
+3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat {output_dir}/.specback/.skill-path) {SPECBACK_DIR}/.skill-path`
 4. **Run the procedure below** using `{SPECBACK_DIR}` and `{TARGET_ROOT}`.
 5. **On completion**: Increment `goal.current_scope`. If `current_scope >= scopes.length`, reset to `0`.
 6. **Resume support**: Save `state.json` with `current_scope` after each scope.
 7. **At START**: If `goal.current_scope > 0` and `multi_scope == true`, skip completed scopes.
 
-When `goal.multi_scope == false` (default), run once with `.specback/` as before.
+When `goal.multi_scope == false` (default), run once with `{output_dir}/.specback/` as the specback directory.
 
 ### Procedure
 
@@ -22,15 +22,26 @@ When `goal.multi_scope == false` (default), run once with `.specback/` as before
    - Start from the current working directory and identify the target project.
    - Ask the user "Is this the right root directory for the target codebase?". If not, obtain the correct path.
 
+1.5. **Auto-migration of legacy `.specback/` (one-time)**
+   - If `project-root/.specback/` exists (the legacy location), this is an old project that needs migration:
+     a. Read the existing `goal.json` from `.specback/` to get `output_dir` (or default to `"specs"`).
+     b. Create the new dir: `mkdir -p "{output_dir}/.specback"`
+     c. Copy all contents: `cp -a .specback/* "{output_dir}/.specback/"`
+     d. Remove the old directory: `rm -rf .specback`
+     e. If `goal.json.output_dir` was the legacy default `".specback"`, update it to `"specs"`.
+     f. Report the migration to the user.
+   - This is a one-time migration. After this, `.specback/` always lives at `{output_dir}/.specback/`.
+   - In resume mode, the new location is used automatically.
+
 2. **Initialize the state directory**
-   - Create the `.specback/` directory.
-   - **Record the skill path**: every helper invocation in this document refers to scripts and references through a path derived from `.specback/.skill-path`. Write the absolute path to the skill root (the directory containing `SKILL.md`) into `.specback/.skill-path`:
+   - Determine the specback directory: `SPECBACK_DIR = "{output_dir}/.specback"`. Create it.
+   - **Record the skill path**: every helper invocation in this document refers to scripts and references through a path derived from `{SPECBACK_DIR}/.skill-path`. Write the absolute path to the skill root (the directory containing `SKILL.md`) into `{SPECBACK_DIR}/.skill-path`:
      ```bash
-     mkdir -p .specback
-     echo "/absolute/path/to/specback/skill/root" > .specback/.skill-path
+     mkdir -p "{output_dir}/.specback"
+     echo "/absolute/path/to/specback/skill/root" > "{output_dir}/.specback/.skill-path"
      ```
-     **Replace `/absolute/path/to/specback/skill/root`** with the real path. The agent reading this instruction knows where `SKILL.md` is installed (e.g. `.claude/skills/specback/` for Claude Code; the agent substitutes the actual absolute path). Once written, all later phases resolve files via `$(cat .specback/.skill-path)/scripts/xxx.py`.
-   - If an existing `.specback/state.json` is found, branch to resume mode (see "State management and resume" below). Resume mode re-reads `.skill-path` before continuing, in case the skill was reinstalled or upgraded.
+     **Replace `/absolute/path/to/specback/skill/root`** with the real path. The agent reading this instruction knows where `SKILL.md` is installed (e.g. `.claude/skills/specback/` for Claude Code; the agent substitutes the actual absolute path). Once written, all later phases resolve files via `$(cat {output_dir}/.specback/.skill-path)/scripts/xxx.py`.
+   - If an existing `{SPECBACK_DIR}/state.json` is found, branch to resume mode (see "State management and resume" below). Resume mode re-reads `.skill-path` before continuing, in case the skill was reinstalled or upgraded.
 
 3. **Output language selection**
 
@@ -48,7 +59,7 @@ When `goal.multi_scope == false` (default), run once with `.specback/` as before
      2. `userUiLanguage` hint passed from the parent harness's initial prompt
      3. Hard default `"en"` (lowest)
    - **All natural-language output from Step 4 onward** — `AskUserQuestion` bodies and choices, confirmation summaries, chapter titles, generated spec body, `questions.json` body text, etc. — is rendered in the language selected here (see Design Principle #11).
-   - **Resume mode**: when `.specback/goal.json` already exists, read the persisted `output_language` and skip this step entirely.
+   - **Resume mode**: when `{output_dir}/.specback/goal.json` already exists, read the persisted `output_language` and skip this question entirely.
 
 4. **Run the 6 goal-definition questions**
    - Use `AskUserQuestion` to ask the following 6 questions in sequence. **Question bodies, choice labels, and free-form-input placeholders are all rendered in the `output_language` selected in Step 3.** The choice labels below are shown when `output_language == "en"`; the agent dynamically translates them when `output_language == "ja"` (enum values such as `primary_reader: "maintenance_developer"` stay as language-independent English enums in `goal.json`). Each question is choice-based first with a free-form field as a fallback.
@@ -95,26 +106,26 @@ When `goal.multi_scope == false` (default), run once with `.specback/` as before
    - Other (free-form)
 
    **Q6. Where should the spec documents be written?**
-   - Default (.specback)
+   - Default (specs)
    - Custom path (free-form, relative to project root)
 
-   - Q6 specifies the **final spec output directory**. Default is `.specback` → final deliverables go to `.specback/final/` (kept separate from state files). When a custom path like `docs/specs` is given, final spec files go directly to `docs/specs/`. Drafts always stay at `.specback/drafts/` regardless. State files (goal.json, state.json, trace.json, etc.) remain in `.specback/`.
+   - Q6 specifies the **final spec output directory**. Default is `specs` → final spec files go to `specs/`. The config/state directory `.specback/` lives at `{output_dir}/.specback/`. When a custom path like `docs/specs` is given, final spec files go directly to `docs/specs/`, and `.specback/` is at `docs/specs/.specback/`. Drafts always stay at `{output_dir}/.specback/drafts/` regardless. State files (goal.json, state.json, trace.json, etc.) remain in `{output_dir}/.specback/`.
    - In resume mode, read `goal.json.output_dir` and skip this question.
 
 5. **Extract `user_custom_deliverables` from `free_text_notes`**
    - **Mandatory.** Before persisting `goal.json`, scan `free_text_notes` for explicit deliverable filenames using the regex `\b[a-z][a-z0-9_-]*\.md\b` (case-insensitive). De-duplicate and exclude any name matching the chapter-naming regex `^(0\d|[1-9]\d)-[a-z0-9-]+\.md$` or the reserved names `00-metadata.md` / `99-unresolved.md` / `traceability.md` (those are handled by the standard chapter pipeline).
-   - The remaining names are **user-promised custom deliverables**. They MUST appear in `{output_dir}/` (e.g. `.specback/final/` or `docs/specs/`) at Phase 6 completion; missing any of them is a hard failure (check 12 in `coverage-check.py`).
+   - The remaining names are **user-promised custom deliverables**. They MUST appear in `{output_dir}/` at Phase 6 completion; missing any of them is a hard failure (check 12 in `coverage-check.py`).
    - Example: `free_text_notes = "顧客向けドキュメント。Mermaid図による視覚的説明と、紙芝居的な manual.md を含める。"` → `user_custom_deliverables = ["manual.md"]`.
    - If the free-form text is empty or contains no `*.md` references, the list is `[]`.
    - User-custom files are **exempt from comprehensive per-chapter quality gates** (the 200-lines / 10-REFs / Mermaid / Sources Read minimums) because their quality bar is the user's intent recorded in `free_text_notes`, not the source-derived spec-chapter bar. Only existence + non-empty body is enforced.
 
 6. **Persist to `goal.json`**
-   - Save the language choice from Step 3, the 6 answers from Step 4, and the `user_custom_deliverables` array from Step 5 as a structured `goal.json` under `.specback/`. Schema:
+   - Save the language choice from Step 3, the 6 answers from Step 4, and the `user_custom_deliverables` array from Step 5 as a structured `goal.json` under `{output_dir}/.specback/`. Schema:
 
    ```json
    {
      "output_language": "en",
-     "output_dir": ".specback",
+     "output_dir": "specs",
      "primary_reader": "maintenance_developer",
      "reader_action": "code_change",
      "granularity": "medium",
@@ -129,8 +140,8 @@ When `goal.multi_scope == false` (default), run once with `.specback/` as before
    }
    ```
    - `output_language` is required and must be `"en"` or `"ja"`. Other enum fields (`primary_reader`, `reader_action`, `granularity`, `perspectives`, `existing_docs`) are language-independent English enums (localized only at display time using `output_language`).
-   - `output_dir` specifies the final spec output directory. Default is `.specback` (which the agent resolves to `.specback/final/`). Custom paths like `docs/specs` are stored as-is (final goes to `docs/specs/`). Final spec files go to `{output_dir}/`. Drafts stay at `.specback/drafts/`. State files remain in `.specback/`.
-   - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/` (default: `.specback/final/`, custom: per choice).
+   - `output_dir` specifies the final spec output directory. Default is `"specs"`. The config/state directory `.specback/` lives at `{output_dir}/.specback/`. Final spec files go to `{output_dir}/`. Drafts stay at `{output_dir}/.specback/drafts/`. State files remain in `{output_dir}/.specback/`.
+   - `user_custom_deliverables` is a (possibly empty) array of file names that the user explicitly requested in `free_text_notes`. These bypass the chapter-naming regex; their filenames are preserved verbatim. Phase 2 adds them to `wbs.json` as `kind: "user_custom"` chapters; Phase 6 verifies every one of them exists in `{output_dir}/`.
    - 🆕 **`multi_scope`** (boolean, default `false`): set to `true` when the target is a monorepo and the user chooses to generate separate specs per system.
    - 🆕 **`scopes[]`** (array of objects, empty by default): each entry specifies `{"name": "...", "root": "..."}` where `name` is a short slug (e.g. `auth`) and `root` is the relative path to the system root (e.g. `services/auth`). Populated in Phase 1 when `multi_scope` becomes `true`.
    - 🆕 **`current_scope`** (integer, default `0`): index into `scopes[]` tracking which scope is currently being processed. Used for resume across multi-scope phases. When `scopes.length > 0` and all scopes have been processed, this resets to `0` before advancing to the next phase.

@@ -6,7 +6,7 @@ In `outline` / `interactive` modes, the spec at the end of Phase 6 is only "over
 
 ### 🆕 Multi-scope execution
 
-When `goal.multi_scope == true`, run the procedure below for the current scope (read from `goal.current_scope`). Set `SPECBACK_DIR = ".specback-{scope.name}"` and use scope-specific draft paths (`.specback-drafts-{name}/deep/`). On completion, increment `goal.current_scope`.
+When `goal.multi_scope == true`, run the procedure below for the current scope (read from `goal.current_scope`). Set `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` and use scope-specific draft paths (`{output_dir}/{scope.name}/.specback/drafts/deep/`). On completion, increment `goal.current_scope`.
 
 When `goal.multi_scope == false` (default), run once with `.specback/` as before.
 

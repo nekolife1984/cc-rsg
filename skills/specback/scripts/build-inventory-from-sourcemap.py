@@ -147,11 +147,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         description="Mechanically convert source-map.json → inventory.json",
     )
     p.add_argument(
-        "--source-map", type=Path, default=".specback/source-map.json",
+        "--source-map", type=Path, default="specs/.specback/source-map.json",
         help="Path to source-map.json (default: .specback/source-map.json)",
     )
     p.add_argument(
-        "--output", type=Path, default=".specback/inventory.json",
+        "--output", type=Path, default="specs/.specback/inventory.json",
         help="Path to output inventory.json (default: .specback/inventory.json)",
     )
     p.add_argument(

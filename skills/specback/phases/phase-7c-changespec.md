@@ -8,10 +8,10 @@ Generate a **human-readable change specification document** (`change-spec.md`) f
 
 When `goal.multi_scope == true`, iterate over each scope and run the procedure for each:
 1. Read `goal.scopes[]`.
-2. For each scope, set `SPECBACK_DIR = ".specback-{scope.name}"` and run the procedure below.
+2. For each scope, set `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` and run the procedure below.
 3. Each scope generates its own `change-spec.md` under `{output_dir}/{scope.name}/`.
 
-When `goal.multi_scope == false` (default), run the procedure once with `.specback/`.
+When `goal.multi_scope == false` (default), run the procedure once with `{output_dir}/.specback/`.
 
 ### Prerequisites
 
@@ -28,8 +28,8 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 
 2. **Run change-spec.py** (mechanical extraction):
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/change-spec.py" \
-     --specback-dir .specback \
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" \
+     --specback-dir {output_dir}/.specback \
      --output-dir {output_dir}
    ```
    This produces `{output_dir}/change-spec.json` — structured facts only, no interpretation.
@@ -50,13 +50,13 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 
 ```bash
 # Git mode (default)
-python "$(cat .specback/.skill-path)/scripts/change-spec.py" --specback-dir .specback
+python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --specback-dir {output_dir}/.specback
 
 # Hash mode
-python "$(cat .specback/.skill-path)/scripts/change-spec.py" --specback-dir .specback --mode hash
+python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --specback-dir {output_dir}/.specback --mode hash
 
 # Pipe diff
-git diff -U5 main...HEAD | python "$(cat .specback/.skill-path)/scripts/change-spec.py" --diff -
+git diff -U5 main...HEAD | python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --diff -
 ```
 
 ### Output

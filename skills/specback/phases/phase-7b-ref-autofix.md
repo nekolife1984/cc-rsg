@@ -8,17 +8,17 @@ Auto-correct `<!-- REF: path:line -->` markers in spec files that have become st
 
 When `goal.multi_scope == true`, iterate over each scope and run the procedure for each:
 1. Read `goal.scopes[]`.
-2. For each scope, set `SPECBACK_DIR = ".specback-{scope.name}"` and run the procedure below.
+2. For each scope, set `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` and run the procedure below.
 3. The `--output-dir` should include the scope name: `{output_dir}/{scope.name}` or the combined output.
 
-When `goal.multi_scope == false` (default), run the procedure once with `.specback/`.
+When `goal.multi_scope == false` (default), run the procedure once with `{output_dir}/.specback/`.
 
 ### Procedure
 
 1. **Run fix-refs.py** (default: dry-run)
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/fix-refs.py" \
-     --specback-dir .specback \
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/fix-refs.py" \
+     --specback-dir {output_dir}/.specback \
      --output-dir {output_dir}
    ```
 
@@ -26,16 +26,16 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 
 3. **Apply corrections**
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/fix-refs.py" \
-     --specback-dir .specback \
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/fix-refs.py" \
+     --specback-dir {output_dir}/.specback \
      --output-dir {output_dir} \
      --apply
    ```
 
 4. **CI check mode**
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/fix-refs.py" \
-     --specback-dir .specback \
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/fix-refs.py" \
+     --specback-dir {output_dir}/.specback \
      --output-dir {output_dir} \
      --check
    ```
@@ -43,7 +43,7 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 ### Safety
 
 - **Dry-run by default**: no files are modified until `--apply` is passed
-- **Backups**: originals saved to `.specback/backups/<file>.bak` before modification
+- **Backups**: originals saved to `{output_dir}/.specback/backups/<file>.bak` before modification
 - **Check mode**: exits with code 1 if orphaned REFs remain after correction
 
 ### Snapshot management (hash mode)
@@ -51,12 +51,12 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 For non-Git projects, generate a hash snapshot after Phase 6 completes:
 
 ```bash
-python "$(cat .specback/.skill-path)/scripts/snapshot-hashes.py" --specback-dir .specback
+python "$(cat {output_dir}/.specback/.skill-path)/scripts/snapshot-hashes.py" --specback-dir {output_dir}/.specback
 ```
 
 ### Phase-specific cautions
 - Dry-run by default: review proposed changes before applying with `--apply`.
-- Backups are saved to `.specback/backups/<file>.bak` — verify they exist before applying.
+- Backups are saved to `{output_dir}/.specback/backups/<file>.bak` — verify they exist before applying.
 - REF corrections shift line numbers in the spec files. After applying, re-run `coverage-check.py` to verify structural integrity.
 - Multi-scope: run per scope — shared `.skill-path` but separate `SPECBACK_DIR`.
 

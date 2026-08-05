@@ -9,16 +9,16 @@ When `goal.multi_scope == true`, the following steps apply:
 
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
 2. **Set scope-specific paths**:
-   - `SPECBACK_DIR = ".specback-{scope.name}"` (e.g. `.specback-auth`)
+   - `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` (e.g. `docs/auth/.specback`)
    - `TARGET_ROOT = scope.root` (e.g. `services/auth`)
-   - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `.specback/final/auth`)
-3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
+   - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `docs/auth`)
+3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat {output_dir}/.specback/.skill-path) {SPECBACK_DIR}/.skill-path`
 4. **Run the phase procedure below** using `{SPECBACK_DIR}` as the specback directory (for scripts: `--specback-dir {SPECBACK_DIR}`) and `{TARGET_ROOT}` as the target codebase root (for source-map: `--target {TARGET_ROOT}`).
-5. **On completion**: Increment `goal.current_scope` in `.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).
+5. **On completion**: Increment `goal.current_scope` in `{output_dir}/.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).
 6. **Resume support**: After each scope completes, save `state.json` with `current_scope` so the session can resume from the correct scope.
 7. **At the START of this phase**: If `goal.current_scope > 0` and `goal.multi_scope == true`, this is a resume — skip already-completed scopes and start from `goal.current_scope`.
 
-When `goal.multi_scope == false` (default), run the phase procedure once with `.specback/` and the project root as before.
+When `goal.multi_scope == false` (default), run the phase procedure once with `{output_dir}/.specback/` and the project root as before.
 
 ---
 
@@ -27,28 +27,26 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
 1. **Generate trace.json**
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/build-trace.py" --specback-dir .specback --output-dir {output_dir} --target-dir-for-required drafts
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/build-trace.py" --specback-dir {output_dir}/.specback --output-dir {output_dir} --target-dir-for-required .specback/drafts
    ```
-   This resolves every `<!-- REF: path:line -->` in `drafts/*.md` to a SRC unit and produces the MECE aggregation.
+   This resolves every `<!-- REF: path:line -->` in `{output_dir}/.specback/drafts/*.md` to a SRC unit and produces the MECE aggregation.
 
 2. **Run coverage-check.py (mandatory; exit code is binding)**
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/coverage-check.py" \
-     --specback-dir .specback \
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/coverage-check.py" \
+     --specback-dir {output_dir}/.specback \
      --output-dir {output_dir} \
-     --target-dir-for-required drafts \
+     --target-dir-for-required .specback/drafts \
      --output-format text
    ```
    This invocation is **non-optional**. The script's exit code is the gate:
 
    **`--output-dir` vs `--target-dir-for-required` resolution:**
 
-   | `--target-dir-for-required` | `--output-dir` (default: `.specback`) | Resolved path | Notes |
-   |----------------------------|---------------------------------------|---------------|-------|
-   | `drafts` | `.specback` | `.specback/drafts/` ✅ | Drafts always live here in Phase 4 |
-   | `drafts` | `specs` (or any other dir) | `specs/drafts/` ❌ → **fallback**: `specs/drafts/` does not exist; the script tries `drafts/` as a standalone path → still missing → fails as expected |
-   | `.specback/drafts` | `specs` | `specs/.specback/drafts/` ❌ → **fallback**: tries `.specback/drafts/` ✅ | Useful when `--output-dir` is custom and drafts are at `.specback/drafts/` |
-   | `final` | `.specback` | `.specback/final/` ✅ | Used in Phase 6; not normally needed in Phase 4 |
+   | `--target-dir-for-required` | `--output-dir` | Resolved path | Notes |
+   |----------------------------|----------------|---------------|-------|
+   | `.specback/drafts` | `{output_dir}` | `{output_dir}/.specback/drafts/` ✅ | Drafts always live here in Phase 4 |
+   | `drafts` | `{output_dir}` | `{output_dir}/drafts/` ❌ → **fallback**: tries `drafts/` → fails ❌ | Wrong dir; drafts are under `.specback/drafts/` |
 
    Fallback resolution: when `--output-dir / --target-dir-for-required` does not exist, the script automatically tries `--target-dir-for-required` as a standalone path (absolute or relative). This allows passing `.specback/drafts` directly without path arithmetic.
    - `0` → all checks pass; Phase 4 may proceed.
@@ -70,7 +68,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    - per-chapter body lines (>= 200), <!-- REF: ... --> count (>= 10), code blocks (>= 3), Mermaid (>= 1), Sources Read items (>= 5) — **applied only to standard chapters that are NOT excluded by Phase 1 detection (excluded chapters are skipped entirely by Phase 2 and must not appear in the draft directory); user_custom chapters are exempt**
    - questions count (≥ 10), open ratio (≤ 20%)
    - MECE coverage (≥ 70%)
-   - **Check 12 — User-custom deliverables**: every filename in `goal.json.user_custom_deliverables` must exist in the target directory (`.specback/drafts/` in Phase 4, `{output_dir}/` (default: `.specback/final/`) in Phase 6) AND have a non-empty body (≥ 10 non-blank lines outside code fences).
+   - **Check 12 — User-custom deliverables**: every filename in `goal.json.user_custom_deliverables` must exist in the target directory (`{output_dir}/.specback/drafts/` in Phase 4, `{output_dir}/` in Phase 6) AND have a non-empty body (≥ 10 non-blank lines outside code fences).
 
 2.5. **Check Markdown quality (markdownlint-cli2) — optional gate**
 
@@ -79,8 +77,8 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    This step runs **after** coverage-check.py passes (exit 0) and is a **non-blocking advisory** gate — violations are reported but do NOT trigger a loopback to Phase 3. The agent may optionally fix fixable issues with `--fix` if the user requests it.
 
    ```bash
-   bash "$(cat .specback/.skill-path)/scripts/verify-markdownlint.sh" \
-     --specback-dir .specback
+   bash "$(cat {output_dir}/.specback/.skill-path)/scripts/verify-markdownlint.sh" \
+     --specback-dir {output_dir}/.specback
    ```
 
    | Exit | Meaning | Action |
@@ -95,7 +93,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    - `MD033` (inline HTML): disabled — `<!-- REF: ... -->` and `<!-- meta: ... -->` are structural
    - All other structural rules (heading order, list consistency, code block style) are enforced.
 
-   **Skipping**: the step is automatically skipped if the target directory (`.specback/drafts/`) does not exist (e.g. Phase 4 called without Phase 3 having run).
+   **Skipping**: the step is automatically skipped if the target directory (`{output_dir}/.specback/drafts/`) does not exist (e.g. Phase 4 called without Phase 3 having run).
 
 3. **Failure → loop back to Phase 3**
    - When exit code is 1, read the "gate decision" section of the output and:
@@ -115,8 +113,8 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    - Merge only the "obviously identical"; flag the "similar but subtly different" as groups for Phase 5 confirmation.
 
 6. **Save the verification report**
-   - Save `coverage-check.py --output-format json` output to `.specback/coverage-report.json`.
-   - Save a human-readable version to `.specback/coverage-report.md`.
+   - Save `coverage-check.py --output-format json` output to `{output_dir}/.specback/coverage-report.json`.
+   - Save a human-readable version to `{output_dir}/.specback/coverage-report.md`.
 
 7. **Doubt-pass: adversarial review subphase (opt-in)**
    This subphase runs after coverage-check passes. It questions every major claim in the generated draft specs by re-reading the source code in a "fresh context" (as if the code were seen for the first time) and checking whether the interpretation is correct.
@@ -151,10 +149,10 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
      - If the claim is **wrong** → add a corrective note to the draft chapter and push the chapter back to Phase 3 (loopback, counting toward the 3-attempt limit).
      - If the claim is **imprecise** → adjust the wording and tighten the `[REF:]` range.
      - If the claim is **correct but under-confident** → upgrade the marker (🔴→🟡 or 🟡→🟢).
-   - **STOP**: Assign a **confidence score** (1.0 = certain, 0.0 = contradictory material found) to the claim. Record it in `.specback/doubt-report.json`.
+   - **STOP**: Assign a **confidence score** (1.0 = certain, 0.0 = contradictory material found) to the claim. Record it in `{output_dir}/.specback/doubt-report.json`.
 
    **7c. Doubt-report output**
-   After processing all selected targets, generate `.specback/doubt-report.json`:
+   After processing all selected targets, generate `{output_dir}/.specback/doubt-report.json`:
 
    ```json
    {

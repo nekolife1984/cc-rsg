@@ -7,7 +7,7 @@ Get a rough mental model of the codebase via a shallow reconnaissance, then pick
 
 When `goal.multi_scope == true`, the following steps apply:
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
-2. **Set scope-specific paths**: `SPECBACK_DIR = ".specback-{scope.name}"`, `TARGET_ROOT = scope.root`.
+2. **Set scope-specific paths**: `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"`, `TARGET_ROOT = scope.root`.
 3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
 4. **Run the procedure below** using `{SPECBACK_DIR}` and `{TARGET_ROOT}`.
 5. **On completion**: Increment `goal.current_scope`. If `current_scope >= scopes.length`, reset to `0`.
@@ -321,7 +321,7 @@ When `goal.multi_scope == false` (default), run once with `.specback/` as before
    - Each scope uses its own state directory: `.specback-{name}/` (e.g. `.specback-auth/`)
    - `.skill-path` is shared (symlink or copy): `ln -sf $(cat .specback/.skill-path) .specback-auth/.skill-path`
    - The project root `.specback/` stores only the shared `goal.json` and `state.json` (which tracks `current_scope` across phases).
-   - Script invocations use `--specback-dir .specback-{name}`.
+   - Script invocations use `--specback-dir {output_dir}/.specback-{name}`.
 
    When `multi_scope == false` (default), proceed with the original `.specback/` flow unchanged.
 

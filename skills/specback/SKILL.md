@@ -24,7 +24,7 @@ This skill operates in the "code → spec" direction; it is the symmetric counte
 
 ## Design principles
 
-1. **Goal-driven**: Phase 0 fixes the goal through a choice-based dialogue persisted to `.specback/goal.json`. All subsequent phases reference this goal.
+1. **Goal-driven**: Phase 0 fixes the goal through a choice-based dialogue persisted to `{output_dir}/.specback/goal.json`. All subsequent phases reference this goal.
 2. **Hybrid template decision**: Supports user's own template, agent-recommended template, or user-adjusted recommendation.
 3. **Reference-based inventory unit selection**: `references/inventory-units.md` lists typical units per language/framework.
 4. **Inventory-based gap prevention**: Enumerate every extractable unit from the code and mechanically verify coverage.
@@ -71,13 +71,13 @@ Use **shape** (not color) for visual emphasis.
 
 | Phase | Name | Detail file | Main deliverables |
 |-------|------|------------|------------|
-| 0 | Setup & Goal | `phases/phase-0-setup.md` | `.specback/goal.json` |
+| 0 | Setup & Goal | `phases/phase-0-setup.md` | `{output_dir}/.specback/goal.json` |
 | 1 | Recon & Template | `phases/phase-1-recon.md` | `recon-report.md`, template |
 | 2 | Plan & WBS | `phases/phase-2-wbs.md` | `inventory.json`, `wbs.json` |
-| 3 | Investigate | `phases/phase-3-investigate.md` → branches to `phase-3a-comprehensive.md` or `phase-3b-outline.md` by depth_mode | `.specback/drafts/*.md` (intermediate) |
+| 3 | Investigate | `phases/phase-3-investigate.md` → branches to `phase-3a-comprehensive.md` or `phase-3b-outline.md` by depth_mode | `{output_dir}/.specback/drafts/*.md` (intermediate) |
 | 4 | Verify | `phases/phase-4-verify.md` | coverage report |
 | 5 | Refine via Dialogue | `phases/phase-5-dialogue.md` | resolved `questions.json` |
-| 6 | Deliver | `phases/phase-6-deliver.md` | `{output_dir}/` (final spec; default: `.specback/final/`) |
+| 6 | Deliver | `phases/phase-6-deliver.md` | `{output_dir}/` (final spec; default: `specs/`) |
 | 6.5 | Interactive Deep-Dive | `phases/phase-6-5-deepdive.md` | on-demand deep-dive chapters |
 | 7 | Drift Detection | `phases/phase-7-drift.md` | `drift-report.md` |
 | 7b | REF Auto-Fix | `phases/phase-7b-ref-autofix.md` | corrected REF lines |

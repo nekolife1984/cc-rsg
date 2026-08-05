@@ -9,11 +9,11 @@ to detect code changes without requiring Git.
 Usage
 -----
     python snapshot-hashes.py --specback-dir .specback
-    python snapshot-hashes.py --specback-dir .specback --output .specback/source-hashes.json
+    python snapshot-hashes.py --specback-dir .specback --output {output_dir}/.specback/source-hashes.json
 
 Output
 ------
-    .specback/source-hashes.json
+    {output_dir}/.specback/source-hashes.json
 
 Dependencies
 ------------
