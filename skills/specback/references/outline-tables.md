@@ -466,7 +466,7 @@ When a chapter-investigator sub-agent is assigned to the Feature specifications 
 5. **For remaining features**, keep only the catalogue table row.
 6. **Cross-reference** each feature to related chapters (screen details, endpoint catalogue, data model).
 7. **Populate questions.json** with `spec_missing` questions for uncertain feature boundaries.
-8. **Output**: `.specback/drafts/02-feature-specifications.md`
+8. **Output**: `{output_dir}/.specback/drafts/02-feature-specifications.md`
 
 ## Module architecture (overview) extraction patterns (for Chapter 3: Module architecture / Architecture overview)
 
@@ -506,7 +506,7 @@ When a chapter-investigator sub-agent is assigned to the Module architecture (ov
 4. **Run import analysis** at top-level granularity; build a `graph TD` dependency overview.
 5. **Cross-reference** detailed internals → Internal structure, detailed dependency analysis → Design decisions.
 6. **Populate questions.json** with `spec_missing` questions for unclear module responsibilities.
-7. **Output**: `.specback/drafts/03-module-architecture.md`
+7. **Output**: `{output_dir}/.specback/drafts/03-module-architecture.md`
 
 ## Design decisions extraction patterns (for Chapter N: Design decisions)
 
@@ -575,4 +575,4 @@ When a chapter-investigator sub-agent is assigned to the Design decisions chapte
 7. **Cross-reference** security/performance/integration sections to their detailed chapters.
 8. **Extract TODO/FIXME/HACK markers** with surrounding context.
 9. **Populate questions.json** with `spec_missing` and `architecture_decision` questions for 🔴 entries.
-10. **Output**: `.specback/drafts/NN-system-design.md`
+10. **Output**: `{output_dir}/.specback/drafts/NN-system-design.md`

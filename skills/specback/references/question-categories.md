@@ -183,11 +183,11 @@ When a question spans multiple categories, choose the dominant one and add the o
 ## Adding custom categories
 
 ### v1 support range
-The initial release does not support adding custom categories through a UI. Users can add them by editing `.specback/questions.json` manually.
+The initial release does not support adding custom categories through a UI. Users can add them by editing `{output_dir}/.specback/questions.json` manually.
 
 ### Manual procedure
 
-1. Create `.specback/custom-categories.json`:
+1. Create `{output_dir}/.specback/custom-categories.json`:
 
    ```json
    {

@@ -15,7 +15,7 @@ CLAIM → EXTRACT → DOUBT → RECONCILE → STOP
 | **CLAIM** | ドラフトから1つの主張を特定（例: "`IssuesController#create` は成功時に201を返す"）。主張をソースチャプターと`<!-- REF: ... -->`アンカーとともに記録。 |
 | **EXTRACT** | 主張を支えるコードファイルと行を特定。ドラフト内の既存の`<!-- REF: ... -->`のみを使用。 |
 | **RECONCILE** | 誤り → 修正ノートとともに Phase 3 にループバック。不正確 → 文言調整＋`<!-- REF: ... -->`範囲の絞り込み。過小信頼 → マーカー昇格（🔴→🟡 or 🟡→🟢）。 |
-| **STOP** | 信頼度スコア（1.0＝確実、0.0＝矛盾）を割り当て。`.specback/doubt-report.json` に記録。 |
+| **STOP** | 信頼度スコア（1.0＝確実、0.0＝矛盾）を割り当て。`{output_dir}/.specback/doubt-report.json` に記録。 |
 
 ## Doubt トリガールールセット
 
@@ -83,7 +83,7 @@ read_file path/to/file.py --line 40-63
 
 ## Doubt-report.json スキーマ
 
-出力ファイルは `.specback/doubt-report.json` に生成されます：
+出力ファイルは `{output_dir}/.specback/doubt-report.json` に生成されます：
 
 ```json
 {

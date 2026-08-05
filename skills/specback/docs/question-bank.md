@@ -2,7 +2,7 @@
 
 ### Data structure
 
-Each entry in `.specback/questions.json` has the following fields:
+Each entry in `{output_dir}/.specback/questions.json` has the following fields:
 
 ```json
 {

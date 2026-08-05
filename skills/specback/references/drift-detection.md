@@ -136,7 +136,7 @@ This uses the same matching heuristic as `build-trace.py`'s `resolve_refs_to_uni
 | Case | Handling |
 |------|----------|
 | No changes | Empty report ("no changes") |
-| `.specback/` doesn't exist | Exit code 2 |
+| `{output_dir}/.specback/` doesn't exist | Exit code 2 |
 | `source-map.json` missing | Exit code 2 |
 | `trace.json` missing | Exit code 2 |
 | Not a Git repo | Use `--diff` flag to pass manual diff |
@@ -152,7 +152,7 @@ This uses the same matching heuristic as `build-trace.py`'s `resolve_refs_to_uni
 
 1. Run `git diff -U0 <base>` to obtain hunk-level diffs
 2. Parse each hunk header (`@@ -old,count +new,count @@`) to build per-file line-number mappings
-3. Scan spec files in `.specback/drafts/` or `{output_dir}/` (default: `.specback/final/`) for `[REF: path:line]` markers
+3. Scan spec files in `{output_dir}/.specback/drafts/` or `{output_dir}/` (default: `{output_dir}/`) for `[REF: path:line]` markers
 4. For each marker referencing a changed file:
    - **Line preserved**: update line number to new position
    - **Line deleted**: flag as orphaned (manual review required)
@@ -162,13 +162,13 @@ This uses the same matching heuristic as `build-trace.py`'s `resolve_refs_to_uni
 
 ```bash
 # Dry-run (default)
-python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir .specback
+python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback
 
 # Apply corrections
-python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir .specback --apply
+python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback --apply
 
 # CI check: exit 1 if any orphaned REFs remain
-python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir .specback --check
+python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --specback-dir {output_dir}/.specback --check
 
 # Pipe diff from CI
 git diff -U0 main...HEAD | python "$(cat .specback/.skill-path)/scripts/fix-refs.py" --diff - --check

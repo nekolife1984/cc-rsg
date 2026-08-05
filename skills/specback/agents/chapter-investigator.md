@@ -17,7 +17,7 @@ You receive from the main agent:
 
 - The chapter number and title (e.g. `Chapter 5: Data Model`)
 - The assigned `inventory_ids` (e.g. `INV-012, INV-013, ...`)
-- The draft output path (e.g. `.specback/drafts/05-data-model.md`)
+- The draft output path (e.g. `{output_dir}/.specback/drafts/05-data-model.md`)
 
 You investigate deeply in an isolated context and produce a draft that satisfies the quality gates.
 
@@ -164,7 +164,7 @@ The `## Sources Read` section MUST use **bullet-list format** — one file per l
 When assigned to the Feature specifications chapter, follow this additional procedure **after STEP A–F**:
 
 #### STEP G: Read the Overview chapter
-Read `.specback/drafts/01-overview.md` (or the final version) to extract the use cases. These define candidate features.
+Read `{output_dir}/.specback/drafts/01-overview.md` (or the final version) to extract the use cases. These define candidate features.
 
 #### STEP H: Apply feature grouping strategies
 Consult `references/outline-tables.md` → **Feature grouping patterns** section. Apply Strategies 1–4 in order:
@@ -184,14 +184,14 @@ For the most critical or complex features, write structured processing definitio
 For features whose boundaries or existence are uncertain, add a `spec_missing` category question to `questions.json` (at least 1 per 3 features). The main agent reads the returned DETAIL_QUESTIONS and appends them.
 
 #### Output filename
-`.specback/drafts/02-feature-specifications.md`
+`{output_dir}/.specback/drafts/02-feature-specifications.md`
 
 ### 💡 Module architecture (overview) chapter (Chapter 3)
 
 When assigned to the Module architecture (overview) chapter, follow this additional procedure **after STEP A–F**. This chapter is deliberately **overview-level**: keep it short and skimmable, deferring detail to the Internal structure chapter (contributor internals) and Design decisions (WHY/HOW rationale).
 
 #### STEP G: Read the Overview chapter
-Read `.specback/drafts/01-overview.md` (or the final version) to pick up the library purpose, main features, and distribution targets.
+Read `{output_dir}/.specback/drafts/01-overview.md` (or the final version) to pick up the library purpose, main features, and distribution targets.
 
 #### STEP H: Apply extraction strategies
 Consult `references/outline-tables.md` → **Module architecture (overview) extraction patterns**. In order:
@@ -207,14 +207,14 @@ Follow the template chapter definition: module composition table, a top-level de
 Add `spec_missing` questions for modules whose responsibility is unclear from code alone. Minimum 1 question for this chapter.
 
 #### Output filename
-`.specback/drafts/03-module-architecture.md`
+`{output_dir}/.specback/drafts/03-module-architecture.md`
 
 ### 💡 Design decisions chapter (Chapter N)
 
 When assigned to the Design decisions chapter, follow this additional procedure **after STEP A–F**:
 
 #### STEP G: Read Overview and Architecture overview
-Read `.specback/drafts/01-overview.md` and the Architecture overview chapter to understand system type and tech stack.
+Read `{output_dir}/.specback/drafts/01-overview.md` and the Architecture overview chapter to understand system type and tech stack.
 
 #### STEP H: Apply extraction strategies
 Consult `references/outline-tables.md` → **Design decisions extraction patterns** section. Apply the 7-section extraction:
@@ -234,7 +234,7 @@ For each section write structured content. Use the template chapter definition (
 Add `architecture_decision` and `spec_missing` questions for 🔴 entries. Minimum 3 questions for this chapter.
 
 #### Output filename
-`.specback/drafts/NN-system-design.md`
+`{output_dir}/.specback/drafts/NN-system-design.md`
 
 ---
 
@@ -245,7 +245,7 @@ Add `architecture_decision` and `spec_missing` questions for 🔴 entries. Minim
 - **Writing files via shell `>` redirection or heredoc** (always use Write / Edit)
 - **Embedding absolute paths (`/home/...` etc.) in the deliverable** (always use workspace-relative paths)
 - **Citing files that are not in Sources Read**
-- **内部ファイルパスの露出**: 生成ドキュメント本文内で `.specback/` 配下のファイルパス（`.specback/drafts/`, `inventory.json`, `wbs.json`, `questions.json`, `source-map.json`, `trace.json`, `goal.json` など）を一切参照しないこと。テーブル列の説明はユーザー向け表現（例：「該当機能を実装するソースコードの単位を示す」）にし、内部データファイル名で説明しない。`inventory_ids` は内部管理用の識別子であり、出力テキストでその出自を説明してはならない。
+- **内部ファイルパスの露出**: 生成ドキュメント本文内で `.specback/` 配下のファイルパス（`{output_dir}/.specback/drafts/`, `inventory.json`, `wbs.json`, `questions.json`, `source-map.json`, `trace.json`, `goal.json` など）を一切参照しないこと。テーブル列の説明はユーザー向け表現（例：「該当機能を実装するソースコードの単位を示す」）にし、内部データファイル名で説明しない。`inventory_ids` は内部管理用の識別子であり、出力テキストでその出自を説明してはならない。
 
 ---
 
