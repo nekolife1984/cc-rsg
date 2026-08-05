@@ -84,7 +84,7 @@ This rule exists because SKILL.md is intentionally lightweight — the phase det
 | 0 | `phases/phase-0-setup.md` |
 | 1 | `phases/phase-1-recon.md`, `docs/question-bank.md` |
 | 2 | `phases/phase-2-wbs.md` |
-| 3 | `phases/phase-3-investigate.md`, `docs/question-bank.md`, `docs/subagent-behavior.md` |
+| 3 | `phases/phase-3-investigate.md` (index) + either `phase-3a-comprehensive.md` or `phase-3b-outline.md` (by `goal.depth_mode`), `docs/question-bank.md`, `docs/subagent-behavior.md` |
 | 4 | `phases/phase-4-verify.md`, `docs/question-bank.md` |
 | 5 | `phases/phase-5-dialogue.md`, `docs/question-bank.md` |
 | 6 | `phases/phase-6-deliver.md`, `docs/state-management.md` |
@@ -92,5 +92,6 @@ This rule exists because SKILL.md is intentionally lightweight — the phase det
 | 7 | `phases/phase-7-drift.md` |
 | 7b | `phases/phase-7b-ref-autofix.md` |
 | 7c | `phases/phase-7c-changespec.md` |
+| 7d | `phases/phase-7d-config-refresh.md` |
 
 ---

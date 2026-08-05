@@ -20,7 +20,7 @@ When `goal.multi_scope == true`, the following steps apply:
 
 When `goal.multi_scope == false` (default), run the phase procedure once with `.specback/` as before.
 
-### All 3 stages are mandatory
+### Procedure
 
 `coverage-check.py` enforces `--max-open-ratio 0.2`, so leaving more than 20% of items as `open` blocks progression to Phase 6. Run all 3 stages.
 

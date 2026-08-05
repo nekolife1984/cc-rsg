@@ -54,6 +54,10 @@ For non-Git projects, generate a hash snapshot after Phase 6 completes:
 python "$(cat .specback/.skill-path)/scripts/snapshot-hashes.py" --specback-dir .specback
 ```
 
-This creates `.specback/source-hashes.json` which `detect-drift.py --mode hash` uses as its comparison baseline.
+### Phase-specific cautions
+- Dry-run by default: review proposed changes before applying with `--apply`.
+- Backups are saved to `.specback/backups/<file>.bak` — verify they exist before applying.
+- REF corrections shift line numbers in the spec files. After applying, re-run `coverage-check.py` to verify structural integrity.
+- Multi-scope: run per scope — shared `.skill-path` but separate `SPECBACK_DIR`.
 
 ---

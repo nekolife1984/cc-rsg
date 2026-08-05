@@ -1,8 +1,14 @@
-## 🆕 Phase 6.5: Deep-dive acceptance mode (when `depth_mode` is `outline` or `interactive`)
+## Phase 6.5: Interactive Deep-Dive
 
 ### Purpose
 
 In `outline` / `interactive` modes, the spec at the end of Phase 6 is only "overview tables + Mermaid + deep-dive candidates". **The user reading the spec points out items of interest and asks for on-the-spot deep-dives** — that is the essence of these modes. Phase 6.5 holds the agent in a **deep-dive acceptance state**, waiting for explicit user instructions, until the env is closed.
+
+### 🆕 Multi-scope execution
+
+When `goal.multi_scope == true`, run the procedure below for the current scope (read from `goal.current_scope`). Set `SPECBACK_DIR = ".specback-{scope.name}"` and use scope-specific draft paths (`.specback-drafts-{name}/deep/`). On completion, increment `goal.current_scope`.
+
+When `goal.multi_scope == false` (default), run once with `.specback/` as before.
 
 ### Behaviour
 
