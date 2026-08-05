@@ -3,6 +3,19 @@
 ### Purpose
 Right after the skill starts, fix the scope and the goal. Every later decision derives from the goal defined here.
 
+### 🆕 Multi-scope execution
+
+When `goal.multi_scope == true`, the following steps apply:
+1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
+2. **Set scope-specific paths**: `SPECBACK_DIR = ".specback-{scope.name}"`, `TARGET_ROOT = scope.root`.
+3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
+4. **Run the procedure below** using `{SPECBACK_DIR}` and `{TARGET_ROOT}`.
+5. **On completion**: Increment `goal.current_scope`. If `current_scope >= scopes.length`, reset to `0`.
+6. **Resume support**: Save `state.json` with `current_scope` after each scope.
+7. **At START**: If `goal.current_scope > 0` and `multi_scope == true`, skip completed scopes.
+
+When `goal.multi_scope == false` (default), run once with `.specback/` as before.
+
 ### Procedure
 
 1. **Project confirmation**

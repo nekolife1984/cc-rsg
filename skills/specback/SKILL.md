@@ -74,7 +74,7 @@ Use **shape** (not color) for visual emphasis.
 | 0 | Setup & Goal | `phases/phase-0-setup.md` | `.specback/goal.json` |
 | 1 | Recon & Template | `phases/phase-1-recon.md` | `recon-report.md`, template |
 | 2 | Plan & WBS | `phases/phase-2-wbs.md` | `inventory.json`, `wbs.json` |
-| 3 | Investigate | `phases/phase-3-investigate.md` | `.specback/drafts/*.md` (intermediate) |
+| 3 | Investigate | `phases/phase-3-investigate.md` → branches to `phase-3a-comprehensive.md` or `phase-3b-outline.md` by depth_mode | `.specback/drafts/*.md` (intermediate) |
 | 4 | Verify | `phases/phase-4-verify.md` | coverage report |
 | 5 | Refine via Dialogue | `phases/phase-5-dialogue.md` | resolved `questions.json` |
 | 6 | Deliver | `phases/phase-6-deliver.md` | `{output_dir}/` (final spec; default: `.specback/final/`) |

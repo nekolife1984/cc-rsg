@@ -66,6 +66,10 @@ git diff -U5 main...HEAD | python "$(cat .specback/.skill-path)/scripts/change-s
 
 ### Quality standards
 
-See `references/change-specification.md` for the full design document.
+### Phase-specific cautions
+- ChangeSpec is AI-interpreted, not mechanically verified. Review the output before sharing with stakeholders.
+- The quality depends on commit message quality and code comment clarity. Sparse commits produce thin ChangeSpec output.
+- `change-spec.md` is regenerated each run — previous versions are overwritten. Save manually if needed.
+- Multi-scope: each scope generates its own `change-spec.md`.
 
 ---

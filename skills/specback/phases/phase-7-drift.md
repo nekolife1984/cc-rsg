@@ -78,6 +78,10 @@ python "$(cat .specback/.skill-path)/scripts/detect-drift.py" --specback-dir .sp
 - `{output_dir}/drift-report.md` — summary table with file, SRC-ID, impacted sections, impact level, and recommended action
 - `{output_dir}/drift-report.json` — structured data for tooling
 
-See `references/drift-detection.md` for the full design document.
+### Phase-specific cautions
+- Always run from the correct baseline commit. The drift report is only as good as the comparison base.
+- Multi-scope: each scope generates its own drift report. Verify the correct scope directory is used.
+- Hash mode requires `source-hashes.json` to exist. Run `snapshot-hashes.py` after Phase 6 if using hash mode.
+- The drift report is advisory — affected spec sections need manual verification before applying changes.
 
 ---
