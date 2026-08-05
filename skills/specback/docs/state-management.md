@@ -23,7 +23,7 @@
 
 ### Resume behaviour
 
-When the skill detects an existing `.specback/state.json` at startup, present the situation in the resume message and confirm the user's intent. If `.specback/goal.json` is readable, the resume message is rendered in its `output_language`. Only when `goal.json` itself is missing (so the language is unknown) the bilingual format (English first, then Japanese) is used — identical in shape to Phase 0 Step 3 — to prompt the language selection again.
+When the skill detects an existing `{output_dir}/.specback/state.json` at startup, present the situation in the resume message and confirm the user's intent. If `{output_dir}/.specback/goal.json` is readable, the resume message is rendered in its `output_language`. Only when `goal.json` itself is missing (so the language is unknown) the bilingual format (English first, then Japanese) is used — identical in shape to Phase 0 Step 3 — to prompt the language selection again.
 
 **🆕 Multi-scope resume**: When `goal.multi_scope == true`, the scope context is included in the resume message:
 
@@ -41,7 +41,7 @@ A previous specback session is in progress. The current state is:
 What would you like to do?
 (A) Resume from where it stopped (finish remaining Phase 3 tasks)
 (B) Roll a phase back (resume from a specified phase)
-(C) Full reset (delete .specback/ and start from Phase 0)
+(C) Full reset (delete output dir and start from Phase 0)
 (D) Show detailed state, then decide
 ```
 
@@ -59,7 +59,7 @@ What would you like to do?
 以下のいずれを実施しますか?
 (A) 続きから再開(Phase 3 残タスクを完了させる)
 (B) Phase を巻き戻す(指定する Phase から再開)
-(C) 全リセット(.specback/ を削除して Phase 0 から開始)
+(C) 全リセット(`{output_dir}/.specback/` を削除して Phase 0 から開始)
 (D) 状況を詳細表示してから判断する
 ```
 

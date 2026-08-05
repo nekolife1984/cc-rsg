@@ -52,12 +52,12 @@ The sub-agent returns 4 blocks; process them in order:
 
 1. **Key findings** — surface in the conversation to share the chapter's summary.
 2. **Detail questions raised** — append the top 5 entries to `questions.json`.
-3. **Manifest line** — **append** one line to `.specback/state/manifest.md` (see G-3).
+3. **Manifest line** — **append** one line to `{output_dir}/.specback/state/manifest.md` (see G-3).
 4. Then **proceed to the next chapter without reading the body**. Open `drafts/NN-slug.md` with the Read tool only when Phase 4 verification or cross-chapter consistency requires it.
 
 **G-3. Manifest update:**
 
-After every per-chapter `task` completes, append a row to `.specback/state/manifest.md`. If the file does not exist, create it with the Write tool and the header:
+After every per-chapter `task` completes, append a row to `{output_dir}/.specback/state/manifest.md`. If the file does not exist, create it with the Write tool and the header:
 
 ```markdown
 # specback Drafts Manifest

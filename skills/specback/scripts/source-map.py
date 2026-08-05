@@ -422,7 +422,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--target", required=True, help="Target codebase root (directory)")
     parser.add_argument(
         "--output",
-        default=".specback/source-map.json",
+        default="specs/.specback/source-map.json",
         help="Output path for source-map.json",
     )
     parser.add_argument(

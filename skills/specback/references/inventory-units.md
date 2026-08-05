@@ -510,7 +510,7 @@ A future version may split this into `references/inventory-units-{custom}.md`-st
 
 ## Instruction summary for Claude during extraction
 
-1. **First, run `scripts/source-map.py --target <root>`**. This auto-extracts file-level source units (SRC-NNNN) and saves them to `.specback/source-map.json`.
+1. **First, run `scripts/source-map.py --target <root>`**. This auto-extracts file-level source units (SRC-NNNN) and saves them to `{output_dir}/.specback/source-map.json`.
 2. Identify the target codebase's primary language(s) from `recon-report.md`.
 3. Consult the matching section and plan an extraction strategy.
 4. **Group `source-map.json` units into conceptual units**. Many-to-one (multiple SRC → 1 INV) is acceptable, subject to the granularity rules below.

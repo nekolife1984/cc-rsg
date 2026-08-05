@@ -216,7 +216,7 @@ class TestErrorDetection:
 
     def test_accepts_valid_goal(self):
         """A well-formed goal.json should pass."""
-        good = {"output_language": "en", "output_dir": ".specback", "primary_reader": "maintenance_developer",
+        good = {"output_language": "en", "output_dir": "specs", "primary_reader": "maintenance_developer",
                 "reader_action": "code_change", "granularity": "medium",
                 "perspectives": ["functional_correctness", "operability"],
                 "existing_docs": "none", "free_text_notes": "", "user_custom_deliverables": [],

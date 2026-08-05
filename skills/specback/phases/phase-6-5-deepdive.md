@@ -6,9 +6,9 @@ In `outline` / `interactive` modes, the spec at the end of Phase 6 is only "over
 
 ### 🆕 Multi-scope execution
 
-When `goal.multi_scope == true`, run the procedure below for the current scope (read from `goal.current_scope`). Set `SPECBACK_DIR = ".specback-{scope.name}"` and use scope-specific draft paths (`.specback-drafts-{name}/deep/`). On completion, increment `goal.current_scope`.
+When `goal.multi_scope == true`, run the procedure below for the current scope (read from `goal.current_scope`). Set `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` and use scope-specific draft paths (`{output_dir}/{scope.name}/.specback/drafts/deep/`). On completion, increment `goal.current_scope`.
 
-When `goal.multi_scope == false` (default), run once with `.specback/` as before.
+When `goal.multi_scope == false` (default), run once with `{output_dir}/.specback/` as before.
 
 ### Procedure
 
@@ -44,7 +44,7 @@ Once the deep-dive target is fixed:
    - Target entity / candidate ID and overview
    - List of related real source files
    - "Write 1 deep-dive chapter" (≥ 10 REFs, ≥ 1 Mermaid, ≥ 5 Sources Read; body length guided by `goal.tone`)
-   - Output path: `.specback/drafts/deep/D-NNN-{slug}.md` or `M-NNN-{slug}.md`
+   - Output path: `{output_dir}/.specback/drafts/deep/D-NNN-{slug}.md` or `M-NNN-{slug}.md`
 3. Display the key findings returned by the sub-agent in the main thread.
 4. **Update traceability.md** (append the deep-dive chapter).
 5. **Update the relevant row in the original Layer 1 chapter**: bump the confidence from 🟡/🔴 → 🟢, add a "see deep-dive `D-001`" link.

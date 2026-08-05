@@ -13,10 +13,10 @@ Without Phase 7d:
 
 When `goal.multi_scope == true`, iterate over each scope and run the procedure for each:
 1. Read `goal.scopes[]`.
-2. For each scope, set `SPECBACK_DIR = ".specback-{scope.name}"` and run the procedure below.
+2. For each scope, set `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` and run the procedure below.
 3. Each scope regenerates its own source-map / trace.
 
-When `goal.multi_scope == false` (default), run the procedure once with `.specback/`.
+When `goal.multi_scope == false` (default), run the procedure once with `{output_dir}/.specback/`.
 
 ### Prerequisites
 
@@ -34,15 +34,15 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 
 2. **Regenerate source-map.json**:
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/source-map.py" \
-     --target . --output-dir .specback
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/source-map.py" \
+     --target . --output-dir {output_dir}/.specback
    ```
    This captures new files and removes deleted files from the source map.
 
 3. **Regenerate trace.json**:
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/build-trace.py" \
-     --specback-dir .specback
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/build-trace.py" \
+     --specback-dir {output_dir}/.specback
    ```
    This rebuilds the REF-to-SRC-ID cross-reference, eliminating orphaned entries from deleted files.
 
@@ -62,8 +62,8 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 5. **Regenerate source-hashes.json** (hash mode only):
    If the project uses hash mode (no Git repository):
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/snapshot-hashes.py" \
-     --target . --output .specback/source-hashes.json
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/snapshot-hashes.py" \
+     --target . --output {output_dir}/.specback/source-hashes.json
    ```
 
 6. **Report completion**:
@@ -86,17 +86,17 @@ When `goal.multi_scope == false` (default), run the procedure once with `.specba
 # Phase 7d agent procedure above handles this automatically
 
 # Manual refresh (standalone, outside agent workflow)
-python skills/specback/scripts/source-map.py --target . --output-dir .specback
-python skills/specback/scripts/build-trace.py --specback-dir .specback
+python skills/specback/scripts/source-map.py --target . --output-dir {output_dir}/.specback
+python skills/specback/scripts/build-trace.py --specback-dir {output_dir}/.specback
 # Then update state.json manually
 ```
 
 ### Output
 
-- `.specback/source-map.json` — updated
-- `.specback/trace.json` — regenerated
-- `.specback/state.json` — `generated_at_commit` updated
-- `.specback/source-hashes.json` — regenerated (hash mode only)
+- `{output_dir}/.specback/source-map.json` — updated
+- `{output_dir}/.specback/trace.json` — regenerated
+- `{output_dir}/.specback/state.json` — `generated_at_commit` updated
+- `{output_dir}/.specback/source-hashes.json` — regenerated (hash mode only)
 
 ---
 

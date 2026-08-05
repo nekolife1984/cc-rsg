@@ -9,16 +9,16 @@ When `goal.multi_scope == true`, the following steps apply:
 
 1. **Determine the current scope**: Read `goal.current_scope` (index into `goal.scopes[]`). Let `scope = goal.scopes[current_scope]`.
 2. **Set scope-specific paths**:
-   - `SPECBACK_DIR = ".specback-{scope.name}"` (e.g. `.specback-auth`)
+   - `SPECBACK_DIR = "{output_dir}/{scope.name}/.specback"` (e.g. `docs/auth/.specback`)
    - `TARGET_ROOT = scope.root` (e.g. `services/auth`)
-   - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `.specback/final/auth`)
-3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat .specback/.skill-path) {SPECBACK_DIR}/.skill-path`
+   - `OUTPUT_DIR = "{output_dir}/{scope.name}"` (e.g. `docs/auth`)
+3. **Ensure `.skill-path`**: `mkdir -p {SPECBACK_DIR} && ln -sf $(cat {output_dir}/.specback/.skill-path) {SPECBACK_DIR}/.skill-path`
 4. **Run the phase procedure below** using `{SPECBACK_DIR}` as the specback directory (for scripts: `--specback-dir {SPECBACK_DIR}`) and `{TARGET_ROOT}` as the target codebase root (for source-map: `--target {TARGET_ROOT}`).
-5. **On completion**: Increment `goal.current_scope` in `.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).
+5. **On completion**: Increment `goal.current_scope` in `{output_dir}/.specback/goal.json`. If `current_scope >= scopes.length`, reset to `0` (all scopes done for this phase).
 6. **Resume support**: After each scope completes, save `state.json` with `current_scope` so the session can resume from the correct scope.
 7. **At the START of this phase**: If `goal.current_scope > 0` and `goal.multi_scope == true`, this is a resume — skip already-completed scopes and start from `goal.current_scope`.
 
-When `goal.multi_scope == false` (default), run the phase procedure once with `.specback/` and the project root as before.
+When `goal.multi_scope == false` (default), run the phase procedure once with `{output_dir}/.specback/` and the project root as before.
 
 ---
 
@@ -55,7 +55,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
      - `99-unresolved.md` (unresolved-items chapter)
      - `traceability.md` (traceability table, no chapter number)
    - Regular chapter numbers are assigned sequentially in `01`-`98` while avoiding collisions with reserved numbers.
-   - **When to generate them**: at Phase 2, create empty chapter files under `.specback/drafts/` for all chapters — standard, reserved, AND user-custom — so every chapter has a skeleton to fill (the body is filled in Phase 3 / Phase 5 / Phase 6 depending on `kind`).
+   - **When to generate them**: at Phase 2, create empty chapter files under `{output_dir}/.specback/drafts/` for all chapters — standard, reserved, AND user-custom — so every chapter has a skeleton to fill (the body is filled in Phase 3 / Phase 5 / Phase 6 depending on `kind`).
    - Place a meta comment (`<!-- meta: ... -->`) at the top of each chapter file describing what that chapter covers.
    - The skeleton of `00-metadata.md` carries a meta comment indicating "Phase 6 will write goal.json snapshot / generation timestamp / commit hash / template selection result here".
    - The skeleton of `99-unresolved.md` carries a meta comment indicating "Phase 6 will aggregate `abandoned` entries from `questions.json` here".
@@ -166,23 +166,23 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 
    **STEP A (required)**: Run `scripts/source-map.py` (v1, original) OR `source_map_v2` (v2, role-typed) to extract source units automatically:
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/source-map.py" \
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/source-map.py" \
      --target <target root> \
-     --output .specback/source-map.json
+     --output {output_dir}/.specback/source-map.json
    ```
    With v2:
    ```bash
    python -m source_map_v2 \
      --target <target root> \
-     --output .specback/source-map.json
+     --output {output_dir}/.specback/source-map.json
    ```
    Either produces `source-map.json` with `SRC-NNNN` units — v2 adds role typing (`role`, `table`, `framework`) but the conversion below handles both.
 
    **STEP B (required)**: Run `scripts/build-inventory-from-sourcemap.py` to mechanically convert `source-map.json` → `inventory.json`:
    ```bash
-   python "$(cat .specback/.skill-path)/scripts/build-inventory-from-sourcemap.py" \
-     --source-map .specback/source-map.json \
-     --output .specback/inventory.json
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/build-inventory-from-sourcemap.py" \
+     --source-map {output_dir}/.specback/source-map.json \
+     --output {output_dir}/.specback/inventory.json
    ```
    This maps:
    - `source-map[].role` → `inventory[].type` (via built-in role→type table; overridable via `--role-to-type`)
@@ -201,8 +201,8 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
    **STEP D (optional, only when v1 source-map.py was used)**: For `source-map.json` v0.1.0 units that lack a `role` field, `build-inventory-from-sourcemap.py` falls back to `kind` as the inventory `type`. If a more precise role→type mapping is needed, pass `--role-to-type`:
    ```bash
    python build-inventory-from-sourcemap.py \
-     --source-map .specback/source-map.json \
-     --output .specback/inventory.json \
+     --source-map {output_dir}/.specback/source-map.json \
+     --output {output_dir}/.specback/inventory.json \
      --role-to-type '{"endpoint":"api","model":"entity"}'
    ```
    When using v2 (`source_map_v2`), roles are already assigned and the default mapping works out of the box.
@@ -275,7 +275,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `.
 - WBS granularity directly drives sub-agent precision. When in doubt, split finer.
 - Skipping the user review causes large rework in Phase 3.
 - **Strictly observe the chapter file naming convention**. Free-form names like `chapter2_architecture.md` or `第3章_認証.md` are NOT allowed. Violations are flagged by `scripts/coverage-check.py`.
-- **Skeleton size cap (mandatory)**: every file under `.specback/drafts/` produced in Phase 2 has **≤ 5 non-blank lines** of body outside code fences. Verify this immediately after writing each skeleton (`wc -l .specback/drafts/*.md` for a sanity check); a skeleton that is already long has body content that belongs in Phase 3 — delete the body and keep only meta comment + title + (optional) Sources Read placeholder.
+- **Skeleton size cap (mandatory)**: every file under `{output_dir}/.specback/drafts/` produced in Phase 2 has **≤ 5 non-blank lines** of body outside code fences. Verify this immediately after writing each skeleton (`wc -l {output_dir}/.specback/drafts/*.md` for a sanity check); a skeleton that is already long has body content that belongs in Phase 3 — delete the body and keep only meta comment + title + (optional) Sources Read placeholder.
 - **Phase 2 does NOT read code**: the only allowed source reads in Phase 2 are (a) for inventory extraction via `source-map.py`, (b) for deciding the depth_mode chapter structure. Reading individual class / model / controller files to write their description is **Phase 3's job**, not Phase 2's. If you catch yourself opening `app/models/issue.rb` to write what `Issue` does, you've crossed into Phase 3 — stop and finish Phase 2 first.
 
 ---

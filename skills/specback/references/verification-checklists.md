@@ -62,8 +62,8 @@ Phase 4 verification runs in 3 tiers:
 Regardless of template, confirm the following on every spec.
 
 ### Filename convention and required files
-- [ ] Every chapter file under `.specback/drafts/` matches `^(0\\d|[1-9]\\d)-[a-z0-9-]+\\.md$` (`coverage-check.py` checks this; violations are WARN).
-- [ ] The three required files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) exist under `.specback/drafts/` or `{output_dir}/` (default: `.specback/final/`) (`coverage-check.py` checks this; missing files are ERROR).
+- [ ] Every chapter file under `{output_dir}/.specback/drafts/` matches `^(0\\d|[1-9]\\d)-[a-z0-9-]+\\.md$` (`coverage-check.py` checks this; violations are WARN).
+- [ ] The three required files (`00-metadata.md`, `99-unresolved.md`, `traceability.md`) exist under `{output_dir}/.specback/drafts/` or `{output_dir}/` (default: `{output_dir}/`) (`coverage-check.py` checks this; missing files are ERROR).
 - [ ] Chapter numbers (`NN`) have no duplicates and no unnecessary gaps.
 
 ### Traceability
@@ -156,7 +156,7 @@ At the end of Phase 4, report to the user in the following format.
 
 ## Customising the checklist
 
-When the user wants to add their own checks, create `.specback/custom-checklists.md` and append items there. In Phase 4, Claude runs the custom checks in addition to the standard ones.
+When the user wants to add their own checks, create `{output_dir}/.specback/custom-checklists.md` and append items there. In Phase 4, Claude runs the custom checks in addition to the standard ones.
 
 Format custom checks like this:
 
