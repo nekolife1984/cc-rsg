@@ -27,7 +27,7 @@ When `goal.multi_scope == false` (default), run the phase procedure once with `{
 
 1. **Generate trace.json**
    ```bash
-   python "$(cat {output_dir}/.specback/.skill-path)/scripts/build-trace.py" --specback-dir {output_dir}/.specback --output-dir {output_dir} --target-dir-for-required .specback/drafts
+   python "$(cat {output_dir}/.specback/.skill-path)/scripts/build-trace.py" --specback-dir {output_dir}/.specback --output-dir {output_dir} --target-dir-for-required drafts
    ```
    This resolves every `<!-- REF: path:line -->` in `{output_dir}/.specback/drafts/*.md` to a SRC unit and produces the MECE aggregation.
 

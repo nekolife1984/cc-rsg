@@ -15,7 +15,7 @@ CLAIM → EXTRACT → DOUBT → RECONCILE → STOP
 | **CLAIM** | Isolate one specific claim from the draft (e.g. "`IssuesController#create` returns a 201 status on success"). Record the claim verbatim with source chapter and `<!-- REF: ... -->` anchor. |
 | **EXTRACT** | Identify exact code file(s) and line(s) supporting the claim. Only use `<!-- REF: ... -->` citations already in the draft. |
 | **RECONCILE** | Wrong -> loop to Phase 3 with corrective note. Imprecise -> adjust wording + tighten `<!-- REF: ... -->` range. Under-confident -> upgrade marker (🔴->🟡 or 🟡->🟢). |
-|| **STOP** | Assign confidence score (1.0 = certain, 0.0 = contradictory). Record in `{output_dir}/.specback/doubt-report.json`. |
+| **STOP** | Assign confidence score (1.0 = certain, 0.0 = contradictory). Record in `{output_dir}/.specback/doubt-report.json`. |
 
 ## Doubt-trigger ruleset
 
