@@ -6,7 +6,7 @@ a unified ``call_llm()`` interface that supports multiple CLI backends:
 - **opencode** (default): ``opencode run <prompt>``
 - **claude-code**: ``claude -p <prompt>``
 - **codex**: ``codex run <prompt>``
-- **copilot**: ``gh copilot suggest <prompt>`` (falls back to ``github-copilot-cli``)
+- **copilot** (default): ``copilot -p <prompt>`` (standalone; falls back to ``gh copilot -p <prompt>``)
 - **pi**: ``pi <prompt>``
 """
 
@@ -25,7 +25,7 @@ _CLI_BINARIES: dict[CLIBackend, str] = {
     "opencode": "opencode",
     "claude-code": "claude",
     "codex": "codex",
-    "copilot": "gh",
+    "copilot": "copilot",  # standalone binary (official); falls back to gh copilot
     "pi": "pi",
 }
 
@@ -73,7 +73,7 @@ def _resolve_backend(agent_def: dict[str, Any] | None) -> CLIBackend:
     Priority:
     1. ``agent_def.cli`` — per-agent override
     2. ``ADW_CLI`` env var — global override
-    3. ``opencode`` — hard default
+    3. ``copilot`` — hard default
     """
     if agent_def and "cli" in agent_def:
         return agent_def["cli"]  # type: ignore[return-value]
@@ -84,7 +84,7 @@ def _resolve_backend(agent_def: dict[str, Any] | None) -> CLIBackend:
     if env_cli:
         return env_cli
 
-    return "opencode"
+    return "copilot"
 
 
 def _normalize_backend(name: str) -> CLIBackend | None:
@@ -144,20 +144,24 @@ def build_cli_command(
         return [binary, "run", prompt]
 
     if backend == "copilot":
-        # gh copilot -p "prompt"
-        # Usage: gh copilot -p "explain this code" [--allow-tool ...]
-        # Falls back to: github-copilot-cli -p "prompt" (standalone binary)
+        # Priority:
+        # 1. Standalone `copilot` binary (official: https://gh.io/copilot-cli)
+        # 2. gh copilot subcommand (legacy extension fallback)
         import shutil
+        if shutil.which("copilot"):
+            # Standalone: copilot -p "prompt"
+            cmd = [binary, "-p", prompt]
+            model = (agent_def or {}).get("model")
+            if model:
+                cmd = [binary, "-p", prompt, "--model", model]
+            return cmd
+        # Legacy fallback: gh copilot -p "prompt"
         if shutil.which("gh"):
-            # gh copilot --help shows: gh copilot -p <prompt>
-            return [binary, "copilot", "-p", prompt]
-        # Standalone binary fallback
-        fallback = "github-copilot-cli"
-        if shutil.which(fallback):
-            return [fallback, "-p", prompt]
+            return ["gh", "copilot", "-p", prompt]
         raise FileNotFoundError(
-            f"Copilot CLI not found. Expected 'gh' (with copilot subcommand) "
-            f"or '{fallback}' on PATH."
+            f"Copilot CLI not found. Expected 'copilot' (standalone) "
+            f"or 'gh' (legacy extension) on PATH. "
+            f"Install via: npm install -g @githubnext/github-copilot-cli"
         )
 
     if backend == "pi":
@@ -180,7 +184,7 @@ def call_llm(
     """Call an LLM via the configured CLI backend and return the response.
 
     The backend is resolved from ``agent_def.cli`` → ``ADW_CLI`` env var →
-    ``opencode`` (hard default).
+    ``copilot`` (hard default).
 
     Args:
         prompt: The LLM prompt text.
