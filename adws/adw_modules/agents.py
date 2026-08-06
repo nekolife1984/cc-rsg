@@ -144,17 +144,20 @@ def build_cli_command(
         return [binary, "run", prompt]
 
     if backend == "copilot":
-        # gh copilot suggest "prompt"
-        # falls back to github-copilot-cli if gh not available
+        # gh copilot -p "prompt"
+        # Usage: gh copilot -p "explain this code" [--allow-tool ...]
+        # Falls back to: github-copilot-cli -p "prompt" (standalone binary)
         import shutil
         if shutil.which("gh"):
-            return [binary, "copilot", "suggest", prompt]
-        # Fallback to standalone binary
+            # gh copilot --help shows: gh copilot -p <prompt>
+            return [binary, "copilot", "-p", prompt]
+        # Standalone binary fallback
         fallback = "github-copilot-cli"
         if shutil.which(fallback):
-            return [fallback, "suggest", prompt]
+            return [fallback, "-p", prompt]
         raise FileNotFoundError(
-            f"Copilot CLI not found. Expected 'gh' or '{fallback}' on PATH."
+            f"Copilot CLI not found. Expected 'gh' (with copilot subcommand) "
+            f"or '{fallback}' on PATH."
         )
 
     if backend == "pi":
