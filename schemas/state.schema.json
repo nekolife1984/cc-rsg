@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/nekolife1984/specback/schemas/state.schema.json",
   "title": "state.json",
-  "description": "specback のセッション状態。現在の Phase、各 Phase の進捗、履歴を記録する。",
+  "description": "specback のセッション状態。現在の Phase、各 Phase の進捗、履歴を記録する。\nSQLite trace DB (trace.db) との双方向同期をサポートする (trace_db.py)。",
   "type": "object",
   "properties": {
     "current_phase": {
@@ -65,6 +65,48 @@
         },
         "required": ["timestamp", "phase", "event"],
         "additionalProperties": false
+      }
+    },
+    "adw_id": {
+      "type": "string",
+      "description": "SQLite trace DB のセッションID (trace_db.py)"
+    },
+    "trace_db_path": {
+      "type": "string",
+      "description": ".specback/ からの相対パス又は trace.db への絶対パス"
+    },
+    "trace_db_version": {
+      "type": "integer",
+      "description": "trace.db のスキーマバージョン",
+      "minimum": 1,
+      "maximum": 1
+    },
+    "questions": {
+      "type": "array",
+      "description": "Question Bank（SQLite questions_bank テーブルのエクスポート）",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "body": { "type": "string" },
+          "severity": { "type": "string" },
+          "status": { "type": "string" },
+          "resolution": { "type": "string" },
+          "category": { "type": "string" }
+        }
+      }
+    },
+    "chapter_drafts": {
+      "type": "object",
+      "description": "チャプタードラフト品質メトリクス（SQLite chapter_drafts テーブルのエクスポート）",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "content_hash": { "type": "string" },
+          "ref_count": { "type": "integer" },
+          "total_lines": { "type": "integer" },
+          "confidence_ratio": { "type": "number" }
+        }
       }
     }
   },
