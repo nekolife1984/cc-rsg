@@ -73,32 +73,21 @@ When `goal.multi_scope == false` (default), run the procedure once with `{output
    - `state.json.generated_at_commit` — set to `<hash>`
    - `source-hashes.json` — updated (if hash mode)
 
-### Design rationale
+   > **Design rationale:** Phase 7d is a separate phase (not a `--refresh` flag) to keep the "detect only" contract of `detect-drift.py` intact. Running after REF Auto-Fix means `build-trace.py` already has corrected REF line numbers. Config Refresh is independent of ChangeSpec — skipping ChangeSpec should not block infrastructure maintenance.
 
-- **Why a separate phase (7d) instead of `--refresh` flag?** Keeps the "detect only" contract of `detect-drift.py` intact. The refresh is an explicit user choice, not a hidden side effect.
-- **Why after REF Auto-Fix?** Running `build-trace.py` after `fix-refs.py` means the new trace.json already has corrected REF line numbers — a single regeneration step rather than needing another fix pass.
-- **Why not part of ChangeSpec?** ChangeSpec's responsibility is human-readable change explanation; infrastructure file maintenance is a separate concern. Mixing them creates an unwanted dependency ("skip ChangeSpec → skip config refresh").
+   > **Output artifacts:**
+   > - `{output_dir}/.specback/source-map.json` — updated
+   > - `{output_dir}/.specback/trace.json` — regenerated
+   > - `{output_dir}/.specback/state.json` — `generated_at_commit` updated
+   > - `{output_dir}/.specback/source-hashes.json` — regenerated (hash mode only)
 
-### Usage examples
-
-```bash
-# Standard invocation (after Phase 7c)
-# Phase 7d agent procedure above handles this automatically
-
-# Manual refresh (standalone, outside agent workflow)
-python skills/specback/scripts/source-map.py --target . --output-dir {output_dir}/.specback
-python skills/specback/scripts/build-trace.py --specback-dir {output_dir}/.specback
-# Then update state.json manually
-```
-
-### Output
-
-- `{output_dir}/.specback/source-map.json` — updated
-- `{output_dir}/.specback/trace.json` — regenerated
-- `{output_dir}/.specback/state.json` — `generated_at_commit` updated
-- `{output_dir}/.specback/source-hashes.json` — regenerated (hash mode only)
-
----
+   > **Usage examples (manual invocation):**
+   > ```bash
+   > # Manual refresh (standalone, outside agent workflow)
+   > python skills/specback/scripts/source-map.py --target . --output-dir {output_dir}/.specback
+   > python skills/specback/scripts/build-trace.py --specback-dir {output_dir}/.specback
+   > # Then update state.json manually
+   > ```
 
 ### Phase-specific cautions
 - Running Phase 7d without Phase 7b (REF Auto-Fix) means stale REFs remain in the regenerated `trace.json`. Run 7b first for best results.

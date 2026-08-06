@@ -92,6 +92,7 @@ Use **shape** (not color) for visual emphasis.
 | `docs/subagent-behavior.md` | Sub-agent prompt template, decision logic |
 | `docs/state-management.md` | `state.json` schema, resume behaviour |
 | `docs/doubt-pass.md` | Doubt-pass adversarial review protocol, trigger rules, confidence scoring, troubleshooting |
+| `references/gates.md` | `scripts/gates.py` — unified Gate interface for verification checks |
 
 ---
 

@@ -46,25 +46,19 @@ When `goal.multi_scope == false` (default), run the procedure once with `{output
 
 4. **Display the output** to the user as a completion summary.
 
-### Usage examples
+   > **Output artifacts:**
+   > - `{output_dir}/change-spec.json` — structured change facts (mechanical)
+   > - `{output_dir}/change-spec.md` — human-readable change specification (AI-generated)
 
-```bash
-# Git mode (default)
-python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --specback-dir {output_dir}/.specback
-
-# Hash mode
-python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --specback-dir {output_dir}/.specback --mode hash
-
-# Pipe diff
-git diff -U5 main...HEAD | python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --diff -
-```
-
-### Output
-
-- `{output_dir}/change-spec.json` — structured change facts (mechanical)
-- `{output_dir}/change-spec.md` — human-readable change specification (AI-generated)
-
-### Quality standards
+   > **Usage examples (manual invocation):**
+   > ```bash
+   > # Git mode (default)
+   > python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --specback-dir {output_dir}/.specback
+   > # Hash mode
+   > python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --specback-dir {output_dir}/.specback --mode hash
+   > # Pipe diff
+   > git diff -U5 main...HEAD | python "$(cat {output_dir}/.specback/.skill-path)/scripts/change-spec.py" --diff -
+   > ```
 
 ### Phase-specific cautions
 - ChangeSpec is AI-interpreted, not mechanically verified. Review the output before sharing with stakeholders.
