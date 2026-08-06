@@ -144,6 +144,76 @@ Japanese output is fully supported: select `日本語 (Japanese)` in Phase 0 Ste
 
 ---
 
+## ADW (AI Developer Workflow)
+
+specback provides **ADW scripts** (Python) as the active workflow. They replace the legacy agent-driven skill workflow.
+
+### Full pipeline
+
+```bash
+# Run all phases in sequence
+uv run adws/adw_specback_full.py --target /path/to/codebase
+
+# Non-interactive mode (skip setup/refine dialogues)
+uv run adws/adw_specback_full.py --target /path --non-interactive
+
+# Resume from specific phase
+uv run adws/adw_specback_full.py --target /path --from-phase verify
+
+# Skip specific phases
+uv run adws/adw_specback_full.py --target /path --skip-phases drift changespec
+
+# With custom output dir
+uv run adws/adw_specback_full.py --target /path --output-dir docs/specs
+```
+
+### Per-phase execution
+
+```bash
+uv run adws/adw_specback_setup.py --target /path              # Phase 0
+uv run adws/adw_specback_recon.py --target /path              # Phase 1
+uv run adws/adw_specback_wbs.py --target /path                # Phase 2
+uv run adws/adw_specback_investigate.py --target /path        # Phase 3
+uv run adws/adw_specback_verify.py --target /path             # Phase 4
+uv run adws/adw_specback_refine.py --target /path             # Phase 5
+uv run adws/adw_specback_deliver.py --target /path            # Phase 6
+uv run adws/adw_specback_drift.py --target /path              # Phase 7
+uv run adws/adw_specback_changespec.py --target /path         # Phase 7c
+```
+
+### CLI backend selection
+
+```bash
+# Default: opencode
+uv run adws/adw_specback_recon.py --target /path
+
+# Switch to Copilot
+export ADW_CLI=copilot
+uv run adws/adw_specback_recon.py --target /path
+
+# Switch to Claude Code
+export ADW_CLI=claude-code
+uv run adws/adw_specback_recon.py --target /path
+
+# Per-agent config in adws/adw_sssf_config/sssf.config.yaml
+```
+
+### Resume support
+
+```bash
+# First run: creates a run ID
+uv run adws/adw_specback_full.py --target /path
+# → ADW ID: adw-abc123
+
+# Resume: skips completed phases
+uv run adws/adw_specback_full.py --target /path --adw-id adw-abc123
+
+# Or per-phase resume
+uv run adws/adw_specback_recon.py --target /path --adw-id adw-abc123
+```
+
+---
+
 ## 6+1 Phase State Machine
 
 | Phase | Name | Main Action |
