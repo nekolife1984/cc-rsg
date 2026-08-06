@@ -30,7 +30,8 @@ def _call_llm(prompt: str, agent_def: dict | None = None, timeout: int = 120) ->
     return _AGENTS_MODULE.call_llm(prompt, agent_def=agent_def, timeout=timeout)
 
 
-# Phase name → agent config key mapping
+# Phase name → agent config key mapping (code default)
+# Overridden by `roster` section in sssf.config.yaml if present.
 _PHASE_TO_AGENT: dict[str, str] = {
     "setup": "engineer",
     "recon": "scout",
@@ -43,19 +44,67 @@ _PHASE_TO_AGENT: dict[str, str] = {
     "changespec": "changespec",
 }
 
-PhaseKind = Literal["engineer", "agent", "code"]
+# Cache for parsed config (avoids re-reading on every resolve)
+_config_cache: dict[str, Any] | None = None
 
 
-def _resolve_agent_def(phase_name: str) -> dict | None:
-    """Load agent definition for a phase from sssf.config.yaml."""
+def _load_full_config() -> dict[str, Any]:
+    """Load and cache the full sssf.config.yaml contents.
+
+    Returns a dict with at minimum empty defaults/defaults for
+    agents/roster keys so callers don't need defensive checks.
+    """
+    global _config_cache
+    if _config_cache is not None:
+        return _config_cache
     try:
         from adws.adw_modules import agents as agents_mod  # noqa
         config_path = Path(__file__).resolve().parent.parent / "adw_sssf_config" / "sssf.config.yaml"
         cfg = agents_mod.load_config(str(config_path))
-        agent_key = _PHASE_TO_AGENT.get(phase_name, phase_name)
-        return cfg.get("agents", {}).get(agent_key)
-    except (FileNotFoundError, KeyError, AttributeError):
-        return None
+    except (FileNotFoundError, ImportError, AttributeError):
+        cfg = {}
+    _config_cache = {
+        "defaults": cfg.get("defaults", {}),
+        "agents": cfg.get("agents", {}),
+        "roster": cfg.get("roster", {}),
+    }
+    return _config_cache
+
+PhaseKind = Literal["engineer", "agent", "code"]
+
+
+def _resolve_agent_def(phase_name: str) -> dict | None:
+    """Load agent definition for a phase from sssf.config.yaml.
+
+    Resolution order:
+    1. Look up ``roster`` section in config for the phase → agent name
+    2. Fall back to ``_PHASE_TO_AGENT`` code mapping
+    3. Fall back to the phase name itself as the agent name
+    4. Look up agent by name in ``agents`` section of config
+    5. Apply ``defaults`` section as fallback for missing fields
+    """
+    cfg = _load_full_config()
+    roster = cfg.get("roster", {})
+    defaults = cfg.get("defaults", {})
+    agents_cfg = cfg.get("agents", {})
+
+    # 1. Roster from config → 2. Code fallback → 3. Phase name itself
+    agent_name = roster.get(phase_name) or _PHASE_TO_AGENT.get(phase_name) or phase_name
+
+    # 4. Look up agent definition
+    agent_def = agents_cfg.get(agent_name)
+    if agent_def is None:
+        # No agent defined for this phase — return defaults only
+        result = dict(defaults) if defaults else None
+        if result is not None:
+            result["_agent_name"] = agent_name
+        return result
+
+    # 5. Merge defaults under agent definition (agent values win)
+    merged = dict(defaults)
+    merged.update(agent_def)
+    merged["_agent_name"] = agent_name  # internal metadata
+    return merged
 
 
 @dataclass

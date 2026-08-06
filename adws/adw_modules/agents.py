@@ -60,10 +60,32 @@ def validate(cfg: dict[str, Any]) -> list[str]:
         issues.append("Missing 'agents' key in config")
     else:
         for name, agent_def in cfg["agents"].items():
+            if not isinstance(agent_def, dict):
+                issues.append(f"Agent '{name}' is not a dict")
+                continue
             if "provider" not in agent_def:
                 issues.append(f"Agent '{name}' missing 'provider'")
             if "model" not in agent_def:
                 issues.append(f"Agent '{name}' missing 'model'")
+
+    # defaults section is optional but must be a dict if present
+    if "defaults" in cfg and not isinstance(cfg["defaults"], dict):
+        issues.append("'defaults' must be a dict")
+
+    # roster section is optional but must be a dict of phase→agent mappings
+    if "roster" in cfg:
+        if not isinstance(cfg["roster"], dict):
+            issues.append("'roster' must be a dict")
+        else:
+            agent_names = set(cfg.get("agents", {}).keys())
+            for phase, agent_name in cfg["roster"].items():
+                if not isinstance(agent_name, str):
+                    issues.append(f"Roster entry '{phase}' must map to a string agent name")
+                elif agent_name not in agent_names:
+                    issues.append(
+                        f"Roster entry '{phase}' maps to '{agent_name}' "
+                        f"which is not defined in 'agents'"
+                    )
 
     return issues
 
@@ -72,7 +94,8 @@ def _resolve_backend(agent_def: dict[str, Any] | None) -> CLIBackend:
     """Resolve which CLI backend to use for an agent definition.
 
     Priority:
-    1. ``agent_def.cli`` — per-agent override
+    1. ``agent_def.cli`` — per-agent override (includes ``defaults.cli``
+       from sssf.config.yaml via pre-merged agent_def)
     2. ``ADW_CLI`` env var — global override
     3. ``opencode`` — hard default
     """
@@ -106,6 +129,30 @@ def _normalize_backend(name: str) -> CLIBackend | None:
         "pi.ai": "pi",
     }
     return mapping.get(name)
+
+
+def get_defaults(config_path: str | Path | None = None) -> dict[str, Any] | None:
+    """Load the ``defaults`` section from sssf.config.yaml.
+
+    Args:
+        config_path: Path to the config file. Defaults to the standard
+            location (``adws/adw_sssf_config/sssf.config.yaml``).
+
+    Returns:
+        Dict of default values (model, provider, cli) or None if not found.
+    """
+    if config_path is None:
+        config_path = (
+            Path(__file__).resolve().parent.parent
+            / "adw_sssf_config"
+            / "sssf.config.yaml"
+        )
+    try:
+        cfg = load_config(str(config_path))
+        defaults = cfg.get("defaults")
+        return dict(defaults) if isinstance(defaults, dict) else None
+    except (FileNotFoundError, ImportError, AttributeError):
+        return None
 
 
 def build_cli_command(
@@ -181,6 +228,7 @@ def call_llm(
     Args:
         prompt: The LLM prompt text.
         agent_def: Optional agent configuration dict (from sssf.config.yaml).
+            If None, defaults from sssf.config.yaml are used as fallback.
         timeout: Max seconds to wait for the CLI.
 
     Returns:
@@ -191,6 +239,8 @@ def call_llm(
         subprocess.TimeoutExpired: If the CLI times out.
         RuntimeError: If the CLI returns a non-zero exit code.
     """
+    if agent_def is None:
+        agent_def = get_defaults()
     backend = _resolve_backend(agent_def)
     cmd = build_cli_command(backend, prompt, agent_def)
 
