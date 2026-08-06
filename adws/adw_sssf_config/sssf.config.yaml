@@ -1,0 +1,21 @@
+# specback ADW configuration
+# Model and agent assignments for ADW phases.
+agents:
+  engineer:
+    provider: opencode-zen
+    model: ds-v4-flash
+    system_prompt: >
+      You are a software specification engineer.
+      Ask targeted questions to define the specification goal.
+  scout:
+    provider: opencode-zen
+    model: ds-v4-flash
+    system_prompt: >
+      You are a codebase scout. Perform shallow reconnaissance
+      of the target codebase to understand its structure and key components.
+  investigator:
+    provider: opencode-zen
+    model: ds-v4-flash
+    system_prompt: >
+      You are a specification investigator. Research specific chapters
+      of a specification document by analyzing the codebase.

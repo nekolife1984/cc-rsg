@@ -20,6 +20,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_SRC="$SCRIPT_DIR/skills/specback"
 SEARCH_SKILL_SRC="$SCRIPT_DIR/skills/specback-search"
+SHARED_DIRS="scripts references schemas agents templates variants"
 
 if [[ ! -d "$SKILL_SRC" ]]; then
   echo "Error: skills/specback/ not found alongside this script."
@@ -155,6 +156,12 @@ install_skill() {
 
   mkdir -p "$dest"
   cp -r "$SKILL_SRC"/* "$dest/"
+  # Copy shared assets (scripts/, references/, schemas/, agents/, templates/, variants/)
+  for dir in $SHARED_DIRS; do
+    if [[ -d "$SCRIPT_DIR/$dir" ]]; then
+      cp -r "$SCRIPT_DIR/$dir" "$dest/"
+    fi
+  done
   echo "  ✅ $dest/ ($label)"
 
   # Install companion: specback-search
@@ -168,7 +175,7 @@ install_skill() {
 
 # ── Optional dependency installer ──────────────────────────────────────
 install_deps() {
-  local req="$SKILL_SRC/scripts/requirements.txt"
+  local req="$SCRIPT_DIR/scripts/requirements.txt"
   if [[ ! -f "$req" ]]; then
     echo "  ⚠️  requirements.txt not found at $req"
     return

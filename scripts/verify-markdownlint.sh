@@ -7,7 +7,7 @@
 # Options:
 #   --specback-dir DIR   Specback state directory (default: .specback)
 #   --target-dir DIR     Target directory with spec files (default: <specback-dir>/drafts)
-#   --config FILE        Path to markdownlint config (default: skills/specback/references/markdownlint-config.yaml)
+#   --config FILE        Path to markdownlint config (default: references/markdownlint-config.yaml)
 #   --help               Show this help
 #
 # Exit codes:

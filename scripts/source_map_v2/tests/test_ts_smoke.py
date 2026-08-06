@@ -30,7 +30,7 @@ import pytest
 
 from source_map_v2.extractors import tshelpers as H
 
-# Must match the ``tree-sitter==`` pin in skills/specback/scripts/requirements.txt.
+# Must match the ``tree-sitter==`` pin in scripts/requirements.txt.
 CORE_PIN = "0.25.1"
 
 

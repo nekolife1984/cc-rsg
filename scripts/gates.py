@@ -106,7 +106,7 @@ def _resolve_skill_path(specback_dir: str) -> Path:
     sp = Path(specback_dir) / ".skill-path"
     if sp.exists():
         return Path(sp.read_text(encoding="utf-8").strip()).resolve()
-    # fallback: sibling of `skills/specback/scripts/`
+    # fallback: sibling of `scripts/`
     return Path(__file__).resolve().parent.parent
 
 

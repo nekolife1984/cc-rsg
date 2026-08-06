@@ -1,109 +1,75 @@
 ---
 name: specback
-description: Reverse-engineer comprehensive specification documents from existing codebases through goal-driven reconnaissance, WBS-based parallel investigation, and iterative question-bank dialogue.
+description: Reverse-engineer comprehensive specification documents from existing codebases. Uses ADW (AI Developer Workflow) scripts.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion, WebFetch, WebSearch
 metadata:
   short-description: >-
     Reverse-spec generator for legacy codebases.
-    Phased reconnaissance → WBS → parallel investigation →
-    verification → dialogue refinement → delivery.
+    This skill is the REFERENCE IMPLEMENTATION.
+    The active workflow runs via ADW scripts (adws/adw_specback_*.py).
 ---
+# specback — Reference Implementation
 
-# specback (Reverse Spec Generator)
+> **ℹ️ This skill is a reference/archive.** The active workflow is now Python-based.
+> Run `uv run adws/adw_specback_full.py --target <path>` to execute the full pipeline.
+> For per-phase execution, see the individual scripts in `adws/`.
 
-A general-purpose framework that reverse-engineers maintenance- or delivery-targeted specification documents from existing codebases (legacy or current).
+## Quick start
 
-This skill operates in the "code → spec" direction; it is the symmetric counterpart of `cc-sdd` (Spec Driven Development).
+```bash
+# Full pipeline
+uv run adws/adw_specback_full.py --target /path/to/codebase
 
-> **🌐 Language policy:** English is the base language; Japanese is opt-in.
-> The Phase 0 dialogue confirms the output language. All machine-readable
-> elements (IDs, `[REF: ...]`, confidence markers, JSON keys, file slugs)
-> stay English regardless of language choice.
+# Or per-phase
+uv run adws/adw_specback_setup.py --target /path/to/codebase
+uv run adws/adw_specback_recon.py --target /path/to/codebase
+# ...
+```
 
----
+## Phase reference (archive)
 
-## Design principles
+The phase documents below are maintained as a **read-only archive**.
+They describe the original agent-driven workflow for reference and learning purposes.
 
-1. **Goal-driven**: Phase 0 fixes the goal through a choice-based dialogue persisted to `{output_dir}/.specback/goal.json`. All subsequent phases reference this goal.
-2. **Hybrid template decision**: Supports user's own template, agent-recommended template, or user-adjusted recommendation.
-3. **Reference-based inventory unit selection**: `references/inventory-units.md` lists typical units per language/framework.
-4. **Inventory-based gap prevention**: Enumerate every extractable unit from the code and mechanically verify coverage.
-5. **Question Bank populated at 3 moments**: end of reconnaissance, during sub-agent investigation, and at verification.
-6. **Sub-agents decide dynamically based on question severity**: Critical → block section; Important/nice-to-have → proceed with inference marker.
-7. **Question merge is automatic only for "obviously identical"**: Similar questions are grouped for user judgement.
-8. **Dialogue protocol is agent-driven**: Choice-based questions by default; free-form fallback.
-9. **Unanswerable questions marked `abandoned`**: Recorded in final spec under "unresolved items".
-10. **Dual-consumer handling reduced to one in goal**: Restart for multiple views instead of overloading a single spec.
-11. **Output language chosen in Phase 0**: English or Japanese. All natural-language output follows this choice.
-12. **Reader-comprehension chapter order**: The template chapter order IS the final document order. It follows the reader's comprehension flow — Overview (what the system is) → Feature specifications (what it can do) → Architecture overview (how it is structured, placed early) → detail chapters → Design decisions (why it is shaped this way, placed late) → Known constraints (what it cannot do). When adding or reordering chapters, judge the change against this flow. Presentation order is independent of generation order (Phase 3 dispatches chapters in parallel anyway). See `references/template-catalog.md` → "Chapter ordering principles".
+| Phase | Name | Archive file | Envelope |
+|-------|------|------------|----------|
+| 0 | Setup & Goal | `phases/phase-0-setup.md` | `GoalOutput` |
+| 1 | Recon & Template | `phases/phase-1-recon.md` | `ReconOutput` |
+| 2 | Plan & WBS | `phases/phase-2-wbs.md` | `WBSOutput` |
+| 3 | Investigate | `phases/phase-3-investigate.md` | `InvestigateOutput` |
+| 4 | Verify | `phases/phase-4-verify.md` | `VerifyOutput` |
+| 5 | Refine via Dialogue | `phases/phase-5-dialogue.md` | `DialogueOutput` |
+| 6 | Deliver | `phases/phase-6-deliver.md` | `DeliverOutput` |
+| 6.5 | Interactive Deep-Dive | `phases/phase-6-5-deepdive.md` | (interactive) |
+| 7 | Drift Detection | `phases/phase-7-drift.md` | `DriftOutput` |
+| 7b | REF Auto-Fix | `phases/phase-7b-ref-autofix.md` | (code) |
+| 7c | ChangeSpec | `phases/phase-7c-changespec.md` | `ChangeSpecOutput` |
+| 7d | Config Refresh | `phases/phase-7d-config-refresh.md` | (code) |
 
----
+## Supporting files (shared)
 
-## Mermaid styling contract (mandatory)
+These files are used by both the ADW scripts and this reference skill.
+All paths are relative to the repo root.
 
-Every Mermaid diagram MUST be **structure-only — no color, no node-level fill, no per-node styling**. The rendering host supplies a theme-aware palette via CSS variables. Hardcoded colors override the host palette and break dark mode.
-
-**Forbidden**: `style A fill:#...`, `classDef foo fill:#...`, `stroke:#...`, `color:#...`.
-
-**Allowed**: arrow types, edge labels, node shapes (rectangle/round/diamond/etc.), subgraphs, diagram types, direction modifiers.
-
-**Direction rule**: `graph TD` / `flowchart TD` (top-to-bottom) is the default for all graph/flowchart diagrams. Use `graph LR` (left-to-right) **only** when the diagram has ≤8 nodes AND the node labels are short enough to fit horizontally. For any diagram with many nodes, complex labels, or subgraphs, always prefer `TD`. This prevents the cramped/squished appearance that occurs when `LR` diagrams have many blocks.
-
-**Split rule**: When a diagram exceeds the following size thresholds, split it into multiple focused diagrams rather than cramming everything into one:
-
-| Diagram type | Max size before split | Split strategy |
-|:------------|:--------------------:|:---------------|
-| ER diagram | 20 entities | Split by domain / module / bounded context |
-| Sequence diagram | 15 messages | Split by use case / scenario |
-| classDiagram | 15 classes | Split by package / namespace |
-| stateDiagram-v2 | 10 states | Split by entity state machine |
-| graph/flowchart | 15 nodes | Split by sub-system / layer |
-
-Split diagrams use the same base heading with a suffix: `### 5.1-a: Sales domain` / `### 5.1-b: Inventory domain`. When splitting, add a brief sentence at the parent section explaining the split rationale.
-
-**Active-diagram rule**: Every section describing something complex — whether processing (conditional branching, multi-step flows, state transitions, decision logic, async/callback chains), structure (module relationships, data flow, class hierarchies, ER), or behavior (authorization flows, screen transitions, integration sequences) — MUST be accompanied by an appropriate Mermaid diagram (flowchart, sequence, state-diagram, ER, component, class, etc.). A section that uses text alone where a diagram would make things clearer is a defect. When in doubt, add a diagram — readers always benefit from the visual.
-
-Use **shape** (not color) for visual emphasis.
-
----
-
-## Phase overview
-
-| Phase | Name | Detail file | Main deliverables |
-|-------|------|------------|------------|
-| 0 | Setup & Goal | `phases/phase-0-setup.md` | `{output_dir}/.specback/goal.json` |
-| 1 | Recon & Template | `phases/phase-1-recon.md` | `recon-report.md`, template |
-| 2 | Plan & WBS | `phases/phase-2-wbs.md` | `inventory.json`, `wbs.json` |
-| 3 | Investigate | `phases/phase-3-investigate.md` → branches to `phase-3a-comprehensive.md` or `phase-3b-outline.md` by depth_mode | `{output_dir}/.specback/drafts/*.md` (intermediate) |
-| 4 | Verify | `phases/phase-4-verify.md` | coverage report |
-| 5 | Refine via Dialogue | `phases/phase-5-dialogue.md` | resolved `questions.json` |
-| 6 | Deliver | `phases/phase-6-deliver.md` | `{output_dir}/` (final spec; default: `specs/`) |
-| 6.5 | Interactive Deep-Dive | `phases/phase-6-5-deepdive.md` | on-demand deep-dive chapters |
-| 7 | Drift Detection | `phases/phase-7-drift.md` | `drift-report.md` |
-| 7b | REF Auto-Fix | `phases/phase-7b-ref-autofix.md` | corrected REF lines |
-| 7c | ChangeSpec | `phases/phase-7c-changespec.md` | `change-spec.md` |
-| 7d | Config Refresh | `phases/phase-7d-config-refresh.md` | updated `source-map.json`, `trace.json`, `state.json` |
-
-## Common reference files
-
-| File | Contents |
+| Path | Contents |
 |------|----------|
-| `docs/question-bank.md` | Question Bank data structure, categories, severity, status transitions |
-| `docs/subagent-behavior.md` | Sub-agent prompt template, decision logic |
-| `docs/state-management.md` | `state.json` schema, resume behaviour |
-| `docs/doubt-pass.md` | Doubt-pass adversarial review protocol, trigger rules, confidence scoring, troubleshooting |
-| `references/gates.md` | `scripts/gates.py` — unified Gate interface for verification checks |
-| `references/data_types.md` | `scripts/data_types.py` — typed envelopes for phase output |
-
----
-
-## Execution rules (MUST read)
-
-1. **Phase descriptions** are in the chart above — load the corresponding `phases/phase-{N}.md` file when entering a new phase.
-2. **Question Bank operations** → read `docs/question-bank.md` before Phase 1 step 4.
-3. **Sub-agent delegation** → read `docs/subagent-behavior.md` before Phase 3.
-4. **State management & resume** → read `docs/state-management.md` when resuming. It contains a phase→file mapping table that tells you exactly which detail files to load based on `state.json.current_phase`.
-5. **On resume, after user confirms, load the phase file corresponding to `state.json.current_phase`** (see mapping in `docs/state-management.md`). Without this, the phase instructions are not in the system prompt.
-6. **The 12 design principles above are universal across all phases.**
-7. **The Mermaid styling contract applies to every diagram in `.specback/drafts/` and `{output_dir}/`.**
-8. **Context-saving note**: This SKILL.md is intentionally lightweight. Phase detail files are loaded only when needed via the Read tool, reducing per-invocation context overhead — especially important for Claude Code which injects SKILL.md into the system prompt.
+| `scripts/gates.py` | GateReport + 4 gates (coverage_mece, schema_valid, traceability_full, drift_detected) |
+| `scripts/data_types.py` | Typed envelopes for phase output |
+| `references/gates.md` | Gate reference (EN) |
+| `references/gates.ja.md` | Gate reference (JA) |
+| `references/data_types.md` | Typed envelopes reference |
+| `references/template-catalog.md` | Template catalog |
+| `references/inventory-units.md` | Inventory units per language |
+| `references/verification-checklists.md` | Verification checklists |
+| `references/drift-detection.md` | Drift detection protocol |
+| `references/change-specification.md` | ChangeSpec protocol |
+| `references/outline-tables.md` | Outline table patterns |
+| `references/question-categories.md` | Question Bank categories |
+| `references/subagent-prompt.md` | Sub-agent prompt template |
+| `schemas/goal.schema.json` | Goal JSON schema |
+| `schemas/questions.schema.json` | Questions JSON schema |
+| `schemas/state.schema.json` | State JSON schema |
+| `docs/skill-behavior/question-bank.md` | Question Bank data structure |
+| `docs/skill-behavior/subagent-behavior.md` | Sub-agent behavior docs |
+| `docs/skill-behavior/state-management.md` | State management docs |
+| `docs/skill-behavior/doubt-pass.md` | Doubt-pass protocol |

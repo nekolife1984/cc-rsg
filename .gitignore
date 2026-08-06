@@ -47,3 +47,4 @@ Thumbs.db
 
 # Graphify 自動生成コードグラフ（コードから再生成可能）
 graphify-out/
+.hermes/

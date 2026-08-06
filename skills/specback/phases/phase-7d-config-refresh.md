@@ -84,8 +84,8 @@ When `goal.multi_scope == false` (default), run the procedure once with `{output
    > **Usage examples (manual invocation):**
    > ```bash
    > # Manual refresh (standalone, outside agent workflow)
-   > python skills/specback/scripts/source-map.py --target . --output-dir {output_dir}/.specback
-   > python skills/specback/scripts/build-trace.py --specback-dir {output_dir}/.specback
+   > python scripts/source-map.py --target . --output-dir {output_dir}/.specback
+   > python scripts/build-trace.py --specback-dir {output_dir}/.specback
    > # Then update state.json manually
    > ```
 

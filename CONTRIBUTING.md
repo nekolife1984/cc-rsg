@@ -13,7 +13,7 @@
 
 ```bash
 # 0. テストに必要な依存をインストール（tree-sitter grammars は任意）
-pip install -r skills/specback/scripts/dev-requirements.txt
+pip install -r scripts/dev-requirements.txt
 
 # 1. main からブランチを作成
 git checkout main
@@ -170,7 +170,7 @@ def test_your_lang_role_typing() -> None:
 
 | # | ファイル | 変更内容 |
 |---|---------|---------|
-| 1 | `skills/specback/references/inventory-units.md` | 言語セクションを追加。対応フレームワークの典型的な抽出単位を記載 |
+| 1 | `references/inventory-units.md` | 言語セクションを追加。対応フレームワークの典型的な抽出単位を記載 |
 | 2 | `README.md` | 「Supported Languages」セクションに対象言語を追記 |
 | 3 | `README.md` | Roadmap から該当マイルストーンを ~~完了~~ に |
 
@@ -191,14 +191,14 @@ mypy scripts/source_map_v2/ --ignore-missing-imports --follow-imports=skip
 
 ## テンプレートを追加する
 
-`skills/specback/templates/` に新しい仕様書テンプレートを追加する手順です。
+`templates/` に新しい仕様書テンプレートを追加する手順です。
 
 ### 編集するファイル
 
 | # | ファイル | 変更内容 |
 |---|---------|---------|
-| 1 | `skills/specback/templates/<name>.md` | **新規作成**。既存テンプレート（例: `web-app.md`）を参考に構造化 |
-| 2 | `skills/specback/references/template-catalog.md` | 新しいテンプレートのエントリを追加 |
+| 1 | `templates/<name>.md` | **新規作成**。既存テンプレート（例: `web-app.md`）を参考に構造化 |
+| 2 | `references/template-catalog.md` | 新しいテンプレートのエントリを追加 |
 | 3 | `README.md` | 「Templates」セクションにテンプレート名を追記 |
 | 4 | `README.md` | Roadmap から該当マイルストーンを ~~完了~~ に（該当する場合） |
 
@@ -211,13 +211,13 @@ mypy scripts/source_map_v2/ --ignore-missing-imports --follow-imports=skip
 
 ## 検証チェックリストを拡充する
 
-`skills/specback/references/verification-checklists.md` に新しいチェック項目を追加する手順です。
+`references/verification-checklists.md` に新しいチェック項目を追加する手順です。
 
 ### 編集するファイル
 
 | # | ファイル | 変更内容 |
 |---|---------|---------|
-| 1 | `skills/specback/references/verification-checklists.md` | 新しいチェック項目を適切なカテゴリに追加 |
+| 1 | `references/verification-checklists.md` | 新しいチェック項目を適切なカテゴリに追加 |
 | 2 | `README.md` | Roadmap から該当マイルストーンを ~~完了~~ に（該当する場合） |
 
 ### 追加時の注意点

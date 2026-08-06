@@ -69,7 +69,7 @@ Install optional Python dependencies (tree-sitter grammars for precise source-co
 ./install.sh --install-deps
 ```
 
-> **Note:** All specback scripts work with Python standard library only. The optional dependencies (`tree-sitter` + per-language grammars) enable fine-grained source-code analysis via `source_map_v2`. Without them, the system falls back to file-level units with a clear warning. See `skills/specback/scripts/requirements.txt` for the full list.
+> **Note:** All specback scripts work with Python standard library only. The optional dependencies (`tree-sitter` + per-language grammars) enable fine-grained source-code analysis via `source_map_v2`. Without them, the system falls back to file-level units with a clear warning. See `scripts/requirements.txt` for the full list.
 
 ### Manual installation (example)
 
@@ -78,11 +78,13 @@ The installer above is recommended. To install manually, copy to your agent's sk
 ```bash
 # As a project-level skill (e.g. for Claude Code)
 mkdir -p .claude/skills/
-cp -r skills/specback .claude/skills/
+cp -r skills/specback .claude/skills/  # スキル（SKILL.md + phases/ アーカイブ）
+cp -r scripts references schemas .claude/skills/specback/  # 共有アセット
 
 # Or as a user-level skill
 mkdir -p ~/.claude/skills/
 cp -r skills/specback ~/.claude/skills/
+cp -r scripts references schemas ~/.claude/skills/specback/
 ```
 
 ### Verify installation
@@ -155,7 +157,7 @@ Japanese output is fully supported: select `日本語 (Japanese)` in Phase 0 Ste
 | 6 | Deliver | Output final deliverables to `.specback/final/` |
 | **6.5** | **Interactive Deep-Dive** | (interactive mode only) On-demand deep-dive chapter generation guided by user |
 
-See [`skills/specback/SKILL.md`](skills/specback/SKILL.md) for details.
+See [`skills/specback/SKILL.md`](skills/specback/SKILL.md) and [`adws/`](adws/) for details.
 
 ---
 
@@ -438,7 +440,7 @@ git clone https://github.com/nekolife1984/specback.git
 ./install.sh --install-deps
 ```
 
-> **注意:** specback の全スクリプトは Python 標準ライブラリのみで動作します。オプション依存（`tree-sitter` + 各言語 grammar）は `source_map_v2` による精密なソースコード解析を可能にします。なくても file-level のユニットにフォールバックし、警告を表示します。詳細は `skills/specback/scripts/requirements.txt` を参照してください。
+> **注意:** specback の全スクリプトは Python 標準ライブラリのみで動作します。オプション依存（`tree-sitter` + 各言語 grammar）は `source_map_v2` による精密なソースコード解析を可能にします。なくても file-level のユニットにフォールバックし、警告を表示します。詳細は `scripts/requirements.txt` を参照してください。
 
 ### 手動配置 (例)
 
@@ -447,7 +449,8 @@ git clone https://github.com/nekolife1984/specback.git
 ```bash
 # 例: Claude Code のプロジェクトレベルスキルとして
 mkdir -p .claude/skills/
-cp -r skills/specback .claude/skills/
+cp -r skills/specback .claude/skills/  # スキル（SKILL.md + phases/ アーカイブ）
+cp -r scripts references schemas .claude/skills/specback/  # 共有アセット
 ```
 
 ### 動作確認
@@ -520,7 +523,7 @@ Drafts（中間ドラフト）は出力先に関わらず常に `.specback/draft
 | 6 | Deliver | 最終成果物を `.specback/final/` に出力 |
 | **6.5** | **Interactive Deep-Dive** | (interactive モード時のみ) 利用者の指示で深掘り章を on-demand 生成 |
 
-詳細は [`skills/specback/SKILL.md`](skills/specback/SKILL.md) を参照してください。
+詳細は [`skills/specback/SKILL.md`](skills/specback/SKILL.md) および [`adws/`](adws/) を参照してください。
 
 ---
 

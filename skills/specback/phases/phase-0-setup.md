@@ -40,7 +40,7 @@ When `goal.multi_scope == false` (default), run once with `{output_dir}/.specbac
      mkdir -p "{output_dir}/.specback"
      echo "/absolute/path/to/specback/skill/root" > "{output_dir}/.specback/.skill-path"
      ```
-     **Replace `/absolute/path/to/specback/skill/root`** with the real path. The agent reading this instruction knows where `SKILL.md` is installed (e.g. `.claude/skills/specback/` for Claude Code; the agent substitutes the actual absolute path). Once written, all later phases resolve files via `$(cat {output_dir}/.specback/.skill-path)/scripts/xxx.py`.
+     **Replace `/absolute/path/to/repo/root`** with the real path. The ADW entry point lives at `adws/adw_specback_full.py` (or per-phase scripts in `adws/`). The skill reference files and shared utilities are at `references/`, `scripts/`, `schemas/`, etc. in the repo root.
    - If an existing `{SPECBACK_DIR}/state.json` is found, branch to resume mode (see "State management and resume" below). Resume mode re-reads `.skill-path` before continuing, in case the skill was reinstalled or upgraded.
 
 3. **Output language selection**
