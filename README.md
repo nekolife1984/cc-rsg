@@ -42,7 +42,30 @@ In the LLM era, asking an AI to "make a spec from this code" produces visually p
 
 ## Installation
 
-### Quick install (recommended)
+specback offers **two workflows** — pick the one that fits your setup:
+
+| | Agent-driven (skill) | ADW scripts (CLI) |
+|---|---|---|
+| **Run** | Load skill in your coding agent | `uv run adws/adw_specback_full.py` |
+| **CLI needed?** | ❌ No | ✅ Yes (Python + uv) |
+| **Best for** | Copilot/Cursor/chat-first | CI/CD/headless/deterministic |
+
+### Skill Stamp Install (CLI — new)
+
+Stamp specback into an existing project directory with lockfile-based drift detection:
+
+```bash
+./install.sh /path/to/your-project
+```
+
+Options:
+- `--check` — Drift detection (no changes made)
+- `--force` — Overwrite stamped files (git commit first recommended)
+- `--dry-run` — Show what would be stamped
+
+See [docs/en/06-install-stamp.md](docs/en/06-install-stamp.md) or [docs/ja/06-install-stamp.md](docs/ja/06-install-stamp.md) for details.
+
+### Quick Install (skill — no CLI needed)
 
 Clone the repository and run the installer from the **project root directory** (not inside the repo):
 
@@ -58,23 +81,6 @@ Windows:
 git clone https://github.com/nekolife1984/specback.git
 .\install.ps1
 ```
-
-### Skill Stamp Install (new)
-
-Stamp specback into an existing project directory with lockfile-based drift detection:
-
-```bash
-./install.sh /path/to/your-project
-```
-
-Options:
-- `--check` — Drift detection (no changes made)
-- `--force` — Overwrite stamped files (git commit first recommended)
-- `--dry-run` — Show what would be stamped
-
-See [docs/en/06-install-stamp.md](docs/en/06-install-stamp.md) or [docs/ja/06-install-stamp.md](docs/ja/06-install-stamp.md) for details.
-
-### Legacy install options
 
 Dry-run mode:
 ```bash
@@ -514,9 +520,17 @@ LLM時代になり、AIに「このコードから仕様書を作って」と頼
 
 ## インストール
 
+specbackには2つの使い方があるよ：
+
+| | エージェント駆動（スキル版） | ADWスクリプト（CLI版） |
+|---|---|---|
+| **実行方法** | エージェントにスキルを読み込む | `uv run adws/adw_specback_full.py` |
+| **CLI必要？** | ❌ 不要 | ✅ 必要（Python + uv） |
+| **おすすめ** | Copilot/Cursor/対話重視 | CI/CD/再現性重視 |
+
 日本語版はこちら: [スキルスタンプインストール](docs/ja/06-install-stamp.md)
 
-### スキルスタンプインストール（新機能）
+### スキルスタンプインストール（CLI版・新機能）
 
 ロックファイルベースのドリフト検出付きで、既存プロジェクトに specback をスタンプ:
 
@@ -531,7 +545,7 @@ LLM時代になり、AIに「このコードから仕様書を作って」と頼
 
 詳細は [docs/ja/06-install-stamp.md](docs/ja/06-install-stamp.md) を参照。
 
-### クイックインストール (推奨)
+### クイックインストール（スキル版・CLI不要）
 
 ```bash
 git clone https://github.com/nekolife1984/specback.git

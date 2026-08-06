@@ -8,13 +8,32 @@ metadata:
     This skill is the REFERENCE IMPLEMENTATION.
     The active workflow runs via ADW scripts (adws/adw_specback_*.py).
 ---
-# specback — Reference Implementation
+# specback — Agent-Driven Workflow
 
-> **ℹ️ This skill is a reference/archive.** The active workflow is now Python-based.
-> Run `uv run adws/adw_specback_full.py --target <path>` to execute the full pipeline.
-> For per-phase execution, see the individual scripts in `adws/`.
+> **Two workflows are available.** Choose the one that fits your environment:
+>
+> | | Agent-driven (this skill) | ADW scripts |
+> |---|---|---|
+> | **Run method** | Load skill in your coding agent | `uv run adws/adw_specback_full.py` |
+> | **CLI required?** | ❌ No — pure agent interaction | ✅ Yes — Python + uv |
+> | **Best for** | Copilot, Cursor, chat-first users | CI/CD, headless, deterministic runs |
+> | **Phase control** | Interactive (agent asks you) | `--resume`, `--non-interactive` flags |
+>
+> Both produce equivalent results. Pick whichever works for your setup.
 
 ## Quick start
+
+### Agent-driven (this skill — no CLI needed)
+
+1. Install the skill to your agent:
+   ```bash
+   ./install.sh --agent claude --level project
+   ```
+2. Navigate to your target codebase
+3. Invoke the skill (`/specback` or equivalent)
+4. Follow the agent's prompts through each phase
+
+### ADW scripts (Python CLI)
 
 ```bash
 # Full pipeline
@@ -26,10 +45,10 @@ uv run adws/adw_specback_recon.py --target /path/to/codebase
 # ...
 ```
 
-## Phase reference (archive)
+## Phase reference
 
-The phase documents below are maintained as a **read-only archive**.
-They describe the original agent-driven workflow for reference and learning purposes.
+The phase documents describe the agent-driven workflow in detail.
+Each phase is a standalone prompt sequence you can run with your coding agent.
 
 | Phase | Name | Archive file | Envelope |
 |-------|------|------------|----------|
