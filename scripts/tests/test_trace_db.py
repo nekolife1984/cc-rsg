@@ -630,6 +630,42 @@ class TestEdgeCases:
         finally:
             os.remove(state_path)
 
+    def test_export_import_roundtrip(self, tmp_db_path: str):
+        """Export→Import round-trip should preserve all question data."""
+        import json, os, tempfile
+        # Create source DB with a resolved question
+        db1 = TraceDB(tmp_db_path + "_src.db")
+        db1.session_start("rt_001")
+        db1.phase_start("rt_001", "ph_01", seq=1, name="test", kind="code")
+        db1.question_save("Q-RT1", "ph_01", "Round trip test?",
+                           severity="critical", status="resolved",
+                           resolution="It works!", category="architecture_decision")
+        db1.session_finish("rt_001", ok=True)
+
+        # Export
+        state_path = tmp_db_path + "_rt.json"
+        db1.export_to_state_json(state_path)
+        db1.close()
+
+        # Import into a new DB
+        db2 = TraceDB(tmp_db_path + "_dst.db")
+        count = db2.import_from_state_json(state_path)
+        assert count > 0
+
+        # Verify question survived the round trip
+        qs = db2.list_questions()
+        assert len(qs) == 1
+        assert qs[0]["id"] == "Q-RT1"
+        assert qs[0]["status"] == "resolved", f"Expected resolved, got {qs[0]['status']}"
+        assert qs[0]["resolution"] == "It works!"
+        assert qs[0]["question_text"] == "Round trip test?"
+        assert qs[0]["severity"] == "critical"
+
+        db2.close()
+        for p in [state_path, tmp_db_path + "_src.db", tmp_db_path + "_dst.db"]:
+            if os.path.exists(p):
+                os.remove(p)
+
     def test_invalid_phase_kind(self, db: TraceDB):
         """Any phase kind string is accepted (no CHECK constraint)."""
         db.session_start("s_kind")
