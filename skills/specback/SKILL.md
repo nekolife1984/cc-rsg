@@ -93,6 +93,7 @@ Use **shape** (not color) for visual emphasis.
 | `docs/state-management.md` | `state.json` schema, resume behaviour |
 | `docs/doubt-pass.md` | Doubt-pass adversarial review protocol, trigger rules, confidence scoring, troubleshooting |
 | `references/gates.md` | `scripts/gates.py` — unified Gate interface for verification checks |
+| `references/data_types.md` | `scripts/data_types.py` — typed envelopes for phase output |
 
 ---
 
