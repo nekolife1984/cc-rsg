@@ -194,7 +194,8 @@ def main() -> int:
                 print(f"  ❌ {f}")
             return run.finish(accepted=False)
 
-        print(f"  ✅ All {len(args.gates or 4)} gate(s) passed")
+        gate_count = len(args.gates) if args.gates else 4
+        print(f"  ✅ All {gate_count} gate(s) passed")
         return run.finish(accepted=True)
 
 
