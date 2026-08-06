@@ -13,7 +13,7 @@ import json
 import uuid
 from contextlib import contextmanager
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterator, Literal
 
@@ -30,6 +30,19 @@ def _call_llm(prompt: str, agent_def: dict | None = None, timeout: int = 120) ->
     return _AGENTS_MODULE.call_llm(prompt, agent_def=agent_def, timeout=timeout)
 
 
+# Phase name → agent config key mapping
+_PHASE_TO_AGENT: dict[str, str] = {
+    "setup": "engineer",
+    "recon": "scout",
+    "wbs": "engineer",
+    "investigate": "investigator",
+    "verify": "engineer",
+    "refine": "engineer",
+    "deliver": "engineer",
+    "drift": "engineer",
+    "changespec": "changespec",
+}
+
 PhaseKind = Literal["engineer", "agent", "code"]
 
 
@@ -39,7 +52,8 @@ def _resolve_agent_def(phase_name: str) -> dict | None:
         from adws.adw_modules import agents as agents_mod  # noqa
         config_path = Path(__file__).resolve().parent.parent / "adw_sssf_config" / "sssf.config.yaml"
         cfg = agents_mod.load_config(str(config_path))
-        return cfg.get("agents", {}).get(phase_name)
+        agent_key = _PHASE_TO_AGENT.get(phase_name, phase_name)
+        return cfg.get("agents", {}).get(agent_key)
     except (FileNotFoundError, KeyError, AttributeError):
         return None
 
@@ -79,7 +93,7 @@ class PhaseContext:
 
     def log(self, **kwargs: Any) -> None:
         """Log structured data during this phase."""
-        entry = {"ts": datetime.utcnow().isoformat(), **kwargs}
+        entry = {"ts": datetime.now(timezone.utc).isoformat(), **kwargs}
         self._log.append(entry)
 
     def call(self, ac: AgentCall) -> Any:
@@ -110,6 +124,19 @@ class Run:
     _completed_phases: set[str] = field(default_factory=set)
     _completed: bool = False
 
+    # ── Public API for pipeline orchestration ─────────────────────────
+
+    def is_completed(self, phase_name: str) -> bool:
+        """Check if a phase has been completed (public API)."""
+        return phase_name in self._completed_phases
+
+    def mark_completed(self, phase_name: str) -> None:
+        """Mark a phase as completed and persist state (public API)."""
+        self._completed_phases.add(phase_name)
+        self._save_state()
+
+    # ── Context manager for phase execution ───────────────────────────
+
     @contextmanager
     def phase(self, pp: PhaseParams) -> Iterator[PhaseContext]:
         """Context manager for a single phase execution.
@@ -118,7 +145,6 @@ class Run:
         and yield a no-op context.
         """
         if pp.name in self._completed_phases:
-            # Resume: phase already done — yield a no-op context
             noop = PhaseContext(name=pp.name, kind=pp.kind)
             noop.log(skipped=True, reason="Already completed (resume)")
             yield noop
@@ -130,12 +156,12 @@ class Run:
             "kind": pp.kind,
             "owner": pp.owner,
             "description": pp.description,
-            "started_at": datetime.utcnow().isoformat(),
+            "started_at": datetime.now(timezone.utc).isoformat(),
         }
         try:
             yield ctx
         finally:
-            phase_record["completed_at"] = datetime.utcnow().isoformat()
+            phase_record["completed_at"] = datetime.now(timezone.utc).isoformat()
             phase_record["log"] = ctx._log
             self._phases.append(phase_record)
             self._completed_phases.add(pp.name)
@@ -145,10 +171,13 @@ class Run:
         """Complete the run and return exit code.
 
         Returns 0 on acceptance, 1 on rejection.
+        Should be called OUTSIDE the with run.phase() block.
         """
         self._completed = True
         self._save_state()
         return 0 if accepted else 1
+
+    # ── State persistence ─────────────────────────────────────────────
 
     def _state_path(self) -> Path | None:
         """Get the path to state.json for this run."""
@@ -178,7 +207,7 @@ class Run:
         try:
             state = json.loads(state_path.read_text(encoding="utf-8"))
             return set(state.get("completed_phases", []))
-        except (json.JSONDecodeError, KeyError):
+        except json.JSONDecodeError:
             return None
 
 
@@ -193,7 +222,7 @@ def ensure(
     ``specback_dir``, the run resumes with already-completed phases skipped.
 
     Args:
-        cfg: ADW configuration dict (from sssf.config.yaml).
+        cfg: ADW configuration dict (from sssf.config.yaml). Reserved for future use.
         adw_id: Existing run ID for resume, or None for new.
         specback_dir: Path to .specback directory (for state persistence).
 
@@ -205,7 +234,6 @@ def ensure(
 
     run = Run(adw_id=run_id, specback_dir=sb_path)
 
-    # Resume: load completed phases from saved state
     if adw_id and sb_path:
         completed = Run._load_state(sb_path, adw_id)
         if completed is not None:

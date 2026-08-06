@@ -34,7 +34,11 @@ def add_common_args(parser: argparse.ArgumentParser) -> None:
 def resolve_specback_dir(target: str, specback_dir: str | None) -> Path:
     """Resolve the .specback directory path.
 
-    Defaults to <target>/.specback if not explicitly provided.
+    If ``specback_dir`` is explicitly provided, returns it resolved.
+    Otherwise defaults to ``<target>/.specback``.
+
+    Note: The full pipeline and setup script override this default
+    to use ``<output_dir>/.specback`` instead.
     """
     if specback_dir:
         return Path(specback_dir).resolve()

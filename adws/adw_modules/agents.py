@@ -13,6 +13,7 @@ a unified ``call_llm()`` interface that supports multiple CLI backends:
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -79,7 +80,7 @@ def _resolve_backend(agent_def: dict[str, Any] | None) -> CLIBackend:
         return agent_def["cli"]  # type: ignore[return-value]
 
     env_cli = _normalize_backend(
-        __import__("os").environ.get("ADW_CLI", "")
+        os.environ.get("ADW_CLI", "")
     )
     if env_cli:
         return env_cli
@@ -126,36 +127,29 @@ def build_cli_command(
 
     if backend == "opencode":
         cmd = [binary, "run", prompt]
-        # Model override via env or config
-        model = (agent_def or {}).get("model") or __import__("os").environ.get("ADW_MODEL")
+        model = (agent_def or {}).get("model") or os.environ.get("ADW_MODEL")
         if model:
-            cmd = [binary, "run", f"--model", model, prompt]
+            cmd.extend(["--model", model])
         return cmd
 
     if backend == "claude-code":
         cmd = [binary, "-p", prompt]
         model = (agent_def or {}).get("model")
         if model:
-            cmd = [binary, "-p", prompt, "--model", model]
+            cmd.extend(["--model", model])
         return cmd
 
     if backend == "codex":
-        # Codex CLI: codex run <prompt>
         return [binary, "run", prompt]
 
     if backend == "copilot":
-        # Priority:
-        # 1. Standalone `copilot` binary (official: https://gh.io/copilot-cli)
-        # 2. gh copilot subcommand (legacy extension fallback)
         import shutil
         if shutil.which("copilot"):
-            # Standalone: copilot -p "prompt"
             cmd = [binary, "-p", prompt]
             model = (agent_def or {}).get("model")
             if model:
-                cmd = [binary, "-p", prompt, "--model", model]
+                cmd.extend(["--model", model])
             return cmd
-        # Legacy fallback: gh copilot -p "prompt"
         if shutil.which("gh"):
             return ["gh", "copilot", "-p", prompt]
         raise FileNotFoundError(
@@ -165,8 +159,6 @@ def build_cli_command(
         )
 
     if backend == "pi":
-        # Pi.ai CLI: pi <prompt>
-        # The pi CLI may support --model for model selection
         cmd = [binary, prompt]
         model = (agent_def or {}).get("model")
         if model:

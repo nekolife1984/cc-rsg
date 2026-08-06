@@ -25,14 +25,8 @@ sys.path.insert(0, str(_PROJECT_ROOT))
 from adws.adw_modules import session  # noqa: E402
 from adws.adw_modules.utils import (  # noqa: E402
     add_common_args,
-    resolve_specback_dir,
 )
 
-
-# Phase definitions: (name, module_path, phase_kind, description)
-# Phase 0, 5 are interactive (engineer) — skip in non-interactive mode
-# Phase 1, 2, 3 are agent-based — use AgentCall (falls back to file analysis)
-# Phase 4, 6, 7, 7b, 7c, 7d are code-only
 
 PHASES: list[dict[str, str | bool]] = [
     {"name": "setup", "script": "adw_specback_setup.py", "kind": "engineer",
@@ -54,6 +48,9 @@ PHASES: list[dict[str, str | bool]] = [
     {"name": "changespec", "script": "adw_specback_changespec.py", "kind": "code",
      "desc": "Change specification", "interactive": True},
 ]
+
+# Phases where failure is non-fatal (self-reporting)
+_NON_FATAL_PHASES = {"verify", "drift"}
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -98,15 +95,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _run_adw(script_name: str, base_args: list[str]) -> int:
-    """Run a single ADW script as a subprocess.
-
-    Args:
-        script_name: Filename of the ADW script (e.g. ``adw_specback_setup.py``).
-        base_args: Shared CLI arguments.
-
-    Returns:
-        Exit code (0 = success, nonzero = failure).
-    """
+    """Run a single ADW script as a subprocess."""
     script_path = _PROJECT_ROOT / "adws" / script_name
     if not script_path.exists():
         print(f"  ⚠️  Script not found: {script_name}", file=sys.stderr)
@@ -118,9 +107,9 @@ def _run_adw(script_name: str, base_args: list[str]) -> int:
 
     result = subprocess.run(
         [sys.executable, str(script_path)] + base_args,
-        capture_output=False,  # Let output flow through to user
+        capture_output=False,
         text=True,
-        timeout=600,  # 10 minutes per phase
+        timeout=600,
     )
     return result.returncode
 
@@ -135,16 +124,17 @@ def main() -> int:
         return 1
 
     output_dir = Path(args.output_dir or "specs").resolve()
-    specback_dir = output_dir / ".specback"
+    specback_dir = Path(args.specback_dir).resolve() if args.specback_dir else (output_dir / ".specback")
     specback_dir.mkdir(parents=True, exist_ok=True)
 
-    # Build base CLI args shared across all phases
     base_args = [
         "--target", str(target),
         "--output-dir", str(output_dir),
     ]
     if args.adw_id:
         base_args.extend(["--adw-id", args.adw_id])
+    if args.specback_dir:
+        base_args.extend(["--specback-dir", args.specback_dir])
     if args.non_interactive:
         base_args.append("--non-interactive")
     if args.depth_mode:
@@ -152,10 +142,8 @@ def main() -> int:
     if args.language:
         base_args.extend(["--language", args.language])
 
-    # Determine which phases to skip
     skip_phases = set(args.skip_phases or [])
     if args.from_phase:
-        # Skip phases before --from-phase
         found = False
         for p in PHASES:
             if p["name"] == args.from_phase:
@@ -163,47 +151,37 @@ def main() -> int:
             if not found:
                 skip_phases.add(p["name"])
 
-    # Create/Resume run
     run = session.ensure(
         adw_id=args.adw_id,
         specback_dir=specback_dir,
     )
 
-    # Execute each phase
     for phase in PHASES:
         pname = phase["name"]
         script = phase["script"]
-        kind = phase["kind"]
         interactive = phase["interactive"]
 
-        # Skip if already completed (resume mode)
-        if pname in run._completed_phases:
+        if run.is_completed(pname):
             print(f"  ⏭️  Phase '{pname}' already completed — skipping")
             continue
 
-        # Skip if user requested
         if pname in skip_phases:
             print(f"  ⏭️  Phase '{pname}' skipped by user request")
             continue
 
-        # Skip interactive phases in non-interactive mode
         if interactive and args.non_interactive:
             print(f"  ⏭️  Phase '{pname}' skipped (interactive, --non-interactive)")
             continue
 
-        # Run the phase
         rc = _run_adw(script, base_args)
 
         if rc != 0:
             print(f"\n  ❌ Phase '{pname}' failed with exit code {rc}", file=sys.stderr)
-            # Don't stop on verify/drift failures — they report their own status
-            if kind == "code":
+            if pname in _NON_FATAL_PHASES:
                 continue
             return rc
 
-        # Mark completed
-        run._completed_phases.add(pname)
-        run._save_state()
+        run.mark_completed(pname)
 
     print(f"\n{'='*60}")
     print(f"  ✅ Full pipeline complete!")

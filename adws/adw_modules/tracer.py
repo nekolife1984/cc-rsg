@@ -7,7 +7,7 @@ Future: migrate to SQLite (#205).
 from __future__ import annotations
 
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -25,7 +25,7 @@ class Tracer:
     def emit(self, adw_id: str, event_type: str, data: dict[str, Any]) -> None:
         """Write a single event to the trace file."""
         event = {
-            "ts": datetime.utcnow().isoformat(),
+            "ts": datetime.now(timezone.utc).isoformat(),
             "adw_id": adw_id,
             "type": event_type,
             "data": data,

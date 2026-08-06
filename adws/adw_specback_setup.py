@@ -14,7 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
@@ -48,7 +48,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--language",
         type=str, default=None,
         choices=["en", "ja"],
-        help="Output language (requires --non-interactive)",
+        help="Output language (overrides interactive prompt if set)",
     )
     parser.add_argument(
         "--envelope-out",
@@ -78,8 +78,10 @@ def _ask(question: str, choices: list[str], default: int = 0) -> str:
             if 1 <= num <= len(choices):
                 return choices[num - 1]
             print(f"Please enter 1-{len(choices)}")
-        except (ValueError, EOFError):
-            return raw or choices[default]
+        except ValueError:
+            print(f"Please enter 1-{len(choices)}")
+        except EOFError:
+            return choices[default]
 
 
 def _ask_multi(question: str, choices: list[str]) -> list[str]:
@@ -98,7 +100,9 @@ def _ask_multi(question: str, choices: list[str]) -> list[str]:
             if selected:
                 return selected
             print("No valid selections")
-        except (ValueError, EOFError):
+        except ValueError:
+            print("No valid selections")
+        except EOFError:
             return [choices[0]]
 
 
@@ -120,7 +124,7 @@ def run_setup(
         target: Target codebase directory.
         output_dir: Output directory for spec.
         non_interactive: Skip interactive prompts (use defaults).
-        language: Force output language (requires non_interactive).
+        language: Force output language.
         resume: Resume from existing state.json.
 
     Returns:
@@ -128,14 +132,12 @@ def run_setup(
     """
     specback_dir = resolve_specback_dir(str(target), str(output_dir / ".specback") if output_dir else None)
 
-    # Resume mode: load existing goal.json
     goal_path = specback_dir / "goal.json"
     if resume and goal_path.exists():
         existing = GoalOutput.from_dict(json.loads(goal_path.read_text(encoding="utf-8")))
         print(f"  🔄 Resumed from {goal_path}")
         return existing
 
-    # Determine output directory
     if output_dir:
         out = str(output_dir)
     elif non_interactive:
@@ -149,9 +151,7 @@ def run_setup(
             out = "specs"
         elif out == "docs":
             out = "docs"
-        # else: use whatever the user typed as custom path
 
-    # Language selection
     if language:
         lang: Literal["en", "ja"] = language
     elif non_interactive:
@@ -163,14 +163,12 @@ def run_setup(
         )
         lang = "en" if sel.startswith("English") else "ja"
 
-    # Non-interactive: use all defaults
     if non_interactive:
         return GoalOutput(
             output_language=lang,
             output_dir=out,
         )
 
-    # Q1-Q6 interactive
     primary_reader = _ask(
         "Who is the primary reader of the spec?",
         ["Maintenance developer", "Delivery customer", "SME", "Regulator", "Other"],
@@ -250,9 +248,9 @@ def main() -> int:
         return 1
 
     output_dir = Path(args.output_dir or "specs")
-    specback_dir = output_dir / ".specback"
+    specback_dir = Path(args.specback_dir).resolve() if args.specback_dir else (output_dir / ".specback")
 
-    run = session.ensure(adw_id=args.adw_id)
+    run = session.ensure(adw_id=args.adw_id, specback_dir=specback_dir)
 
     with run.phase(session.PhaseParams(
         name="setup", kind="engineer", owner="engineer",
@@ -267,18 +265,13 @@ def main() -> int:
         )
         ph.log(envelope=envelope.to_dict())
 
-        # Persist goal.json
         _write_json(specback_dir / "goal.json", envelope.to_goal_json())
-
-        # Write .skill-path
         skill_path = specback_dir / ".skill-path"
         skill_path.write_text(str(_PROJECT_ROOT), encoding="utf-8")
-
-        # Write state.json
         _write_json(specback_dir / "state.json", {
             "current_phase": "setup",
             "output_dir": str(output_dir),
-            "updated_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
         })
 
         if args.envelope_out:
@@ -295,7 +288,9 @@ def main() -> int:
         print(f"     Action: {envelope.reader_action}")
         print(f"     Granularity: {envelope.granularity}")
         print(f"     Output: {output_dir}")
-        return run.finish(accepted=True)
+
+    # finish() outside the with block
+    return run.finish(accepted=True)
 
 
 if __name__ == "__main__":
