@@ -73,7 +73,7 @@ def _resolve_backend(agent_def: dict[str, Any] | None) -> CLIBackend:
     Priority:
     1. ``agent_def.cli`` — per-agent override
     2. ``ADW_CLI`` env var — global override
-    3. ``copilot`` — hard default
+    3. ``opencode`` — hard default
     """
     if agent_def and "cli" in agent_def:
         return agent_def["cli"]  # type: ignore[return-value]
@@ -84,7 +84,7 @@ def _resolve_backend(agent_def: dict[str, Any] | None) -> CLIBackend:
     if env_cli:
         return env_cli
 
-    return "copilot"
+    return "opencode"
 
 
 def _normalize_backend(name: str) -> CLIBackend | None:
@@ -184,7 +184,7 @@ def call_llm(
     """Call an LLM via the configured CLI backend and return the response.
 
     The backend is resolved from ``agent_def.cli`` → ``ADW_CLI`` env var →
-    ``copilot`` (hard default).
+    ``opencode`` (hard default).
 
     Args:
         prompt: The LLM prompt text.

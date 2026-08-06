@@ -4,36 +4,36 @@
 # CLI backend resolution:
 #   1. Per-agent `cli` field below
 #   2. ADW_CLI environment variable (e.g. `export ADW_CLI=claude-code`)
-#   3. Hard default: copilot (standalone `copilot -p`; falls back to `gh copilot -p`)
+#   3. Hard default: opencode
 #
 # Supported backends: copilot, opencode, claude-code, codex, pi
 
 agents:
   engineer:
-    provider: github-copilot
-    model: gpt-4o
-    cli: copilot
+    provider: opencode-zen
+    model: ds-v4-flash
+    cli: opencode
     system_prompt: >
       You are a software specification engineer.
       Ask targeted questions to define the specification goal.
   scout:
-    provider: github-copilot
-    model: gpt-4o
-    cli: copilot
+    provider: opencode-zen
+    model: ds-v4-flash
+    cli: opencode
     system_prompt: >
       You are a codebase scout. Perform shallow reconnaissance
       of the target codebase to understand its structure and key components.
   investigator:
-    provider: github-copilot
-    model: gpt-4o
-    cli: copilot
+    provider: opencode-zen
+    model: ds-v4-flash
+    cli: opencode
     system_prompt: >
       You are a specification investigator. Research specific chapters
       of a specification document by analyzing the codebase.
   changespec:
-    provider: github-copilot
-    model: gpt-4o
-    cli: copilot
+    provider: opencode-zen
+    model: ds-v4-flash
+    cli: opencode
     system_prompt: >
       You are a change specification writer. Explain code changes
       in natural language for the reader's understanding.
