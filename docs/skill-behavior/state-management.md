@@ -95,3 +95,34 @@ This rule exists because SKILL.md is intentionally lightweight — the phase det
 | 7d | `phases/phase-7d-config-refresh.md` |
 
 ---
+
+### SQLite Trace DB (`trace.db`)
+
+Since v1.5.0, specback also supports a **SQLite trace database** (`trace.db`) that replicates and extends the session state. See `scripts/trace_db.py` for the full API.
+
+| Feature | state.json | trace.db |
+|---------|-----------|----------|
+| Format | JSON file | SQLite (WAL mode) |
+| Concurrent reads | Blocked during write | Non-blocking (WAL) |
+| Events | Append-only array | Append-only table |
+| Phase detail | `phase_progress` object | `phases` table with status/error/retries |
+| Spec units | Not tracked | `spec_units` table (chapter/source_unit/question) |
+| Chapter quality | Not tracked | `chapter_drafts` table (refs, lines, confidence) |
+| Question bank | `questions` array | `questions_bank` table (typed columns) |
+| Gate results | Not tracked | `gate_results` table (per-gate pass/fail) |
+
+Bidirectional sync is supported via:
+```bash
+# Export trace.db → state.json
+python3 scripts/trace_db.py --db .specback/trace.db export --state-json .specback/state.json
+
+# Import state.json → trace.db
+python3 scripts/trace_db.py --db .specback/trace.db import --state-json .specback/state.json
+
+# Inspect the trace DB
+python3 scripts/trace_db.py --db .specback/trace.db inspect
+```
+
+The `adw_id` and `trace_db_path` fields in `state.json` link the two storage formats. The default trace DB path is `.specback/trace.db`.
+
+---
