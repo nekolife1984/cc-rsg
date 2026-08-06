@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[4]
+ROOT = Path(__file__).resolve().parents[2]
 MERGE_PR_SH = ROOT / "scripts" / "merge-pr.sh"
 
 MOCK_GH = """#!/bin/sh
