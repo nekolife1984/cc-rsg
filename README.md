@@ -59,6 +59,23 @@ git clone https://github.com/nekolife1984/specback.git
 .\install.ps1
 ```
 
+### Skill Stamp Install (new)
+
+Stamp specback into an existing project directory with lockfile-based drift detection:
+
+```bash
+./install.sh /path/to/your-project
+```
+
+Options:
+- `--check` — Drift detection (no changes made)
+- `--force` — Overwrite stamped files (git commit first recommended)
+- `--dry-run` — Show what would be stamped
+
+See [docs/en/06-install-stamp.md](docs/en/06-install-stamp.md) or [docs/ja/06-install-stamp.md](docs/ja/06-install-stamp.md) for details.
+
+### Legacy install options
+
 Dry-run mode:
 ```bash
 ./install.sh --dry-run
@@ -496,6 +513,23 @@ LLM時代になり、AIに「このコードから仕様書を作って」と頼
 ---
 
 ## インストール
+
+日本語版はこちら: [スキルスタンプインストール](docs/ja/06-install-stamp.md)
+
+### スキルスタンプインストール（新機能）
+
+ロックファイルベースのドリフト検出付きで、既存プロジェクトに specback をスタンプ:
+
+```bash
+./install.sh /path/to/your-project
+```
+
+オプション:
+- `--check` — ドリフト検出（変更なし）
+- `--force` — スタンプファイルを上書き（事前に git commit 推奨）
+- `--dry-run` — スタンプ内容を表示
+
+詳細は [docs/ja/06-install-stamp.md](docs/ja/06-install-stamp.md) を参照。
 
 ### クイックインストール (推奨)
 

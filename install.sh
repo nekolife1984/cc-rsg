@@ -2,9 +2,15 @@
 set -euo pipefail
 
 # ---------------------------------------------------------------------------
-# specback installer — interactive or CLI-driven skill installer
+# specback installer — skill stamp installer (SSSF-style)
 #
-# Usage:
+# New stamp mode (delegates to Python):
+#   ./install.sh /path/to/target               Stamp into target project
+#   ./install.sh --check /path/to/target        Drift detection
+#   ./install.sh --force /path/to/target        Overwrite stamped files
+#   ./install.sh --dry-run /path/to/target      Show what would be stamped
+#
+# Legacy agent-install mode:
 #   ./install.sh                                          interactive mode
 #   ./install.sh --dry-run                                dry-run (interactive)
 #   ./install.sh --agent claude,opencode --level user     non-interactive
@@ -28,7 +34,45 @@ if [[ ! -d "$SKILL_SRC" ]]; then
   exit 1
 fi
 
-# ── Defaults ───────────────────────────────────────────────────────────
+# ── Stamp-mode detection ────────────────────────────────────────────────
+# If the first positional argument looks like a filesystem path,
+# delegate to the Python stamp installer.
+STAMP_MODE=false
+PATH_ARG=""
+for arg in "$@"; do
+  case "$arg" in
+    --check|--force|--dry-run|--help)
+      # These flags are shared — keep scanning for a path
+      ;;
+    --agent|--level|--install-deps)
+      # Legacy flags — definitely not stamp mode
+      break
+      ;;
+    *)
+      if [[ "$arg" == /* || "$arg" == ~* || "$arg" == \.* ]]; then
+        STAMP_MODE=true
+        PATH_ARG="$arg"
+        break
+      fi
+      ;;
+  esac
+done
+
+if $STAMP_MODE; then
+  PY_SCRIPT="$SCRIPT_DIR/scripts/specback_install.py"
+  if [[ ! -f "$PY_SCRIPT" ]]; then
+    echo "Error: scripts/specback_install.py not found."
+    echo "Run this script from the root of the specback repository."
+    exit 1
+  fi
+  echo ""
+  echo "specback stamp installer v1.0.0"
+  echo "==============================="
+  echo ""
+  exec python3 "$PY_SCRIPT" "$@"
+fi
+
+# ── Legacy mode: Defaults ──────────────────────────────────────────────
 DRY_RUN=false
 CLI_AGENT=""
 CLI_LEVEL=""
@@ -61,7 +105,11 @@ while [[ $# -gt 0 ]]; do
     --help|-h)
       echo "Usage: $0 [OPTIONS]"
       echo ""
-      echo "Options:"
+      echo "Stamp mode (new):"
+      echo "  $0 /path/to/target           Stamp into target project"
+      echo "  $0 --check /path/to/target   Drift detection"
+      echo ""
+      echo "Legacy mode options:"
       echo "  --dry-run           Print what would be done, no changes"
       echo "  --install-deps      Install optional Python dependencies (tree-sitter grammars)"
       echo "  --agent AGENTS      Comma-separated agent keys: claude,codex,opencode,copilot,cursor,other,all"
@@ -74,6 +122,8 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Examples:"
       echo "  $0"
+      echo "  $0 /path/to/my-project"
+      echo "  $0 --check /path/to/my-project"
       echo "  $0 --agent claude,opencode --level user"
       echo "  $0 --agent all --level both --dry-run"
       exit 0
