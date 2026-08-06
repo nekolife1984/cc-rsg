@@ -37,3 +37,17 @@ agents:
     system_prompt: >
       You are a change specification writer. Explain code changes
       in natural language for the reader's understanding.
+
+  # Copilot backend (uses gh copilot suggest)
+  copilot-agent:
+    provider: github-copilot
+    model: gpt-4o
+    cli: copilot
+    system_prompt: ""
+
+  # Pi backend (uses pi CLI)
+  pi-agent:
+    provider: pi
+    model: pi-model
+    cli: pi
+    system_prompt: ""

@@ -6,6 +6,8 @@ a unified ``call_llm()`` interface that supports multiple CLI backends:
 - **opencode** (default): ``opencode run <prompt>``
 - **claude-code**: ``claude -p <prompt>``
 - **codex**: ``codex run <prompt>``
+- **copilot**: ``gh copilot suggest <prompt>`` (falls back to ``github-copilot-cli``)
+- **pi**: ``pi <prompt>``
 """
 
 from __future__ import annotations
@@ -16,13 +18,15 @@ import sys
 from pathlib import Path
 from typing import Any, Literal
 
-CLIBackend = Literal["opencode", "claude-code", "codex"]
+CLIBackend = Literal["opencode", "claude-code", "codex", "copilot", "pi"]
 
 # Maps short config keys to CLI binary names
 _CLI_BINARIES: dict[CLIBackend, str] = {
     "opencode": "opencode",
     "claude-code": "claude",
     "codex": "codex",
+    "copilot": "gh",
+    "pi": "pi",
 }
 
 
@@ -93,6 +97,12 @@ def _normalize_backend(name: str) -> CLIBackend | None:
         "claude code": "claude-code",
         "claude-code": "claude-code",
         "codex": "codex",
+        "copilot": "copilot",
+        "github copilot": "copilot",
+        "gh": "copilot",
+        "pi": "pi",
+        "pi ai": "pi",
+        "pi.ai": "pi",
     }
     return mapping.get(name)
 
@@ -132,6 +142,29 @@ def build_cli_command(
     if backend == "codex":
         # Codex CLI: codex run <prompt>
         return [binary, "run", prompt]
+
+    if backend == "copilot":
+        # gh copilot suggest "prompt"
+        # falls back to github-copilot-cli if gh not available
+        import shutil
+        if shutil.which("gh"):
+            return [binary, "copilot", "suggest", prompt]
+        # Fallback to standalone binary
+        fallback = "github-copilot-cli"
+        if shutil.which(fallback):
+            return [fallback, "suggest", prompt]
+        raise FileNotFoundError(
+            f"Copilot CLI not found. Expected 'gh' or '{fallback}' on PATH."
+        )
+
+    if backend == "pi":
+        # Pi.ai CLI: pi <prompt>
+        # The pi CLI may support --model for model selection
+        cmd = [binary, prompt]
+        model = (agent_def or {}).get("model")
+        if model:
+            cmd = [binary, "--model", model, prompt]
+        return cmd
 
     raise ValueError(f"Unknown CLI backend: {backend}")
 
