@@ -16,7 +16,34 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Iterator, Literal
 
+
+# ── Forward reference for optional LLM call ──────────────────────────
+_AGENTS_MODULE = None  # lazy import to avoid circular deps
+
+
+def _call_llm(prompt: str, agent_def: dict | None = None, timeout: int = 120) -> str:
+    """Thin wrapper — import agents.call_llm lazily."""
+    global _AGENTS_MODULE
+    if _AGENTS_MODULE is None:
+        from adws.adw_modules import agents as _AGENTS_MODULE  # noqa
+    return _AGENTS_MODULE.call_llm(prompt, agent_def=agent_def, timeout=timeout)
+
 PhaseKind = Literal["engineer", "agent", "code"]
+
+
+def _resolve_agent_def(phase_name: str) -> dict | None:
+    """Load agent definition for a phase from sssf.config.yaml.
+
+    Uses the phase name as the agent key. Falls back to env var ADW_PROVIDER.
+    Returns None if no config found (caller will use defaults).
+    """
+    try:
+        from adws.adw_modules import agents as agents_mod  # noqa
+        config_path = Path(__file__).resolve().parent.parent / "adw_sssf_config" / "sssf.config.yaml"
+        cfg = agents_mod.load_config(str(config_path))
+        return cfg.get("agents", {}).get(phase_name)
+    except (FileNotFoundError, KeyError, AttributeError):
+        return None
 
 
 @dataclass
@@ -60,14 +87,21 @@ class PhaseContext:
     def call(self, ac: AgentCall) -> Any:
         """Execute an agent call within this phase.
 
-        In the initial implementation, this raises NotImplementedError.
-        Real implementation will use delegate_task or similar Hermes mechanism.
+        Dispatches to ``agents.call_llm()`` which supports multiple CLI
+        backends: opencode (default), claude-code, codex.
+
+        The backend is resolved from:
+        1. ``agent_def.cli`` in sssf.config.yaml
+        2. ``ADW_CLI`` environment variable
+        3. ``opencode`` (hard default)
+
+        The agent definition (provider, model, cli) is loaded from
+        ``adws/adw_sssf_config/sssf.config.yaml`` using the phase owner name.
         """
-        raise NotImplementedError(
-            f"AgentCall not yet implemented in the ADW bootstrap. "
-            f"This phase ({self.name}) requires agent execution.\n"
-            f"Prompt: {ac.prompt[:200]}..."
-        )
+        agent_def = _resolve_agent_def(self.name)
+        response_text = _call_llm(ac.prompt, agent_def=agent_def, timeout=120)
+        self._log.append({"agent_call": ac.prompt[:100], "response_length": len(response_text)})
+        return response_text
 
 
 @dataclass
