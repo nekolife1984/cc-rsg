@@ -599,6 +599,37 @@ class TestEdgeCases:
         assert db2.get_session("s_reopen") is not None
         db2.close()
 
+    def test_context_manager(self, tmp_db_path: str):
+        """TraceDB should work as a context manager."""
+        with TraceDB(tmp_db_path) as db:
+            db.session_start("s_ctx")
+            assert db.get_session("s_ctx") is not None
+        # Connection should be closed after context exit
+        import sqlite3
+        with pytest.raises(sqlite3.ProgrammingError):
+            db.conn.execute("SELECT 1")
+
+    def test_session_finish_nonexistent(self, db: TraceDB):
+        """session_finish on a nonexistent session should not crash."""
+        db.session_finish("nonexistent", ok=True)  # This updates 0 rows, should be fine
+
+    def test_import_empty_json_object(self, tmp_db_path: str):
+        """Import from an empty JSON object should return 0."""
+        import json, os, tempfile
+        fd, state_path = tempfile.mkstemp(suffix=".json")
+        os.close(fd)
+        with open(state_path, "w") as f:
+            json.dump({}, f)
+        try:
+            db = TraceDB(tmp_db_path)
+            count = db.import_from_state_json(state_path)
+            assert count == 0
+            # Should NOT have created a session
+            assert len(db.list_sessions()) == 0
+            db.close()
+        finally:
+            os.remove(state_path)
+
     def test_invalid_phase_kind(self, db: TraceDB):
         """Any phase kind string is accepted (no CHECK constraint)."""
         db.session_start("s_kind")
@@ -614,3 +645,83 @@ class TestEdgeCases:
                   payload=large)
         evts = db.list_events(adw_id="test_001", limit=20)
         assert len(evts) >= 1
+
+
+# ===================================================================
+# Agent sessions & Processes (SSSF tables)
+# ===================================================================
+
+
+class TestSSSFTables:
+    """Tests for agent_sessions and processes tables (SSSF core tables)."""
+
+    def test_agent_session_insert(self, db: TraceDB):
+        """agent_sessions should accept a valid row."""
+        db.conn.execute(
+            """INSERT INTO agent_sessions (adw_id, agent, coding_agent, model,
+               session_id, context_tokens, context_window, created_at, last_used_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            ("test_001", "scout", "pi", "ds-v4-flash",
+             "sess_abc", 5000, 128000, "2026-01-01T00:00:00Z", "2026-01-01T00:00:00Z"),
+        )
+        row = db.conn.execute(
+            "SELECT adw_id, agent, model FROM agent_sessions WHERE adw_id=? AND agent=?",
+            ("test_001", "scout"),
+        ).fetchone()
+        assert row is not None
+        assert row[0] == "test_001"
+        assert row[1] == "scout"
+
+    def test_agent_session_upsert(self, db: TraceDB):
+        """agent_sessions uses PRIMARY KEY (adw_id, agent)."""
+        import time
+        ts = "2026-01-01T00:00:00Z"
+        db.conn.execute(
+            "INSERT OR REPLACE INTO agent_sessions (adw_id, agent, coding_agent, model, session_id, created_at, last_used_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            ("s1", "scout", "pi", "v1", "sess_1", ts, ts),
+        )
+        db.conn.execute(
+            "INSERT OR REPLACE INTO agent_sessions (adw_id, agent, coding_agent, model, session_id, created_at, last_used_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            ("s1", "scout", "pi", "v2", "sess_2", ts, ts),
+        )
+        row = db.conn.execute(
+            "SELECT model, session_id FROM agent_sessions WHERE adw_id='s1' AND agent='scout'"
+        ).fetchone()
+        assert row[0] == "v2"
+        assert row[1] == "sess_2"
+
+    def test_process_insert(self, db: TraceDB):
+        """processes should accept a valid row."""
+        db.session_start("test_pid")
+        db.conn.execute(
+            """INSERT INTO processes (adw_id, kind, name, pid, command, started_at)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            ("test_pid", "adw", "specback_recon", 12345,
+             "python adw_specback_recon.py --target .", "2026-01-01T00:00:00Z"),
+        )
+        row = db.conn.execute(
+            "SELECT adw_id, kind, pid FROM processes WHERE adw_id=?", ("test_pid",)
+        ).fetchone()
+        assert row is not None
+        assert row[0] == "test_pid"
+        assert row[2] == 12345
+
+    def test_process_lifecycle(self, db: TraceDB):
+        """processes should track start and end."""
+        db.session_start("test_life")
+        db.conn.execute(
+            "INSERT INTO processes (adw_id, kind, name, pid, command, started_at) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            ("test_life", "agent", "investigator", 99999, "agent run", "2026-01-01T00:00:00Z"),
+        )
+        db.conn.execute(
+            "UPDATE processes SET ended_at=? WHERE adw_id=? AND kind=? AND name=? AND pid=?",
+            ("2026-01-01T01:00:00Z", "test_life", "agent", "investigator", 99999),
+        )
+        row = db.conn.execute(
+            "SELECT pid, ended_at FROM processes WHERE adw_id='test_life' AND kind='agent'"
+        ).fetchone()
+        assert row[0] == 99999
+        assert row[1] is not None

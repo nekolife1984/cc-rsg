@@ -285,6 +285,14 @@ class TraceDB:
         """Close the database connection."""
         self.conn.close()
 
+    def __enter__(self) -> TraceDB:
+        """Context manager entry."""
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager exit — close the connection."""
+        self.close()
+
     # ── Sessions ──────────────────────────────────────────────────────────
 
     def session_start(
@@ -595,7 +603,12 @@ class TraceDB:
                    status=excluded.status,
                    resolution=excluded.resolution,
                    severity=excluded.severity,
-                   category=excluded.category""",
+                   category=excluded.category,
+                   resolved_at=CASE
+                       WHEN excluded.status='resolved' AND questions_bank.status!='resolved'
+                       THEN excluded.resolved_at
+                       ELSE questions_bank.resolved_at
+                   END""",
             (qid, phase_id, question_text, severity, status,
              resolution, category, now, now if status == "resolved" else None),
         )
@@ -661,6 +674,7 @@ class TraceDB:
             "session_history": session_history,
             "adw_id": session["adw_id"],
             "trace_db_path": self.db_path,
+            "trace_db_version": 1,
         }
 
         # Export questions if present
@@ -711,6 +725,9 @@ class TraceDB:
             return 0
 
         state = json.loads(fpath.read_text(encoding="utf-8"))
+        if not state or not isinstance(state, dict) or "current_phase" not in state:
+            return 0
+
         adw_id = state.get("adw_id", f"imported_{_new_id(8)}")
 
         # Create/update session
