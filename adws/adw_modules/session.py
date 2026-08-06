@@ -79,8 +79,9 @@ def _resolve_agent_def(phase_name: str) -> dict | None:
     Resolution order:
     1. Look up ``roster`` section in config for the phase → agent name
     2. Fall back to ``_PHASE_TO_AGENT`` code mapping
-    3. Look up agent by name in ``agents`` section of config
-    4. Apply ``defaults`` section as fallback for missing fields
+    3. Fall back to the phase name itself as the agent name
+    4. Look up agent by name in ``agents`` section of config
+    5. Apply ``defaults`` section as fallback for missing fields
     """
     cfg = _load_full_config()
     roster = cfg.get("roster", {})
@@ -94,7 +95,10 @@ def _resolve_agent_def(phase_name: str) -> dict | None:
     agent_def = agents_cfg.get(agent_name)
     if agent_def is None:
         # No agent defined for this phase — return defaults only
-        return dict(defaults) if defaults else None
+        result = dict(defaults) if defaults else None
+        if result is not None:
+            result["_agent_name"] = agent_name
+        return result
 
     # 5. Merge defaults under agent definition (agent values win)
     merged = dict(defaults)

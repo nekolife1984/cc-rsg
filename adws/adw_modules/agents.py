@@ -77,9 +77,15 @@ def validate(cfg: dict[str, Any]) -> list[str]:
         if not isinstance(cfg["roster"], dict):
             issues.append("'roster' must be a dict")
         else:
+            agent_names = set(cfg.get("agents", {}).keys())
             for phase, agent_name in cfg["roster"].items():
                 if not isinstance(agent_name, str):
                     issues.append(f"Roster entry '{phase}' must map to a string agent name")
+                elif agent_name not in agent_names:
+                    issues.append(
+                        f"Roster entry '{phase}' maps to '{agent_name}' "
+                        f"which is not defined in 'agents'"
+                    )
 
     return issues
 
@@ -88,7 +94,8 @@ def _resolve_backend(agent_def: dict[str, Any] | None) -> CLIBackend:
     """Resolve which CLI backend to use for an agent definition.
 
     Priority:
-    1. ``agent_def.cli`` — per-agent override
+    1. ``agent_def.cli`` — per-agent override (includes ``defaults.cli``
+       from sssf.config.yaml via pre-merged agent_def)
     2. ``ADW_CLI`` env var — global override
     3. ``opencode`` — hard default
     """
