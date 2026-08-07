@@ -247,9 +247,8 @@ def find_refs_in_file(
         return refs
 
     for line_no_0idx, line in enumerate(content.splitlines()):
-        # Detect SRC-ID refs first (these are skipped by auto-fix)
-        src_m = SRC_REF_RE.search(line)
-        if src_m:
+        # Collect all SRC-ID refs on this line first
+        for src_m in SRC_REF_RE.finditer(line):
             src_id = src_m.group(1).strip()
             refs.append({
                 "line_no": line_no_0idx,
@@ -261,8 +260,7 @@ def find_refs_in_file(
                 "is_src_id": True,
                 "full_match": src_m.group(0),
             })
-            continue
-        # Traditional path:line format
+        # Also collect any path:line refs on the same line
         for m in REF_RE.finditer(line):
             ref_path = m.group(1).strip()
             ref_start = int(m.group(2))
@@ -309,6 +307,9 @@ def resolve_base(args_base: str | None, specback_path: Path) -> str:
 
 def format_ref(ref: dict[str, Any]) -> str:
     """Format a REF marker as a string."""
+    # SRC-ID refs have no line numbers
+    if str(ref.get("ref_path", "")).startswith("SRC-"):
+        return f"<!-- REF: {ref['ref_path']} -->"
     if ref["ref_start"] == ref["ref_end"]:
         return f"<!-- REF: {ref['ref_path']}:{ref['ref_start']} -->"
     return f"<!-- REF: {ref['ref_path']}:{ref['ref_start']}-{ref['ref_end']} -->"

@@ -137,9 +137,8 @@ def scan_drafts_for_refs(drafts_dir: Path, units_by_id: dict[str, dict] | None =
             content = md_file.read_text(encoding="utf-8", errors="replace")
         lines = content.splitlines()
         for line_no_0idx, line in enumerate(lines):
-            # Check SRC-ID format first
-            src_m = SRC_REF_RE.search(line)
-            if src_m:
+            # Collect all SRC-ID refs on this line first
+            for src_m in SRC_REF_RE.finditer(line):
                 src_id = src_m.group(1).strip()
                 if units_by_id and src_id in units_by_id:
                     unit = units_by_id[src_id]
@@ -163,8 +162,7 @@ def scan_drafts_for_refs(drafts_dir: Path, units_by_id: dict[str, dict] | None =
                         "ref_start": 0,
                         "ref_end": 0,
                     })
-                continue
-            # Traditional path:line format
+            # Also collect any path:line refs on the same line
             for m in REF_RE.finditer(line):
                 ref_path = m.group(1).strip()
                 start = int(m.group(2))

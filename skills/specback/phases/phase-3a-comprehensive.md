@@ -59,7 +59,7 @@ Examples:
 
 **Strict format requirements** (the UI's REF chip click-to-source feature parses these variant formats render as plain non-clickable text, breaking reviewer flow):
 
-- Use **`<!-- REF: path:line -->` or `<!-- REF: path:start-end -->` only**. The HTML comment markers, the `REF:` prefix, and the colon between path and line numbers are all mandatory.
+- Use **`<!-- REF: path:line -->`**, **`<!-- REF: path:start-end -->`**, or **`<!-- REF: SRC-NNNN -->`** only. The HTML comment markers, the `REF:` prefix, and the colon between path and line numbers (for path:line format) are all mandatory.
 - The path is workspace-relative (`app/...` for an env with `archiveRoot = "myapp-main"`). Absolute paths are forbidden.
 - Line numbers are integers. Use a single line (`:42`) when a single line is being cited; use a range (`:42-56`) when an extent matters. Do NOT use `L42`, `line 42`, ` lines 42-56`, parentheses, or any other decoration.
 - Forbidden alternative forms include but are not limited to:
