@@ -707,8 +707,8 @@ Code-wide patterns that span multiple modules.
 
 | Pattern | Detection method | Example REF | Confidence |
 |---------|----------------|-------------|-----------|
-| Error handling strategy | Search for `try`/`catch`/`except`/`raise`/`throw` patterns, custom exception classes | [REF: src/errors.py:1-50] | 🟢 |
-| Logging approach | Search for `logger`/`logging`/`console.log`/`print`/`warn` calls | [REF: src/middleware/logging.py:10-30] | 🟢 |
+| Error handling strategy | Search for `try`/`catch`/`except`/`raise`/`throw` patterns, custom exception classes | <!-- REF: SRC-0001 --> | 🟢 |
+| Logging approach | Search for `logger`/`logging`/`console.log`/`print`/`warn` calls | <!-- REF: SRC-0002 --> | 🟢 |
 | Command routing | How subcommands are registered and dispatched | [REF: cmd/root.go:1-30] | 🟢 |
 | Output formatting | Search for `render`/`format`/`print`/`tablewriter`/`json.Marshal` | [REF: internal/output/format.go] | 🟢 |
 | Validation pattern | Search for `validate`/`assert`/`required` flags, validation functions | [REF: internal/validate/] | 🟢 |

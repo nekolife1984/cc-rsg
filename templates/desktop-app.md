@@ -838,14 +838,14 @@ Code-wide patterns that span multiple modules.
 
 | Pattern | Detection method | Example REF | Confidence |
 |---------|----------------|-------------|-----------|
-| Error handling strategy | Search for `try`/`catch`/`except`/`raise`/`throw` patterns, custom exception classes | [REF: src/errors.py:1-50] | 🟢 |
-| Logging approach | Search for `logger`/`logging`/`console.log`/`print`/`warn` calls | [REF: src/middleware/logging.py:10-30] | 🟢 |
+| Error handling strategy | Search for `try`/`catch`/`except`/`raise`/`throw` patterns, custom exception classes | <!-- REF: SRC-0001 --> | 🟢 |
+| Logging approach | Search for `logger`/`logging`/`console.log`/`print`/`warn` calls | <!-- REF: SRC-0002 --> | 🟢 |
 | IPC pattern | Search for `ipcMain`/`ipcRenderer`/`postMessage`/`send` patterns | [REF: src/main/ipc-handlers.ts] | 🟢 |
 | Event bus / pub-sub | Search for `EventEmitter`/`EventBus`/`on`/`emit`/`publish`/`subscribe` | [REF: src/shared/event-bus.ts] | 🟢 |
 | State management | Search for `store`/`reducer`/`useState`/`mobX`/`signal`/`bloc` | [REF: src/renderer/store/] | 🟢 |
-| Dependency injection | Constructor injection / DI container / service provider | [REF: src/di/container.py:1-80] | 🟡 |
-| Retry / resilience | Search for `retry`/`backoff`/`timeout`/`circuit_breaker` patterns | [REF: src/utils/retry.py] | 🟡 |
-| Batch / chunk processing | Search for `batch`/`chunk`/`bulk` in method/class names | [REF: src/jobs/batch_processor.py] | 🟢 |
+| Dependency injection | Constructor injection / DI container / service provider | <!-- REF: SRC-0003 --> | 🟡 |
+| Retry / resilience | Search for `retry`/`backoff`/`timeout`/`circuit_breaker` patterns | <!-- REF: SRC-0005 --> | 🟡 |
+| Batch / chunk processing | Search for `batch`/`chunk`/`bulk` in method/class names | <!-- REF: SRC-0006 --> | 🟢 |
 | Native module bridging | Search for C++/Rust FFI, N-API, `ffi`/`ctypes`/`napi` calls | [REF: src/native/] | 🟢 |
 
 For each pattern found, note:

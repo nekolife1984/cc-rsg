@@ -87,6 +87,7 @@ REQUIRED_FILES = ("00-metadata.md", "99-unresolved.md", "traceability.md")
 
 # Regexes used in chapter bodies
 REF_RE = re.compile(r"<!-- REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\s*-->")
+SRC_REF_RE = re.compile(r"<!-- REF:\s*(SRC-\d+)\s*-->")
 CODE_FENCE_RE = re.compile(r"^```([a-zA-Z0-9_-]+)?")
 MERMAID_FENCE_RE = re.compile(r"^```mermaid\b")
 SOURCES_READ_RE = re.compile(r"^##+\s*Sources\s*Read\b", re.IGNORECASE)
@@ -325,6 +326,7 @@ def compute_chapter_metrics(name: str, content: str) -> ChapterMetrics:
             continue
         body_lines += 1
         refs += len(REF_RE.findall(line))
+        refs += len(SRC_REF_RE.findall(line))
 
     return ChapterMetrics(
         file=name,

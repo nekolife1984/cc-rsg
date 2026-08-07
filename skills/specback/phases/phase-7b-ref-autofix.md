@@ -4,6 +4,8 @@
 
 Auto-correct `<!-- REF: path:line -->` markers in spec files that have become stale due to source code changes. Run `scripts/fix-refs.py` to parse `git diff -U0` hunk headers and update line numbers.
 
+**SRC-ID refs** (`<!-- REF: SRC-NNNN -->`) are **auto-skipped** by fix-refs.py — they reference source-map.json unit IDs rather than line numbers, so they remain stable across code changes. Simply regenerate the source-map after refactoring and all SRC-ID refs stay valid.
+
 ### 🆕 Multi-scope execution
 
 When `goal.multi_scope == true`, iterate over each scope and run the procedure for each:

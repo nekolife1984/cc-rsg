@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-08-06T23:20:42.166916+00:00",
+  "target": "/private/var/folders/cs/28g26qtd2015r4f61kfh10_r0000gn/T/pytest-of-genya/pytest-298/test_full_recon0",
+  "languages": {
+    "python": 2,
+    "markdown": 1,
+    "javascript": 1
+  },
+  "language_names": [
+    "Python",
+    "Markdown",
+    "JavaScript"
+  ],
+  "frameworks": [],
+  "total_files": 4,
+  "estimated_complexity": "medium",
+  "recommended_template": "web-app",
+  "depth_mode": "outline",
+  "has_config_dir": false,
+  "top_level_dirs": [
+    "src"
+  ]
+}

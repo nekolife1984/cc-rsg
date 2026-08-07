@@ -223,3 +223,55 @@ Just plain text.
     assert m["code_block_lines"] == 0
     assert m["code_blocks"] == 0
     assert m["mermaid_blocks"] == 0
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SRC-ID REF counting tests (Issue #224)
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+def test_src_id_refs_counted_in_total(tmp_path):
+    """SRC-ID format (<!-- REF: SRC-NNNN -->) should count as REFs."""
+    content = """# Chapter
+
+Some text. <!-- REF: SRC-0001 -->
+
+More text. <!-- REF: SRC-0142 -->
+"""
+    specback_dir = _minimal_specback(tmp_path, content)
+    report = _run_check(specback_dir)
+    m = _chapter_by_name(report, "01-overview.md")
+    assert m["refs"] == 2, f"Expected 2 refs (both SRC-ID), got {m['refs']}"
+
+
+def test_mixed_src_id_and_path_line_refs(tmp_path):
+    """Both SRC-ID and path:line refs should be counted together."""
+    content = """# Chapter
+
+Text. <!-- REF: SRC-0001 -->
+Text. <!-- REF: src/errors.py:1-50 -->
+Text. <!-- REF: SRC-0142 -->
+"""
+    specback_dir = _minimal_specback(tmp_path, content)
+    report = _run_check(specback_dir)
+    m = _chapter_by_name(report, "01-overview.md")
+    assert m["refs"] == 3, f"Expected 3 refs (2 SRC-ID + 1 path:line), got {m['refs']}"
+
+
+def test_src_id_refs_in_code_fenced_block_ignored(tmp_path):
+    """REF markers inside code fences should not be counted."""
+    content = """# Chapter
+
+Some real text. <!-- REF: SRC-0001 -->
+
+```python
+<!-- REF: SRC-0002 -->
+<! -- REF: SRC-0003 -->
+```
+
+More text. <!-- REF: SRC-0142 -->
+"""
+    specback_dir = _minimal_specback(tmp_path, content)
+    report = _run_check(specback_dir)
+    m = _chapter_by_name(report, "01-overview.md")
+    assert m["refs"] == 2, f"Expected 2 refs (outside code fence), got {m['refs']}"

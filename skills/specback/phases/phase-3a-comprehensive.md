@@ -34,19 +34,27 @@ List the viewed file paths and line ranges at the **end of the chapter under a `
 
 #### STEP B: Citation extraction (mandatory)
 
-Extract at least **10 concrete citations** from the viewed code, all in **exactly one format**:
+Extract at least **10 concrete citations** from the viewed code, in one of these formats:
 
+**Format 1 — Direct path:line (traditional):**
 ```
 <!-- REF: <workspace-relative path>:<start> -->
 <!-- REF: <workspace-relative path>:<start>-<end> -->
 ```
 
+**Format 2 — SRC-ID (recommended for stable references):**
+```
+<!-- REF: SRC-NNNN -->
+```
+
+The SRC-ID format references the source-map.json unit IDs (e.g. `SRC-0142`) and is automatically resolved by `build-trace.py`. Unlike path:line refs, SRC-ID refs survive code refactoring — simply regenerate the source-map after code changes and all refs remain valid. `fix-refs.py` skips SRC-ID refs (they have no line numbers to correct).
+
 Examples:
 
 ```
-<!-- REF: app/models/issue.rb:42-56 -->
-<!-- REF: app/models/issue.rb:120-145 -->
-<!-- REF: config/routes.rb:7 -->
+<!-- REF: SRC-0142 -->
+<!-- REF: SRC-0143 -->
+<!-- REF: SRC-0001 -->
 ```
 
 **Strict format requirements** (the UI's REF chip click-to-source feature parses these variant formats render as plain non-clickable text, breaking reviewer flow):
