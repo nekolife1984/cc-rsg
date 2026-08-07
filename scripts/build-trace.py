@@ -62,6 +62,7 @@ except ImportError:
 
 
 REF_RE = re.compile(r"<!-- REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\s*-->")
+SRC_REF_RE = re.compile(r"<!-- REF:\s*(SRC-\d+)\s*-->")
 SECTION_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
 
 
@@ -119,8 +120,13 @@ def parse_section_at(lines: list[str], line_no_0idx: int) -> str:
     return "(prelude)"
 
 
-def scan_drafts_for_refs(drafts_dir: Path) -> list[dict]:
-    """Extract every <!-- REF: ... --> from drafts/*.md (or final/*.md)."""
+def scan_drafts_for_refs(drafts_dir: Path, units_by_id: dict[str, dict] | None = None) -> list[dict]:
+    """Extract every <!-- REF: ... --> from drafts/*.md (or final/*.md).
+
+    Supports two formats:
+    - ``<!-- REF: path:start-end -->`` — direct path + line range reference
+    - ``<!-- REF: SRC-NNNN -->`` — indirect source-unit ID (resolved via units_by_id)
+    """
     out: list[dict] = []
     if not drafts_dir.is_dir():
         return out
@@ -131,6 +137,32 @@ def scan_drafts_for_refs(drafts_dir: Path) -> list[dict]:
             content = md_file.read_text(encoding="utf-8", errors="replace")
         lines = content.splitlines()
         for line_no_0idx, line in enumerate(lines):
+            # Collect all SRC-ID refs on this line first
+            for src_m in SRC_REF_RE.finditer(line):
+                src_id = src_m.group(1).strip()
+                if units_by_id and src_id in units_by_id:
+                    unit = units_by_id[src_id]
+                    unit_path: str = unit["path"]
+                    unit_range: list[int] = unit["line_range"]
+                    section = parse_section_at(lines, line_no_0idx)
+                    out.append({
+                        "draft_file": md_file.name,
+                        "section": section,
+                        "ref_path": unit_path,
+                        "ref_start": unit_range[0],
+                        "ref_end": unit_range[1],
+                    })
+                else:
+                    # SRC-ID not found in source-map — still record with null range
+                    section = parse_section_at(lines, line_no_0idx)
+                    out.append({
+                        "draft_file": md_file.name,
+                        "section": section,
+                        "ref_path": src_id,
+                        "ref_start": 0,
+                        "ref_end": 0,
+                    })
+            # Also collect any path:line refs on the same line
             for m in REF_RE.finditer(line):
                 ref_path = m.group(1).strip()
                 start = int(m.group(2))
@@ -220,9 +252,13 @@ def main(argv: list[str] | None = None) -> int:
 
     sm = load_source_map(source_map_path)
     units = sm.get("units", [])
+
+    # Build an index for SRC-ID resolution
+    units_by_id: dict[str, dict] = {u["id"]: u for u in units if "id" in u}
+
     exclusions = load_exclusions(exclusions_path)
 
-    refs = scan_drafts_for_refs(drafts_dir)
+    refs = scan_drafts_for_refs(drafts_dir, units_by_id)
     coverage = resolve_refs_to_units(refs, units)
 
     by_source: dict[str, dict[str, Any]] = {}

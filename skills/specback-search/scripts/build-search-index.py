@@ -38,7 +38,9 @@ from typing import Any
 SCHEMA_VERSION = "0.1.0"
 
 # Confidence markers found in spec chapter <!-- REF: ... --> annotations
-CONFIDENCE_RE = re.compile(r'<!-- REF:\s*\S+\s*:\s*\d+(?:-\d+)?\s*-->\s*([🟢🟡🔴])')
+# Supports both path:line format (<!-- REF: path:file:1-50 --> 🟢) and
+# SRC-ID format (<!-- REF: SRC-0001 --> 🟢)
+CONFIDENCE_RE = re.compile(r'<!-- REF:\s*(?:\S+:\d+(?:-\d+)?|SRC-\d+)\s*-->\s*([🟢🟡🔴])')
 
 
 # ---------------------------------------------------------------------------

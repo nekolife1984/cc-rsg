@@ -52,6 +52,7 @@ from typing import Any
 
 SCHEMA_VERSION = "0.1.0"
 REF_RE = re.compile(r"<!-- REF:\s*([^:\]]+):(\d+)(?:-(\d+))?\s*-->")
+SRC_REF_RE = re.compile(r"<!-- REF:\s*(SRC-\d+)\s*-->")
 HUNK_RE = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@")
 
 
@@ -223,13 +224,18 @@ def get_git_diff(
 def find_refs_in_file(
     file_path: Path,
 ) -> list[dict[str, Any]]:
-    """Find all <!-- REF: path:line --> markers in a spec file.
+    """Find all <!-- REF: ... --> markers in a spec file.
+
+    Supports two formats:
+    - ``<!-- REF: path:line -->`` — traditional path + line reference
+    - ``<!-- REF: SRC-NNNN -->`` — indirect source-unit ID (skipped by auto-fix)
 
     Returns list of dicts with keys:
     - line_no: 0-indexed line number in the file
-    - ref_path: path from the REF marker
-    - ref_start: start line number
-    - ref_end: end line number (or same as ref_start for single-line)
+    - ref_path: path from the REF marker (or SRC-ID)
+    - ref_start: start line number (0 for SRC-ID)
+    - ref_end: end line number (0 for SRC-ID; same as ref_start for single-line)
+    - is_src_id: True if this is a SRC-ID reference
     - full_match: the matched text (for replacement)
     - prefix: text before the REF marker on the line
     - suffix: text after the REF marker on the line
@@ -241,6 +247,20 @@ def find_refs_in_file(
         return refs
 
     for line_no_0idx, line in enumerate(content.splitlines()):
+        # Collect all SRC-ID refs on this line first
+        for src_m in SRC_REF_RE.finditer(line):
+            src_id = src_m.group(1).strip()
+            refs.append({
+                "line_no": line_no_0idx,
+                "col_start": src_m.start(),
+                "col_end": src_m.end(),
+                "ref_path": src_id,
+                "ref_start": 0,
+                "ref_end": 0,
+                "is_src_id": True,
+                "full_match": src_m.group(0),
+            })
+        # Also collect any path:line refs on the same line
         for m in REF_RE.finditer(line):
             ref_path = m.group(1).strip()
             ref_start = int(m.group(2))
@@ -252,6 +272,7 @@ def find_refs_in_file(
                 "ref_path": ref_path,
                 "ref_start": ref_start,
                 "ref_end": ref_end,
+                "is_src_id": False,
                 "full_match": m.group(0),
             })
     return refs
@@ -286,6 +307,9 @@ def resolve_base(args_base: str | None, specback_path: Path) -> str:
 
 def format_ref(ref: dict[str, Any]) -> str:
     """Format a REF marker as a string."""
+    # SRC-ID refs have no line numbers
+    if str(ref.get("ref_path", "")).startswith("SRC-"):
+        return f"<!-- REF: {ref['ref_path']} -->"
     if ref["ref_start"] == ref["ref_end"]:
         return f"<!-- REF: {ref['ref_path']}:{ref['ref_start']} -->"
     return f"<!-- REF: {ref['ref_path']}:{ref['ref_start']}-{ref['ref_end']} -->"
@@ -400,8 +424,14 @@ def main(argv: list[str] | None = None) -> int:
     corrections: list[dict[str, Any]] = []
     orphaned: list[dict[str, Any]] = []
     unchanged: list[dict[str, Any]] = []
+    src_id_refs: list[dict[str, Any]] = []
 
     for ref in all_refs:
+        if ref.get("is_src_id"):
+            # SRC-ID refs have no line numbers — auto-stable, skip correction
+            src_id_refs.append(ref)
+            continue
+
         rel_path = ref["ref_path"]
         lm = line_maps.get(rel_path)
 
@@ -445,6 +475,8 @@ def main(argv: list[str] | None = None) -> int:
         f"|--------|------:|",
         f"| Files with hunks | {len(hunks_by_file)} |",
         f"| [REF:] markers scanned | {len(all_refs)} |",
+        f"| — Path:line format | {len(corrections) + len(orphaned) + len(unchanged)} |",
+        f"| — SRC-ID format (auto-stable) | {len(src_id_refs)} |",
         f"| **Line corrections needed** | **{len(corrections)}** |",
         f"| **Orphaned REFs (deleted)** | **{len(orphaned)}** |",
         f"| Unchanged | {len(unchanged)} |",
@@ -554,6 +586,8 @@ def main(argv: list[str] | None = None) -> int:
             "summary": {
                 "files_with_hunks": len(hunks_by_file),
                 "refs_scanned": len(all_refs),
+                "refs_path_line": len(corrections) + len(orphaned) + len(unchanged),
+                "refs_src_id": len(src_id_refs),
                 "corrections_applied": len(corrections),
                 "orphaned_refs": len(orphaned),
                 "unchanged_refs": len(unchanged),
