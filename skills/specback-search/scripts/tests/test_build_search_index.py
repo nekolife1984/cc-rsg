@@ -427,3 +427,47 @@ def test_no_filters(specback_dir: Path):
     )
     assert result.returncode == 0
     assert "Hint" in result.stdout
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CONFIDENCE_RE: SRC-ID support (Issue #224 follow-up)
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+class TestConfidenceRe:
+    """Verify CONFIDENCE_RE matches both path:line and SRC-ID REF formats."""
+
+    def setup_method(self):
+        # Replicate the exact regex from build-search-index.py
+        import re
+        self._re = re.compile(
+            r'<!-- REF:\s*(?:\S+:\d+(?:-\d+)?|SRC-\d+)\s*-->\s*([🟢🟡🔴])'
+        )
+
+    def test_path_line_range(self):
+        m = self._re.search('<!-- REF: src/errors.py:1-50 --> 🟢')
+        assert m is not None
+        assert m.group(1) == "🟢"
+
+    def test_path_line_single(self):
+        m = self._re.search('<!-- REF: app/users.py:42 --> 🟡')
+        assert m is not None
+        assert m.group(1) == "🟡"
+
+    def test_src_id(self):
+        m = self._re.search('<!-- REF: SRC-0001 --> 🟢')
+        assert m is not None
+        assert m.group(1) == "🟢"
+
+    def test_src_id_red(self):
+        m = self._re.search('<!-- REF: SRC-0142 --> 🔴')
+        assert m is not None
+        assert m.group(1) == "🔴"
+
+    def test_no_emoji_no_match(self):
+        m = self._re.search('<!-- REF: SRC-0001 -->')
+        assert m is None
+
+    def test_invalid_src_id_no_match(self):
+        m = self._re.search('<!-- REF: SRC-XXX --> 🟢')
+        assert m is None
