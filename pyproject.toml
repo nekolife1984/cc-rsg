@@ -19,8 +19,12 @@ classifiers = [
 ]
 
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.backends._legacy:_Backend"
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+# specback はパッケージ化対象なし（ADWスクリプト + ドキュメント群）
+[tool.setuptools]
+packages = []
 
 [tool.mypy]
 python_version = "3.11"
